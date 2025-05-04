@@ -73,7 +73,7 @@ pnpm add -D hardhat
 
 ::::
 
-To use your local installation of Hardhat, you need to use `npx` to run it (i.e. `npx hardhat init`).
+To use your local installation of Hardhat, you need to use ```npx``` to run it (i.e. ```npx hardhat init```).
 
 ## Quick Start
 
@@ -85,10 +85,9 @@ If you are using Windows, we **strongly recommend** using [WSL 2](https://docs.m
 
 We will explore the basics of creating a Hardhat project with a sample contract, tests of that contract, and a Hardhat Ignition module to deploy it.
 
-To create the sample project, run `npx hardhat init` in your project folder:
+To create the sample project, run ```npx hardhat init``` in your project folder:
 
-```
-$ npx hardhat init
+$ ```npx hardhat init```
 888    888                      888 888               888
 888    888                      888 888               888
 888    888                      888 888               888
@@ -106,16 +105,14 @@ $ npx hardhat init
   Create a TypeScript project (with Viem)
   Create an empty hardhat.config.js
   Quit
-```
 
 Let’s create the JavaScript or TypeScript project and go through these steps to compile, test and deploy the sample contract. We recommend using TypeScript, but if you are not familiar with it just pick JavaScript.
 
 ### Running tasks
 
-To first get a quick sense of what's available and what's going on, run `npx hardhat` in your project folder:
+To first get a quick sense of what's available and what's going on, run ```npx hardhat``` in your project folder:
 
-```
-$ npx hardhat
+$ ```npx hardhat```
 Hardhat version 2.9.9
 
 Usage: hardhat [GLOBAL OPTIONS] <TASK> [TASK OPTIONS]
@@ -149,21 +146,18 @@ AVAILABLE TASKS:
   verify                Verifies contract on Etherscan
 
 To get help for a specific task run: npx hardhat help [task]
-```
 
-The list of available tasks includes the built-in ones and also those that came with any installed plugins. `npx hardhat` is your starting point to find out what tasks are available to run.
+The list of available tasks includes the built-in ones and also those that came with any installed plugins. ```npx hardhat``` is your starting point to find out what tasks are available to run.
 
 ### Compiling your contracts
 
-Next, if you take a look in the `contracts/` folder, you'll see `Lock.sol`:
+Next, if you take a look in the ```contracts/``` folder, you'll see ```Lock.sol```:
 
 <<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/contracts/Lock.sol
 
 To compile it, simply run:
 
-```
-npx hardhat compile
-```
+```npx hardhat compile```
 
 If you created a TypeScript project, this task will also generate TypeScript bindings using [TypeChain](https://www.npmjs.com/package/typechain).
 
@@ -171,7 +165,7 @@ If you created a TypeScript project, this task will also generate TypeScript bin
 
 Your project comes with tests that use [Mocha](https://mochajs.org), [Chai](https://www.chaijs.com), [Ethers.js](https://docs.ethers.org/v6/) and [Hardhat Ignition](/ignition).
 
-If you take a look in the `test/` folder, you'll see a test file:
+If you take a look in the ```test/``` folder, you'll see a test file:
 
 ::::tabsgroup{options="TypeScript,JavaScript"}
 
@@ -189,14 +183,13 @@ If you take a look in the `test/` folder, you'll see a test file:
 
 ::::
 
-You can run your tests with `npx hardhat test`:
+You can run your tests with ```npx hardhat test```:
 
 ::::tabsgroup{options="TypeScript,JavaScript"}
 
 :::tab{value="TypeScript"}
 
-```
-$ npx hardhat test
+$ ```npx hardhat test```
 Generating typings for: 2 artifacts in dir: typechain-types for target: ethers-v6
 Successfully generated 6 typings!
 Compiled 2 Solidity files successfully
@@ -220,14 +213,13 @@ Compiled 2 Solidity files successfully
 
 
   9 passing (790ms)
-```
+
 
 :::
 
 :::tab{value="JavaScript"}
 
-```
-$ npx hardhat test
+$ ```npx hardhat test```
 Compiled 2 Solidity files successfully
 
 
@@ -249,7 +241,6 @@ Compiled 2 Solidity files successfully
 
 
   9 passing (790ms)
-```
 
 :::
 
@@ -259,7 +250,7 @@ Compiled 2 Solidity files successfully
 
 Next, to deploy the contract we will use a Hardhat Ignition module.
 
-Inside the `ignition/modules` folder you will find a file with the following code:
+Inside the ```ignition/modules``` folder you will find a file with the following code:
 
 ::::tabsgroup{options="TypeScript,JavaScript"}
 
@@ -281,10 +272,9 @@ Inside the `ignition/modules` folder you will find a file with the following cod
 
 :::tab{value="TypeScript"}
 
-You can deploy it using `npx hardhat ignition deploy ./ignition/modules/Lock.ts`:
+You can deploy it using ```npx hardhat ignition deploy ./ignition/modules/Lock.ts```:
 
-```
-$ npx hardhat ignition deploy ./ignition/modules/Lock.ts
+$ ```npx hardhat ignition deploy ./ignition/modules/Lock.ts```
 Compiled 1 Solidity file successfully (evm target: paris).
 You are running Hardhat Ignition against an in-process instance of Hardhat Network.
 This will execute the deployment, but the results will be lost.
@@ -302,15 +292,13 @@ Batch #1
 Deployed Addresses
 
 LockModule#Lock - 0x5FbDB2315678afecb367f032d93F642f64180aa3
-```
 
 :::
 
 :::tab{value="JavaScript"}
 
-You can deploy it using `npx hardhat ignition deploy ./ignition/modules/Lock.js`:
+You can deploy it using ```npx hardhat ignition deploy ./ignition/modules/Lock.js```:
 
-```
 $ npx hardhat ignition deploy ./ignition/modules/Lock.js
 Compiled 1 Solidity file successfully (evm target: paris).
 You are running Hardhat Ignition against an in-process instance of Hardhat Network.
@@ -329,7 +317,6 @@ Batch #1
 Deployed Addresses
 
 LockModule#Lock - 0x5FbDB2315678afecb367f032d93F642f64180aa3
-```
 
 :::
 
@@ -341,18 +328,16 @@ To learn more check out the [Hardhat Ignition documentation](/ignition).
 
 By default, Hardhat will spin up a new in-memory instance of Hardhat Network on startup. It's also possible to run Hardhat Network in a standalone fashion so that external clients can connect to it. This could be a wallet, your Dapp front-end, or a Hardhat Ignition deployment.
 
-To run Hardhat Network in this way, run `npx hardhat node`:
+To run Hardhat Network in this way, run ```npx hardhat node```:
 
-```
 $ npx hardhat node
 Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/
-```
 
-This will expose a JSON-RPC interface to Hardhat Network. To use it connect your wallet or application to `http://127.0.0.1:8545`.
+This will expose a JSON-RPC interface to Hardhat Network. To use it connect your wallet or application to ```http://127.0.0.1:8545```.
 
-If you want to connect Hardhat to this node, for example to run a deployment against it, you simply need to run it using `--network localhost`.
+If you want to connect Hardhat to this node, for example to run a deployment against it, you simply need to run it using ```--network localhost```.
 
-To try this, start a node with `npx hardhat node` and re-run the deployment using the `network` option:
+To try this, start a node with ```npx hardhat node``` and re-run the deployment using the ```network``` option:
 
 ::::tabsgroup{options="TypeScript,JavaScript"}
 
@@ -374,9 +359,9 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js --network localhost
 
 ::::
 
-To run Hardhat Network on specific port and allow incoming requests from a specific network interface or hostname, run `npx hardhat node --hostname 127.0.0.1 --port 8545`.
+To run Hardhat Network on specific port and allow incoming requests from a specific network interface or hostname, run ```npx hardhat node --hostname 127.0.0.1 --port 8545```.
 
-If you want to allow incoming requests from anywhere, including external ips, use `--hostname 0.0.0.0`.
+If you want to allow incoming requests from anywhere, including external ips, use ```--hostname 0.0.0.0```.
 
 Congrats! You have created a project and compiled, tested and deployed a smart contract.
 
