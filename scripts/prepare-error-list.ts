@@ -7,6 +7,7 @@ import {
 import * as fs from "fs";
 import * as path from "path";
 
+
 interface Redirect {
   source: string;
   destination: string;
@@ -24,9 +25,7 @@ for (const [rangeName, range] of Object.entries(ERROR_RANGES)) {
 ## ${range.title}
 `;
 
-  for (const errorDescriptor of Object.values<ErrorDescriptor>(
-    ERRORS[rangeName]
-  )) {
+  for (const errorDescriptor of Object.values<ErrorDescriptor>(ERRORS[rangeName])) {
     const errorCode = getErrorCode(errorDescriptor);
     const title = `${errorCode}: ${errorDescriptor.title}`;
 
@@ -51,13 +50,9 @@ ${errorDescriptor.description}
   }
 }
 
+fs.writeFileSync(path.join(__dirname, '../src/content/hardhat-runner/docs/errors/index.md'), content, 'utf-8');
 fs.writeFileSync(
-  path.join(__dirname, "../src/content/hardhat-runner/docs/errors/index.md"),
-  content,
-  "utf-8"
-);
-fs.writeFileSync(
-  path.join(__dirname, "../temp/error-redirects.json"),
+  path.join(__dirname, '../temp/error-redirects.json'),
   JSON.stringify(errorRedirects, undefined, 2),
-  "utf-8"
+  'utf-8'
 );

@@ -1,112 +1,163 @@
-import React from "react";
-import { styled } from "linaria/react";
+"use client";
 
+import React from "react";
+import Image, { StaticImageData } from "next/image";
 import Section from "../Section";
-import { media, tm, tmDark, tmSelectors } from "../../themes";
+import LandingContainer from "../LandingContainer";
+import ImageMaskDesktop from "../../assets/why-we/gridDesktop.svg";
+import ImageMaskLaptop from "../../assets/why-we/gridLaptop.svg";
+import ImageMaskTablet from "../../assets/why-we/gridTablet.svg";
+import ImageMaskMobile from "../../assets/why-we/gridMobile.svg";
+import ImageMaskDarkDesktop from "../../assets/why-we/gridDarkDesktop.svg";
+import ImageMaskDarkLaptop from "../../assets/why-we/gridDarkLaptop.svg";
+import ImageMaskDarkTablet from "../../assets/why-we/gridDarkTablet.svg";
+import ImageMaskDarkMobile from "../../assets/why-we/gridDarkMobile.svg";
+import LinesMobile from "../../assets/why-we/linesMobile";
+import LinesDesktop from "../../assets/why-we/linesDesktop";
+import useWindowSize from "../../hooks/useWindowSize";
+import { CTAType } from "../ui/types";
+import FeatureCard from "../ui/FeatureCard";
+import useImageAnimation from "../../hooks/useImageAnimation";
+import WhyHardHatBlockStyled from "./WhyHardHatBlock.styled";
+import getImage from "../../utils";
+
+const {
+  Container,
+  Heading,
+  Title,
+  ImageContainer,
+  ImageWrapper,
+  CardList,
+  BottomWrapper,
+  BottomWrapperTitle,
+  BottomWrapperText,
+} = WhyHardHatBlockStyled;
+
+interface ArticleType {
+  title: string;
+  text: string;
+  icon: React.FC<any>;
+  cta: CTAType;
+}
+interface ContentProps {
+  image: {
+    lg: StaticImageData;
+    m?: StaticImageData;
+    md: StaticImageData;
+    sm: StaticImageData;
+  };
+  imageDark: {
+    lg: StaticImageData;
+    m?: StaticImageData;
+    md: StaticImageData;
+    sm: StaticImageData;
+  };
+  articleOne: ArticleType;
+  articleTwo: ArticleType;
+}
 
 type Props = React.PropsWithChildren<{
-  content: { title: string };
+  content: {
+    title: string;
+    footer: { title: string; text: string };
+    featureCards: ContentProps[];
+  };
 }>;
 
-const Container = styled.section`
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid ${tm(({ colors }) => colors.neutral400)};
-  padding-top: 52px;
-  ${media.md} {
-    border-left: unset;
-    border-top: 1px solid ${tm(({ colors }) => colors.neutral400)};
+function ImageMask(width: number, dark?: boolean): string {
+  if (width >= 1700) {
+    return dark ? ImageMaskDarkDesktop.src : ImageMaskDesktop.src;
   }
-  ${tmSelectors.dark} {
-    border-color: ${tmDark(({ colors }) => colors.neutral400)};
+  if (width >= 1280) {
+    return dark ? ImageMaskDarkLaptop.src : ImageMaskLaptop.src;
   }
-  ${media.mqDark} {
-    ${tmSelectors.auto} {
-      border-color: ${tmDark(({ colors }) => colors.neutral400)};
-    }
+  if (width >= 768) {
+    return dark ? ImageMaskDarkTablet.src : ImageMaskTablet.src;
   }
-`;
+  return dark ? ImageMaskDarkMobile.src : ImageMaskMobile.src;
+}
 
-const Title = styled.h2`
-  position: absolute;
-  padding: 24px;
-  background-color: ${tm(({ colors }) => colors.neutral0)};
-  color: ${tm(({ colors }) => colors.neutral900)};
-  left: 0;
-  top: 0;
-  transform: translateY(-50%);
-  text-transform: uppercase;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
-  letter-spacing: 0.2em;
-  margin-bottom: 32px;
-  ${media.md} {
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-  }
-  ${tmSelectors.dark} {
-    background-color: ${tmDark(({ colors }) => colors.neutral0)};
-    color: ${tmDark(({ colors }) => colors.neutral900)};
-  }
-  ${media.mqDark} {
-    ${tmSelectors.auto} {
-      background-color: ${tmDark(({ colors }) => colors.neutral0)};
-      color: ${tmDark(({ colors }) => colors.neutral900)};
-    }
-  }
-`;
+const WhyHardhatBlock = ({ content }: Props) => {
+  const { width } = useWindowSize();
 
-const TopBrackets = styled.div`
-  position: absolute;
-  top: 0;
-  left: 24px;
-  width: calc(100% - 24px);
-  height: 32px;
-  border-top: 1px solid ${tm(({ colors }) => colors.neutral400)};
-  border-left: 1px solid ${tm(({ colors }) => colors.neutral400)};
-  border-right: 1px solid ${tm(({ colors }) => colors.neutral400)};
-  ${media.md} {
-    height: 36px;
-    border-top: none;
-    width: 100%;
-    border-top: none;
-    left: 0;
-  }
-  ${tmSelectors.dark} {
-    border-color: ${tmDark(({ colors }) => colors.neutral400)};
-  }
-  ${media.mqDark} {
-    ${tmSelectors.auto} {
-      border-color: ${tmDark(({ colors }) => colors.neutral400)};
-    }
-  }
-`;
-const BottomBrackets = styled.div`
-  position: absolute;
-  left: 0px;
-  bottom: 0;
-  width: 32px;
-  height: 32px;
-  border-bottom: 1px solid ${tm(({ colors }) => colors.neutral400)};
-  ${media.md} {
-    display: none;
-  }
-`;
+  const { activeIndex, cardsRef } = useImageAnimation(content, width);
 
-const WhyHardhatBlock = ({ content, children }: Props) => {
   return (
-    <Section>
+    <Section clearPadding>
       <Container>
-        <TopBrackets />
-        <Title>{content.title}</Title>
-        {children}
-        <BottomBrackets />
+        <LandingContainer>
+          <Heading>
+            <Title>
+              <LinesMobile />
+              <LinesMobile />
+              {content.title}
+              <LinesDesktop />
+            </Title>
+          </Heading>
+
+          <CardList>
+            {content.featureCards.map((item, index) => (
+              <FeatureCard
+                key={index}
+                content={item}
+                index={index}
+                ref={(el) => {
+                  if (el) {
+                    cardsRef.current[index] = el;
+                  }
+                }}
+              />
+            ))}
+            {width >= 768 && (
+              <ImageContainer
+                className={`image-container image-container-${activeIndex}`}
+                background={ImageMask(width, false)}
+                backgroundDark={ImageMask(width, true)}
+              >
+                {content.featureCards.map((item, index) => {
+                  const lightImage = getImage(item, width, "light");
+                  const darkImage = getImage(item, width, "dark");
+
+                  return (
+                    <>
+                      <ImageWrapper
+                        className={`light image-wrapper-${index}  ${
+                          activeIndex === index ? "active" : ""
+                        }`}
+                      >
+                        <Image
+                          src={lightImage}
+                          alt="Feature card picture"
+                          quality={100}
+                          layout="intrinsic"
+                        />
+                      </ImageWrapper>
+                      <ImageWrapper
+                        className={`dark image-wrapper-${index}  ${
+                          activeIndex === index ? "active" : ""
+                        }`}
+                      >
+                        <Image
+                          src={darkImage}
+                          alt="Feature card picture"
+                          quality={100}
+                          layout="intrinsic"
+                        />
+                      </ImageWrapper>
+                    </>
+                  );
+                })}
+              </ImageContainer>
+            )}
+          </CardList>
+        </LandingContainer>
       </Container>
+      <BottomWrapper>
+        <LandingContainer>
+          <BottomWrapperTitle>{content.footer.title}</BottomWrapperTitle>
+          <BottomWrapperText>{content.footer.text}</BottomWrapperText>
+        </LandingContainer>
+      </BottomWrapper>
     </Section>
   );
 };

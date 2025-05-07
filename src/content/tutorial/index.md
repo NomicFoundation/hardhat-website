@@ -2,7 +2,8 @@
 prev: false
 ---
 
-![Teacher Hardhat](/hardhat-tutorial.svg)
+![Teacher Hardhat#light](/hardhat-tutorial.png)
+![Teacher Hardhat#dark](/hardhat-tutorial-dark.png)
 
 # Hardhat's tutorial for beginners
 

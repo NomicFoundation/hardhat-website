@@ -17,10 +17,14 @@
   "dependencies": {
     "@callstack/react-theme-provider": "^3.0.7",
     "@docsearch/react": "3",
+    "@gsap/react": "^2.1.2",
+    "github-slugger": "^2.0.0",
     "glob": "^8.0.1",
     "gray-matter": "^4.0.3",
+    "gsap": "^3.12.7",
     "hastscript": "^7.0.2",
     "linaria": "^2.3.1",
+    "lucide-react": "^0.503.0",
     "next": "12.3.4",
     "next-linaria": "^0.11.0",
     "next-mdx-remote": "^4.0.2",
@@ -38,6 +42,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-runtime": "^7.26.10",
     "@babel/preset-env": "^7.16.11",
     "@next/bundle-analyzer": "^12.1.5",
     "@react-theming/storybook-addon": "^1.1.5",

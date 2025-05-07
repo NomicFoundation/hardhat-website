@@ -1,27 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { styled } from "linaria/react";
+import React, { useEffect, useState } from 'react';
+import { styled } from 'linaria/react';
 
-import SEO from "./SEO";
-import LandingFooter from "./LandingFooter";
-import {
-  headerTotalHeight,
-  media,
-  ThemeProvider,
-  tm,
-  tmDark,
-  tmSelectors,
-} from "../themes";
-import { menuItemsList, socialsItems } from "../config";
-import GDPRNotice from "./GDPRNotice";
-import DocsNavigation from "./DocsNavigation";
-import {
-  Header,
-  MobileSidebarMenuMask,
-  SidebarContainer,
-} from "./DocumentationLayout";
-import MobileSidebarMenu from "./MobileSidebarMenu";
-import { IDocumentationSidebarStructure, ISeo } from "./types";
-import AlphaBanner from "./ui/AlphaBanner";
+import SEO from './SEO';
+import LandingFooter from './LandingFooter';
+import { media, ThemeProvider, tm, tmDark, tmSelectors } from '../themes';
+import { bannerContent, menuItemsList, socialsItems } from '../config';
+import GDPRNotice from './GDPRNotice';
+import DocsNavigation from './DocsNavigation';
+import { Header, MobileSidebarMenuMask, SidebarContainer } from './DocumentationLayout';
+import MobileSidebarMenu from './MobileSidebarMenu';
+import { IDocumentationSidebarStructure, ISeo } from './types';
+import Banner, { DefaultBanner } from './ui/Banner';
+import { DefaultBannerProps } from './ui/types';
 
 const Container = styled.div`
   position: relative;
@@ -31,8 +21,8 @@ const Container = styled.div`
   align-items: center;
   -webkit-font-smoothing: antialiased;
   background-color: ${tm(({ colors }) => colors.neutral0)};
-  transition: all ease-in-out 0.25s;
   min-width: 320px;
+  width: 100%;
   ${tmSelectors.dark} {
     background-color: ${tmDark(({ colors }) => colors.neutral0)};
   }
@@ -44,8 +34,8 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
-  overflow-x: hidden;
-  padding-top: ${headerTotalHeight};
+  overflow-x: clip;
+
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -61,40 +51,56 @@ type Props = React.PropsWithChildren<{
 
 const LandingLayout = ({ children, seo, sidebarLayout }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isScrolledTop, setIsScrolledTop] = useState(true);
 
   useEffect(() => {
-    const body = document.querySelector("body");
+    const body = document.querySelector('body');
     if (!body) return;
 
     if (isSidebarOpen) {
       // Disable scroll
-      body.style.overflow = "hidden";
+      body.style.overflow = 'hidden';
     } else {
       // Enable scroll
-      body.style.overflow = "auto";
+      body.style.overflow = 'auto';
     }
   }, [isSidebarOpen]);
 
   useEffect(() => {
-    const listener = () => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      setIsScrolledTop(scrollTop <= 0);
+    };
+
+    const handleClick = () => {
       if (isSidebarOpen) {
         setIsSidebarOpen(false);
       }
     };
 
-    document.addEventListener("click", listener);
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClick);
+    handleScroll();
 
-    return () => document.removeEventListener("click", listener);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClick);
+    };
   }, [isSidebarOpen]);
+
   return (
     <ThemeProvider>
-      <Container className="landing">
-        <Header>
+      <Container className='landing'>
+        <Header className={`${isSidebarOpen ? 'is-sidebar-open' : ''} `}>
+          <Banner
+            content={bannerContent}
+            renderContent={({ content }: DefaultBannerProps) => <DefaultBanner content={content} />}
+          />
           <DocsNavigation
+            className={`${isScrolledTop ? 'is-at-top' : ''} ${isSidebarOpen ? 'is-sidebar-open' : ''}`}
             isSidebarOpen={isSidebarOpen}
             onSidebarOpen={setIsSidebarOpen}
           />
-          <AlphaBanner />
         </Header>
 
         <SEO seo={seo} />

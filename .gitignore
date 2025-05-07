@@ -42,3 +42,4 @@ src/content/hardhat-runner/docs/errors/index.md
 
 # typescript
 *.tsbuildinfo
+.env*.local
