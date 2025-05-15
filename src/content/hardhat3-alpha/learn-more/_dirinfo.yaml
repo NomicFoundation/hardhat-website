@@ -7,3 +7,5 @@ order:
     href: /alpha-limitations
   - title: Configuring the compiler
     href: /configuring-the-compiler
+  - title: Writing Solidity tests
+    href: /writing-solidity-tests
