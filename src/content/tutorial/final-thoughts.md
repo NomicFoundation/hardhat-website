@@ -23,4 +23,5 @@ Finally, show us some love by starring [our repository on GitHub!](https://githu
 
 Happy hacking!
 
-![](/cool-hardhat.svg)
+![Test alt#light](/cool-hardhat.png)
+![Test alt#dark](/cool-hardhat-dark.png)

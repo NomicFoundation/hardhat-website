@@ -1,41 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import { styled } from "linaria/react";
-import { useRouter } from "next/router";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import React, { useEffect, useRef, useState } from 'react';
+import { styled } from 'linaria/react';
+import { useRouter } from 'next/router';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
-import SEO from "./SEO";
-import DocsNavigation from "./DocsNavigation";
-import {
-  tm,
-  tmSelectors,
-  tmDark,
-  media,
-  ThemeProvider,
-  headerTotalHeight,
-} from "../themes";
-import {
-  FooterNavigation,
-  IDocumentationSidebarStructure,
-  ISeo,
-} from "./types";
-import Sidebar from "./Sidebar";
-import { menuItemsList, socialsItems } from "../config";
-import MobileSidebarMenu from "./MobileSidebarMenu";
-import DocumentationFooter from "./DocumentationFooter";
-import Title from "./mdxComponents/Title";
-import Paragraph from "./mdxComponents/Paragraph";
-import CodeBlocks from "./mdxComponents/CodeBlocks";
-import Admonition from "./mdxComponents/Admonition";
-import UnorderedList from "./mdxComponents/UnorderedList";
-import HorizontalRule from "./mdxComponents/HorizontalRule";
-import MDLink from "./mdxComponents/MDLink";
-import Table from "./mdxComponents/Table";
-import MDImage from "./mdxComponents/MDImage";
-import OrderedList from "./mdxComponents/OrderedList";
-import TabsGroup from "./mdxComponents/TabsGroup";
-import Tab from "./mdxComponents/Tab";
-import GDPRNotice from "./GDPRNotice";
-import AlphaBanner from "./ui/AlphaBanner";
+import SEO from './SEO';
+import DocsNavigation from './DocsNavigation';
+import { tm, tmSelectors, tmDark, media, ThemeProvider, headerTotalHeight } from '../themes';
+import { FooterNavigation, IDocumentationSidebarStructure, ISeo } from './types';
+import Sidebar from './Sidebar';
+import { bannerContent, menuItemsList, socialsItems } from '../config';
+import MobileSidebarMenu from './MobileSidebarMenu';
+import DocumentationFooter from './DocumentationFooter';
+import Title from './mdxComponents/Title';
+import Paragraph from './mdxComponents/Paragraph';
+import CodeBlocks from './mdxComponents/CodeBlocks';
+import Admonition from './mdxComponents/Admonition';
+import UnorderedList from './mdxComponents/UnorderedList';
+import HorizontalRule from './mdxComponents/HorizontalRule';
+import MDLink from './mdxComponents/MDLink';
+import Table from './mdxComponents/Table';
+import MDImage from './mdxComponents/MDImage';
+import OrderedList from './mdxComponents/OrderedList';
+import TabsGroup from './mdxComponents/TabsGroup';
+import Tab from './mdxComponents/Tab';
+import GDPRNotice from './GDPRNotice';
+
+import Banner, { DefaultBanner } from './ui/Banner';
+import { DefaultBannerProps } from './ui/types';
 
 const Container = styled.div`
   position: relative;
@@ -43,15 +34,14 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
-  height: 100vh;
   min-width: 320px;
+
+  width: 100%;
 `;
 
 const Main = styled.main`
-  padding-top: ${headerTotalHeight};
   flex: 1 1 auto;
   display: flex;
   justify-content: flex-start;
@@ -59,7 +49,6 @@ const Main = styled.main`
   background-color: ${tm(({ colors }) => colors.neutral0)};
   width: 100%;
   position: relative;
-  transition: background-color ease-in-out 0.25s;
 
   ${tmSelectors.dark} {
     background-color: ${tmDark(({ colors }) => colors.neutral0)};
@@ -84,8 +73,8 @@ export const MobileSidebarMenuMask = styled.div`
   width: 100%;
   left: -100%;
   top: 0;
-  transition: all 0.25s ease-in-out;
-  &[data-open="true"] {
+  transition: left 0.25s ease-in-out;
+  &[data-open='true'] {
     left: 0;
   }
 `;
@@ -94,24 +83,27 @@ export const SidebarContainer = styled.aside<{ isSidebarOpen: boolean }>`
   flex-direction: column;
   width: min(366px, 100%);
   position: fixed;
+
   top: ${headerTotalHeight};
-  left: ${({ isSidebarOpen }) => (isSidebarOpen ? "0px" : "-120vw")};
-  height: calc(100vh - ${headerTotalHeight});
+  left: 0;
+  transform: translateX(${({ isSidebarOpen }) => (isSidebarOpen ? '0px' : '-100%')});
+  height: calc(100svh - ${headerTotalHeight});
+
   display: flex;
   overflow-y: auto;
-  transition: all ease-out 0.25s;
+  transition: transform ease-out 0.25s;
   z-index: 50;
   background-color: ${tm(({ colors }) => colors.neutral0)};
 
-  ${media.md} {
-    left: 0;
+  ${media.laptop} {
+    transform: none;
   }
 
   .landing & {
-    ${media.md} {
+    ${media.laptop} {
       display: none;
     }
-    pointer-events: ${({ isSidebarOpen }) => (isSidebarOpen ? "auto" : "none")};
+    pointer-events: ${({ isSidebarOpen }) => (isSidebarOpen ? 'auto' : 'none')};
   }
 
   ${tmSelectors.dark} {
@@ -123,15 +115,15 @@ export const SidebarContainer = styled.aside<{ isSidebarOpen: boolean }>`
     }
   }
 
-  :not(&[data-no-border="true"]) {
-    border-right: 1px solid ${tm(({ colors }) => colors.neutral400)};
+  :not(&[data-no-border='true']) {
+    border-right: 1px solid ${tm(({ colors }) => colors.gray2)};
     ${tmSelectors.dark} {
-      border-right: 1px solid ${tmDark(({ colors }) => colors.border)};
+      border-right: 1px solid ${tmDark(({ colors }) => colors.gray3)};
       background-color: ${tmDark(({ colors }) => colors.neutral0)};
     }
     ${media.mqDark} {
       ${tmSelectors.auto} {
-        border-right: 1px solid ${tmDark(({ colors }) => colors.border)};
+        border-right: 1px solid ${tmDark(({ colors }) => colors.gray3)};
         background-color: ${tmDark(({ colors }) => colors.neutral0)};
       }
     }
@@ -139,30 +131,71 @@ export const SidebarContainer = styled.aside<{ isSidebarOpen: boolean }>`
 
   ${SidebarMask} {
     display: none;
-    ${media.md} {
+    ${media.laptop} {
       display: flex;
     }
   }
   ${MobileSidebarMenuMask} {
     display: flex;
-    ${media.md} {
+    ${media.laptop} {
       display: none;
     }
   }
 
-  &[data-no-border="true"] {
+  &[data-no-border='true'] {
     border-right: none;
   }
 `;
 
 export const Header = styled.header`
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
   z-index: 199;
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: ${tm(({ colors }) => colors.gray2)};
+    display: none;
+    z-index: 11;
+    pointer-events: none;
+  }
+
+  &.is-sidebar-open {
+    &:before {
+      display: block;
+    }
+  }
+
+  ${tmSelectors.dark} {
+    &.is-sidebar-open:before,
+    &.with-line:before {
+      background-color: ${tmDark(({ colors }) => colors.gray3)};
+    }
+  }
+  ${media.mqDark} {
+    ${tmSelectors.auto} {
+      &.is-sidebar-open:before,
+      &.with-line:before {
+        background-color: ${tmDark(({ colors }) => colors.gray3)};
+      }
+    }
+  }
+
+  ${media.laptop} {
+    &.with-line {
+      &:before {
+        display: block;
+      }
+    }
+  }
 `;
 
 const View = styled.section`
@@ -172,17 +205,16 @@ const View = styled.section`
   justify-content: space-between;
   padding-top: 24px;
   width: 100%;
-  height: calc(100vh - ${headerTotalHeight});
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  ${media.md} {
+  height: 100%;
+
+  ${media.laptop} {
     padding-left: 366px;
   }
 `;
 const Content = styled.section`
   width: 100%;
   max-width: 774px;
-  padding: 0 34px;
+  padding: 0 16px;
   color: ${tm(({ colors }) => colors.neutral900)};
 
   & h2 + p {
@@ -199,6 +231,9 @@ const Content = styled.section`
     ${tmSelectors.auto} {
       color: ${tmDark(({ colors }) => colors.neutral900)};
     }
+  }
+  ${media.tablet} {
+    padding: 0 44px;
   }
 `;
 
@@ -230,12 +265,7 @@ interface Props {
   mdxSource: MDXRemoteSerializeResult;
 }
 
-const DocumentationLayout = ({
-  mdxSource,
-  seo,
-  sidebarLayout,
-  footerNavigation,
-}: Props) => {
+const DocumentationLayout = ({ mdxSource, seo, sidebarLayout, footerNavigation }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const docViewRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -245,15 +275,15 @@ const DocumentationLayout = ({
   }, [router.asPath]);
 
   useEffect(() => {
-    const body = document.querySelector("body");
+    const body = document.querySelector('body');
     if (!body) return;
 
     if (isSidebarOpen) {
       // Disable scroll
-      body.style.overflow = "hidden";
+      body.style.overflow = 'hidden';
     } else {
       // Enable scroll
-      body.style.overflow = "auto";
+      body.style.overflow = 'auto';
     }
   }, [isSidebarOpen]);
 
@@ -264,20 +294,20 @@ const DocumentationLayout = ({
       }
     };
 
-    document.addEventListener("click", listener);
+    document.addEventListener('click', listener);
 
-    return () => document.removeEventListener("click", listener);
+    return () => document.removeEventListener('click', listener);
   }, [isSidebarOpen]);
 
   return (
     <ThemeProvider>
       <Container>
-        <Header>
-          <DocsNavigation
-            isSidebarOpen={isSidebarOpen}
-            onSidebarOpen={setIsSidebarOpen}
+        <Header className={`${isSidebarOpen ? 'is-sidebar-open' : ''} with-line`}>
+          <Banner
+            content={bannerContent}
+            renderContent={({ content }: DefaultBannerProps) => <DefaultBanner content={content} />}
           />
-          <AlphaBanner />
+          <DocsNavigation isSidebarOpen={isSidebarOpen} onSidebarOpen={setIsSidebarOpen} />
         </Header>
 
         <SEO seo={seo} />
@@ -290,10 +320,7 @@ const DocumentationLayout = ({
             isSidebarOpen={isSidebarOpen}
           >
             <SidebarMask>
-              <Sidebar
-                elementsList={sidebarLayout}
-                closeSidebar={() => setIsSidebarOpen(false)}
-              />
+              <Sidebar elementsList={sidebarLayout} closeSidebar={() => setIsSidebarOpen(false)} />
             </SidebarMask>
             <MobileSidebarMenuMask data-open={isSidebarOpen}>
               <MobileSidebarMenu

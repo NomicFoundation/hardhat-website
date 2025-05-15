@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import tabsConfig from "../temp/tabsConfig.json";
 
 type TabType = string;
 
@@ -29,7 +28,7 @@ export const generateTabsGroupType = (options: string): string => {
 export const TabsProvider = ({
   children,
 }: React.PropsWithChildren<{}>): JSX.Element => {
-  const [tabsState, setTabsState] = useState<ITabsState>(tabsConfig);
+  const [tabsState, setTabsState] = useState<ITabsState>({});
 
   const changeTab = useCallback(
     (type, value) => {
@@ -47,7 +46,6 @@ export const TabsProvider = ({
     if (savedTabsState === null) return;
 
     setTabsState({
-      ...tabsConfig,
       ...JSON.parse(savedTabsState),
     });
   }, []);

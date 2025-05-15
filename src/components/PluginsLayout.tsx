@@ -1,26 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { styled } from "linaria/react";
-import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from 'react';
+import { styled } from 'linaria/react';
+import { useRouter } from 'next/router';
 
-import SEO from "./SEO";
-import DocsNavigation from "./DocsNavigation";
-import {
-  tm,
-  tmSelectors,
-  tmDark,
-  media,
-  ThemeProvider,
-  headerTotalHeight,
-} from "../themes";
-import { IDocumentationSidebarStructure, ISeo } from "./types";
-import { menuItemsList, socialsItems } from "../config";
-import {
-  Header,
-  MobileSidebarMenuMask,
-  SidebarContainer,
-} from "./DocumentationLayout";
-import MobileSidebarMenu from "./MobileSidebarMenu";
-import AlphaBanner from "./ui/AlphaBanner";
+import SEO from './SEO';
+import DocsNavigation from './DocsNavigation';
+import { tm, tmSelectors, tmDark, media, ThemeProvider } from '../themes';
+import { IDocumentationSidebarStructure, ISeo } from './types';
+import { bannerContent, menuItemsList, socialsItems } from '../config';
+import { Header, MobileSidebarMenuMask, SidebarContainer } from './DocumentationLayout';
+import MobileSidebarMenu from './MobileSidebarMenu';
+import Banner, { DefaultBanner } from './ui/Banner';
+import { DefaultBannerProps } from './ui/types';
 
 const Container = styled.div`
   position: relative;
@@ -28,15 +18,14 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
-  height: 100vh;
+  width: 100%;
   min-width: 320px;
 `;
 
 const Main = styled.main`
-  padding-top: ${headerTotalHeight};
   flex: 1 1 auto;
   display: flex;
   justify-content: flex-start;
@@ -44,7 +33,6 @@ const Main = styled.main`
   background-color: ${tm(({ colors }) => colors.neutral0)};
   width: 100%;
   position: relative;
-  transition: background-color ease-in-out 0.25s;
 
   ${tmSelectors.dark} {
     background-color: ${tmDark(({ colors }) => colors.neutral0)};
@@ -54,7 +42,7 @@ const Main = styled.main`
       background-color: ${tmDark(({ colors }) => colors.neutral0)};
     }
   }
-  ${media.md} {
+  ${media.laptop} {
     & aside {
       display: none;
     }
@@ -67,8 +55,6 @@ const View = styled.section`
   align-items: center;
   padding-top: 24px;
   width: 100%;
-  height: calc(100vh - ${headerTotalHeight});
-  overflow-y: scroll;
 `;
 const Content = styled.section`
   display: flex;
@@ -113,15 +99,15 @@ const PluginsLayout = ({ children, seo, sidebarLayout }: Props) => {
   }, [router.asPath]);
 
   useEffect(() => {
-    const body = document.querySelector("body");
+    const body = document.querySelector('body');
     if (!body) return;
 
     if (isSidebarOpen) {
       // Disable scroll
-      body.style.overflow = "hidden";
+      body.style.overflow = 'hidden';
     } else {
       // Enable scroll
-      body.style.overflow = "auto";
+      body.style.overflow = 'auto';
     }
   }, [isSidebarOpen]);
 
@@ -132,20 +118,20 @@ const PluginsLayout = ({ children, seo, sidebarLayout }: Props) => {
       }
     };
 
-    document.addEventListener("click", listener);
+    document.addEventListener('click', listener);
 
-    return () => document.removeEventListener("click", listener);
+    return () => document.removeEventListener('click', listener);
   }, [isSidebarOpen]);
 
   return (
     <ThemeProvider>
       <Container>
-        <Header>
-          <DocsNavigation
-            isSidebarOpen={isSidebarOpen}
-            onSidebarOpen={setIsSidebarOpen}
+        <Header className={`${isSidebarOpen ? 'is-sidebar-open' : ''} `}>
+          <Banner
+            content={bannerContent}
+            renderContent={({ content }: DefaultBannerProps) => <DefaultBanner content={content} />}
           />
-          <AlphaBanner />
+          <DocsNavigation isSidebarOpen={isSidebarOpen} onSidebarOpen={setIsSidebarOpen} />
         </Header>
 
         <SEO seo={seo} />
