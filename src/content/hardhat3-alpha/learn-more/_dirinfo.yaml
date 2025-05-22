@@ -1,6 +1,8 @@
 section-type: group
 section-title: Learn more
 order:
+  - title: Getting started
+    href: /getting-started
   - title: Differences with Hardhat 2
     href: /comparison
   - title: Alpha version limitations
