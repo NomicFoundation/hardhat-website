@@ -1,46 +1,56 @@
-import React from "react";
-import path from "path";
-import glob from "glob";
-import fs from "fs";
-import { execSync } from "child_process";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import matter from "gray-matter";
-import remarkDirective from "remark-directive";
-import { serialize } from "next-mdx-remote/serialize";
-import { visit } from "unist-util-visit";
-import { h } from "hastscript";
-import remarkGfm from "remark-gfm";
-import remarkUnwrapImages from "remark-unwrap-images";
-import rehypePrism from "rehype-prism";
-import remarkPrism from "remark-prism";
+import React from 'react';
+import path from 'path';
+import glob from 'glob';
+import fs from 'fs';
+import { execSync } from 'child_process';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
+import matter from 'gray-matter';
+import remarkDirective from 'remark-directive';
+import { serialize } from 'next-mdx-remote/serialize';
+import { visit } from 'unist-util-visit';
+import { h } from 'hastscript';
+import remarkGfm from 'remark-gfm';
+import remarkUnwrapImages from 'remark-unwrap-images';
+import rehypePrism from 'rehype-prism';
+import remarkPrism from 'remark-prism';
 
-import { DOCS_PATH, REPO_URL, TEMP_PATH } from "../config";
-import { ITabsState } from "../global-tabs";
+import { DOCS_PATH, REPO_URL, TEMP_PATH } from '../config';
+import { ITabsState } from '../global-tabs';
 
 export const newLineDividerRegEx = /\r\n|\n/;
 
 export const withIndexURL = (pathname: string): string[] => {
-  const docPath = pathname.split("/");
-  if (docPath[docPath.length - 1] === "index") {
+  const docPath = pathname.split('/');
+  if (docPath[docPath.length - 1] === 'index') {
     return [...docPath.slice(0, docPath.length - 1)];
   }
   return docPath;
 };
 
 export const withIndexFile = (docPath: string[]): string => {
-  const mdFilePath = path.join(DOCS_PATH, `${docPath.join("/")}.md`);
+  const mdFilePath = path.join(DOCS_PATH, `${docPath.join('/')}.md`);
   return mdFilePath;
+};
+
+export const normilizePath = (docPath: string[]): string[] => {
+  if (!docPath || docPath.length === 0) return [];
+
+  const normalized = [...docPath];
+
+  const last = normalized[normalized.length - 1];
+  normalized[normalized.length - 1] = last.replace(/\.md$/, "");
+
+  return normalized;
 };
 
 export const withCodeElementWrapper = (
   content: string,
-  extension: string = "",
-  highlightedLinesNumbers: string = ""
+  extension: string = '',
+  highlightedLinesNumbers: string = ''
 ) => {
-  const stringNumbersEntity =
-    highlightedLinesNumbers.length > 0 ? `{${highlightedLinesNumbers}}` : "";
+  const stringNumbersEntity = highlightedLinesNumbers.length > 0 ? `{${highlightedLinesNumbers}}` : '';
 
-  return `\`\`\`${extension ?? "markup"}${stringNumbersEntity}
+  return `\`\`\`${extension ?? 'markup'}${stringNumbersEntity}
 ${content}
   \`\`\``;
 };
@@ -51,15 +61,11 @@ export const getEntriesInfo = (
   pathname: string;
   highlightedLinesNumbers: string;
 } => {
-  const highlightedLinesNumbers: string | null = line.includes("{")
-    ? line.substring(line.indexOf("{")).replace(/[{}]/g, "").trim()
-    : "";
+  const highlightedLinesNumbers: string | null = line.includes('{')
+    ? line.substring(line.indexOf('{')).replace(/[{}]/g, '').trim()
+    : '';
 
-  const pathname = (
-    highlightedLinesNumbers ? line.substring(0, line.indexOf("{")) : line
-  )
-    .replace("<<< @/", "")
-    .trim();
+  const pathname = (highlightedLinesNumbers ? line.substring(0, line.indexOf('{')) : line).replace('<<< @/', '').trim();
 
   return {
     pathname,
@@ -76,36 +82,32 @@ export const readFileContent = (pathname: string) => {
 };
 
 export const getFileExtensionFromPathname = (pathname: string) => {
-  return pathname.substring(pathname.lastIndexOf(".") + 1);
+  return pathname.substring(pathname.lastIndexOf('.') + 1);
 };
 
 export const withInsertedCodeFromLinks = (content: string) => {
   return content
     .split(newLineDividerRegEx)
     .map((line: string) => {
-      if (!line.startsWith("<<<")) return line;
+      if (!line.startsWith('<<<')) return line;
 
       const { pathname, highlightedLinesNumbers } = getEntriesInfo(line);
 
       const fileContent = readFileContent(pathname);
       const fileExtension = getFileExtensionFromPathname(pathname);
 
-      return withCodeElementWrapper(
-        fileContent,
-        fileExtension,
-        highlightedLinesNumbers
-      );
+      return withCodeElementWrapper(fileContent, fileExtension, highlightedLinesNumbers);
     })
-    .join("\n");
+    .join('\n');
 };
 
 export const withoutComments = (content: string) => {
-  return content.replace(/<!--[\s\S]*?-->/gm, "");
+  return content.replace(/<!--[\s\S]*?-->/gm, '');
 };
 
 export const replacePlaceholders = (content: string) => {
-  const recommendedSolcVersion = "0.8.28";
-  const latestPragma = "^0.8.0";
+  const recommendedSolcVersion = '0.8.28';
+  const latestPragma = '^0.8.0';
   const hardhatPackageJson = fs
     .readFileSync(
       path.resolve(
@@ -124,14 +126,12 @@ export const replacePlaceholders = (content: string) => {
   const hardhatVersion = JSON.parse(hardhatPackageJson).version;
 
   return content
-    .replaceAll("{RECOMMENDED_SOLC_VERSION}", recommendedSolcVersion)
-    .replaceAll("{LATEST_PRAGMA}", latestPragma)
-    .replaceAll("{HARDHAT_VERSION}", hardhatVersion);
+    .replaceAll('{RECOMMENDED_SOLC_VERSION}', recommendedSolcVersion)
+    .replaceAll('{LATEST_PRAGMA}', latestPragma)
+    .replaceAll('{HARDHAT_VERSION}', hardhatVersion);
 };
 
-export const readMDFileFromPathOrIndex = (
-  fileName: string
-): { source: string; fileName: string } => {
+export const readMDFileFromPathOrIndex = (fileName: string): { source: string; fileName: string } => {
   try {
     const source = fs.readFileSync(fileName).toString();
     return {
@@ -139,7 +139,7 @@ export const readMDFileFromPathOrIndex = (
       fileName,
     };
   } catch (err) {
-    const file = fileName.replace(".md", "/index.md");
+    const file = fileName.replace('.md', '/index.md');
     const source = fs.readFileSync(file).toString();
     return {
       source,
@@ -153,11 +153,7 @@ function createCustomNodes() {
   // @ts-ignore
   return (tree) => {
     visit(tree, (node) => {
-      if (
-        node.type === "textDirective" ||
-        node.type === "leafDirective" ||
-        node.type === "containerDirective"
-      ) {
+      if (node.type === 'textDirective' || node.type === 'leafDirective' || node.type === 'containerDirective') {
         // eslint-disable-next-line
         const data = node.data || (node.data = {});
         const hast = h(node.name, node.attributes);
@@ -176,9 +172,9 @@ function setDefaultLang() {
   // @ts-ignore
   return (tree) => {
     visit(tree, (node) => {
-      if (node.type === "code" && !node.lang) {
+      if (node.type === 'code' && !node.lang) {
         // eslint-disable-next-line
-        node.lang = "markup";
+        node.lang = 'markup';
       }
     });
   };
@@ -189,7 +185,7 @@ function validateTabs() {
   return (tree) => {
     const initialTabsState: ITabsState = {};
     visit(tree, (node) => {
-      if (node.type === "containerDirective" && node.name === "tabsgroup") {
+      if (node.type === 'containerDirective' && node.name === 'tabsgroup') {
         node.children?.forEach(
           (
             child: React.ReactElement & {
@@ -200,42 +196,32 @@ function validateTabs() {
             }
           ) => {
             const { options } = node.attributes;
-            if (!options.split(",").includes(child.data.hProperties.value)) {
-              throw new Error(
-                `Value "${child.data.hProperties.value}" is not provided in TabsGroups options.`
-              );
+            if (!options.split(',').includes(child.data.hProperties.value)) {
+              throw new Error(`Value "${child.data.hProperties.value}" is not provided in TabsGroups options.`);
             }
-            initialTabsState[options.split(",").join("/")] = options
-              .split(",")[0]
-              .trim();
+            initialTabsState[options.split(',').join('/')] = options.split(',')[0].trim();
           }
         );
       }
     });
-    const tabsConfigPath = `${TEMP_PATH}tabsConfig.json`;
-    fs.writeFileSync(tabsConfigPath, JSON.stringify(initialTabsState));
   };
 }
 
 export const generateTitleFromContent = (content: string) => {
   return content
     .split(newLineDividerRegEx)
-    .filter((line) => line.startsWith("#"))[0]
-    ?.replace(/[#]*/g, "")
+    .filter((line) => line.startsWith('#'))[0]
+    ?.replace(/[#]*/g, '')
     .trim();
 };
 
 export const parseMdFile = (source: string) => {
   const { content, data } = matter(source);
-  const formattedContent = replacePlaceholders(
-    withoutComments(withInsertedCodeFromLinks(content))
-  );
+  const formattedContent = replacePlaceholders(withoutComments(withInsertedCodeFromLinks(content)));
 
   const tocTitle = data.title ?? generateTitleFromContent(formattedContent);
-  const seoTitle = tocTitle || "Hardhat";
-  const seoDescription =
-    data.title ||
-    "Ethereum development environment for professionals by Nomic Foundation";
+  const seoTitle = tocTitle || 'Hardhat';
+  const seoDescription = data.title || 'Ethereum development environment for professionals by Nomic Foundation';
 
   return {
     rawContent: content,
@@ -276,7 +262,7 @@ export const prepareMdContent = async (
           [
             rehypePrism,
             {
-              plugins: ["line-highlight"],
+              plugins: ['line-highlight'],
             },
           ],
         ],
@@ -295,15 +281,15 @@ export const prepareMdContent = async (
 export const getMDFiles = (): string[] =>
   glob
     .sync(`${DOCS_PATH}**/*.md`)
-    .filter(
-      (pathname) =>
-        /\.mdx?$/.test(pathname) && !pathname.includes("plugins/index.md")
-    )
-    .map((pathname) => pathname.replace(DOCS_PATH, ""));
+    .filter((pathname) => /\.mdx?$/.test(pathname) && !pathname.includes('plugins/index.md'))
+    .map((pathname) => pathname.replace(DOCS_PATH, ''));
 
 export const getPathParamsByFile = (pathname: string): string[] => {
-  const fileBase = pathname.replace(/\.mdx?$/, "");
+  const fileBase = pathname.replace(/\.mdx?$/, '');
   return withIndexURL(fileBase);
+};
+export const getPathParamsByFileMd = (pathname: string): string[] => {
+  return withIndexURL(pathname);
 };
 
 export const getHrefByFile = (pathname: string): string => {
@@ -312,11 +298,20 @@ export const getHrefByFile = (pathname: string): string => {
 };
 
 export const getMDPaths = (): Array<{ params: { docPath: string[] } }> =>
-  getMDFiles().map((pathname) => ({
-    params: {
-      docPath: getPathParamsByFile(pathname),
-    },
-  }));
+  getMDFiles()
+    .map((pathname) => [
+      {
+        params: {
+          docPath: getPathParamsByFile(pathname),
+        },
+      },
+      {
+        params: {
+          docPath: getPathParamsByFileMd(pathname),
+        },
+      },
+    ])
+    .flat();
 
 export const getSidebarConfig = () => {
   try {
@@ -340,29 +335,21 @@ export const getLayout = (fileName: string) => {
    * (as getStaticPaths and getStaticProps executed in isolated environments, so it's the only way to pass information)
    */
   const { layoutConfigs, layoutsMap } = getSidebarConfig();
-  const fileNameKey = fileName.replace(DOCS_PATH, "");
+  const fileNameKey = fileName.replace(DOCS_PATH, '');
   const { layout, prev = null, next = null } = layoutsMap[fileNameKey];
   return { layout: layoutConfigs[layout], prev, next };
 };
 
 export const getCommitDate = (fileName: string): string => {
-  const output = execSync(
-    `git log -1 --pretty="format:%cI" ${fileName}`
-  ).toString();
+  const output = execSync(`git log -1 --pretty="format:%cI" ${fileName}`).toString();
   return output;
 };
 
 export const getEditLink = (fileName: string): string => {
   // the errors page is a special case because it's auto-generated
-  const errorsFile = path.join(
-    "content",
-    "hardhat-runner",
-    "docs",
-    "errors",
-    "index.md"
-  );
+  const errorsFile = path.join('content', 'hardhat-runner', 'docs', 'errors', 'index.md');
   if (fileName.endsWith(errorsFile)) {
-    return "https://github.com/NomicFoundation/hardhat/edit/main/packages/hardhat-core/src/internal/core/errors-list.ts";
+    return 'https://github.com/NomicFoundation/hardhat/edit/main/packages/hardhat-core/src/internal/core/errors-list.ts';
   }
 
   return fileName.replace(DOCS_PATH, REPO_URL);

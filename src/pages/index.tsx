@@ -1,17 +1,21 @@
-import type { NextPage } from "next";
 import HeroBlock from "../components/landingBlocks/HeroBlock";
-import FeatureCard from "../components/ui/FeatureCard";
-import GetStartedBlock from "../components/landingBlocks/GetStartedBlock";
 import WhyHardhatBlock from "../components/landingBlocks/WhyHardhatBlock";
-import VibrantCommunityBlock from "../components/landingBlocks/VibrantCommunityBlock";
-import TrustedTeamsBlock from "../components/landingBlocks/TrustedTeamsBlock";
-import BuiltByBlock from "../components/landingBlocks/BuiltByBlock";
-import ReviewsBlock from "../components/landingBlocks/ReviewsBlock";
-import ToolsBlock from "../components/landingBlocks/ToolsBlock";
 import homepageContent from "../content/home";
 import LandingLayout from "../components/LandingLayout";
+import WhatIsNewBlock, {
+  NewsType,
+} from "../components/landingBlocks/WhatIsNewBlock";
+import HardhatNews from "../components/landingBlocks/HardhatNews";
+import getPosts from "../lib/getPosts";
+import getHardHatReleases from "../lib/getHardHatReleases";
+import EmailForm from "../components/landingBlocks/EmailForm";
 
-const Home: NextPage = () => {
+type HomePageType = {
+  releases: NewsType[];
+  posts: [];
+};
+
+const Home = ({ releases, posts }: HomePageType) => {
   return (
     <LandingLayout
       seo={{
@@ -23,33 +27,32 @@ const Home: NextPage = () => {
     >
       <HeroBlock content={homepageContent.heroBlockContent} />
 
-      <ToolsBlock content={homepageContent.toolsBlockContent} />
-
-      <WhyHardhatBlock content={homepageContent.whyHardhatContent}>
-        <FeatureCard
-          content={homepageContent.featureCardsContent.featureCardOne}
-          isReversed
-        />
-        <FeatureCard
-          content={homepageContent.featureCardsContent.featureCardTwo}
-        />
-        <FeatureCard
-          content={homepageContent.featureCardsContent.featureCardThree}
-          isReversed
-        />
-        <FeatureCard
-          content={homepageContent.featureCardsContent.featureCardFour}
-        />
-      </WhyHardhatBlock>
-      <VibrantCommunityBlock
-        content={homepageContent.vibrantCommunityBlockContent}
+      <WhyHardhatBlock content={homepageContent.whyHardhatContent} />
+      <WhatIsNewBlock
+        content={{
+          title: homepageContent.whatIsNewBlockContent.title,
+          releases,
+        }}
       />
-      <GetStartedBlock content={homepageContent.getStartedBlockContent} />
-      <TrustedTeamsBlock content={homepageContent.trustedTeamsBlockContent} />
-      <ReviewsBlock content={homepageContent.reviewsBlockContent} />
-      <BuiltByBlock content={homepageContent.builtByBlockContent} />
+      <HardhatNews
+        content={{ title: homepageContent.hardhatNewsContent.title, posts }}
+      />
+
+      <EmailForm />
     </LandingLayout>
   );
 };
 
 export default Home;
+
+export const getStaticProps = async () => {
+  const releases = await getHardHatReleases();
+  const posts = await getPosts();
+  return {
+    props: {
+      releases,
+      posts,
+    },
+    revalidate: 3600,
+  };
+};

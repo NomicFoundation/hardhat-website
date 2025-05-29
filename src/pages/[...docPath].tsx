@@ -6,6 +6,7 @@ import {
   getEditLink,
   getLayout,
   getMDPaths,
+  normilizePath,
   prepareMdContent,
   readMDFileFromPathOrIndex,
   withIndexFile,
@@ -55,7 +56,8 @@ export default DocPage;
 export const getStaticProps: GetStaticProps = async (props) => {
   const { params } = props;
   // @ts-ignore
-  const fullName = withIndexFile(params.docPath);
+  const normalizedPath = normilizePath(params.docPath);
+  const fullName = withIndexFile(normalizedPath);
   const { source, fileName } = readMDFileFromPathOrIndex(fullName);
   const lastEditDate = getCommitDate(fileName);
   const editLink = getEditLink(fileName);
