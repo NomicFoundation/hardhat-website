@@ -143,6 +143,27 @@ To do this, you need to configure Hardhat to compile the contract and generate a
 
 To learn how to do it, please read [this guide](./configuring-the-compiler.md#generating-artifacts-from-npm-dependencies).
 
+## Viem assertions
+
+The example project includes the `hardhat-viem-assertions` plugin, which helps you write expressive TypeScript tests in viem-based projects.
+
+This plugin adds an `assertions` property to the `viem` object, giving you utility functions to test contract behavior more easily. For example, the following test checks that calling a function emits the expected event:
+
+```typescript
+it("Should emit the Increment event when calling the inc() function", async function () {
+  const counter = await viem.deployContract("Counter");
+
+  await viem.assertions.emitWithArgs(
+    counter.write.inc(),
+    counter,
+    "Increment",
+    [1n]
+  );
+});
+```
+
+You can also assert that transactions revert (and why), or check that account balances change as expected.
+
 ## Type-safe contract interactions
 
 Viem has powerful typing capabilities, triggering compilation errors when you make mistakes like using the wrong type in a function argument or sending value to a non-payable function:
