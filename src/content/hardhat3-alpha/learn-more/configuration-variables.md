@@ -282,7 +282,3 @@ On Linux, this might print something like:
 ```
 path to keystore file: /home/username/.config/hardhat-nodejs/keystore.json
 ```
-
-<!--TODO: cryptography details -->
-
-<!-- TODO: how safe it is? -->
