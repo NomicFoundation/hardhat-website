@@ -223,7 +223,7 @@ Besides `keystore set`, Hardhat provides several other tasks to help you manage 
 
   ::::
 
-## Combining environment and encrypted variables
+<!-- ## Combining environment and encrypted variables
 
 The `hardhat-keystore` plugin extends how configuration variables are resolved, but it doesn’t replace their default behavior. Hardhat still looks for environment variables first, and only falls back to the keystore if the variable isn’t set in the environment. This makes it easy to mix and override values depending on your workflow.
 
@@ -251,7 +251,7 @@ SEPOLIA_RPC_URL=https://temporary-url.example pnpm hardhat test
 
 This lets you test with a different provider without changing or deleting the encrypted value.
 
-Another use case is **defining a variable exclusively through environment variables**, without using the keystore at all. This is useful in environments like CI runners. Since environment variables are always checked first, you don’t need to change anything in your config for this to work.
+Another use case is **defining a variable exclusively through environment variables**, without using the keystore at all. This is useful in environments like CI runners. Since environment variables are always checked first, you don’t need to change anything in your config for this to work. -->
 
 ## Under the hood
 
