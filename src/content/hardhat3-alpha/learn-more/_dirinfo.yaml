@@ -9,6 +9,8 @@ order:
     href: /deploying-contracts
   - title: Configuring the compiler
     href: /configuring-the-compiler
+  - title: Configuration variables
+    href: /configuration-variables
   - title: Differences with Hardhat 2
     href: /comparison
   - title: Alpha version limitations
