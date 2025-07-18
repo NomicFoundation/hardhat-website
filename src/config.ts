@@ -40,6 +40,10 @@ export const DOCS_LANDING_PATH = path.join(
   process.cwd(),
   "src/content/docs-landing"
 );
+export const HARDHAT2_REDIRECT_PATH = path.join(
+  process.cwd(),
+  "src/content/hardhat2"
+);
 export const PLUGINS_PATH = path.join(
   process.cwd(),
   "src/content/hardhat-runner/plugins"
@@ -95,12 +99,12 @@ export const menuItemsList: MenuItemType[] = [
     href: "/hardhat-runner/plugins",
   },
   {
-    label: "Documentation",
-    href: "/docs",
-  },
-  {
     label: "Tutorial",
     href: NavigationPagesPaths.TUTORIAL,
+  },
+  {
+    label: "Hardhat 2",
+    href: "/hardhat2",
   },
 ];
 

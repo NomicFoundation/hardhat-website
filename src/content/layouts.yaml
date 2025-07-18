@@ -73,3 +73,8 @@ hardhat3-alpha:
   folders:
     - hardhat3-alpha
     - hardhat3-alpha/learn-more
+
+hardhat2:
+  title: Hardhat 2
+  folders:
+    - hardhat2
