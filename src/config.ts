@@ -61,8 +61,8 @@ export const menuItemsList: MenuItemType[] = [
     href: NavigationPagesPaths.HOME,
   },
   {
-    label: "Tools",
-    href: "/#tools",
+    label: "Documentation",
+    href: "/docs",
     subItems: [
       {
         prefix: "Hardhat",
@@ -77,13 +77,6 @@ export const menuItemsList: MenuItemType[] = [
         href: "/ignition",
         icon: IgnitionIcon,
         iconDark: IgnitionIconDark,
-      },
-      {
-        prefix: "Hardhat",
-        label: "Network",
-        href: "/hardhat-network",
-        icon: NetworkIcon,
-        iconDark: NetworkIconDark,
       },
       {
         prefix: "Hardhat",
