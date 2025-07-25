@@ -1,6 +1,7 @@
 import React from "react";
 import { styled } from "linaria/react";
-import { media, tm, tmDark, tmSelectors } from "../../themes";
+import { media, tm, tmDark, tmSelectors, breakpoints } from "../../themes";
+import { CopyButton } from "./CopyButton";
 
 export interface CodeProps {
   children: string | JSX.Element[] | JSX.Element;
@@ -52,12 +53,25 @@ const StyledCode = styled.code`
 `;
 
 const StyledPre = styled.pre`
+  position: relative;
   margin: 16px 0;
   padding: 20px 24px;
   background-color: ${tm(({ colors }) => colors.codeBlockBackground)};
   border-radius: 6px;
   overflow: auto;
   border: 1px solid ${tm(({ colors }) => colors.transparent)};
+  
+  @media (hover: hover) {
+    &:hover .copy-button {
+      opacity: 1;
+    }
+  }
+  
+  @media screen and (max-width: ${breakpoints.smd}px) {
+    padding: 16px;
+    padding-top: 56px;
+  }
+  
   & code {
     padding: 0;
     color: ${tm(({ colors }) => colors.preCodeColor)};
@@ -127,7 +141,37 @@ const Code = ({ children }: CodeProps) => {
 };
 
 const Pre = ({ children, className }: PreProps) => {
-  return <StyledPre className={className}>{children}</StyledPre>;
+  // Extract the code text from the children
+  const getCodeText = (node: React.ReactElement): string => {
+    if (typeof node === 'string') return node;
+    if (!node || !node.props) return '';
+    
+    if (node.props.children) {
+      if (typeof node.props.children === 'string') {
+        return node.props.children;
+      }
+      if (Array.isArray(node.props.children)) {
+        return node.props.children.map((child: any) => {
+          if (typeof child === 'string') return child;
+          if (child && child.props && child.props.children) {
+            return getCodeText(child);
+          }
+          return '';
+        }).join('');
+      }
+      return getCodeText(node.props.children);
+    }
+    return '';
+  };
+
+  const codeText = getCodeText(children);
+
+  return (
+    <StyledPre className={className}>
+      <CopyButton code={codeText} />
+      {children}
+    </StyledPre>
+  );
 };
 
 const CodeBlocks = {
