@@ -14,6 +14,19 @@ const path = require("path");
  *
  */
 const customRedirects = [
+  // Workarounds: this are top pritory, as they workaround an issue with the site generator
+  // where there's duplicate content
+  {
+    source: "/docs-landing",
+    destination: "/docs",
+    permanent: false,
+  },
+  {
+    source: "/hardhat2-redirect",
+    destination: "/hardhat2",
+    permanent: false,
+  },
+
   // shortlinks
   {
     source: "/config",
