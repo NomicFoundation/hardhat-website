@@ -50,7 +50,7 @@ const Docs: NextPage<IDocsPage> = ({ mdxSource, layout }) => {
     >
       <div>
         <PageTitle>{title}</PageTitle>
-        {/* @ts-ignore */}
+        {/* @ts-expect-error: MDXRemote types are wrong */}
         <MDXRemote {...mdxSource} components={components} />
       </div>
     </PluginsLayout>
