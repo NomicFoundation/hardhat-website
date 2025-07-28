@@ -321,9 +321,7 @@ const DocumentationLayout = ({
   return (
     <ThemeProvider>
       <Container>
-        <Header
-          className={`${isSidebarOpen ? "is-sidebar-open" : ""} with-line`}
-        >
+        <Header className={isSidebarOpen ? "is-sidebar-open" : ""}>
           <Banner
             content={bannerContent}
             renderContent={({ content }: DefaultBannerProps) => (
