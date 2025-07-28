@@ -30,6 +30,11 @@ const customRedirects = [
     destination: "/hardhat-runner/docs/getting-started#overview",
     permanent: false,
   },
+  {
+    source: "/get-started",
+    destination: "/getting-started",
+    permanent: false,
+  },
   { source: "/links/stack-traces", destination: "/", permanent: false },
   {
     source: "/reportbug",
