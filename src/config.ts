@@ -9,9 +9,7 @@ import TwitterLogo from "./assets/socials/tw-logo";
 import DiscordLogo from "./assets/socials/dc-logo";
 import SolidityIcon from "./assets/tools/solidity";
 import RunnerIcon from "./assets/tools/runner";
-import NetworkIcon from "./assets/tools/network";
 import RunnerIconDark from "./assets/tools/runner-dark";
-import NetworkIconDark from "./assets/tools/network-dark";
 import SolidityIconDark from "./assets/tools/solidity-dark";
 import IgnitionIcon from "./assets/tools/ignition";
 import IgnitionIconDark from "./assets/tools/ignition-dark";
@@ -42,7 +40,7 @@ export const DOCS_LANDING_PATH = path.join(
 );
 export const HARDHAT2_REDIRECT_PATH = path.join(
   process.cwd(),
-  "src/content/hardhat2"
+  "src/content/hardhat2-redirect"
 );
 export const PLUGINS_PATH = path.join(
   process.cwd(),

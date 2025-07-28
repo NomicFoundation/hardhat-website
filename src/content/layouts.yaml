@@ -62,6 +62,7 @@ hidden:
   title: hidden
   folders:
     - docs-landing
+    - hardhat2-redirect
 
 tutorial:
   title: tutorial
@@ -73,8 +74,3 @@ hardhat3-alpha:
   folders:
     - hardhat3-alpha
     - hardhat3-alpha/learn-more
-
-hardhat2:
-  title: Hardhat 2
-  folders:
-    - hardhat2
