@@ -4,7 +4,6 @@ export enum SectionType {
   SINGLE = "single",
   GROUP = "group",
   HIDDEN = "hidden",
-  PLUGINS = "plugins",
 }
 
 export type OrderType =
