@@ -89,10 +89,10 @@ export const menuItemsList: MenuItemType[] = [
     label: "Plugins",
     href: "/hardhat-runner/plugins",
   },
-  {
-    label: "Tutorial",
-    href: NavigationPagesPaths.TUTORIAL,
-  },
+  // {
+  //   label: "Tutorial",
+  //   href: NavigationPagesPaths.TUTORIAL,
+  // },
   {
     label: "Hardhat 2",
     href: "/hardhat2",
