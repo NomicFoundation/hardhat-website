@@ -108,15 +108,15 @@ By using TypeScript, you can also type your configuration, which will save you f
 
 For example, the sample project's config turns from this:
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/hardhat.config.js{1,4}
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/hardhat.config.js{1,4}
 
 into this:
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/hardhat.config.ts{1,2,4,8}
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/hardhat.config.ts{1,2,4,8}
 
 Finally, you need to create a [`tsconfig.json`](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) file. Here's our recommended one:
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/tsconfig.json
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/tsconfig.json
 
 And that's really all it takes. Now you can write your config, tests, tasks and Ignition modules in TypeScript.
 

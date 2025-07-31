@@ -157,7 +157,7 @@ The list of available tasks includes the built-in ones and also those that came 
 
 Next, if you take a look in the `contracts/` folder, you'll see `Lock.sol`:
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/contracts/Lock.sol
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/contracts/Lock.sol
 
 To compile it, simply run:
 
@@ -177,13 +177,13 @@ If you take a look in the `test/` folder, you'll see a test file:
 
 :::tab{value="TypeScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/test/Lock.ts
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/test/Lock.ts
 
 :::
 
 :::tab{value="JavaScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/test/Lock.js
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/test/Lock.js
 
 :::
 
@@ -265,13 +265,13 @@ Inside the `ignition/modules` folder you will find a file with the following cod
 
 :::tab{value="TypeScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/ignition/modules/Lock.ts
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/ignition/modules/Lock.ts
 
 :::
 
 :::tab{value="JavaScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/ignition/modules/Lock.js
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/ignition/modules/Lock.js
 
 :::
 

@@ -8,13 +8,13 @@ In the sample project, the Ignition module `LockModule` which deploys the `Lock`
 
 :::tab{value="TypeScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/ignition/modules/Lock.ts
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/typescript/ignition/modules/Lock.ts
 
 :::
 
 :::tab{value="JavaScript"}
 
-<<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/ignition/modules/Lock.js
+<< @/../websites-version-of-hardhat/packages/hardhat-core/sample-projects/javascript/ignition/modules/Lock.js
 
 :::
 
