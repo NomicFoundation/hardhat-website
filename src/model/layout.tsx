@@ -9,7 +9,6 @@ import {
   readMDFileFromPathOrIndex,
 } from "./markdown";
 import { DirInfoConfigKeys, DOCS_PATH, TEMP_PATH } from "../config";
-import { getPluginsSubitems } from "./plugins";
 
 import {
   SectionType,
@@ -199,6 +198,27 @@ const generateSingleSection = (folder: FolderType) => {
 };
 
 const generateHiddenSection = () => null;
+
+export const generateSlug = (pluginName: string): string =>
+  pluginName.replace(/^@/, "").replace(/\//g, "-");
+
+export const getPluginsSubitems = (
+  folderPath: string,
+  order: OrderType[]
+): TocSubitem[] => {
+  return order.map((item: OrderType) => {
+    if (typeof item === "object") {
+      return {
+        label: item.title,
+        href: item.href,
+      };
+    }
+    return {
+      label: item,
+      href: `/${folderPath}/${generateSlug(item)}`,
+    };
+  });
+};
 
 const generatePluginsSection = (folder: FolderType) => {
   const tocItem = {

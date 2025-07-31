@@ -95,5 +95,5 @@ export interface IPlugin {
   authorUrl: string;
   description: string;
   tags: string[];
-  normalizedName?: string;
+  slug?: string;
 }

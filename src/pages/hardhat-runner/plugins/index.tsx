@@ -10,13 +10,13 @@ import {
 } from "../../../model/markdown";
 import { PLUGINS_PATH } from "../../../config";
 
-import { getPlugins, PluginsList } from "../../../model/plugins";
+import { plugins } from "../../../content/hardhat-runner/plugins/plugins";
 import { IPlugin } from "../../../model/types";
 import PluginSnippet from "../../../components/PluginSnippet";
 
 interface IPluginsPage {
   mdxSource: MDXRemoteSerializeResult;
-  sortedPlugins: PluginsList;
+  sortedPlugins: typeof plugins;
 }
 
 const PageTitle = styled.h3`
@@ -116,12 +116,12 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
         <SectionTitleWrapper>
           <SectionTitle id="official-plugins">Official plugins</SectionTitle>
         </SectionTitleWrapper>
-        {sortedPlugins.officialPlugins.map((plugin: IPlugin) => {
+        {sortedPlugins.officialPlugins.map((plugin) => {
           return (
             <PluginSnippet
               key={plugin.name}
               {...plugin}
-              href={`/hardhat-runner/plugins/${plugin.normalizedName || ""}`}
+              href={`/hardhat-runner/plugins/${plugin.slug}`}
             />
           );
         })}
@@ -152,14 +152,13 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
 export default Plugins;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const sortedPlugins = await getPlugins();
   const { source } = readMDFileFromPathOrIndex(`${PLUGINS_PATH}/index.md`);
   const { mdxSource } = await prepareMdContent(source);
 
   return {
     props: {
       mdxSource,
-      sortedPlugins,
+      sortedPlugins: plugins,
     },
   };
 };
