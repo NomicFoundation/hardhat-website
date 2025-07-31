@@ -136,7 +136,7 @@ export const generatePluginsDownloads = async (pluginsD: typeof plugins) => {
 export const addNormalizedName = (pluginsList: IPlugin[]) => {
   return pluginsList.map((p) => ({
     ...p,
-    normalizedName: p.name.split("/").join("-").replace(/^@/, ""),
+    normalizedName: generateSlug(p.name),
   }));
 };
 
