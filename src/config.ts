@@ -23,15 +23,9 @@ export const SOCIALS_LINKS = {
 export const PRIVACY_POLICY_PATH = "/privacy-policy.html";
 
 export const bannerContent = {
-  text: "join the Hardhat team! Nomic Labs is hiring",
+  text: "TODO: join the Hardhat team! Nomic Labs is hiring",
   href: "https://hardhat.org/solidity-survey-2024",
 };
-
-// export const bannerContent = {
-//   text: "Please take a few minutes to complete the 2024 Solidity Survey",
-//   shortText: "Complete the 2024 Solidity Survey here",
-//   href: "https://hardhat.org/solidity-survey-2024",
-// };
 
 export const DOCS_PATH = path.join(process.cwd(), "src/content/");
 export const DOCS_LANDING_PATH = path.join(
@@ -53,9 +47,6 @@ export const MARKDOWN_REAPLACEMENT_VALUES_JSON = path.join(
   TEMP_PATH,
   "markdown-replacement-values.json"
 );
-
-// Regular expression to find tool in query string.
-export const toolRegExp = /tool=[A-Z_]+/;
 
 export const menuItemsList: MenuItemType[] = [
   {
@@ -102,13 +93,6 @@ export const menuItemsList: MenuItemType[] = [
     href: "/hardhat2",
   },
 ];
-
-export enum Tools {
-  RUNNER = "RUNNER",
-  IGNITION = "IGNITION",
-  NETWORK = "NETWORK",
-  SOLIDITY = "SOLIDITY",
-}
 
 export const socialsItems = [
   {
