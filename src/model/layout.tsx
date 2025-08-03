@@ -361,6 +361,6 @@ export const createLayouts = () => {
   const sidebarConfigPath = `${TEMP_PATH}sidebarConfig.json`;
   fs.writeFileSync(
     sidebarConfigPath,
-    JSON.stringify({ layoutConfigs, layoutsMap })
+    JSON.stringify({ layoutConfigs, layoutsMap }, undefined, 2)
   );
 };
