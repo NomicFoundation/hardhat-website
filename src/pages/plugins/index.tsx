@@ -96,7 +96,10 @@ const SectionTitleDescription = styled.span`
   }
 `;
 
-const Plugins: NextPage<IPluginsPage> = ({ mdxSource, plugins }) => {
+const Plugins: NextPage<IPluginsPage> = ({
+  mdxSource,
+  plugins: pluginsProp,
+}) => {
   return (
     <PluginsLayout
       seo={{
@@ -112,7 +115,7 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, plugins }) => {
         <SectionTitleWrapper>
           <SectionTitle id="official-plugins">Official plugins</SectionTitle>
         </SectionTitleWrapper>
-        {plugins.officialPlugins.map((plugin) => {
+        {pluginsProp.officialPlugins.map((plugin) => {
           return (
             <PluginSnippet
               key={plugin.name}
@@ -128,7 +131,7 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, plugins }) => {
             Sorted by npm downloads
           </SectionTitleDescription>
         </SectionTitleWrapper>
-        {plugins.communityPlugins.map((plugin: IPlugin) => {
+        {pluginsProp.communityPlugins.map((plugin: IPlugin) => {
           return (
             <PluginSnippet
               key={plugin.name}
