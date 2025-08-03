@@ -1,17 +1,14 @@
 import type { GetStaticProps, NextPage } from "next";
 import { styled } from "linaria/react";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import PluginsLayout from "../../components/PluginsLayout";
 import { media, tm, tmDark, tmSelectors } from "../../themes";
-import { components } from "../../components/DocumentationLayout";
-import { prepareMdContent } from "../../model/markdown";
 
 import { plugins } from "../../content/plugins/plugins";
 import { IPlugin } from "../../model/types";
 import PluginSnippet from "../../components/PluginSnippet";
+import MDLink from "../../components/mdxComponents/MDLink";
 
 interface IPluginsPage {
-  mdxSource: MDXRemoteSerializeResult;
   plugins: typeof plugins;
 }
 
@@ -44,6 +41,10 @@ const SectionTitleWrapper = styled.div`
   ${media.md} {
     align-items: center;
     flex-direction: row;
+  }
+
+  &.first {
+    margin-top: 40px;
   }
 `;
 
@@ -96,23 +97,57 @@ const SectionTitleDescription = styled.span`
   }
 `;
 
-const Plugins: NextPage<IPluginsPage> = ({
-  mdxSource,
-  plugins: pluginsProp,
-}) => {
+const Description = styled.div`
+  font-size: 18px;
+  color: ${tm(({ colors }) => colors.codeColor)};
+  margin-top: 30px;
+
+  ${tmSelectors.dark} {
+    color: ${tmDark(({ colors }) => colors.codeColor)};
+  }
+
+  ${media.mqDark} {
+    ${tmSelectors.auto} {
+      color: ${tmDark(({ colors }) => colors.codeColor)};
+    }
+  }
+
+  i {
+    color: ${tm(({ colors }) => colors.neutral700)};
+
+    ${tmSelectors.dark} {
+      color: ${tmDark(({ colors }) => colors.neutral700)};
+    }
+
+    ${media.mqDark} {
+      ${tmSelectors.auto} {
+        color: ${tmDark(({ colors }) => colors.neutral700)};
+      }
+    }
+  }
+
+  &.last {
+    margin-bottom: 40px;
+  }
+`;
+
+const Plugins: NextPage<IPluginsPage> = ({ plugins: pluginsProp }) => {
   return (
     <PluginsLayout
       seo={{
-        title: "Plugins",
-        description: "Plugins",
+        title: "Hardhat 3 plugins",
+        description: "Hardhat 3 plugins",
       }}
       sidebarLayout={[]}
     >
       <div>
         <PageTitle>Plugins</PageTitle>
-        {/* @ts-ignore */}
-        <MDXRemote {...mdxSource} components={components} />
-        <SectionTitleWrapper>
+
+        <Description>
+          Extend Hardhat&lsquo;s functionality with the plugins below.
+        </Description>
+
+        <SectionTitleWrapper className="first">
           <SectionTitle id="official-plugins">Official plugins</SectionTitle>
         </SectionTitleWrapper>
         {pluginsProp.officialPlugins.map((plugin) => {
@@ -124,25 +159,36 @@ const Plugins: NextPage<IPluginsPage> = ({
             />
           );
         })}
-
         <SectionTitleWrapper>
           <SectionTitle id="community-plugins">Community plugins</SectionTitle>
           <SectionTitleDescription>
             Sorted by npm downloads
           </SectionTitleDescription>
         </SectionTitleWrapper>
-        {pluginsProp.communityPlugins.map((plugin: IPlugin) => {
-          return (
-            <PluginSnippet
-              key={plugin.name}
-              {...plugin}
-              href={`https://www.npmjs.com/package/${
-                // eslint-disable-next-line
-                plugin.npmPackage || plugin.name
-              }`}
-            />
-          );
-        })}
+        {pluginsProp.communityPlugins.length === 0 ? (
+          <Description>
+            <i>No community plugins yet.</i>
+          </Description>
+        ) : (
+          pluginsProp.communityPlugins.map((plugin: IPlugin) => {
+            return (
+              <PluginSnippet
+                key={plugin.name}
+                {...plugin}
+                href={`https://www.npmjs.com/package/${
+                  // eslint-disable-next-line
+                  plugin.npmPackage || plugin.name
+                }`}
+              />
+            );
+          })
+        )}
+        <Description className="last">
+          <MDLink href="https://github.com/NomicFoundation/hardhat-website/blob/main/src/content/plugins/plugins.ts#L27">
+            Send a Pull Request
+          </MDLink>
+          to get yours listed here.
+        </Description>
       </div>
     </PluginsLayout>
   );
@@ -151,16 +197,8 @@ const Plugins: NextPage<IPluginsPage> = ({
 export default Plugins;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const source = `Plugins are the backbone of Hardhat, and they're built using the same config API that you use in your Hardhat configuration. Read the [Building plugins](/advanced/building-plugins) guide to learn how to create your own, and [send a pull request](https://github.com/NomicFoundation/hardhat-website/blob/main/src/content/plugins/plugins.ts#L9) to get it listed here.
-
-Extend Hardhat's functionality with the plugins below.
-`;
-
-  const { mdxSource } = await prepareMdContent(source);
-
   return {
     props: {
-      mdxSource,
       plugins,
     },
   };

@@ -292,11 +292,6 @@ const customRedirects = [
     permanent: false,
   },
   {
-    source: "/plugins/:slug",
-    destination: "/hardhat-runner/plugins/:slug",
-    permanent: false,
-  },
-  {
     source: "/hardhat-runner/docs/guides/shorthand",
     destination: "/hardhat-runner/docs/guides/command-line-completion",
     permanent: false,
