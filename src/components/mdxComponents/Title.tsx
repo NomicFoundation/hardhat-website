@@ -193,6 +193,7 @@ const buildIdFromChildren = function getId(
     slugger.reset();
     return slugger.slug(children);
   }
+
   if (Array.isArray(children)) {
     return children
       .map((child) => {
@@ -201,10 +202,29 @@ const buildIdFromChildren = function getId(
       .join(" ");
   }
 
+  const hrefOnlyChildren = children?.props?.href;
+
+  if (
+    hrefOnlyChildren !== undefined &&
+    typeof hrefOnlyChildren === "string" &&
+    hrefOnlyChildren.startsWith("#")
+  ) {
+    return getId(hrefOnlyChildren.replace(/^#/g, ""));
+  }
+
   return getId(children.props.children);
 };
 
-const H1 = ({ children }: Props): JSX.Element => {
+const H1 = ({ children }: Props) => {
+  if (typeof children !== "string" && children.type === MDLink) {
+    return (
+      <StyledH1 id={buildIdFromChildren(children)}>
+        <span className="hash">#</span>
+        {children}
+      </StyledH1>
+    );
+  }
+
   return (
     <StyledH1 id={buildIdFromChildren(children)}>
       <a href={`#${buildIdFromChildren(children)}`}>
@@ -216,10 +236,20 @@ const H1 = ({ children }: Props): JSX.Element => {
 };
 
 const H2 = ({ children }: Props) => {
+  if (typeof children !== "string" && children.type === MDLink) {
+    return (
+      <StyledH2 id={buildIdFromChildren(children)}>
+        <span className="hash">#</span>
+        {children}
+      </StyledH2>
+    );
+  }
+
   return (
     <StyledH2 id={buildIdFromChildren(children)}>
       <a href={`#${buildIdFromChildren(children)}`}>
-        <span className="hash">#</span> {children}
+        <span className="hash">#</span>
+        {children}
       </a>
     </StyledH2>
   );
@@ -228,7 +258,7 @@ const H2 = ({ children }: Props) => {
 const H3 = ({ children }: Props) => {
   if (typeof children !== "string" && children.type === MDLink) {
     return (
-      <StyledH3 id={children.props.href.replace(/^#/g, "")}>
+      <StyledH3 id={buildIdFromChildren(children)}>
         <span className="hash">#</span>
         {children}
       </StyledH3>
@@ -246,6 +276,15 @@ const H3 = ({ children }: Props) => {
 };
 
 const H4 = ({ children }: Props) => {
+  if (typeof children !== "string" && children.type === MDLink) {
+    return (
+      <StyledH4 id={buildIdFromChildren(children)}>
+        <span className="hash">#</span>
+        {children}
+      </StyledH4>
+    );
+  }
+
   return (
     <StyledH4 id={buildIdFromChildren(children)}>
       <a href={`#${buildIdFromChildren(children)}`}>
@@ -257,6 +296,15 @@ const H4 = ({ children }: Props) => {
 };
 
 const H5 = ({ children }: Props) => {
+  if (typeof children !== "string" && children.type === MDLink) {
+    return (
+      <StyledH5 id={buildIdFromChildren(children)}>
+        <span className="hash">#</span>
+        {children}
+      </StyledH5>
+    );
+  }
+
   return (
     <StyledH5 id={buildIdFromChildren(children)}>
       <a href={`#${buildIdFromChildren(children)}`}>
