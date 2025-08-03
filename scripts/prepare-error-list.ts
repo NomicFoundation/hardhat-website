@@ -103,7 +103,6 @@ ${errorDescriptor.websiteDescription}
 `;
 
         const shortLink = errorCode;
-        // TODO: Fix anchor generation
         const anchor = shortLink;
 
         errorRedirects.push({
