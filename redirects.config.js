@@ -26,11 +26,6 @@ const customRedirects = [
     permanent: false,
   },
   {
-    source: "/plugins",
-    destination: "/docs/plugins",
-    permanent: false,
-  },
-  {
     source: "/getting-started",
     destination: "/docs/getting-started#overview",
     permanent: false,

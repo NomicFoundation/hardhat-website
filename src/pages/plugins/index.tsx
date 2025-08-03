@@ -12,7 +12,7 @@ import PluginSnippet from "../../components/PluginSnippet";
 
 interface IPluginsPage {
   mdxSource: MDXRemoteSerializeResult;
-  sortedPlugins: typeof plugins;
+  plugins: typeof plugins;
 }
 
 const PageTitle = styled.h3`
@@ -96,7 +96,7 @@ const SectionTitleDescription = styled.span`
   }
 `;
 
-const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
+const Plugins: NextPage<IPluginsPage> = ({ mdxSource, plugins }) => {
   return (
     <PluginsLayout
       seo={{
@@ -112,7 +112,7 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
         <SectionTitleWrapper>
           <SectionTitle id="official-plugins">Official plugins</SectionTitle>
         </SectionTitleWrapper>
-        {sortedPlugins.officialPlugins.map((plugin) => {
+        {plugins.officialPlugins.map((plugin) => {
           return (
             <PluginSnippet
               key={plugin.name}
@@ -128,7 +128,7 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
             Sorted by npm downloads
           </SectionTitleDescription>
         </SectionTitleWrapper>
-        {sortedPlugins.communityPlugins.map((plugin: IPlugin) => {
+        {plugins.communityPlugins.map((plugin: IPlugin) => {
           return (
             <PluginSnippet
               key={plugin.name}
@@ -158,7 +158,7 @@ Extend Hardhat's functionality with the plugins below.
   return {
     props: {
       mdxSource,
-      sortedPlugins: plugins,
+      plugins,
     },
   };
 };
