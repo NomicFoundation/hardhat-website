@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { createTheming } from "@callstack/react-theme-provider";
 
-export { styled } from "linaria/react";
-
 export enum ThemesEnum {
   LIGHT = "LIGHT",
   DARK = "DARK",

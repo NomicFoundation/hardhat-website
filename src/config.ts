@@ -14,7 +14,7 @@ import SolidityIconDark from "./assets/tools/solidity-dark";
 import IgnitionIcon from "./assets/tools/ignition";
 import IgnitionIconDark from "./assets/tools/ignition-dark";
 
-export const SOCIALS_LINKS = {
+const SOCIALS_LINKS = {
   [SocialsEnum.GITHUB]: "https://github.com/NomicFoundation/hardhat",
   [SocialsEnum.TWITTER]: "https://twitter.com/HardhatHQ",
   [SocialsEnum.DISCORD]: "/discord",

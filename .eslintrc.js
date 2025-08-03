@@ -3,13 +3,7 @@ module.exports = {
   parserOptions: {
     project: "./tsconfig.json",
   },
-  extends: [
-    "airbnb",
-    "airbnb-typescript",
-    "next/core-web-vitals",
-    "plugin:storybook/recommended",
-    "prettier",
-  ],
+  extends: ["airbnb", "airbnb-typescript", "next/core-web-vitals", "prettier"],
   rules: {
     "react/function-component-definition": [
       "error",

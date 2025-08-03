@@ -51,7 +51,7 @@ const getLayoutsInfo = (): LayoutsInfo => {
   return yamlData;
 };
 
-export const getDirInfoFiles = (): InfoFiles =>
+const getDirInfoFiles = (): InfoFiles =>
   glob
     .sync(`${DOCS_PATH}**/_dirinfo.yaml`)
     .filter((pathname) => /\.yaml$/.test(pathname))
@@ -60,21 +60,21 @@ export const getDirInfoFiles = (): InfoFiles =>
       path: pathname,
     }));
 
-export const getYamlData = (relativePath: string): DirInfo => {
+const getYamlData = (relativePath: string): DirInfo => {
   const fullPath = `${DOCS_PATH}/${relativePath}`;
   const yamlText = fs.readFileSync(fullPath).toString();
   const yamlData = yaml.load(yamlText) as DirInfo;
   return yamlData;
 };
 
-export const getFoldersInfo = (infoFiles: InfoFiles): FoldersConfig =>
+const getFoldersInfo = (infoFiles: InfoFiles): FoldersConfig =>
   infoFiles.map(({ path }) => ({
     path,
     folder: path.replace("/_dirinfo.yaml", ""),
     config: getYamlData(path),
   }));
 
-export const getAllFolders = (mdFiles: string[]): FolderWithFiles[] => {
+const getAllFolders = (mdFiles: string[]): FolderWithFiles[] => {
   const filesWithPaths = mdFiles.map((fileName) => ({
     fileName,
     path: fileName.replace(/\/.*\.mdx?$/, ""),
@@ -277,6 +277,7 @@ const getLayoutToc = (
   return { tocItems, flatTocList };
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const createLayouts = () => {
   const infoFiles = getDirInfoFiles();
   const foldersInfo = getFoldersInfo(infoFiles);

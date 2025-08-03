@@ -22,9 +22,9 @@ import {
 } from "../config";
 import { ITabsState } from "../global-tabs";
 
-export const newLineDividerRegEx = /\r\n|\n/;
+const newLineDividerRegEx = /\r\n|\n/;
 
-export const withIndexURL = (pathname: string): string[] => {
+const withIndexURL = (pathname: string): string[] => {
   const docPath = pathname.split("/");
   if (docPath[docPath.length - 1] === "index") {
     return [...docPath.slice(0, docPath.length - 1)];
@@ -48,7 +48,7 @@ export const normilizePath = (docPath: string[]): string[] => {
   return normalized;
 };
 
-export const withCodeElementWrapper = (
+const withCodeElementWrapper = (
   content: string,
   extension: string = "",
   highlightedLinesNumbers: string = ""
@@ -61,7 +61,7 @@ ${content}
   \`\`\``;
 };
 
-export const getEntriesInfo = (
+const getEntriesInfo = (
   line: string
 ): {
   pathname: string;
@@ -83,7 +83,7 @@ export const getEntriesInfo = (
   };
 };
 
-export const readFileContent = (pathname: string) => {
+const readFileContent = (pathname: string) => {
   try {
     return fs.readFileSync(pathname).toString();
   } catch (err) {
@@ -91,11 +91,11 @@ export const readFileContent = (pathname: string) => {
   }
 };
 
-export const getFileExtensionFromPathname = (pathname: string) => {
+const getFileExtensionFromPathname = (pathname: string) => {
   return pathname.substring(pathname.lastIndexOf(".") + 1);
 };
 
-export const withInsertedCodeFromLinks = (content: string) => {
+const withInsertedCodeFromLinks = (content: string) => {
   return content
     .split(newLineDividerRegEx)
     .map((line: string) => {
@@ -115,13 +115,13 @@ export const withInsertedCodeFromLinks = (content: string) => {
     .join("\n");
 };
 
-export const withoutComments = (content: string) => {
+const withoutComments = (content: string) => {
   return content.replace(/<!--[\s\S]*?-->/gm, "");
 };
 
-export const normalizeApostrophes = (text: string) => text.replace(/’/g, "'");
+const normalizeApostrophes = (text: string) => text.replace(/’/g, "'");
 
-export const replacePlaceholders = (content: string) => {
+const replacePlaceholders = (content: string) => {
   const replacementValuesJson = fs.readFileSync(
     MARKDOWN_REAPLACEMENT_VALUES_JSON,
     "utf-8"
@@ -231,7 +231,7 @@ function validateTabs() {
   };
 }
 
-export const generateTitleFromContent = (content: string) => {
+const generateTitleFromContent = (content: string) => {
   return content
     .split(newLineDividerRegEx)
     .filter((line) => line.startsWith("#"))[0]
@@ -315,11 +315,12 @@ export const getMDFiles = (): string[] =>
     )
     .map((pathname) => pathname.replace(DOCS_PATH, ""));
 
-export const getPathParamsByFile = (pathname: string): string[] => {
+const getPathParamsByFile = (pathname: string): string[] => {
   const fileBase = pathname.replace(/\.mdx?$/, "");
   return withIndexURL(fileBase);
 };
-export const getPathParamsByFileMd = (pathname: string): string[] => {
+
+const getPathParamsByFileMd = (pathname: string): string[] => {
   return withIndexURL(pathname);
 };
 
@@ -344,7 +345,7 @@ export const getMDPaths = (): Array<{ params: { docPath: string[] } }> =>
     ])
     .flat();
 
-export const getSidebarConfig = () => {
+const getSidebarConfig = () => {
   try {
     const sidebarConfigPath = `${TEMP_PATH}sidebarConfig.json`;
     const configText = fs.readFileSync(sidebarConfigPath).toString();

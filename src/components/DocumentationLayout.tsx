@@ -72,7 +72,7 @@ const Main = styled.main`
   }
 `;
 
-export const SidebarMask = styled.div`
+const SidebarMask = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;

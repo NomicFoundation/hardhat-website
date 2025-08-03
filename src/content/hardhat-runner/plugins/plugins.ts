@@ -153,10 +153,10 @@ const officialPlugins: IPlugin[] = [
   // Don't add community plugins here. They should be placed in the other array.
 ];
 
-export const generateSlug = (pluginName: string): string =>
+const generateSlug = (pluginName: string): string =>
   pluginName.replace(/^@/, "").replace(/\//g, "-");
 
-export function normalize(plugin: IPlugin): Required<IPlugin> {
+function normalize(plugin: IPlugin): Required<IPlugin> {
   return {
     ...plugin,
     slug: generateSlug(plugin.name),
@@ -164,9 +164,7 @@ export function normalize(plugin: IPlugin): Required<IPlugin> {
   };
 }
 
-export const sortCommunityPluginsByDownloads = (
-  plugins: Required<IPlugin>[]
-) => {
+const sortCommunityPluginsByDownloads = (plugins: Required<IPlugin>[]) => {
   let downloads: Record<string, number> = {};
 
   try {
@@ -194,5 +192,3 @@ export const plugins = {
   ),
   officialPlugins: officialPlugins.map(normalize),
 };
-
-export default plugins;
