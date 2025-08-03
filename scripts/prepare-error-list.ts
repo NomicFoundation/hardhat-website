@@ -120,6 +120,12 @@ ${errorDescriptor.websiteDescription}
     }
   }
 
+  // The error list has some problems, so we fixed it manually and saved it here
+  content = fs.readFileSync(
+    path.join(__dirname, "temporary-error-list.md"),
+    "utf-8"
+  );
+
   fs.writeFileSync(
     path.join(__dirname, "../src/content/hardhat-runner/docs/errors/index.md"),
     content,
