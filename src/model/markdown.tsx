@@ -248,6 +248,7 @@ export const parseMdFile = (source: string) => {
   const tocTitle = data.title ?? generateTitleFromContent(formattedContent);
   const seoTitle = tocTitle || "Hardhat";
   const seoDescription =
+    data.description ||
     data.title ||
     "Ethereum development environment for professionals by Nomic Foundation";
 
