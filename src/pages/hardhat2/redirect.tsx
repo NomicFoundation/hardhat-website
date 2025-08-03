@@ -1,6 +1,8 @@
 import type { GetStaticProps, NextPage } from "next";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { styled } from "linaria/react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import PluginsLayout from "../../components/PluginsLayout";
 import { components } from "../../components/DocumentationLayout";
 import {
@@ -12,6 +14,7 @@ import { HARDHAT2_REDIRECT_PATH } from "../../config";
 import { media, tmDark, tmSelectors } from "../../themes";
 import { createLayouts } from "../../model/layout";
 import { IDocumentationSidebarStructure } from "../../components/types";
+import MDLink from "../../components/mdxComponents/MDLink";
 
 interface IDocsPage {
   mdxSource: MDXRemoteSerializeResult;
@@ -39,6 +42,32 @@ const PageTitle = styled.h3`
 const Docs: NextPage<IDocsPage> = ({ mdxSource, layout }) => {
   const title = "Redirecting to Hardhat 2's docs";
 
+  const { query, isReady } = useRouter();
+
+  const [destination, setDestination] = useState("https://v2.hardhat.org");
+
+  useEffect(() => {
+    // hydration hasn’t finished yet
+    if (!isReady) return;
+
+    const value = query.r; // string | string[] | undefined
+    const url =
+      typeof value === "string"
+        ? `https://v2.hardhat.org${value}`
+        : `https://v2.hardhat.org`;
+
+    setDestination(url);
+
+    // eslint-disable-next-line no-console
+    console.log({ r: value, destination: url });
+    // eslint-disable-next-line no-console
+    console.log(`Redirecting to ${url}`);
+
+    setTimeout(() => {
+      window.location.href = url;
+    }, 5000);
+  }, [query, isReady]);
+
   return (
     <PluginsLayout
       seo={{
@@ -50,8 +79,12 @@ const Docs: NextPage<IDocsPage> = ({ mdxSource, layout }) => {
     >
       <div>
         <PageTitle>{title}</PageTitle>
-        {/* @ts-expect-error: MDXRemote types are wrong */}
-        <MDXRemote {...mdxSource} components={components} />
+
+        <MDXRemote
+          {...mdxSource}
+          components={{ ...components, MDLink }}
+          scope={{ destination }}
+        />
       </div>
     </PluginsLayout>
   );
