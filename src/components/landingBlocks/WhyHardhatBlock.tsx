@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Fragment } from "react";
 import Image, { StaticImageData } from "next/image";
 import Section from "../Section";
 import LandingContainer from "../LandingContainer";
@@ -119,7 +119,7 @@ const WhyHardhatBlock = ({ content }: Props) => {
                   const darkImage = getImage(item, width, "dark");
 
                   return (
-                    <>
+                    <Fragment key={index}>
                       <ImageWrapper
                         className={`light image-wrapper-${index}  ${
                           activeIndex === index ? "active" : ""
@@ -144,7 +144,7 @@ const WhyHardhatBlock = ({ content }: Props) => {
                           layout="intrinsic"
                         />
                       </ImageWrapper>
-                    </>
+                    </Fragment>
                   );
                 })}
               </ImageContainer>
