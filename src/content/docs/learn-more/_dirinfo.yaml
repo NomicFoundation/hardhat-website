@@ -15,5 +15,3 @@ order:
     href: /configuration-variables
   - title: Differences with Hardhat 2
     href: /comparison
-  - title: Alpha version limitations
-    href: /alpha-limitations

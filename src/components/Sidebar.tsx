@@ -105,6 +105,9 @@ const SidebarItem = styled.li`
   &.group:not(:first-child) {
     margin-top: 8px;
   }
+  &.single:not(:first-child) {
+    margin-top: 8px;
+  }
 `;
 
 const SidebarHeading = styled.p`

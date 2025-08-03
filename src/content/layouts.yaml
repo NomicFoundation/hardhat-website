@@ -4,16 +4,12 @@ docs:
     - docs
     - docs/getting-started
     - docs/config
-    - docs/guides
-    - docs/advanced
-    - docs/supporter-guides
-    - docs/troubleshooting
-    - docs/reference
+    - docs/learn-more
+    - docs/hardhat2-migration
     - plugins
     - docs/other-components
     # hidden
     - docs/errors
-    - docs/other-guides
 
 hardhat-vscode:
   title: Hardhat VSCode
@@ -40,9 +36,3 @@ ignition:
     - ignition/docs/advanced
     - ignition/docs/reference
     - ignition/docs/other-components
-
-hardhat3-alpha:
-  title: Hardhat 3 Alpha Tutorial
-  folders:
-    - hardhat3-alpha
-    - hardhat3-alpha/learn-more

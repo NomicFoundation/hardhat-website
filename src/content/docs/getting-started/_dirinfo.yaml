@@ -1,9 +1,21 @@
 section-type: group
 section-title: Getting started
 order:
-  - href: "#overview"
-    title: Overview
-  - href: "#installation"
-    title: Installation
-  - href: "#quick-start"
-    title: Quick start
+  - title: Getting started
+    href: "#getting-started-with-hardhat-3"
+  - title: Installation
+    href: "#installation"
+  - title: Project structure
+    href: "#project-structure"
+  - title: Writing a smart contract
+    href: "#writing-a-smart-contract"
+  - title: Testing your contracts
+    href: "#testing-your-contracts"
+  - title: Solidity tests
+    href: "#solidity-tests"
+  - title: TypeScript tests
+    href: "#typescript-tests"
+  - title: Writing scripts
+    href: "#writing-scripts-to-interact-with-the-network"
+  - title: Deploying contracts
+    href: "#deploying-contracts"
