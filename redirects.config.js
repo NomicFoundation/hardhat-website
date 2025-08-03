@@ -101,6 +101,11 @@ const customRedirects = [
       "https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%40:version",
     permanent: false,
   },
+  {
+    source: "/errors",
+    destination: "/docs/errors",
+    permanent: false,
+  },
   ...loadErrorRedirects(),
 
   // Legacy shortlinks: We should be able to remove them when
@@ -274,11 +279,6 @@ const customRedirects = [
   {
     source: "/troubleshooting/common-problems",
     destination: "/hardhat-runner/docs/troubleshooting/common-problems",
-    permanent: false,
-  },
-  {
-    source: "/errors",
-    destination: "/hardhat-runner/docs/errors",
     permanent: false,
   },
   {

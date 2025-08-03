@@ -94,7 +94,7 @@ using Hardhat and an explanation of each of them.`;
       for (const errorDescriptor of Object.values<ErrorDescriptor>(
         ERRORS[packageName][rangeName]
       )) {
-        const errorCode = `HHE${errorDescriptor.number}`;
+        const errorCode = `hhe${errorDescriptor.number}`;
         const title = `${errorCode}: ${errorDescriptor.websiteTitle}`;
 
         content += `
