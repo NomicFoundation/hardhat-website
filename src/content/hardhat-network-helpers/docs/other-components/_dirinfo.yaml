@@ -2,7 +2,7 @@ section-type: group
 section-title: Other Hardhat components
 order:
   - href: /../../../docs
-    title: Hardhat
+    title: Hardhat 3
   - href: /../../../ignition/docs
     title: Hardhat Ignition
   - href: /../../../hardhat-vscode/docs

@@ -47,8 +47,8 @@ export const menuItemsList: MenuItemType[] = [
     href: "/docs/getting-started",
     subItems: [
       {
-        prefix: "Hardhat",
-        label: "",
+        prefix: "",
+        label: "Hardhat 3",
         href: "/docs/getting-started",
         icon: RunnerIcon,
         iconDark: RunnerIconDark,
