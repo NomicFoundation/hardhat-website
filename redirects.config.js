@@ -26,6 +26,11 @@ const customRedirects = [
     destination: "/hardhat2",
     permanent: false,
   },
+  {
+    source: "/hardhat2-redirect/redirect",
+    destination: "/hardhat2",
+    permanent: false,
+  },
 
   // shortlinks
   {
