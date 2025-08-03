@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prepare": "tsx scripts/prepare-error-list.ts && tsx scripts/download-plugin-readmes-and-downloads-count.ts",
+    "prepare": "tsx scripts/prepare-error-list.ts && tsx scripts/download-plugin-readmes-and-downloads-count.ts && tsx scripts/prepare-markdown-replacement-values.ts",
     "prebuild": "pnpm prepare",
     "predev": "pnpm prepare",
     "dev": "next-remote-watch ./src/content",

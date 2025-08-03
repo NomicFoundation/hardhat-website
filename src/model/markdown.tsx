@@ -14,7 +14,12 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import rehypePrism from "rehype-prism";
 import remarkPrism from "remark-prism";
 
-import { DOCS_PATH, REPO_URL, TEMP_PATH } from "../config";
+import {
+  DOCS_PATH,
+  MARKDOWN_REAPLACEMENT_VALUES_JSON,
+  REPO_URL,
+  TEMP_PATH,
+} from "../config";
 import { ITabsState } from "../global-tabs";
 
 export const newLineDividerRegEx = /\r\n|\n/;
@@ -117,29 +122,27 @@ export const withoutComments = (content: string) => {
 export const normalizeApostrophes = (text: string) => text.replace(/’/g, "'");
 
 export const replacePlaceholders = (content: string) => {
-  const recommendedSolcVersion = "0.8.28";
-  const latestPragma = "^0.8.0";
-  const hardhatPackageJson = fs
-    .readFileSync(
-      path.resolve(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "..",
-        "websites-version-of-hardhat",
-        "packages",
-        "hardhat-core",
-        "package.json"
-      )
-    )
-    .toString();
-  const hardhatVersion = JSON.parse(hardhatPackageJson).version;
+  const replacementValuesJson = fs.readFileSync(
+    MARKDOWN_REAPLACEMENT_VALUES_JSON,
+    "utf-8"
+  );
 
-  return content
-    .replaceAll("{RECOMMENDED_SOLC_VERSION}", recommendedSolcVersion)
-    .replaceAll("{LATEST_PRAGMA}", latestPragma)
-    .replaceAll("{HARDHAT_VERSION}", hardhatVersion);
+  const replacementValues = JSON.parse(replacementValuesJson);
+
+  let replacedContent = content;
+  const entries = Array.from(Object.entries(replacementValues));
+  for (let i = 0; i < entries.length; i += 1) {
+    const [key, value] = entries[i];
+    if (typeof value !== "string") {
+      throw new Error(
+        `Expected markdown replacement value "${key}" to be a string, but got ${value} (typeof "${typeof value}")`
+      );
+    }
+
+    replacedContent = replacedContent.replaceAll(`{${key}}`, value.toString());
+  }
+
+  return replacedContent;
 };
 
 export const readMDFileFromPathOrIndex = (
