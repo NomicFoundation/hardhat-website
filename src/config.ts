@@ -28,18 +28,7 @@ export const bannerContent = {
 };
 
 export const DOCS_PATH = path.join(process.cwd(), "src/content/");
-export const DOCS_LANDING_PATH = path.join(
-  process.cwd(),
-  "src/content/docs-landing"
-);
-export const HARDHAT2_REDIRECT_PATH = path.join(
-  process.cwd(),
-  "src/content/hardhat2-redirect"
-);
-export const PLUGINS_PATH = path.join(
-  process.cwd(),
-  "src/content/hardhat-runner/plugins"
-);
+
 export const TEMP_PATH = path.join(process.cwd(), "temp/");
 export const REPO_URL =
   "https://github.com/NomicFoundation/hardhat-website/edit/main/src/content/";
@@ -55,12 +44,12 @@ export const menuItemsList: MenuItemType[] = [
   },
   {
     label: "Documentation",
-    href: "/docs",
+    href: "/docs/getting-started",
     subItems: [
       {
         prefix: "Hardhat",
-        label: "Runner",
-        href: "/hardhat-runner",
+        label: "",
+        href: "/docs/getting-started",
         icon: RunnerIcon,
         iconDark: RunnerIconDark,
       },
@@ -82,7 +71,7 @@ export const menuItemsList: MenuItemType[] = [
   },
   {
     label: "Plugins",
-    href: "/hardhat-runner/plugins",
+    href: "/plugins",
   },
   // {
   //   label: "Tutorial",

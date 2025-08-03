@@ -14,38 +14,25 @@ const path = require("path");
  *
  */
 const customRedirects = [
-  // Workarounds: this are top pritory, as they workaround an issue with the site generator
-  // where there's duplicate content
-  {
-    source: "/docs-landing",
-    destination: "/docs",
-    permanent: false,
-  },
-  {
-    source: "/hardhat2-redirect",
-    destination: "/hardhat2",
-    permanent: false,
-  },
-  {
-    source: "/hardhat2-redirect/redirect",
-    destination: "/hardhat2",
-    permanent: false,
-  },
-
   // shortlinks
   {
+    source: "/docs",
+    destination: "/docs/getting-started",
+    permanent: false,
+  },
+  {
     source: "/config",
-    destination: "/hardhat-runner/docs/config",
+    destination: "/docs/config",
     permanent: false,
   },
   {
     source: "/plugins",
-    destination: "/hardhat-runner/plugins",
+    destination: "/docs/plugins",
     permanent: false,
   },
   {
     source: "/getting-started",
-    destination: "/hardhat-runner/docs/getting-started#overview",
+    destination: "/docs/getting-started#overview",
     permanent: false,
   },
   {
@@ -53,7 +40,6 @@ const customRedirects = [
     destination: "/getting-started",
     permanent: false,
   },
-  { source: "/links/stack-traces", destination: "/", permanent: false },
   {
     source: "/reportbug",
     destination: "https://github.com/NomicFoundation/hardhat/issues/new",
@@ -65,11 +51,6 @@ const customRedirects = [
     permanent: false,
   },
   {
-    source: "/console-log",
-    destination: "/hardhat-network/#console.log",
-    permanent: false,
-  },
-  {
     source: "/discord",
     destination: "https://discord.gg/TETZs2KK4k",
     permanent: false,
@@ -77,11 +58,6 @@ const customRedirects = [
   {
     source: "/ignition-discord",
     destination: "https://discord.gg/7jBkZQXB25",
-    permanent: false,
-  },
-  {
-    source: "/hardhat3-alpha-telegram-group",
-    destination: "https://t.me/+nx5My-pzR0piMjU5",
     permanent: false,
   },
   {
@@ -109,6 +85,18 @@ const customRedirects = [
   {
     source: "/metamask-issue",
     destination: "/hardhat-network/docs/metamask-issue",
+    permanent: false,
+  },
+
+  // Legacy shortlinks
+  {
+    source: "/console-log",
+    destination: "/hardhat-network/#console.log",
+    permanent: false,
+  },
+  {
+    source: "/hardhat3-alpha-telegram-group",
+    destination: "https://t.me/+nx5My-pzR0piMjU5",
     permanent: false,
   },
   {

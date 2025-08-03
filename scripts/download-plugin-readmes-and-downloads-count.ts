@@ -3,15 +3,12 @@ import fs from "fs";
 import {
   plugins,
   COMMUNITY_PLUGIN_DOWNLOADS_FILE,
-} from "../src/content/hardhat-runner/plugins/plugins";
+} from "../src/content/plugins/plugins";
 import type { IPlugin } from "../src/model/types";
 
 const NPM_TAG = `next`;
 
-const PLUGINS_FOLDER = path.join(
-  __dirname,
-  "../src/content/hardhat-runner/plugins"
-);
+const PLUGINS_FOLDER = path.join(__dirname, "../src/content/plugins");
 
 async function fetchReadme(
   plugin: Required<IPlugin>

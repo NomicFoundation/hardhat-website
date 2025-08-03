@@ -1,8 +1,8 @@
 section-type: group
 section-title: Other Hardhat components
 order:
-  - href: /../../../hardhat-runner/docs
-    title: Hardhat Runner
+  - href: /../../../docs
+    title: Hardhat
   - href: /../../../hardhat-network/docs
     title: Hardhat Network
   - href: /../../../hardhat-vscode/docs

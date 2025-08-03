@@ -41,7 +41,7 @@ const heroBlockContent = {
   tagline: "<strong>Hardhat 3:</strong> Rust-powered Solidity tests",
   cta: {
     title: "Get started",
-    url: "/hardhat-runner/docs/getting-started",
+    url: "/docs/getting-started",
   },
 };
 

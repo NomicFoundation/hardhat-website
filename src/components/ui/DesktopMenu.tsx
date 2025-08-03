@@ -183,6 +183,7 @@ const MenuItemDropdown = styled.div`
 
 const DropdownItem = styled.a`
   display: block;
+  text-align: center;
   line-height: 1.5;
   padding: 2px 8px;
   font-size: 12px;

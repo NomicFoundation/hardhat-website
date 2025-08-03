@@ -127,7 +127,7 @@ ${errorDescriptor.websiteDescription}
   );
 
   fs.writeFileSync(
-    path.join(__dirname, "../src/content/hardhat-runner/docs/errors/index.md"),
+    path.join(__dirname, "../src/content/docs/errors/index.md"),
     content,
     "utf-8"
   );

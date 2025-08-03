@@ -5,12 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import PluginsLayout from "../../components/PluginsLayout";
 import { components } from "../../components/DocumentationLayout";
-import {
-  getLayout,
-  prepareMdContent,
-  readMDFileFromPathOrIndex,
-} from "../../model/markdown";
-import { HARDHAT2_REDIRECT_PATH } from "../../config";
+import { getLayout, prepareMdContent } from "../../model/markdown";
 import { media, tmDark, tmSelectors } from "../../themes";
 import { createLayouts } from "../../model/layout";
 import { IDocumentationSidebarStructure } from "../../components/types";
@@ -82,7 +77,7 @@ const Docs: NextPage<IDocsPage> = ({ mdxSource, layout }) => {
 
         <MDXRemote
           {...mdxSource}
-          components={{ ...components, MDLink }}
+          components={{ ...components, MDLink } as any}
           scope={{ destination }}
         />
       </div>
@@ -94,11 +89,17 @@ export default Docs;
 
 export const getStaticProps: GetStaticProps = async () => {
   createLayouts();
-  const { source } = readMDFileFromPathOrIndex(
-    `${HARDHAT2_REDIRECT_PATH}/redirect.md`
-  );
+
+  const source = `This website contains the documentation of Hardhat 3, the new major version of Hardhat.
+
+We recommend migrating to Hardhat 3, but you can still use Hardhat 2.
+
+We are redirecting you to the documentation you are looking for.
+
+If it doesn't take you there after a few seconds, please <MDLink href={destination}>click here</MDLink>.`;
+
   const { mdxSource } = await prepareMdContent(source);
-  const { layout } = getLayout("hardhat-runner/docs/getting-started/index.md");
+  const { layout } = getLayout("docs/getting-started/index.md");
 
   return {
     props: {

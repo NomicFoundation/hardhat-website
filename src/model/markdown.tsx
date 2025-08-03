@@ -381,14 +381,9 @@ export const getCommitDate = (fileName: string): string => {
 
 export const getEditLink = (fileName: string): string => {
   // the errors page is a special case because it's auto-generated
-  const errorsFile = path.join(
-    "content",
-    "hardhat-runner",
-    "docs",
-    "errors",
-    "index.md"
-  );
+  const errorsFile = path.join("content", "docs", "errors", "index.md");
   if (fileName.endsWith(errorsFile)) {
+    //
     return "https://github.com/NomicFoundation/hardhat/edit/main/packages/hardhat-core/src/internal/core/errors-list.ts";
   }
 

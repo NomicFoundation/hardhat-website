@@ -1,18 +1,14 @@
 import type { GetStaticProps, NextPage } from "next";
 import { styled } from "linaria/react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import PluginsLayout from "../../../components/PluginsLayout";
-import { media, tm, tmDark, tmSelectors } from "../../../themes";
-import { components } from "../../../components/DocumentationLayout";
-import {
-  prepareMdContent,
-  readMDFileFromPathOrIndex,
-} from "../../../model/markdown";
-import { PLUGINS_PATH } from "../../../config";
+import PluginsLayout from "../../components/PluginsLayout";
+import { media, tm, tmDark, tmSelectors } from "../../themes";
+import { components } from "../../components/DocumentationLayout";
+import { prepareMdContent } from "../../model/markdown";
 
-import { plugins } from "../../../content/hardhat-runner/plugins/plugins";
-import { IPlugin } from "../../../model/types";
-import PluginSnippet from "../../../components/PluginSnippet";
+import { plugins } from "../../content/plugins/plugins";
+import { IPlugin } from "../../model/types";
+import PluginSnippet from "../../components/PluginSnippet";
 
 interface IPluginsPage {
   mdxSource: MDXRemoteSerializeResult;
@@ -121,7 +117,7 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
             <PluginSnippet
               key={plugin.name}
               {...plugin}
-              href={`/hardhat-runner/plugins/${plugin.slug}`}
+              href={`/plugins/${plugin.slug}`}
             />
           );
         })}
@@ -152,7 +148,11 @@ const Plugins: NextPage<IPluginsPage> = ({ mdxSource, sortedPlugins }) => {
 export default Plugins;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { source } = readMDFileFromPathOrIndex(`${PLUGINS_PATH}/index.md`);
+  const source = `Plugins are the backbone of Hardhat, and they're built using the same config API that you use in your Hardhat configuration. Read the [Building plugins](/advanced/building-plugins) guide to learn how to create your own, and [send a pull request](https://github.com/NomicFoundation/hardhat-website/blob/main/src/content/hardhat-runner/plugins/plugins.ts#L9) to get it listed here.
+
+Extend Hardhat's functionality with the plugins below.
+`;
+
   const { mdxSource } = await prepareMdContent(source);
 
   return {

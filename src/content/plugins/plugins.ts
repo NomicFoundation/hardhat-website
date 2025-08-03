@@ -9,7 +9,7 @@ import path from "path";
 
 export const COMMUNITY_PLUGIN_DOWNLOADS_FILE = path.join(
   __dirname,
-  "../../../../temp/community-plugins-downloads.json"
+  "../../../temp/community-plugins-downloads.json"
 );
 
 export interface IPlugin {

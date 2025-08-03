@@ -3,12 +3,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { styled } from "linaria/react";
 import PluginsLayout from "../../components/PluginsLayout";
 import { components } from "../../components/DocumentationLayout";
-import {
-  getLayout,
-  prepareMdContent,
-  readMDFileFromPathOrIndex,
-} from "../../model/markdown";
-import { HARDHAT2_REDIRECT_PATH } from "../../config";
+import { getLayout, prepareMdContent } from "../../model/markdown";
 import { media, tmDark, tmSelectors } from "../../themes";
 import { createLayouts } from "../../model/layout";
 import { IDocumentationSidebarStructure } from "../../components/types";
@@ -61,11 +56,18 @@ export default Docs;
 
 export const getStaticProps: GetStaticProps = async () => {
   createLayouts();
-  const { source } = readMDFileFromPathOrIndex(
-    `${HARDHAT2_REDIRECT_PATH}/index.md`
-  );
+  const source = `This website contains the documentation for Hardhat 3, the new major version of Hardhat.
+
+You can find the documentation for [Hardhat 2 here](https://v2.hardhat.org).
+
+### Hardhat 2 support
+
+We encourage everyone to migrate to Hardhat 3, but if you need to keep using Hardhat 2, we got you covered.
+
+Hardhat 2 will be supported until the [Glamsterdam hardfork](https://forkcast.org/upgrade/glamsterdam) gets activated on Ethereum Mainnet.`;
+
   const { mdxSource } = await prepareMdContent(source);
-  const { layout } = getLayout("hardhat-runner/docs/getting-started/index.md");
+  const { layout } = getLayout("docs/getting-started/index.md");
 
   return {
     props: {

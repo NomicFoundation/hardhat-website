@@ -1,20 +1,19 @@
-hardhat-runner:
-  title: Hardhat Runner
+docs:
+  title: Hardhat
   folders:
-    - hardhat-runner
-    - hardhat-runner/docs
-    - hardhat-runner/docs/getting-started
-    - hardhat-runner/docs/config
-    - hardhat-runner/docs/guides
-    - hardhat-runner/docs/advanced
-    - hardhat-runner/docs/supporter-guides
-    - hardhat-runner/docs/troubleshooting
-    - hardhat-runner/docs/reference
-    - hardhat-runner/plugins
-    - hardhat-runner/docs/other-components
+    - docs
+    - docs/getting-started
+    - docs/config
+    - docs/guides
+    - docs/advanced
+    - docs/supporter-guides
+    - docs/troubleshooting
+    - docs/reference
+    - plugins
+    - docs/other-components
     # hidden
-    - hardhat-runner/docs/errors
-    - hardhat-runner/docs/other-guides
+    - docs/errors
+    - docs/other-guides
 
 hardhat-network:
   title: Hardhat Network
@@ -61,7 +60,6 @@ ignition:
 hidden:
   title: hidden
   folders:
-    - docs-landing
     - hardhat2-redirect
 
 tutorial:
