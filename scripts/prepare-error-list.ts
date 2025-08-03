@@ -63,8 +63,11 @@ async function loadErrorDescriptors(): Promise<{
 }
 
 async function main() {
+  console.log("Downloading error descriptors...");
   await downloadErrorDescriptors();
   const { ERROR_CATEGORIES, ERRORS } = await loadErrorDescriptors();
+
+  console.log("Preparing errors markdown and redirects...");
 
   let content = `# Hardhat errors
 
@@ -127,6 +130,7 @@ ${errorDescriptor.websiteDescription}
     JSON.stringify(errorRedirects, undefined, 2),
     "utf-8"
   );
+  console.log();
 }
 
 main().catch((error) => {

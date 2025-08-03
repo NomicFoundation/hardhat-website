@@ -95,6 +95,8 @@ async function main() {
     console.error("Error downloading official plugins readmes");
     console.error(e);
   }
+
+  console.log();
 }
 
 main().catch((error) => {
