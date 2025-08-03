@@ -157,17 +157,8 @@ When developing the application you might need these main folders
 - src/styles - global CSS styles
 - src/config.ts - keep main information about the app.
 - public/ - static files
-- .storybook/ - Storybook settings
 - next.config.js - NextJS config
 - redirects.config.js - Custom redirects
-
-## Storybook
-
-You can use Storybook to develop components in isolation. Launch it via `pnpm storybook` and open http://127.0.0.1:6006/ You will see a list of components in the left-side sidebar. When you edit component's code and save it, the Storybook is auto-updating it.
-
-Each component can be exposed with different states (stories) independently by passing props you need. You can find component stories settings in `Component.stories.ts` files.
-
-We also deploy updated storybook on each build. You can find it on https://hardhat-storybook.netlify.app/
 
 ## Content generating technical details
 
