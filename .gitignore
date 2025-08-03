@@ -22,7 +22,7 @@
 !/temp/info.md
 /public/sitemap-0.xml
 /public/sitemap*.xml
-src/content/hardhat-runner/docs/errors/index.md
+src/content/docs/errors/index.md
 
 # misc
 .DS_Store
