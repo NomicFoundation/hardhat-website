@@ -3,9 +3,9 @@ docs:
   folders:
     - docs
     - docs/getting-started
-    - docs/config
+    - docs/migrating-to-hardhat-3
     - docs/learn-more
-    - docs/hardhat2-migration
+    - docs/reference
     - plugins
     - docs/other-components
     # hidden
