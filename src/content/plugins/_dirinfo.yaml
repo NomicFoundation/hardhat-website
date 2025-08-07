@@ -2,6 +2,6 @@ section-type: group
 section-title: Plugins
 order:
   - title: Official plugins
-    href: /plugins/#official-plugins
+    href: /#official-plugins
   - title: Community plugins
-    href: /plugins/#community-plugins
+    href: /#community-plugins
