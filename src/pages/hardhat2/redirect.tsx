@@ -60,7 +60,7 @@ const Docs: NextPage<IDocsPage> = ({ mdxSource, layout }) => {
 
     setTimeout(() => {
       window.location.href = url;
-    }, 5000);
+    }, 7000);
   }, [query, isReady]);
 
   return (
