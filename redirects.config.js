@@ -62,7 +62,7 @@ const customRedirects = [
   // Valid shortlinks
   {
     source: "/config",
-    destination: "/docs/config",
+    destination: "/docs/reference/configuration",
     permanent: false,
   },
   {
