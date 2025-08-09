@@ -15,5 +15,5 @@ order:
     href: /configuring-the-compiler
   - title: Configuration variables
     href: /configuration-variables
-  - title: Differences with Hardhat 2
-    href: /comparison
+  - title: The Hardhat 3 Cookbook
+    href: /cookbook
