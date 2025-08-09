@@ -9,7 +9,7 @@ docs:
     - plugins
     - docs/other-components
     # hidden
-    - docs/errors
+    - docs/reference/errors
 
 hardhat-vscode:
   title: Hardhat VSCode

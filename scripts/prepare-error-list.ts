@@ -109,12 +109,12 @@ ${errorDescriptor.websiteDescription}
 
         errorRedirects.push({
           source: `/${shortLink}`,
-          destination: `/errors/#${anchor}`,
+          destination: `/docs/reference/errors/#${anchor}`,
           permanent: false,
         });
         errorRedirects.push({
           source: `/${shortLink.toLowerCase()}`,
-          destination: `/errors/#${anchor}`,
+          destination: `/docs/reference/errors/#${anchor}`,
           permanent: false,
         });
       }
@@ -129,7 +129,7 @@ ${errorDescriptor.websiteDescription}
   // );
 
   fs.writeFileSync(
-    path.join(__dirname, "../src/content/docs/errors/index.md"),
+    path.join(__dirname, "../src/content/docs/reference/errors/index.md"),
     content,
     "utf-8"
   );

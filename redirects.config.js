@@ -103,7 +103,7 @@ const customRedirects = [
   },
   {
     source: "/errors",
-    destination: "/docs/errors",
+    destination: "/docs/reference/errors",
     permanent: false,
   },
   ...loadErrorRedirects(),

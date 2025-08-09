@@ -3,3 +3,7 @@ section-title: Reference
 order:
   - title: Configuration
     href: /configuration
+  - title: Error codes
+    href: /errors/
+  - title: Node.js support
+    href: /nodejs-support
