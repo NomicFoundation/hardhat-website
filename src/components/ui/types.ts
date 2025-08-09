@@ -47,7 +47,7 @@ export enum Tools {
   SOLIDITY = "SOLIDITY",
 }
 
-interface DefaultBannerContent {
+export interface DefaultBannerContent {
   text: string;
   shortText?: string;
   href: string;

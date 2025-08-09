@@ -1,5 +1,6 @@
 import path from "path";
 import {
+  DefaultBannerContent,
   MenuItemType,
   NavigationPagesPaths,
   SocialsEnum,
@@ -22,9 +23,10 @@ const SOCIALS_LINKS = {
 
 export const PRIVACY_POLICY_PATH = "/privacy-policy.html";
 
-export const bannerContent = {
-  text: "TODO: join the Hardhat team! Nomic Labs is hiring",
-  href: "https://hardhat.org/solidity-survey-2024",
+export const bannerContent: DefaultBannerContent = {
+  text: "Hardhat 3 Beta is now available! Get started with it now!",
+  shortText: "Hardhat 3 Beta is here!",
+  href: "/docs",
 };
 
 export const DOCS_PATH = path.join(process.cwd(), "src/content/");
