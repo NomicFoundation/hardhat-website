@@ -7,6 +7,7 @@ docs:
     - docs/migrate-to-hardhat3
     - docs/reference
     - plugins
+    - docs/hardhat2-docs
     - docs/other-components
     # hidden
     - docs/reference/errors
