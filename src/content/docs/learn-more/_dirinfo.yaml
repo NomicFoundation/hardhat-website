@@ -1,6 +1,8 @@
 section-type: group
 section-title: Learn more
 order:
+  - title: What's new in Hardhat 3
+    href: /what-new
   - title: Writing Solidity tests
     href: /writing-solidity-tests
   - title: Using viem
