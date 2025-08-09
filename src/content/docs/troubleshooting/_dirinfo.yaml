@@ -1,0 +1,7 @@
+section-type: group
+section-title: Troubleshooting
+order:
+  - href: /getting-help
+    title: Getting help
+  - href: /../../../migrate-from-hardhat2/missing-plugins
+    title: Missing plugins

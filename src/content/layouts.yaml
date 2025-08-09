@@ -6,6 +6,7 @@ docs:
     - docs/learn-more
     - docs/migrate-to-hardhat3
     - docs/reference
+    - docs/troubleshooting
     - plugins
     - docs/hardhat2-docs
     - docs/other-components
