@@ -3,8 +3,8 @@ docs:
   folders:
     - docs
     - docs/getting-started
-    - docs/migrating-to-hardhat-3
     - docs/learn-more
+    - docs/migrate-to-hardhat3
     - docs/reference
     - plugins
     - docs/other-components
@@ -24,6 +24,12 @@ hardhat-network-helpers:
     - hardhat-network-helpers
     - hardhat-network-helpers/docs
     - hardhat-network-helpers/docs/other-components
+
+migrate-from-hardhat2:
+  title: Migrate from Hardhat 2
+  folders:
+    - migrate-from-hardhat2
+    - migrate-from-hardhat2/learn-more
 
 ignition:
   title: Hardhat Ignition
