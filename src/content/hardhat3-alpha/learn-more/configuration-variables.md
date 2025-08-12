@@ -41,7 +41,7 @@ By default, configuration variables get their values from environment variables.
 :::tab{value=npm}
 
 ```bash
-SEPOLIA_RPC_URL='https://eth-sepolia.g.alchemy.com/v2/ABC123...' npx hardhat test
+SEPOLIA_RPC_URL='<https://eth-sepolia.g.alchemy.com/v2/ABC123>...'  npx hardhat ignition deploy ignition/modules/Counter.ts --network sepolia
 ```
 
 :::
@@ -49,7 +49,7 @@ SEPOLIA_RPC_URL='https://eth-sepolia.g.alchemy.com/v2/ABC123...' npx hardhat tes
 :::tab{value=pnpm}
 
 ```bash
-SEPOLIA_RPC_URL='https://eth-sepolia.g.alchemy.com/v2/ABC123...' pnpm hardhat test
+SEPOLIA_RPC_URL='<https://eth-sepolia.g.alchemy.com/v2/ABC123>...'  pnpm hardhat ignition deploy ignition/modules/Counter.ts --network sepolia
 ```
 
 :::
@@ -278,7 +278,7 @@ One common use case is **overriding a keystore value with an environment variabl
 :::tab{value=npm}
 
 ```bash
-SEPOLIA_RPC_URL=https://temporary-url.example npx hardhat test
+SEPOLIA_RPC_URL='<https://eth-sepolia.g.alchemy.com/v2/ABC123>...'  npx hardhat ignition deploy ignition/modules/Counter.ts --network sepolia
 ```
 
 :::
@@ -286,7 +286,7 @@ SEPOLIA_RPC_URL=https://temporary-url.example npx hardhat test
 :::tab{value=pnpm}
 
 ```bash
-SEPOLIA_RPC_URL=https://temporary-url.example pnpm hardhat test
+SEPOLIA_RPC_URL='<https://eth-sepolia.g.alchemy.com/v2/ABC123>...'  pnpm hardhat ignition deploy ignition/modules/Counter.ts --network sepolia
 ```
 
 :::
