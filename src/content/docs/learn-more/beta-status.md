@@ -20,8 +20,6 @@ There are some features that are still in development, and should be released so
 
 - Gas snapshots: The ability to take gas snapshots and compare them is still under development.
 
-- `hardhat-deploy` support: We are working on porting over the [`hardhat-deploy`](https://www.npmjs.com/package/hardhat-deploy) plugin to Hardhat 3.
-
 ## Migration blockers
 
 If your migration is blocked by a missing feature or plugin, please let us know [in this issue](https://github.com/NomicFoundation/hardhat/issues/7207).
