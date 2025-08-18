@@ -32,7 +32,7 @@ Once that's done, initialize your Hardhat project by running:
 :::tab{value=npm}
 
 ```bash
-npx hardhat --init
+npx hardhat init
 ```
 
 :::
