@@ -15,7 +15,7 @@ order:
     href: /smart-contract-verification
   - title: Configuring the compiler
     href: /configuring-the-compiler
-  - title: Configuration variables
+  - title: Managing config values and secrets
     href: /configuration-variables
   - title: Cookbook
     href: /cookbook
