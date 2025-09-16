@@ -17,8 +17,10 @@ import { configVariable } from "hardhat/config";
 
 export default {
   // ...rest of the config...
-  etherscan: {
-    apiKey: configVariable("ETHERSCAN_API_KEY"),
+  verify: {
+    etherscan: {
+      apiKey: "SWKCAYZ22E7ZU72MDX8EWFCWQSSGEDZIJE",
+    },
   },
 };
 ```
