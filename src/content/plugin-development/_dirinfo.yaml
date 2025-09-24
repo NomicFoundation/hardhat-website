@@ -1,0 +1,7 @@
+section-type: group
+section-title: Hardhat plugin development
+order:
+  - title: Overview
+    href: "#overview"
+  - title: Tutorial
+    href: /tutorial
