@@ -1,0 +1,9 @@
+tools:
+  enabled:
+    - read_file
+    - edit_file
+    - multi_edit_file
+    - slash_command
+
+include:
+  - src/content/**/*.md

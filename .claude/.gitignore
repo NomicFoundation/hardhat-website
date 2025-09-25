@@ -1,0 +1,6 @@
+session/
+settings.local.json
+cache/
+tmp/
+*.log
+personal-*.md
