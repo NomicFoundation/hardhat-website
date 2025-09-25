@@ -11,6 +11,8 @@ description: A step-by-step guide to building a Hardhat 3 plugin
 
 This tutorial will guide you through the process of building a simple Hardhat 3 plugin based on the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/).
 
+By the end of this tutorial, you'll have created a plugin that extends network connections with custom account management, config, and adds a task to display account information.
+
 ## Getting started
 
 ### Prerequisites
@@ -103,7 +105,7 @@ A user can have multiple network connections at the same time, so if your plugin
 
 ### Hooking into the Hardhat behavior
 
-Hardhat and its plugins can define hooks, which are extensibility points that allow you to customize their behavior by adding custom logic called "hook handlers".
+Hardhat and its plugins can define hooks, which are extensibility points that allow you to customize their behavior by adding custom logic called "Hook Handlers".
 
 Hooks are split into different categories, and each plugin can define which categories they want to use in their main file, like this:
 
@@ -118,7 +120,9 @@ const plugin: HardhatPlugin = {
 };
 ```
 
-Each category defines a function that imports a module containing your hook handlers. Hardhat calls this function the first time it needs to run any hook in that category, which avoids loading the module until it's actually needed. If you have multiple instances of the Hardhat Runtime Environment, each instance will call the function once.
+Each category defines a function that imports a module containing your Hook Handlers. Hardhat calls this function the first time it needs to run any hook in that category, which avoids loading the module until it's actually needed.
+
+If you have multiple instances of the Hardhat Runtime Environment, each instance will call the function once.
 
 Having hook handlers in separate files also makes Hardhat more robust, as an error in one part of a plugin won't affect unrelated parts of the system. For example, if `./hooks/config.js` throws an error due to a missing dependency, Hardhat can still compile your project and perform other operations that don't require network functionality.
 
@@ -167,14 +171,14 @@ const handlers: Partial<NetworkHooks> = {
 };
 ```
 
-Most hook handlers receive two common parameters:
+Most Hook Handlers receive two common parameters:
 
-- `context`: An object that contains most of the Hardhat Runtime Environment's functionality, except for the `tasks` properties.
-- `next`: A function that calls the next hook handler, or the default behavior that Hardhat provides if there isn't any other hook handler.
+- `context`: An object that contains most of the Hardhat Runtime Environment's functionality, except for the `tasks` property.
+- `next`: A function that calls the next Hook Handler, or the default behavior that Hardhat provides if there isn't any other Hook Handler.
 
 You're responsible for calling `next` when appropriate, passing it the same or modified parameters, and handling its result. You can choose not to call it at all, but you shouldn't call it more than once.
 
-In the above snippet, we are using `next(context)` to immediately get the `NetworkConnection` object, and logging its `id`. We'll change that, and add the `myAccount` property to the connection instead.
+In the above snippet, we are using `next(context)` to immediately get the `NetworkConnection` object, and logging its `id`. We'll change that and add the `myAccount` property to the connection instead.
 
 Please change the body of the method to the following:
 
@@ -199,7 +203,7 @@ Fortunately, the TypeScript type system is designed to accommodate this kind of 
 
 We won't get into the details of how precisely they work, but the general idea is that you redeclare a TypeScript module and redeclare the type you want to extend. TypeScript will merge the different declarations, and users of your plugin will see the extended type.
 
-Please open `packages/plugin/src/type-extensions.ts`, where you'll find something like this:
+Open `packages/plugin/src/type-extensions.ts`, where you'll find something like this:
 
 ```ts
 // More code above that you can ignore...
@@ -218,7 +222,7 @@ declare module "hardhat/types/network" {
 
 We're redeclaring the module where `NetworkConnection` is originally defined. Note that importing the original module is critical for the type extension to work.
 
-Now, let's add the `myAccount` property to the `NetworkConnection` type, leaving the code above it as is. Please change the above code to the following:
+Now, let's add the `myAccount` property to the `NetworkConnection` type, leaving the code above it as is. Change the above code to the following:
 
 ```ts{4}
 import "hardhat/types/network";
@@ -291,7 +295,9 @@ This type represents the config that the user writes, but it's not the one that 
 
 The resolution process creates the `HardhatConfig` from an already-validated `HardhatUserConfig`. This involves copying values, assigning defaults, normalizing different config formats, or applying custom logic that plugins need.
 
-In general, `HardhatUserConfig` and its property types are more permissive and optional, allowing different ways to express the same thing. For example, `solidity` can be a `string`, `string[]`, or different types of objects. The `HardhatConfig` is stricter, with fewer optional properties and only one way to express each concept.
+In general, `HardhatUserConfig` and its property types are more permissive and optional, allowing different ways to express the same thing. For example, `solidity` can be a `string`, `string[]`, or different types of objects.
+
+The `HardhatConfig` is stricter, with fewer optional properties and only one way to express each concept.
 
 ### Extending the Hardhat config types
 
@@ -306,7 +312,7 @@ In this case, we'll extend the following types:
 - `EdrNetworkUserConfig` and `EdrNetworkConfig`, for `edr-simulated` networks.
 - `HttpNetworkUserConfig` and `HttpNetworkConfig`, for `http` networks.
 
-To do it, open `packages/plugin/src/type-extensions.ts`, and let's replace the code above the one we added in the previous section, so that the entire file looks like this:
+Open `packages/plugin/src/type-extensions.ts` and replace the code above the section we added previously. The entire file should look like this:
 
 ```ts{4,8,12,16}
 import "hardhat/types/config";
@@ -384,7 +390,7 @@ If the validation is successful, this function should return an empty array. Oth
 - `path`: The path to the property that caused the error, relative to the `HardhatUserConfig` object.
 - `message`: The error message.
 
-You can use libraries like [`Zod`](https://zod.dev/) or [ArkType](https://arktype.io/) to implement your validation logic, but for now, let's replace the existing function with:
+You can use libraries like [Zod](https://zod.dev/) or [ArkType](https://arktype.io/) to implement your validation logic, but for now, let's replace the existing function with:
 
 ```ts
 export async function validatePluginConfig(
@@ -476,11 +482,11 @@ This function iterates over all the networks and adds the `myAccountIndex` prope
 
 Note that it iterates the networks of the `partiallyResolvedConfig`, and not the `userConfig`. This is because the built-in resolution of the networks has already been done, and we can rely on it. If instead we iterated over `userConfig.networks`, we would get unresolved values, and potentially missing networks.
 
-However, when reading our plugin's config (the `myAccountIndex` value for each network), we must use the `userConfig`. This is because the `partiallyResolvedConfig` doesn't contain any information about the `myAccountIndex` property, as we're defining it here.
+However, when reading our plugin's config (the `myAccountIndex` value for each network), we must use the `userConfig`. This is because the `partiallyResolvedConfig` doesn't contain information about the `myAccountIndex` property, as we're defining it in this function.
 
 If no `myAccountIndex` is found in the user config for a given network, we will use the default value of `0`.
 
-Note that the `resolvePluginConfig` function doesn't modify values in-place but creates new ones. This is important because Hardhat 3 allows multiple instances of the Hardhat Runtime Environment, and modifying config values could interfere with other instances, especially during testing.
+**Important**: The `resolvePluginConfig` function doesn't modify values in-place but creates new ones. This is important because Hardhat 3 allows multiple instances of the Hardhat Runtime Environment, and modifying config values could interfere with other instances, especially during testing.
 
 ### Testing your plugin's config extension
 
@@ -494,7 +500,7 @@ We recommend taking a look at the tests, as they are a good example of the cases
 
 Now that your plugin has its own config, we should update the logic in the network hooks to use it.
 
-All we need to do is modify the `packages/plugin/src/hooks/network.ts` file and replace
+Modify the `packages/plugin/src/hooks/network.ts` file by replacing:
 
 ```ts
 connection.myAccount = accounts[0];
@@ -515,15 +521,17 @@ if (myAccountIndex >= accounts.length) {
 connection.myAccount = accounts[myAccountIndex];
 ```
 
-We first get `myAccountIndex` from the network config (part of the `NetworkConnection` object) and then validate that the index is valid.
+We first get `myAccountIndex` from the network config (which is part of the `NetworkConnection` object) and then validate that the index is valid.
 
-If it isn't, we throw a `HardhatPluginError`, which you can import from `hardhat/plugins`. This custom error type takes the plugin ID (as defined in your plugin object), a message, and an optional `cause` error. Make sure to throw this type of error from your plugin so that Hardhat's user interface can display them properly. You can also subclass `HardhatPluginError`, and it will still work.
+If it isn't, we throw a `HardhatPluginError`, which you can import from `hardhat/plugins`. This custom error type takes the plugin ID (as defined in your plugin object), a message, and an optional `cause` error.
+
+Make sure to throw this type of error from your plugin so that Hardhat's user interface can display them properly. You can also subclass `HardhatPluginError`, and it will still work with Hardhat's error handling.
 
 Finally, if `myAccountIndex` is valid, we use it to set the `myAccount` property of the `NetworkConnection` object.
 
 You can try it out by updating the example project's config, and running the `my-account-example.ts` script again.
 
-If you haven't already, delete the `myPlugin` field from your config in `packages/example-project/hardhat.config.ts` and add this network config:
+Update your configuration in `packages/example-project/hardhat.config.ts` by removing any `myPlugin` field and adding this network config:
 
 ```ts
 networks: {
@@ -570,7 +578,7 @@ It uses the `task` function from `hardhat/config` to create a task builder, whic
 
 Note that just like with `hookHandlers`, the action function imports another file, so that it isn't loaded unless it's needed.
 
-We'll update this definition to use it for the `my-account` task, by first changing the name, description, and the values we pass to `addOption`:
+We'll update the task definition to create the `my-account` task by changing the name, description, and the values we pass to `addOption`:
 
 ```ts{8}
 task("my-account", "Prints your account.")
@@ -590,7 +598,7 @@ You should get a type error in the highlighted line. This is because the task bu
 
 Let's fix the type error in the task definition, and implement the logic of the `my-account` task.
 
-First, let's rename the `packages/plugin/src/tasks/my-task.ts` file to `packages/plugin/src/tasks/my-account.ts`, and update the call to `import("./tasks/my-task.js")` to `import("./tasks/my-account.js")` in the task definition.
+First, rename the `packages/plugin/src/tasks/my-task.ts` file to `packages/plugin/src/tasks/my-account.ts`, then update the import call from `import("./tasks/my-task.js")` to `import("./tasks/my-account.js")` in the task definition.
 
 Now, let's replace the content of `packages/plugin/src/tasks/my-account.ts` with this:
 
@@ -633,7 +641,7 @@ Mi cuenta
 
 ## Integration tests
 
-While some parts of your plugins may be tested in isolation, most are tested with integration tests, through their interaction with Hardhat and potentially other plugins.
+While some parts of your plugin may be tested in isolation, most are tested with integration tests, through their interaction with Hardhat and potentially other plugins.
 
 There are two ways to write integration tests of plugins in Hardhat 3. We'll briefly cover both of them, and then we'll add some tests to the extension of the `NetworkConnection` object we added a few sections ago.
 
@@ -711,7 +719,7 @@ Note that the `hre` created like this won't have a `hre.config.paths.config` val
 
 We'll create a simple integration test for the `myAccount` property of the `NetworkConnection` object. We'll use the fixture project approach explained above, given its simplicity.
 
-Let's start by deleting the `packages/plugin/test/example-tests.ts`, as they were testing the template plugin, so those tests no longer work.
+Let's start by deleting `packages/plugin/test/example-tests.ts`, as it was testing the template plugin and no longer works with our changes.
 
 Now, let's create a new file in `packages/plugin/test/myAccount.ts`, and add the following code:
 
@@ -767,3 +775,15 @@ it("should throw a plugin error if the myAccountIndex is too high with respect t
 Run `pnpm test` again to make sure it works.
 
 You can find more tests of the plugin in the [`myAccount.ts` test file](https://github.com/NomicFoundation/hardhat3-plugin-template/blob/tutorial/packages/plugin/test/myAccount.ts) in the `tutorial` branch of the template project.
+
+## Next steps
+
+Congratulations! You've successfully built a complete Hardhat 3 plugin that extends network connections, adds custom configuration, and includes a task. You've learned the core concepts of Hardhat 3 plugin development:
+
+- Using Hook Handlers to extend the Hardhat functionality
+- Extending TypeScript types for great developer experience
+- Customizing the config validation and resolution
+- Creating custom tasks
+- Writing integration tests for your plugin
+
+You can now apply these patterns to build more complex plugins implementing your own ideas and features.
