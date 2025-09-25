@@ -109,7 +109,9 @@ const plugin: HardhatPlugin = {
 };
 ```
 
-Each of the categories defines a function that imports a module with your hook handlers. Hardhat will call that function the first time each instance of the Hardhat Runtime Environment needs to run one of your hook handlers, avoiding the cost of loading the module until it's actually needed.
+Each of the categories defines a function that imports a module with your hook handlers. Hardhat will call that function the first time each instance of the Hardhat Runtime Environment needs to run one of the hooks in that category, avoiding the cost of loading the module until it's actually needed.
+
+Having the hook handlers in separate files also makes Hardhat more robust, as an error in one part of a plugin won't afffect unrelated parts of the system. For example, if `./hooks/config.js` were to throw because of a missing dependency, Hardhat would still be able to compile your project, or do anything else that doesn't use the network.
 
 A typical file with hook handlers looks like this:
 
@@ -126,7 +128,7 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 };
 ```
 
-They export an async function that returns an object with hook handlers for its category.
+They export an async function that returns an object with hook handlers for its category. Once again, Hardhat will call this function the first time each instance of the Hardhat Runtime Environment needs to run one of the hooks in that category.
 
 ### Writing your first hook handler
 
