@@ -1,3 +1,12 @@
+---
+title: Building a Hardhat 3 plugin
+description: A step-by-step guide to building a Hardhat 3 plugin
+# Target audience:
+#  - New plugin author with context about what Hardhat is, but no context about how to build plugins
+#  - A Hardhat 3 plugin author wanting to learn how they work in Hardhat 3
+#  - An advanced Hardhat 3 user wanting to learn more about it
+---
+
 # Building a Hardhat 3 plugin
 
 This tutorial will guide you through the process of building a simple Hardhat 3 plugin, based on the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/).
@@ -512,7 +521,7 @@ If it isn't, we throw a `HardhatPluginError`, which you can import from `hardhat
 
 Finally, if `myAccountIndex` is valid, we use it to set the `myAccount` property of the `NetworkConnection` object.
 
-You can try it out by updating the example project's config, and running the
+You can try it out by updating the example project's config, and running the `my-account-example.ts` script again.
 
 If you haven't done it yet, delete the `myPlugin` field of your config in `packages/example-project/hardhat.config.ts`, and add this network config:
 
