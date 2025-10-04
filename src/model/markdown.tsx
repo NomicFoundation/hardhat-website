@@ -314,6 +314,7 @@ export const getMDFiles = (): string[] =>
       (pathname) =>
         /\.mdx?$/.test(pathname) && !pathname.includes("plugins/index.md")
     )
+    .filter((pathname) => !pathname.endsWith(".ignore.md"))
     .map((pathname) => pathname.replace(DOCS_PATH, ""));
 
 const getPathParamsByFile = (pathname: string): string[] => {
