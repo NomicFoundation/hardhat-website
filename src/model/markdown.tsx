@@ -322,10 +322,6 @@ const getPathParamsByFile = (pathname: string): string[] => {
   return withIndexURL(fileBase);
 };
 
-const getPathParamsByFileMd = (pathname: string): string[] => {
-  return withIndexURL(pathname);
-};
-
 export const getHrefByFile = (pathname: string): string => {
   const params = getPathParamsByFile(pathname);
   return path.join(...params);
@@ -337,11 +333,6 @@ export const getMDPaths = (): Array<{ params: { docPath: string[] } }> =>
       {
         params: {
           docPath: getPathParamsByFile(pathname),
-        },
-      },
-      {
-        params: {
-          docPath: getPathParamsByFileMd(pathname),
         },
       },
     ])
