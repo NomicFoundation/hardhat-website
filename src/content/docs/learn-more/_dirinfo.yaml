@@ -19,3 +19,5 @@ order:
     href: /configuration-variables
   - title: Cookbook
     href: /cookbook
+  - title: Plugin development
+    href: /../../plugin-development

@@ -33,6 +33,15 @@ migrate-from-hardhat2:
     - migrate-from-hardhat2
     - migrate-from-hardhat2/learn-more
 
+plugin-development:
+  title: Plugin development guide
+  folders:
+    - plugin-development
+    - plugin-development/tutorial
+    - plugin-development/guides
+    - plugin-development/reference
+    - plugin-development/explanation
+
 ignition:
   title: Hardhat Ignition
   folders:

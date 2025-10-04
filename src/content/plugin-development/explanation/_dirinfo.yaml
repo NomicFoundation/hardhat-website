@@ -1,0 +1,19 @@
+section-type: group
+section-title: Explanation
+order:
+  - href: /lifecycle
+    title: Plugin's lifecycle
+  - href: /hooks
+    title: Hooks and Hook Handlers
+  - href: /type-extensions
+    title: Type extensions
+  - href: /tasks
+    title: Tasks
+  - href: /config
+    title: Config system
+  - href: /global-options
+    title: Global options
+  - href: /user-interruptions
+    title: User interruptions
+  - href: /multichain-plugins
+    title: Multichain plugins
