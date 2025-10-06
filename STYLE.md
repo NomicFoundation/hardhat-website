@@ -249,10 +249,25 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Mainnet
 - Hook
 - Hook Handler
+- Hook Handler Category Factory
+- Hook Context
 - Global Option
 - Type Extension
 - Conditional Dependency
 - Config System
 - User Interruptions
 - Hardhat Task
+- Task Action
 - Mocha
+- Configuration Variable
+
+### How to refer to the name of a Hook
+
+When you need to refer to the name of a Hook, you should use `HookCategoryName#hookName`, where `HookCategoryName` is the name of the TypeScript interface that defines the Hooks of that category, and `hookName` is the name of the property in that interface. Some examples:
+
+- `NetworkHooks#newConnection`
+- `NetworkHooks#closeConnection`
+- `NetworkHooks#onConnect`
+- `TestHooks#registerFileForTestRunner`
+- `ConfigurationVariableHooks#fetchValue`
+- `UserInterruptionHooks#displayMessage`
