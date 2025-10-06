@@ -5,13 +5,13 @@ description: Hardhat 3 plugin tutorial - Creating a custom task
 
 # Creating a custom task
 
-We'll now define a task that prints the `myAccount` address of the network it's connected to, with a customizable title.
+Let's now define a task that prints the `myAccount` address of the network Hardhat is connected to, with a customizable title.
 
 ## Defining the task in your `HardhatPlugin` object
 
 Tasks are defined in the `tasks` property of the `HardhatPlugin` object.
 
-If you open `packages/plugin/src/index.ts`, you'll find the `tasks` property, which is an array of task definitions, and you already have one:
+If you open `packages/plugin/src/index.ts`, you'll find the `tasks` property, an array of task definitions. You already have one:
 
 ```ts
 task("my-task", "Prints a greeting.")
@@ -43,7 +43,7 @@ You'll get an error in the highlighted line because a file is missing. We'll cre
 
 ## Creating a task action file
 
-The task action is defined in a separate file, which is only imported when the task is run.
+The task action is defined in a separate file that's only imported when the task runs.
 
 Create the file `packages/plugin/src/tasks/my-account.ts` with this code:
 
@@ -64,7 +64,7 @@ export default async function (
 }
 ```
 
-Here we define the task arguments interface, and action (i.e. the function that will be executed when the task is run).
+Here we define the task arguments interface and action (the function that executes when the task runs).
 
 The task action must be an async function and exported as `default`.
 
@@ -72,11 +72,11 @@ The task action must be an async function and exported as `default`.
 The task arguments interface, `MyAccountTaskArguments`, is type-safe. You'll get a compilation error if it doesn't match the arguments in the task definition.
 :::
 
-You can now remove `packages/plugin/src/tasks/my-task.ts`, as it's no longer needed.
+You can remove `packages/plugin/src/tasks/my-task.ts`, as it's no longer needed.
 
 ## Trying out your task
 
-To try out your task, build the plugin, and run this in the example project:
+To try out your task, build the plugin and run this in the example project:
 
 ```sh
 pnpm hardhat my-account --title "Mi cuenta"
