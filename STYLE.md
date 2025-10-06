@@ -261,6 +261,12 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Mocha
 - Configuration Variable
 
+### Proper nouns in code blocks
+
+If these terms are included in code blocks (with `single backticks` or `triple backticks`), the above capitalizations don't apply, as they are technical terms and part of the code. In code blocks, you should use the term as it appears in the code.
+
+For example `NetworkConnection` should be capitalized as `NetworkConnection`, not `Network Connection`, nor replaced by "Network Connection".
+
 ### How to refer to the name of a Hook
 
 When you need to refer to the name of a Hook, you should use `HookCategoryName#hookName`, where `HookCategoryName` is the name of the TypeScript interface that defines the Hooks of that category, and `hookName` is the name of the property in that interface. Some examples:
