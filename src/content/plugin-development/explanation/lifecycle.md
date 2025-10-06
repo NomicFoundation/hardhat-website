@@ -11,7 +11,7 @@ This section explains the lifecycle of a Hardhat 3 plugin and its different comp
 
 A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package, and exported as `default`.
 
-Importing it shouldn't generate any side effect at runtime, nor import anything other than Hardhat and the plugin's [Type Extensions](./type-extensions.md). All the actual behavior is in separate files that are loaded dynamically.
+Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](./type-extensions.md). All the actual behavior must be in separate files that are loaded dynamically.
 
 For example, the `index.ts` file of the [Hardhat 3 plugin template](https://github.com/NomicFoundation/hardhat3-plugin-template/blob/tutorial/packages/plugin/src/index.ts) looks like this:
 
@@ -42,67 +42,66 @@ const plugin: HardhatPlugin = {
 };
 ```
 
-Importing this file won't load any module apart from Hardhat's and the type extensions. The `./hooks/config.js`, `./hooks/network.js`, and `./tasks/my-task.js` are loaded when needed, as explained later in this document.
+Importing this file only loads Hardhat's modules and the type extensions.
 
-Structuring the plugin like this has two main advantages, without sacrificing type safety.
+The `./hooks/config.js`, `./hooks/network.js`, and `./tasks/my-task.js` modules are loaded when needed, as explained later in this document.
+
+Structuring the plugin like this has two main advantages while maintaining type safety.
 
 First, the initialization of Hardhat is faster, as it doesn't load all the files at once.
 
-Second, it is more tolerant to installation and plugin errors, as an error in one of the dynamicly loaded files won't affect the rest of the system.
+Second, it's more tolerant to installation and plugin errors, as an error in one of the dynamically loaded files won't affect the rest of the system.
 
 ## Hardhat Runtime Environment initialization
 
-This section explains the difference process of the lifecycle of a plugin that happen during the initialization of the Hardhat Runtime Environment, in order.
+This section explains the different parts of the lifecycle of a plugin that happen during the initialization of the Hardhat Runtime Environment, in order.
 
-Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runtime Environment, so they can be run multiple times within the same process.
+Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runtime Environment, so they can run multiple times within the same process.
 
 ### Plugin list resolution
 
-One of the first things that Hardhat does when initializing the Hardhat Runtime Environment is to resolve the list of plugins based on the `plugins` field in the user config, and the built-in plugins that are bundled with Hardhat.
+One of the first things that Hardhat does when initializing the Hardhat Runtime Environment is to create an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
 
 To do this, Hardhat executes the `dependencies` function of each plugin, adding any new plugin to the list. This is a recursive process, in which the dependencies of dependencies are also added.
 
-Once all the dependencies are loaded, the array of plugins is sorted so that:
+Once that's completed, the array of plugins is sorted following these rules:
 
-- The built-in plugins are first
 - Every dependency of a plugin comes before the plugin itself
+- The built-in plugins come before external plugins
 - The relative order of the plugins in the config is preserved in the cases where it doesn't violate the above rules
 
-The order of the plugins two things things:
-
-- How Tasks are resolved
-- How Chained Hooks are run
+The order of the plugins is important because it determines how Task Actions of overridden tasks are run, and the order in which Hook Handlers of Chained Hooks are executed.
 
 ### Config Hooks are run
 
-Later in the initialization process, Hardhat runs the different Hook Handlers in the `config` category:
+Later in the initialization process, Hardhat runs the different Hook Handlers in the `config` category. These follow the process explained in [Hook Handler's lifecycle](#hook-handlers-lifecycle).
 
-- The function in `hookHandlers.config` is evaluated, if it exists.
-- The returned function is called.
-- The different hooks are run, including extending the user config, validating, and resolving it.
+The only difference with config Hook Handlers is that they don't have access to the Hook Context, as they are executed before it's created.
 
-To learn more about this proces, read the [Config system](./config.md) explanation.
+To learn more about this process, read the [Config System explanation](./config.md).
 
 ### Global Options resolution
 
-Each plugin can define an array of Global Options definitions. They are resolved so that their names don't clash with one another.
+Each plugin can define an array of Global Option definitions. They are resolved so that their names don't clash with one another.
 
-Then, their values are read either from the command line arguments, or from the environment variables.
+Then, their values are read from either the command line arguments or the environment variables.
 
-### Tasks defintions resolution
+### Tasks definitions resolution
 
-Finally, the Tasks definitions are resolved. This is done by flattening the `tasks` arrays in each plugin, and iterate the result in order to create the `hre.tasks` object.
+Finally, Hardhat resolves the Tasks definitions by combining all the `tasks` arrays from each plugin into a single list. It then iterates through this list to create the `hre.tasks` object.
 
-This process runs multiple validations, which include checking that:
+This process runs multiple validations, including checking that:
 
 - The task names don't clash with one another
 - Any subtask is defined after its parent task
 
-It also defines the order in which tasks overrides are run, which is the reverse order in the flattened array.
+It also defines the order in which task overrides are run. When a task is overridden by multiple plugins, Hardhat runs them in reverse order, starting with the last plugin in the list.
 
 ## Hook Handlers' lifecycle
 
-A plugin defines its Hook Handlers in the `hookHandlers` field of the plugin object. Each field is a function that imports a JavaScript module. For example, the `network` field could look like this:
+A plugin defines its Hook Handlers in the `hookHandlers` field of the plugin object. Each field is a function that imports a JavaScript module.
+
+For example, the `network` field could look like this:
 
 ```ts
 {
@@ -110,9 +109,9 @@ A plugin defines its Hook Handlers in the `hookHandlers` field of the plugin obj
 }
 ```
 
-The first time an instance of the Hardhat Runtime Environment runs a Hook of a category, it Hardhat will invoke the functions in the `hookHandlers`'s field for that category, of every plugin.
+When a Hook of a specific category runs for the first time in a Hardhat Runtime Environment instance, Hardhat needs to load the Hook Handlers for that category. It does this by calling the import function defined in the `hookHandlers` field of every plugin.
 
-The module that the function imports, must export as `default` a Hook Handler Category Factory, which is an async function that returns a `Partial<HookCategory>` object.
+The imported module must export a Hook Handler Category Factory as its `default` export. This factory is an async function that returns a `Partial<HookCategory>` object.
 
 For example, the `./hooks/network.js` could look like this:
 
@@ -126,15 +125,17 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 };
 ```
 
-Hardhat will call each Hoook Handler Category Factory at most once per instance of the Hardhat Runtime Environment and cache the result. It calls it the right after loading the module.
+Hardhat calls each Hook Handler Category Factory only when needed, immediately after loading the module.
 
-### Managing state associated to Hook Handlers
+The result of the Hook Handler Category Factory is cached, so it's only called once per instance of the Hardhat Runtime Environment, if needed.
 
-If you need to have state for your Hook Handlers, you can initialize it in the Hook Handler Category Factory, and use it in the Hook Handlers.
+### Managing state associated with Hook Handlers
 
-Note that te factory doesn't have access to the Hardhat Runtime Environment nor Hook Context, so the prefered way to do it is to define any necessary variables in the factory, but initialize the state in the Hook Handlers.
+If you need state for your Hook Handlers, you can initialize it in the Hook Handler Category Factory and use it in the Hook Handlers.
 
-For example, you can store state associated to each `NetworkConnection` like this:
+Note that the factory doesn't have access to the Hardhat Runtime Environment or Hook Context, so the preferred way to do it is to define any necessary variables in the factory, but initialize the state in the Hook Handlers.
+
+For example, you can store state associated with each `NetworkConnection` like this:
 
 ```ts
 interface MyPluginState {}
@@ -177,13 +178,15 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 };
 ```
 
-### Dynamic Hook Handler's lifecycle
+### Dynamic Hook Handlers' lifecycle
 
-The lifecycle of a Dynamic Hook Handler simpler, as it's manually registered and unregistered using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded, and are run just like any other Hook Handler.
+The lifecycle of a Dynamic Hook Handler is simpler, as it's manually registered and unregistered using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded, and are run just like any other Hook Handler.
 
 ## Task Actions' lifecycle
 
-Task Actions are defined using the `setAction` method of the `TaskBuilder`s APIs. This looks like this:
+You define Task Actions using the `setAction` method of the `TaskDefinitionBuilder`s APIs.
+
+It looks like this:
 
 ```ts{8}
 task("my-task", "Prints a greeting.")
@@ -197,9 +200,9 @@ task("my-task", "Prints a greeting.")
   .build(),
 ```
 
-You should provide a function that loads a module. This function is called the first time the task action needs to be run, and the result is cached.
+The `setAction` method expects a function that loads a module. When the task runs for the first time in a Hardhat Runtime Environment instance, Hardhat calls this function to load the module and caches the result for future runs in that instance.
 
-The module must export as default the function that implements the Task Action.
+The module must export the Task Action function as its `default` export.
 
 For example, the `./tasks/my-task.js` could look like this:
 
@@ -214,14 +217,17 @@ export default async function (
 
 ## Configuration Variables' lifecycle
 
-A plugin can extend the config of Hardhat adding new Configuration Variables, and also customizing how Configuration Variables work.
+There are two things that plugins can do with Configuration Variables:
 
-To do that, you need to understand their lifecycle.
+- Extend the config of Hardhat by adding new Configuration Variables
+- Customize how Configuration Variables work
 
-A Configuration Variable is created by calling the `configVariable` function exported by `hardhat/config`. It returns a `ConfigurationVariable` object, which is mostly the name of a value that may later be loaded.
+To do either of them, you need to understand their lifecycle.
 
-A `ConfigurationVariable` object is part of the `HardhatUserConfig`, so will go through the config validation and resolution process. During the config resolution, it's resolved by calling the `resolveConfigurationVariable` that's received by the `resolveUserConfig` Hook Handlers.
+Users create a Configuration Variable by calling the `configVariable` function exported by `hardhat/config`. This returns a `ConfigurationVariable` object, which is mostly the name of a value that may later be loaded.
 
-Resolving it turns the `ConfigurationVariable` to a `ResolvedConfigurationVariable`, but doesn't read its associated value yet. Instead, it's just used as part of the resolved config.
+A `ConfigurationVariable` object is part of the `HardhatUserConfig`, so it goes through the config validation and resolution process. During config resolution, plugins resolve it by calling the `resolveConfigurationVariable` function that `ConfigHooks#resolveUserConfig` Hook Handlers receive.
 
-When a task, script, or plugin wants to read the value of a Configuration Variable, it must use one of the `ResolvedConfigurationVariable`'s getters. This will call the `ConfigurationVariables#fetchValue` Hook to read the value and cache it.
+Resolving it turns the `ConfigurationVariable` into a `ResolvedConfigurationVariable`, but doesn't read its associated value yet. Instead, it's just used as part of the resolved config.
+
+When a task, script, or plugin wants to read the value of a Configuration Variable, it must use one of the `ResolvedConfigurationVariable`'s getters. This runs the `ConfigurationVariables#fetchValue` Hook to read and cache the value.
