@@ -56,7 +56,7 @@ This section explains the difference process of the lifecycle of a plugin that h
 
 Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runtime Environment, so they can be run multiple times within the same process.
 
-### Plugins list resolution
+### Plugin list resolution
 
 One of the first things that Hardhat does when initializing the Hardhat Runtime Environment is to resolve the list of plugins based on the `plugins` field in the user config, and the built-in plugins that are bundled with Hardhat.
 
@@ -102,18 +102,126 @@ It also defines the order in which tasks overrides are run, which is the reverse
 
 ## Hook Handlers' lifecycle
 
-The first time an instance of the Hardhat Runtime Environment runs a Hook of a specific category, all the
+A plugin defines its Hook Handlers in the `hookHandlers` field of the plugin object. Each field is a function that imports a JavaScript module. For example, the `network` field could look like this:
 
-**TODO**
+```ts
+{
+  network: () => import("./hooks/network.js");
+}
+```
+
+The first time an instance of the Hardhat Runtime Environment runs a Hook of a category, it Hardhat will invoke the functions in the `hookHandlers`'s field for that category, of every plugin.
+
+The module that the function imports, must export as `default` a Hook Handler Category Factory, which is an async function that returns a `Partial<HookCategory>` object.
+
+For example, the `./hooks/network.js` could look like this:
+
+```ts
+export default async (): Promise<Partial<NetworkHooks>> => {
+  const handlers: Partial<NetworkHooks> = {
+    // ...
+  };
+
+  return handlers;
+};
+```
+
+Hardhat will call each Hoook Handler Category Factory at most once per instance of the Hardhat Runtime Environment and cache the result. It calls it the right after loading the module.
+
+### Managing state associated to Hook Handlers
+
+If you need to have state for your Hook Handlers, you can initialize it in the Hook Handler Category Factory, and use it in the Hook Handlers.
+
+Note that te factory doesn't have access to the Hardhat Runtime Environment nor Hook Context, so the prefered way to do it is to define any necessary variables in the factory, but initialize the state in the Hook Handlers.
+
+For example, you can store state associated to each `NetworkConnection` like this:
+
+```ts
+interface MyPluginState {}
+
+export default async (): Promise<Partial<NetworkHooks>> => {
+  const statePerConnection: WeakMap<
+    NetworkConnection<ChainType | string>,
+    MyPluginState
+  > = new WeakMap();
+
+  const handlers: Partial<NetworkHooks> = {
+    async newConnection<ChainTypeT extends ChainType | string>(
+      context: HookContext,
+      next: (nextContext: HookContext) => Promise<NetworkConnection<ChainTypeT>>
+    ): Promise<NetworkConnection<ChainTypeT>> {
+      const connection = await next(context);
+
+      statePerConnection.set(connection, {});
+
+      return connection;
+    },
+
+    async closeConnection<ChainTypeT extends ChainType | string>(
+      context: HookContext,
+      networkConnection: NetworkConnection<ChainTypeT>,
+      next: (
+        nextContext: HookContext,
+        nextNetworkConnection: NetworkConnection<ChainTypeT>
+      ) => Promise<void>
+    ): Promise<void> {
+      if (statePerConnection.has(networkConnection) === true) {
+        statePerConnection.delete(networkConnection);
+      }
+
+      return next(context, networkConnection);
+    },
+  };
+
+  return handlers;
+};
+```
 
 ### Dynamic Hook Handler's lifecycle
 
-The lifecycle of a Dynamic Hook Handler simpler, as it's manually registered and unregistered, using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded, and are run just like any other Hook Handler.
+The lifecycle of a Dynamic Hook Handler simpler, as it's manually registered and unregistered using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded, and are run just like any other Hook Handler.
 
-## Task actions' lifecycle
+## Task Actions' lifecycle
 
-**TODO**
+Task Actions are defined using the `setAction` method of the `TaskBuilder`s APIs. This looks like this:
+
+```ts{8}
+task("my-task", "Prints a greeting.")
+  .addOption({
+    name: "who",
+    description: "Who is receiving the greeting.",
+    type: ArgumentType.STRING,
+    defaultValue: "Hardhat",
+  })
+  .setAction(() => import("./tasks/my-task.js"))
+  .build(),
+```
+
+You should provide a function that loads a module. This function is called the first time the task action needs to be run, and the result is cached.
+
+The module must export as default the function that implements the Task Action.
+
+For example, the `./tasks/my-task.js` could look like this:
+
+```ts
+export default async function (
+  taskArguments: MyTaskTaskArguments,
+  hre: HardhatRuntimeEnvironment
+) {
+  console.log(`${hre.config.myConfig.greeting}, ${taskArguments.who}!`);
+}
+```
 
 ## Configuration Variables' lifecycle
 
-**TODO**
+A plugin can extend the config of Hardhat adding new Configuration Variables, and also customizing how Configuration Variables work.
+
+To do that, you need to understand their lifecycle.
+
+A Configuration Variable is created by calling the `configVariable` function exported by `hardhat/config`. It returns a `ConfigurationVariable` object, which is mostly the name of a value that may later be loaded.
+
+A `ConfigurationVariable` object is part of the `HardhatUserConfig`, so will go through the config validation and resolution process. During the config resolution, it's resolved by calling the `resolveConfigurationVariable` that's received by the `resolveUserConfig` Hook Handlers.
+
+Resolving it turns the `ConfigurationVariable` to a `ResolvedConfigurationVariable`, but doesn't read its associated value yet. Instead, it's just used as part of the resolved config.
+
+When a task, script, or plugin wants to read the value of a Configuration Variable, it must use one of the `ResolvedConfigurationVariable`'s getters. This will call the `ConfigurationVariables#fetchValue` Hook to read the value and cache it.
