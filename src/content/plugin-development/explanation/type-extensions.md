@@ -5,20 +5,20 @@ description: What are type extensions in a Hardhat 3 plugin and how to use them
 
 # Type extensions
 
-When building a Hardhat 3 plugin, you'll often need to extend a TypeScript type of Hardhat or a plugin you are using as a dependency. This is done with a Type Extension.
+When building a Hardhat 3 plugin, you'll often need to extend a TypeScript type from Hardhat or a plugin you're using as a dependency. This is done with a Type Extension.
 
 ## How do Type Extensions work?
 
 Type Extensions are a combination of two features of TypeScript:
 
-- Module augmentation
-- Declaration merging
+- Module Augmentation
+- Declaration Merging
 
-### Module augmentation
+### Module Augmentation
 
-Module augmentation allows you to add new type declarations as if they were defined in another module, the one that's being augmented.
+Module Augmentation lets you add new type declarations as if they were defined in another module.
 
-You can augment a module in any `.ts` file. You need to import the module you want to augment, and then use the `declare module` to declare it again, adding the new declarations.
+You can augment a module in any `.ts` file. First, import the module you want to augment. Then use the `declare module` syntax to declare it again with the new types.
 
 For example, if you want to add a new `MyType` type to the `hardhat/types/network` module, you can do it like this:
 
@@ -31,11 +31,11 @@ declare module "hardhat/types/network" {
 }
 ```
 
-Now, everyone who imports `hardhat/types/network` will have access to the `MyType` type.
+Now, any code that imports `hardhat/types/network` has access to the `MyType` type.
 
-### Declaration merging
+### Declaration Merging
 
-Declaration merging is a process that TypeScript applies when a module declares a type more than once. It merges the different properties of each declaration into a single one.
+Declaration Merging happens when a module declares a type more than once. TypeScript merges the different properties of each declaration into a single one.
 
 For example, if you have these two declarations in a single file:
 
@@ -49,7 +49,7 @@ interface MyType {
 }
 ```
 
-is equivalent to having this:
+This is equivalent to having this:
 
 ```ts
 interface MyType {
@@ -73,19 +73,19 @@ declare module "hardhat/types/network" {
 }
 ```
 
-The `NetworkConnection` type will now have a `myProp` property, everywhere that's used.
+The `NetworkConnection` type will now have a `myProp` property everywhere it's used.
 
 ## Type extension vs runtime behavior
 
-Type Extensions are exclusively a type-level concept. Adding a property to a type doesn't mean that it will automatically be added to the values of that type at runtime.
+Type Extensions are exclusively a type-level concept. Adding a property to a type doesn't automatically add it to the values of that type at runtime.
 
-You'll need to make sure that your Type Extensions are aligned with the actual behavior of your plugin by adding any property at runtime as well. This is normally done with Hook Handlers.
+Make sure your Type Extensions align with your plugin's actual behavior by adding any property at runtime as well. This is normally done with Hook Handlers.
 
 In the example above, you'd need to hook into the `NetworkConnection` creation to add the `myProp` property to it.
 
 ## Loading your plugin's type extensions
 
-To make TypeScript aware of your type extensions, you'll need to import them in the index file of your plugin. Normally, adding this import in your `index.ts` file is enough:
+To make TypeScript aware of your type extensions, import them in your plugin's index file. Normally, adding this import to your `index.ts` file is enough:
 
 ```ts
 import "./type-extensions.js";
@@ -93,4 +93,4 @@ import "./type-extensions.js";
 
 ## Learn more
 
-To learn about the details of how Module Augmentation and Declaration Merging work, you can read the [official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation).
+To learn more about how Module Augmentation and Declaration Merging work, read the [official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation).
