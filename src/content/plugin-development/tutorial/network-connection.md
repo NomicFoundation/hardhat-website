@@ -5,11 +5,11 @@ description: Hardhat 3 plugin tutorial - Extending the NetworkConnection
 
 # Extending the `NetworkConnection`
 
-The first thing we'll do is adding the `myAccount` property to the `NetworkConnection` object, which is returned by `network.connect()`.
+Let's start by adding the `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
 
 ## Defining a network Hook Handler
 
-To add a network property to the `NetworkConnection` object, we'll use a network hook handler.
+To add a network property to the `NetworkConnection` object, we'll use a network Hook Handler.
 
 The template already comes with the `packages/plugin/src/hooks/network.ts` file, so we'll replace its contents with this:
 
@@ -42,11 +42,11 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 };
 ```
 
-The `newConnection` function above is a Hook Handler. It will be called every time a new network connection is created with `network.connect()`.
+The `newConnection` function above is a Hook Handler. Hardhat calls it every time a new network connection is created with `network.connect()`.
 
 Within this function, we first call `next` to call any other Hook Handler, or the default behavior of Hardhat. It returns the `NetworkConnection` object.
 
-Then, get the accounts of the connection, and assign the first one as `myAccount`.
+Then, we get the accounts of the connection and assign the first one as `myAccount`.
 
 You'll get a type error in the highlighted line though. This is because the `NetworkConnection` type doesn't have a `myAccount` property.
 
@@ -54,7 +54,7 @@ We'll fix it by extending the `NetworkConnection` type.
 
 ## Extending the `NetworkConnection` type
 
-The TypeScript type system is designed to let you add properties to an existing type, what we call Type Extensions.
+The TypeScript type system lets you add properties to an existing type, what we call Type Extensions.
 
 Open `packages/plugin/src/type-extensions.ts`, where you'll find something like this:
 
@@ -86,7 +86,7 @@ declare module "hardhat/types/network" {
 }
 ```
 
-By extending the `NetworkConnection` type, the error we had in the previous section is fixed.
+Extending the `NetworkConnection` type fixes the error from the previous section.
 
 ### Trying out your `NetworkConnection` extension
 
@@ -98,7 +98,7 @@ First, you need to build the plugin, by running this in `packages/plugin`:
 pnpm build
 ```
 
-Then, let's create a script in the `example-project` which uses your plugin.
+Then, let's create a script in the `example-project` that uses your plugin.
 
 Create the file `packages/example-project/scripts/my-account-example.ts` with this code:
 
@@ -110,7 +110,7 @@ const connection = await network.connect();
 console.log("connection.myAccount:", connection.myAccount);
 ```
 
-Now run it with:
+Run it with:
 
 ```sh
 $ pnpm hardhat run scripts/my-account-example.ts
