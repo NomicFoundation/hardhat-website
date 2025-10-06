@@ -5,15 +5,15 @@ description: How to build Hardhat 3 plugins to extend and customize its
 
 # Hardhat plugin development
 
-Welcome to the Hardhat plugin development documentaton. In this section, you'll learn how to extend and customize Hardhat's behavior using plugins.
+Welcome to the Hardhat plugin development documentation. In this section, you'll learn how to extend and customize Hardhat's behavior using plugins.
 
 ## What is a Hardhat plugin?
 
-A Hardhat plugin is a way to extend the functionality of Hardhat and its plugins.
+A Hardhat plugin is reusable extension of the functionality of Hardhat and its plugins.
 
-They are defined as TypeScript objects with a `HardhatPlugin` type. They are the objects that the user adds to their `plugins` array in their `hardhat.config.ts` file.
+Plugins are defined as TypeScript objects with a `HardhatPlugin` type. Users add them to the `plugins` array in their `hardhat.config.ts` file.
 
-This is how a plugin looks like:
+Let's look at the structure of a basic plugin:
 
 ```ts
 import type { HardhatPlugin } from "hardhat/types/plugins";
@@ -26,11 +26,11 @@ const plugin: HardhatPlugin = {
     // The hook handlers that this plugin defines
   },
   tasks: [
-    // The plugins that this tasks defines
+    // The tasks that this plugin defines
   ],
   globalOptions: [
     // The global options that this plugin defines
-  ]
+  ],
   dependencies: [
     // Other plugins that this plugin depends on
   ],
@@ -41,16 +41,16 @@ export default plugin;
 
 A plugin can define:
 
-- Type extensions: which allow you to add extend the types of Hardhat's built-in types. For example, adding your custom fields to the `HardhatUserConfig` type.
+- **Type Extensions** allow you to extend Hardhat's built-in types. For example, you can add custom fields to the `HardhatUserConfig` type.
 
-- Hook Handlers: which are functions to customize different parts of the the behavior of Hardhat. We call each of the parts extensibility points a Hook.
+- **Hook Handlers** are functions that customize different parts of Hardhat's behavior. Each extensibility point is called a Hook.
 
-- Tasks: which are exposed in the CLI and can be run with `npx hardhat <task>`.
+- **Hardhat Tasks** are exposed in the CLI and can be run with `npx hardhat <task>`.
 
-- Global options: which are exposed in the CLI and can be used with `--<option>`. When you you define a global option, their value is available everywhere (hook handlers, tasks, tests, etc.).
+- **Global Options** are exposed in the CLI and can be used with `--<option>`. When you define a Global Option, its value is available everywhere (Hook Handlers, Hardhat Tasks, tests, etc.).
 
-- Dependencies: which are other plugins that this plugin depends on. Hardhat guarantees that the dependencies are loaded before the plugin itself.
+- **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself.
 
 ## Get started
 
-To build your first plugin, follow [this tutorial](./tutorial/setup.md).
+Ready to build your first plugin? The [tutorial](./tutorial/setup.md) walks you through creating a complete plugin from scratch, covering project setup, defining hooks, adding tasks, and testing your plugin.
