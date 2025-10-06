@@ -2,11 +2,6 @@ Review the files using the hardhat3 output style. The hardhat3 output style incl
 
 If any file isn't markdown, abort with the message "Only markdown files are supported."
 
-**CRITICAL WORKFLOW:**
-
-1. Read the entire file ONCE
-2. Apply ALL changes using MultiEdit in ONE tool call paying attention to the instructions in the hardhat3 output style
-
-For higher-level suggestions, provide them as chat feedback.
+Any higher-level suggestion to improve the documentation should be provided in the chat.
 
 Files to review: $ARGUMENTS
