@@ -219,7 +219,7 @@ export default async function (
 
 There are two things that plugins can do with Configuration Variables:
 
-- Extend the config of Hardhat by adding new Configuration Variables
+- Extend the config of Hardhat by adding fields that accept Configuration Variables
 - Customize how Configuration Variables work
 
 To do either of them, you need to understand their lifecycle.
