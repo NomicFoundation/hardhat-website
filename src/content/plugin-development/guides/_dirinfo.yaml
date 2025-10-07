@@ -11,8 +11,6 @@ order:
     title: Using plugin dependencies
   - href: /publishing
     title: Publishing a plugin
-  - href: /documentation
-    title: Documenting a plugin
   - href: /conditional-dependencies
     title: Using conditional dependencies
   - href: /hook-handlers-io
