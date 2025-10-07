@@ -74,4 +74,4 @@ export default plugin;
 
 When you declare a plugin as a dependency, you can be sure that its Hook Handlers, Tasks, and Global Options will be loaded when your plugin is loaded.
 
-To learn more about how the plugin dependencies are loaded, read the [Lifecycle of the components of a Hardhat 3 plugin](../explanation/lifecycle.md) explanation.
+To learn more about how the plugin dependencies are loaded, read the [Lifecycle of the components of a Hardhat 3 plugin](../explanations/lifecycle.md) explanation.

@@ -40,7 +40,7 @@ plugin-development:
     - plugin-development/tutorial
     - plugin-development/guides
     - plugin-development/reference
-    - plugin-development/explanation
+    - plugin-development/explanations
 
 ignition:
   title: Hardhat Ignition
