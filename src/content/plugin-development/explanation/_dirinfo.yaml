@@ -2,7 +2,7 @@ section-type: group
 section-title: Explanation
 order:
   - href: /lifecycle
-    title: Plugin's lifecycle
+    title: Lifecycle of a plugin
   - href: /hooks
     title: Hooks and Hook Handlers
   - href: /type-extensions

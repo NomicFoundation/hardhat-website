@@ -1,13 +1,17 @@
 ---
-title: Hardhat 3 plugin's lifecycle
-description: An explanation about the lifecycle of a Hardhat 3 plugin
+title: Lifecycle of the components of Hardhat 3 plugin
+description: An explanation about the lifecycles of a Hardhat 3 plugin
 ---
 
-# Hardhat 3 plugin's lifecycle
+# Lifecycle of the components of Hardhat 3 plugin
 
 This section explains the lifecycle of a Hardhat 3 plugin and its different components.
 
-## Plugin import
+## Plugin lifecycle
+
+The lifecycle of the Hardhat plugin can be divided into two parts: importing the plugin and the initialization of the Hardhat Runtime Environment.
+
+### Plugin import
 
 A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package, and exported as `default`.
 
@@ -52,15 +56,15 @@ First, the initialization of Hardhat is faster, as it doesn't load all the files
 
 Second, it's more tolerant to installation and plugin errors, as an error in one of the dynamically loaded files won't affect the rest of the system.
 
-## Hardhat Runtime Environment initialization
+### Hardhat Runtime Environment initialization
 
 This section explains the different parts of the lifecycle of a plugin that happen during the initialization of the Hardhat Runtime Environment, in order.
 
 Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runtime Environment, so they can run multiple times within the same process.
 
-### Plugin list resolution
+#### Plugin list resolution
 
-One of the first things that Hardhat does when initializing the Hardhat Runtime Environment is to create an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
+When initializing the Hardhat Runtime Environment, Hardhat creates an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
 
 To do this, Hardhat executes the `dependencies` function of each plugin, adding any new plugin to the list. This is a recursive process, in which the dependencies of dependencies are also added.
 
@@ -72,21 +76,21 @@ Once that's completed, the array of plugins is sorted following these rules:
 
 The order of the plugins is important because it determines how Task Actions of overridden tasks are run, and the order in which Hook Handlers of Chained Hooks are executed.
 
-### Config Hooks are run
+#### Config Hooks are run
 
-Later in the initialization process, Hardhat runs the different Hook Handlers in the `config` category. These follow the process explained in [Hook Handler's lifecycle](#hook-handlers-lifecycle).
+Later in the initialization process, Hardhat runs the different Hook Handlers in the `config` category. These follow the process explained in [Hook Handlers' lifecycle](#hook-handlers-lifecycle).
 
-The only difference with config Hook Handlers is that they don't have access to the Hook Context, as they are executed before it's created.
+The only difference with config Hook Handlers is that they don't have access to the Hook Context, as they're executed before it's created.
 
 To learn more about this process, read the [Config System explanation](./config.md).
 
-### Global Options resolution
+#### Global Options resolution
 
-Each plugin can define an array of Global Option definitions. They are resolved so that their names don't clash with one another.
+Each plugin can define an array of Global Option definitions. They're resolved so that their names don't clash with one another.
 
-Then, their values are read from either the command line arguments or the environment variables.
+Then, their values are read from the command line arguments or the environment variables.
 
-### Tasks definitions resolution
+#### Tasks definitions resolution
 
 Finally, Hardhat resolves the Tasks definitions by combining all the `tasks` arrays from each plugin into a single list. It then iterates through this list to create the `hre.tasks` object.
 
@@ -95,7 +99,7 @@ This process runs multiple validations, including checking that:
 - The task names don't clash with one another
 - Any subtask is defined after its parent task
 
-It also defines the order in which task overrides are run. When a task is overridden by multiple plugins, Hardhat runs them in reverse order, starting with the last plugin in the list.
+It also defines the order in which task overrides run. When multiple plugins override a task, Hardhat runs their actions in reverse order, starting with the last plugin in the list.
 
 ## Hook Handlers' lifecycle
 
@@ -111,7 +115,7 @@ For example, the `network` field could look like this:
 
 When a Hook of a specific category runs for the first time in a Hardhat Runtime Environment instance, Hardhat needs to load the Hook Handlers for that category. It does this by calling the import function defined in the `hookHandlers` field of every plugin.
 
-The imported module must export a Hook Handler Category Factory as its `default` export. This factory is an async function that returns a `Partial<HookCategory>` object.
+The imported module must export a Hook Handler Category Factory as its `default` export. The factory is an async function that returns a `Partial<HookCategory>` object.
 
 For example, the `./hooks/network.js` could look like this:
 
@@ -127,7 +131,7 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 
 Hardhat calls each Hook Handler Category Factory only when needed, immediately after loading the module.
 
-The result of the Hook Handler Category Factory is cached, so it's only called once per instance of the Hardhat Runtime Environment, if needed.
+Hardhat caches the result of the Hook Handler Category Factory, so it's only called once per instance of the Hardhat Runtime Environment, if needed.
 
 ### Managing state associated with Hook Handlers
 
@@ -180,7 +184,7 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 
 ### Dynamic Hook Handlers' lifecycle
 
-The lifecycle of a Dynamic Hook Handler is simpler, as it's manually registered and unregistered using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded, and are run just like any other Hook Handler.
+The lifecycle of a Dynamic Hook Handler is simpler, as it's manually registered and unregistered using `hre.hooks.registerHandlers` and `hre.hooks.unregisterHandlers`. They aren't lazy loaded and run just like any other Hook Handler.
 
 ## Task Actions' lifecycle
 
@@ -224,7 +228,7 @@ There are two things that plugins can do with Configuration Variables:
 
 To do either of them, you need to understand their lifecycle.
 
-Users create a Configuration Variable by calling the `configVariable` function exported by `hardhat/config`. This returns a `ConfigurationVariable` object, which is mostly the name of a value that may later be loaded.
+Users create a Configuration Variable by calling the `configVariable` function exported by `hardhat/config`. This returns a `ConfigurationVariable` object, which is mostly the name of a value that may be loaded later.
 
 A `ConfigurationVariable` object is part of the `HardhatUserConfig`, so it goes through the config validation and resolution process. During config resolution, plugins resolve it by calling the `resolveConfigurationVariable` function that `ConfigHooks#resolveUserConfig` Hook Handlers receive.
 
