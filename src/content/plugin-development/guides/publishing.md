@@ -21,15 +21,17 @@ Make sure your plugin documentation includes at least:
 
 ### Documenting the installation process
 
-Hardhat plugins use `peerDependencies` in three cases:
+Hardhat plugins use `peerDependencies` in five cases:
 
 1. When they depend on other Hardhat plugins
 2. When they depend on a package that the user may import directly (e.g. `viem`)
 3. When they depend on a package that the user may run directly (e.g. `mocha`)
+4. When they exposing parts of a package as in your API
+5. When using a package that has peer dependencies
 
 To learn more about this, read the [Using dependencies in your plugin](./dependencies.md) guide.
 
-When documenting how to install your plugin, tell the user to install your package and any `peerDependencies` from cases (2) and (3) above.
+When documenting how to install your plugin, tell the user to install your package and any `peerDependencies` from cases (2) and (3) above, except for case `hardhat` itself.
 
 If you don't document this, the user installation may fail, as some package managers will autoinstall the `peerDependencies` of your plugin, but they may not make them available to the user's project. This can lead to import errors.
 
