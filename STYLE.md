@@ -248,6 +248,7 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Ethereum Virtual Machine
 - Mainnet
 - Hook
+- Chained Hook
 - Hook Handler
 - Hook Handler Category Factory
 - Hook Context
