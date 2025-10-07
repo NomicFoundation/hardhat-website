@@ -93,4 +93,4 @@ import "./type-extensions.js";
 
 ## Learn more
 
-To learn more about how Module Augmentation and Declaration Merging work, read the [official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation).
+To learn more about how Module Augmentation and Declaration Merging work, read the [official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
