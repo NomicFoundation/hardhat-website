@@ -66,6 +66,11 @@ const customRedirects = [
 
   // Valid shortlinks
   {
+    source: "/plugin-authors-group",
+    destination: "https://t.me/+cFxwO53KTrY5MjYx",
+    permanent: false,
+  },
+  {
     source: "/config",
     destination: "/docs/reference/configuration",
     permanent: false,
