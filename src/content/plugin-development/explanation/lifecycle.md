@@ -1,15 +1,15 @@
 ---
-title: Lifecycle of the components of Hardhat 3 plugin
+title: Lifecycle of the components of a Hardhat 3 plugin
 description: An explanation about the lifecycles of a Hardhat 3 plugin
 ---
 
-# Lifecycle of the components of Hardhat 3 plugin
+# Lifecycle of the components of a Hardhat 3 plugin
 
 This section explains the lifecycle of a Hardhat 3 plugin and its different components.
 
 ## Plugin lifecycle
 
-The lifecycle of the Hardhat plugin can be divided into two parts: importing the plugin and the initialization of the Hardhat Runtime Environment.
+The lifecycle of a Hardhat plugin can be divided into two parts: importing the plugin and the initialization of the Hardhat Runtime Environment.
 
 ### Plugin import
 
@@ -204,7 +204,7 @@ task("my-task", "Prints a greeting.")
   .build(),
 ```
 
-The `setAction` method expects a function that loads a module. When the task runs for the first time in a Hardhat Runtime Environment instance, Hardhat calls this function to load the module and caches the result for future runs in that instance.
+The `setAction` method expects a function that loads a module. When the task runs for the first time in a Hardhat Runtime Environment instance, Hardhat will load the actions associated to the task when needed, calling this function to load the module and caching the result for future runs in that instance. If the task isn't overridden, a single action will be loaded.
 
 The module must export the Task Action function as its `default` export.
 
@@ -234,4 +234,4 @@ A `ConfigurationVariable` object is part of the `HardhatUserConfig`, so it goes 
 
 Resolving it turns the `ConfigurationVariable` into a `ResolvedConfigurationVariable`, but doesn't read its associated value yet. Instead, it's just used as part of the resolved config.
 
-When a task, script, or plugin wants to read the value of a Configuration Variable, it must use one of the `ResolvedConfigurationVariable`'s getters. This runs the `ConfigurationVariables#fetchValue` Hook to read and cache the value.
+When a task, script, or plugin wants to read the value of a Configuration Variable, it must use one of the `ResolvedConfigurationVariable`'s getters. This runs the `ConfigurationVariableHooks#fetchValue` Hook to read and cache the value.
