@@ -5,7 +5,7 @@ description: Hardhat 3 plugin tutorial - Your first Hardhat 3 plugin
 
 # Hardhat 3 plugin tutorial
 
-In this tutorial, you'll build a simple Hardhat 3 plugin based on the [Hardhat 3 plugin template](../guides/hardhat3-plugin-template.md).
+In this tutorial, you'll build a simple Hardhat 3 plugin based on the [Hardhat 3 plugin template](https://github.com/NomicFoundation/hardhat3-plugin-template).
 
 ## Setting up your dev environment
 
