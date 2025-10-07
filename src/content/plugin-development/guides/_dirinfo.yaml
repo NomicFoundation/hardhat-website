@@ -7,8 +7,8 @@ order:
     title: Hooking into the compilation process
   - href: /config-extensions
     title: Extending the Hardhat config
-  - href: /plugin-dependencies
-    title: Using plugin dependencies
+  - href: /dependencies
+    title: Using dependencies in your plugin
   - href: /publishing
     title: Publishing a plugin
   - href: /conditional-dependencies
