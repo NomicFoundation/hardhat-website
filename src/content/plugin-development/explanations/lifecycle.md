@@ -13,7 +13,7 @@ The lifecycle of a Hardhat plugin can be divided into two parts: importing the p
 
 ### Plugin import
 
-A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package, and exported as `default`.
+A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
 
 Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](./type-extensions.md). All the actual behavior must be in separate files that are loaded dynamically.
 
@@ -66,7 +66,11 @@ Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runt
 
 When initializing the Hardhat Runtime Environment, Hardhat creates an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
 
-To do this, Hardhat executes the `dependencies` function of each plugin, adding any new plugin to the list. This is a recursive process, in which the dependencies of dependencies are also added.
+To do this, Hardhat executes the `dependencies` function of each plugin, adding any new plugin to the list.
+
+At the same time, it loads the conditional dependencies of each plugin by calling the `condition` function of each of them and checking if they're already loaded. If they are, the `plugin` function is called and the plugin is added to the list.
+
+This is a recursive process where the dependencies of dependencies are also added, along with conditional dependencies. Hardhat runs it until all plugins are loaded.
 
 Once that's completed, the array of plugins is sorted following these rules:
 
@@ -80,13 +84,13 @@ The order of the plugins is important because it determines how Task Actions of 
 
 Later in the initialization process, Hardhat runs the different Hook Handlers in the `config` category. These follow the process explained in [Hook Handlers' lifecycle](#hook-handlers-lifecycle).
 
-The only difference with config Hook Handlers is that they don't have access to the Hook Context, as they're executed before it's created.
+The only difference from config Hook Handlers is that they don't have access to the Hook Context, as they're executed before it's created.
 
 To learn more about this process, read the [Config System explanation](./config.md).
 
 #### Global Options resolution
 
-Each plugin can define an array of Global Option definitions. They're resolved so that their names don't clash with one another.
+Each plugin can define an array of Global Option definitions. Hardhat resolves them so their names don't clash with one another.
 
 Then, their values are read from the command line arguments or the environment variables.
 
@@ -204,7 +208,7 @@ task("my-task", "Prints a greeting.")
   .build(),
 ```
 
-The `setAction` method expects a function that loads a module. When the task runs for the first time in a Hardhat Runtime Environment instance, Hardhat will load the actions associated to the task when needed, calling this function to load the module and caching the result for future runs in that instance. If the task isn't overridden, a single action will be loaded.
+The `setAction` method expects a function that loads a module. When the task runs for the first time in a Hardhat Runtime Environment instance, Hardhat loads the actions associated with the task when needed, calling this function to load the module and caching the result for future runs in that instance. If the task isn't overridden, Hardhat loads a single action.
 
 The module must export the Task Action function as its `default` export.
 
