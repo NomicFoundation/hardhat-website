@@ -249,6 +249,8 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Mainnet
 - Hook
 - Chained Hook
+- Parallel Hook
+- Sequential Hook
 - Hook Handler
 - Hook Handler Category Factory
 - Hook Context
