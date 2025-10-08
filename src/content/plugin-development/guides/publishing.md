@@ -29,7 +29,7 @@ Hardhat plugins use `peerDependencies` in five cases:
 4. When they expose parts of a package in their public API
 5. When using a package that has peer dependencies
 
-To learn more about this, read the [Using dependencies in your plugin](./dependencies.md) guide.
+To learn more about why and how to use `peerDependencies` in Hardhat plugins, read the [Peer dependencies in Hardhat 3 plugins](../explanations/peer-dependencies.md) explanation.
 
 When documenting how to install your plugin, tell the user to install your package and any `peerDependencies` from cases (2) and (3) above, except for `hardhat` itself.
 
