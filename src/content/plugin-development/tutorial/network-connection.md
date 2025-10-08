@@ -75,7 +75,7 @@ declare module "hardhat/types/network" {
 
 We'll replace it with this:
 
-```ts{5}
+```ts
 // More code above that you can ignore for now...
 
 import "hardhat/types/network";
