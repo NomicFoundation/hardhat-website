@@ -7,9 +7,9 @@ description: How to use dependencies in your plugin
 
 This guide shows you how to use dependencies in your plugin, including how to use other plugins as dependencies.
 
-## Understanding `peerDependencies`
-
 Hardhat plugins make extensive use of `peerDependencies`, so it's important to understand what they are, and how to use them.
+
+## Understanding `peerDependencies`
 
 A `peerDependency` is a way to declare that your package expects the consumer (the project using your package) to have a specific dependency, and that your package will use the same instance of that dependency as the consumer. This allows multiple packages in the dependency graph to share a single version and instance of a package, rather than each having their own separate copy.
 
@@ -25,7 +25,7 @@ You should use a `peerDependency` when you expose part of a dependency in your p
 - Accepting a type from a dependency in a public API
 - Returning a type from a dependency in a public API
 
-For example, if you use `viem` and expose its `Wallet` class, you should declare `viem` as a `peerDependency`.
+For example, if you use `viem` and expose its `WalletClient` type, you should declare `viem` as a `peerDependency`.
 
 In the context of Hardhat plugins, this means that:
 
