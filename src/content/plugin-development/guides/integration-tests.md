@@ -5,17 +5,17 @@ description: How to write integration tests for your plugin
 
 # Writing integration tests for plugins
 
-While some parts of your plugin may be tested in isolation, most are tested with integration tests, through their interaction with Hardhat and potentially other plugins.
+While you can test some parts of your plugin in isolation, most testing happens through integration tests that verify how your plugin works with Hardhat and other plugins.
 
-There are two ways to write integration tests of plugins in Hardhat 3.
+In Hardhat 3 there are two main approaches for writing integration tests.
 
-### Testing with fixture projects
+## Testing with fixture projects
 
 The simplest way to create an integration test for your plugin is by defining a Hardhat project and using it as a test fixture.
 
-We'll explain how to do this based on the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/). Follow [this guide](../guides/hardhat3-plugin-template.md) before continuing.
+Here's how to do this using the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/). Follow [this guide](../guides/hardhat3-plugin-template.md) to learn how to use the template before continuing.
 
-In your project based on the template, you can define a fixture project by creating a directory in `packages/plugin/test/fixture-projects` and adding a `hardhat.config.ts` and a `package.json` to it.
+To define a fixture project in your template-based repository, create a directory in `packages/plugin/test/fixture-projects` with a `hardhat.config.ts` and a `package.json`.
 
 The `package.json` can be fairly simple and should look something like this:
 
@@ -28,7 +28,7 @@ The `package.json` can be fairly simple and should look something like this:
 }
 ```
 
-The `hardhat.config.ts` can define whichever config you want and must import your plugin. If you open `packages/plugin/test/fixture-projects/base-project/hardhat.config.ts`, you'll find this example:
+The `hardhat.config.ts` can define whichever config you want, but it must import your plugin. Here's an example from `packages/plugin/test/fixture-projects/base-project/hardhat.config.ts`:
 
 ```ts
 import { HardhatUserConfig } from "hardhat/config";
@@ -49,18 +49,18 @@ import { createFixtureProjectHRE } from "./helpers/fixture-projects.js";
 describe("Fixture test example", () => {
   it("do something", async () => {
     const hre = await createFixtureProjectHRE("base-project");
-    // Do whatever you need with the hre
+    // Assert the behavior of your plugin
   });
 });
 ```
 
-The `createFixtureProjectHRE` function initializes a new Hardhat Runtime Environment, based on a directory in `packages/plugin/test/fixture-projects`, using its `hardhat.config.ts`, and the directory as the root of the Hardhat project.
+The `createFixtureProjectHRE` function initializes a new Hardhat Runtime Environment based on a directory in `packages/plugin/test/fixture-projects`. It uses that directory's `hardhat.config.ts` and treats the directory as the project root.
 
-### Testing with inline `HardhatUserConfig`s
+## Testing with inline `HardhatUserConfig`s
 
-While fixture tests are simple, they can be cumbersome to maintain, as your test and its data are spread across multiple files.
+While fixture tests are simple, they can become cumbersome to maintain since your test and its data are spread across multiple files.
 
-An alternative way to test your plugin is to create an instance of the Hardhat Runtime Environment with an inline `HardhatUserConfig`.
+Alternatively, you can create a Hardhat Runtime Environment with an inline `HardhatUserConfig`.
 
 This type of test looks something like this:
 
@@ -74,14 +74,45 @@ describe("Inline config test example", () => {
       plugins: [MyPlugin],
     });
 
-    // Do whatever you need with the hre
+    // Assert the behavior of your plugin
   });
 });
 ```
 
-Note that the `hre` created with an inline config will have two small differences:
+The `hre` created with an inline config has two small differences:
 
-1. It won't have an `hre.config.paths.config` value, as it doesn't have a config file
-2. Its `hre.config.paths.root` will be the closest directory to your current working directory that has a `package.json` file (just like npm does).
+1. It won't have an `hre.config.paths.config` value. This field normally has the absolute path of the config file, but you are using an inline config.
+2. Its `hre.config.paths.root` will be the closest directory to your current working directory that has a `package.json` file (just like npm does)
 
 Both of these are customizable. Learn how by looking at the `createFixtureProjectHRE` function in the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/).
+
+## Using plugins as mocks
+
+Another pattern that can be helpful for integration tests is defining another plugin exclusively for testing purposes.
+
+This lets you customize Hardhat's behavior by mocking specific parts.
+
+To do this, define a plugin and add it to your test `HardhatUserConfig`'s `plugins` array before your actual plugin.
+
+For example:
+
+```ts
+import { createHardhatRuntimeEnvironment } from "hardhat/hre";
+import MyPlugin from "../src/index.js";
+import MockNetworkPlugin from "./mocks/network-mocks.js";
+
+describe("Mock plugin test example", () => {
+  it("do something", async () => {
+    const hre = await createHardhatRuntimeEnvironment({
+      plugins: [MockNetworkPlugin, MyPlugin],
+    });
+
+    // Setup the mock behavior
+    // Assert the behavior of your plugin
+  });
+});
+```
+
+Your mock plugin can maintain state and export functions that control its behavior. For example, you could create functions to simulate network responses, configure fake data, or trigger specific conditions.
+
+This works both with inline config and fixture projects.
