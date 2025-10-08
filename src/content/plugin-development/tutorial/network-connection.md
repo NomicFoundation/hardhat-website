@@ -113,7 +113,7 @@ console.log("connection.myAccount:", connection.myAccount);
 Run it with:
 
 ```sh
-$ pnpm hardhat run scripts/my-account-example.ts
+pnpm hardhat run scripts/my-account-example.ts
 Compiling your Solidity contracts...
 Compiled 1 Solidity file with solc 0.8.29 (evm target: cancun)
 
