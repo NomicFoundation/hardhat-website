@@ -43,7 +43,7 @@ To add new settings to the config, you need to extend the config types. Since th
 
 For new top-level options, this means extending the `HardhatUserConfig` and `HardhatConfig` types. But it's also possible to extend nested options without having to redefine the entire config structure. For example, you can extend the `NetworkUserConfig` and `NetworkConfig` types to add new options to network configs.
 
-You can learn more about type extensions in [this explaination](./type-extensions.md).
+You can learn more about type extensions in [this explanation](./type-extensions.md).
 
 #### Extending the validation
 

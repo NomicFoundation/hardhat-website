@@ -58,4 +58,4 @@ A plugin can define:
 
 ## Get started
 
-Ready to build your first plugin? The [tutorial](./tutorial/setup.md) walks you through creating a complete plugin from scratch, covering project setup, defining hooks, adding tasks, and testing your plugin.
+Ready to build your first plugin? The [tutorial](./tutorial/index.md) walks you through creating a complete plugin from scratch, covering project setup, defining hooks, adding tasks, and testing your plugin.
