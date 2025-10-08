@@ -1,6 +1,6 @@
 ---
 title: Hardhat plugin development
-description: How to build Hardhat 3 plugins to extend and customize its
+description: How to build Hardhat 3 plugins to extend and customize its behavior
 ---
 
 # Hardhat plugin development
@@ -9,7 +9,7 @@ Welcome to the Hardhat plugin development documentation. In this section, you'll
 
 ## What is a Hardhat plugin?
 
-A Hardhat plugin is reusable extension of the functionality of Hardhat and its plugins.
+A Hardhat plugin is a reusable extension of the functionality of Hardhat and its plugins.
 
 Plugins are defined as TypeScript objects with a `HardhatPlugin` type. Users add them to the `plugins` array in their `hardhat.config.ts` file.
 
@@ -34,6 +34,9 @@ const plugin: HardhatPlugin = {
   dependencies: [
     // Other plugins that this plugin depends on
   ],
+  conditionalDependencies: [
+    // Plugins that are loaded only if the user is already using certain other plugins
+  ],
 };
 
 export default plugin;
@@ -50,6 +53,8 @@ A plugin can define:
 - **Global Options** are exposed in the CLI and can be used with `--<option>`. When you define a Global Option, its value is available everywhere (Hook Handlers, Hardhat Tasks, tests, etc.).
 
 - **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself.
+
+- **Conditional Dependencies** declare plugins that are loaded only if the user is already using certain other plugins, without forcing those to be loaded.
 
 ## Get started
 
