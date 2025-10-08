@@ -47,9 +47,9 @@ You can learn more about type extensions in [this explanation](./type-extensions
 
 #### Extending the validation
 
-Once you've extended the config types, you can hook into the validation phase using the `HardhatConfigHooks#validateUserConfig` Hook. This Hook is used when you want to validate the values of _new_ options. In this case, you need to validate them yourself, since Hardhat doesn't know about them. For example, you can use this to ensure that a numeric setting is within a certain range or that a string setting matches a specific format.
+Once you've extended the config types, you can hook into the validation phase using the `HardhatConfigHooks#validateUserConfig` [Hook](./hooks.md#whats-a-hook). This Hook is used when you want to validate the values of _new_ options. In this case, you need to validate them yourself, since Hardhat doesn't know about them. For example, you can use this to ensure that a numeric setting is within a certain range or that a string setting matches a specific format.
 
-When validating the user config, the Hook Handler should only check the values of your plugin's settings. You don't need to re-validate the existing settings, since other registered Hook Handlers will take care of that.
+When validating the user config, the [Hook Handler](./hooks.md#whats-a-hook-handler) should only check the values of your plugin's settings. You don't need to re-validate the existing settings, since other registered Hook Handlers will take care of that.
 
 #### Extending the resolution
 

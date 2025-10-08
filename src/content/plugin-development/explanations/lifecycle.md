@@ -66,9 +66,9 @@ Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runt
 
 When initializing the Hardhat Runtime Environment, Hardhat creates an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
 
-To do this, Hardhat executes the `dependencies` function of each plugin, adding any new plugin to the list.
+To do this, Hardhat executes the [`dependencies`](../reference/hardhat-plugin-object.md#dependencies) function of each plugin, adding any new plugin to the list.
 
-At the same time, it loads the conditional dependencies of each plugin by calling the `condition` function of each of them and checking if they're already loaded. If they are, the `plugin` function is called and the plugin is added to the list.
+At the same time, it loads the [`conditionalDependencies`](../reference/hardhat-plugin-object.md#conditionaldependencies) of each plugin by calling the `condition` function of each of them and checking if they're already loaded. If they are, the `plugin` function is called and the plugin is added to the list.
 
 This is a recursive process where the dependencies of dependencies are also added, along with conditional dependencies. Hardhat runs it until all plugins are loaded.
 

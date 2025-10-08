@@ -9,7 +9,7 @@ Let's start by adding the `myAccount` property to the `NetworkConnection` object
 
 ## Defining a network Hook Handler
 
-To add a network property to the `NetworkConnection` object, we'll use a network Hook Handler.
+To add a network property to the `NetworkConnection` object, we'll use a network [Hook Handler](../explanations/hooks.md).
 
 The template already comes with the `packages/plugin/src/hooks/network.ts` file, so we'll replace its contents with this:
 
@@ -54,7 +54,7 @@ We'll fix it by extending the `NetworkConnection` type.
 
 ## Extending the `NetworkConnection` type
 
-The TypeScript type system lets you add properties to an existing type, what we call Type Extensions.
+The TypeScript type system lets you add properties to an existing type, what we call [Type Extensions](../explanations/type-extensions.md).
 
 Open `packages/plugin/src/type-extensions.ts`, where you'll find something like this:
 

@@ -44,15 +44,15 @@ export default plugin;
 
 A plugin can define:
 
-- **Type Extensions** allow you to extend Hardhat's built-in types. For example, you can add custom fields to the `HardhatUserConfig` type.
+- **Type Extensions** allow you to extend Hardhat's built-in types. For example, you can add custom fields to the `HardhatUserConfig` type. Read more about them [here](./explanations/type-extensions.md).
 
-- **Hook Handlers** are functions that customize different parts of Hardhat's behavior. Each extensibility point is called a Hook.
+- **Hook Handlers** are functions that customize different parts of Hardhat's behavior. Each extensibility point is called a Hook. Learn more about them [here](./explanations/hooks.md).
 
 - **Hardhat Tasks** are exposed in the CLI and can be run with `npx hardhat <task>`.
 
 - **Global Options** are exposed in the CLI and can be used with `--<option>`. When you define a Global Option, its value is available everywhere (Hook Handlers, Hardhat Tasks, tests, etc.).
 
-- **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself.
+- **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself. Read [this guide](./guides/dependencies.md) to learn how to use them.
 
 - **Conditional Dependencies** declare plugins that are loaded only if the user is already using certain other plugins, without forcing those to be loaded.
 

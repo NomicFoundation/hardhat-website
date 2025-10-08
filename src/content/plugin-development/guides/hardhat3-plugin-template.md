@@ -26,6 +26,8 @@ The repository you just created is structured as a [`pnpm`](https://pnpm.io/) mo
 
 You'll do all development in the `packages/plugin` directory, while `packages/example-project` is a playground to experiment with your plugin and manually test it.
 
+To learn how to write automated tests for your plugin, read [this guide](./integration-tests.md).
+
 ## Trying out your plugin
 
 Before changing anything, let's test the boilerplate plugin.
