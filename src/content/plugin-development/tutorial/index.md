@@ -11,7 +11,7 @@ In this tutorial, you'll build a simple Hardhat 3 plugin based on the [Hardhat 3
 
 To follow this tutorial, you need to have Node.js 22+ and `pnpm` installed on your machine.
 
-You also need to create a new repository based on the [Hardhat 3 plugin template](https://github.com/NomicFoundation/hardhat3-plugin-template). Follow [this guide](../guides/hardhat3-plugin-template.md) to get started.
+You also need to create a new repository based on the [Hardhat 3 plugin template](https://github.com/NomicFoundation/hardhat3-plugin-template). Follow [this guide](/plugin-development/guides/hardhat3-plugin-template.md) to get started.
 
 ## Your first Hardhat 3 plugin
 
