@@ -79,7 +79,7 @@ You can remove `packages/plugin/src/tasks/my-task.ts`, as it's no longer needed.
 To try out your task, build the plugin and run this in the example project:
 
 ```sh
-pnpm hardhat my-account --title "Mi cuenta"
-Mi cuenta
+pnpm hardhat my-account --title MiCuenta
+MiCuenta
 0x70997970c51812dc3a010c7d01b50e0d17dc79c8
 ```

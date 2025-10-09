@@ -13,8 +13,7 @@ To add a network property to the `NetworkConnection` object, we'll use a network
 
 The template already comes with the `packages/plugin/src/hooks/network.ts` file, so we'll replace its contents with this:
 
-```ts{19}
-import { HardhatPluginError } from "hardhat/plugins";
+```ts{18}
 import type { HookContext, NetworkHooks } from "hardhat/types/hooks";
 import { ChainType, NetworkConnection } from "hardhat/types/network";
 
@@ -110,12 +109,12 @@ const connection = await network.connect();
 console.log("connection.myAccount:", connection.myAccount);
 ```
 
-Run it with:
+Run it from the `example-project` with this command:
 
 ```sh
 pnpm hardhat run scripts/my-account-example.ts
 Compiling your Solidity contracts...
 Compiled 1 Solidity file with solc 0.8.29 (evm target: cancun)
 
-connection.myAccount 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+connection.myAccount: 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
 ```

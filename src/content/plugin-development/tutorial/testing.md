@@ -11,8 +11,6 @@ We'll do it by using the Hardhat project in `packages/plugin/test/fixture-projec
 
 The template repository comes with utilities to work with fixture projects. To learn more about them and other integration test strategies, read the [Writing integration tests for plugins guide](../guides/integration-tests.md).
 
-Before moving forward, delete the outdated tests from the template project. Remove `packages/plugin/test/example-tests.ts` and `packages/plugin/test/config.ts`.
-
 Now create a new file in `packages/plugin/test/myAccount.ts` and add the following code:
 
 ```ts

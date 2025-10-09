@@ -41,6 +41,14 @@ This extends four types:
 - `EdrNetworkUserConfig` and `HttpNetworkUserConfig`: Part of the `HardhatUserConfig` type, which represent the config that the user writes in their `hardhat.config.ts` file.
 - `EdrNetworkConfig` and `HttpNetworkConfig`: Part of the `HardhatConfig` type, which is the config that Hardhat uses internally.
 
+We replaced an existing config extension with a new one, so you should delete the files that depend on the old one:
+
+```sh
+rm packages/plugin/src/types.ts
+rm packages/plugin/test/config.ts
+rm packages/plugin/test/example-tests.ts
+```
+
 ## Extending the config validation and resolution
 
 The config that a user provides can be invalid, so we have to extend the validation process to make sure it's valid.
@@ -146,7 +154,7 @@ The `resolvePluginConfig` function is in charge of returning a new `HardhatConfi
 
 ## Using the plugin config in the network hook
 
-To use the config in the network hook, we just need to modify the implementation of our Hook Handler so that it looks like this:
+To use the config in the network hook, we just need to modify the implementation of our `NetworkHooks#newConnection` Hook Handler so that it looks like this:
 
 ```ts{8}
 const connection = await next(context);
@@ -170,7 +178,7 @@ connection.myAccount = accounts[myAccountIndex];
 return connection;
 ```
 
-We access the config in the highlighted line and validate that the index is valid. If it isn't, we throw a `HardhatPluginError`, which you can import from `hardhat/plugins`. When you throw a `HardhatPluginError`, Hardhat will show a nice error message to the user.
+We access the config in the highlighted line and validate that the index is valid. If it isn't, we throw a `HardhatPluginError`, which you should import from `hardhat/plugins`. When you throw a `HardhatPluginError`, Hardhat will show a nice error message to the user.
 
 Finally, we use the `myAccountIndex` to set the `myAccount` property of the `NetworkConnection` object.
 
@@ -196,5 +204,5 @@ pnpm hardhat run scripts/my-account-example.ts
 Compiling your Solidity contracts...
 Compiled 1 Solidity file with solc 0.8.29 (evm target: cancun)
 
-connection.myAccount 0x70997970c51812dc3a010c7d01b50e0d17dc79c8
+connection.myAccount: 0x70997970c51812dc3a010c7d01b50e0d17dc79c8
 ```
