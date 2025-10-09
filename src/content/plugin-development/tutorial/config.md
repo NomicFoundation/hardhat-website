@@ -41,12 +41,29 @@ This extends four types:
 - `EdrNetworkUserConfig` and `HttpNetworkUserConfig`: Part of the `HardhatUserConfig` type, which represent the config that the user writes in their `hardhat.config.ts` file.
 - `EdrNetworkConfig` and `HttpNetworkConfig`: Part of the `HardhatConfig` type, which is the config that Hardhat uses internally.
 
-We replaced an existing config extension with a new one, so you should delete the files that depend on the old one:
+We replaced an existing config extension with a new one, so you'd get compilation errors if you try to build your plugin now. Let's remove the code that depends on the old extension.
+
+First, delete these files:
 
 ```sh
 rm packages/plugin/src/types.ts
 rm packages/plugin/test/config.ts
 rm packages/plugin/test/example-tests.ts
+```
+
+Then, replace the contents of `packages/plugin/src/tasks/my-task.ts` with the following:
+
+```ts
+import { HardhatRuntimeEnvironment } from "hardhat/types/hre";
+
+interface MyTaskTaskArguments {
+  who: string;
+}
+
+export default async function (
+  taskArguments: MyTaskTaskArguments,
+  hre: HardhatRuntimeEnvironment
+) {}
 ```
 
 ## Extending the config validation and resolution
