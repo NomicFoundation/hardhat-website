@@ -7,3 +7,5 @@ order:
     title: Hardhat Ignition
   - href: /../../../hardhat-vscode/docs
     title: Hardhat VSCode
+  - href: /../../../hardhat-ledger/docs
+    title: Hardhat Ledger

@@ -54,6 +54,16 @@ const customRedirects = [
     permanent: false,
   },
   {
+    source: "/hardhat-ledger",
+    destination: "/hardhat-ledger/docs/overview",
+    permanent: false,
+  },
+  {
+    source: "/hardhat-ledger/docs",
+    destination: "/hardhat-ledger/docs/overview",
+    permanent: false,
+  },
+  {
     source: "/ignition",
     destination: "/ignition/docs/getting-started#overview",
     permanent: false,

@@ -7,3 +7,5 @@ order:
     title: Hardhat Ignition
   - href: /../../../hardhat-network-helpers/docs
     title: Hardhat Network Helpers
+  - href: /../../../hardhat-ledger/docs
+    title: Hardhat Ledger

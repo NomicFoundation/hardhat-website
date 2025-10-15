@@ -160,6 +160,14 @@ const officialPlugins: IPlugin[] = [
     tags: ["Network", "Simulation", "Helpers", "Testing"],
   },
   {
+    name: "@nomicfoundation/hardhat-ledger",
+    author: "Nomic Foundation",
+    authorUrl: "https://twitter.com/NomicFoundation",
+    description:
+      "A plugin that allow to interact with Ledger hardware wallets.",
+    tags: ["Ledger", "Hardware-wallet", "Helpers", "Testing"],
+  },
+  {
     name: "@nomicfoundation/hardhat-viem",
     author: "Nomic Foundation",
     authorUrl: "https://twitter.com/NomicFoundation",
