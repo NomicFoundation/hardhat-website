@@ -27,6 +27,13 @@ hardhat-network-helpers:
     - hardhat-network-helpers/docs
     - hardhat-network-helpers/docs/other-components
 
+hardhat-ledger:
+  title: Hardhat Ledger
+  folders:
+    - hardhat-ledger
+    - hardhat-ledger/docs
+    - hardhat-ledger/docs/other-components
+
 migrate-from-hardhat2:
   title: Migrate from Hardhat 2
   folders:
