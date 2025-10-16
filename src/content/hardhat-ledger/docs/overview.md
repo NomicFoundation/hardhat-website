@@ -7,6 +7,8 @@ description: Hardhat plugin for connecting Ledger hardware wallets
 
 This plugin allows Hardhat to integrate seamlessly with a connected [Ledger wallet](https://www.ledger.com/).
 
+> Note: Currently, `EIP-7702` is not supported, as the stable Ledger library doesn't implement it. A [newer library](https://www.npmjs.com/package/@ledgerhq/device-management-kit?activeTab=readme) does support EIP-7702, but it's not yet stable enough for use in Hardhat. We'll migrate to it once it's more mature.
+
 ## Installation
 
 To install this plugin, run the following command:
@@ -24,7 +26,7 @@ npm install --save-dev @nomicfoundation/hardhat-ledger
 :::tab{value=pnpm}
 
 ```bash
-pnpm install --save-dev @nomicfoundation/hardhat-ledger
+pnpm install --save-dev --allow-build=node-hid @nomicfoundation/hardhat-ledger
 ```
 
 :::
@@ -93,8 +95,14 @@ To sign transactions with your Ledger, first ensure the appropriate app is open 
 
 Usage Example:
 
+::::tabsgroup{options=provider,viem}
+
+:::tab{value=provider}
+
 ```typescript
-const { ethers, provider } = await hre.network.connect("yourNetworkName");
+import hre from "hardhat";
+
+const { provider, ethers } = await hre.network.connect("yourNetworkName");
 
 const ledgerAddress = "0x..."; // Your ledger address
 
@@ -106,3 +114,29 @@ const signature = await provider.request({
   params: [ledgerAddress, hexMsg],
 });
 ```
+
+:::
+
+:::tab{value=viem}
+
+```typescript
+import hre from "hardhat";
+import { stringToHex } from "viem";
+
+const { viem } = await hre.network.connect("yourNetworkName");
+
+const ledgerAddress = "0x..."; // Your ledger address
+
+const [senderClient] = await viem.getWalletClients();
+
+const hexMsg = stringToHex("Hello world");
+
+const signature = await senderClient.request({
+  method: "eth_sign",
+  params: [ledgerAddress, hexMsg],
+});
+```
+
+:::
+
+::::
