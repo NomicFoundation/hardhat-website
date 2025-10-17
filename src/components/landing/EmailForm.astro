@@ -1,0 +1,179 @@
+---
+import Container from "./Container.astro";
+
+import { landing } from "../../config";
+---
+
+<section class="section">
+  <div class="lines-container">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="46"
+      height="102"
+      viewBox="0 0 46 102"
+      fill="none"
+      class="lines"
+    >
+      <path d="M45.123 0.938477L0.876953 0.938475"></path>
+      <path d="M45.123 4.93848L0.876953 4.93847"></path>
+      <path d="M23 8.93848L23 53.1846"></path>
+      <path d="M23 57.1846L23 101.431"></path>
+    </svg>
+  </div>
+  <div class="form">
+    <Container>
+      <div class="background-image"></div>
+      <div class="form-container">
+        <h2 class="form-title">
+          {landing.emailForm.title}
+        </h2>
+        <div class="form-row">
+          <div class="ghost-form-container" id="ghost-form-container"></div>
+        </div>
+      </div>
+    </Container>
+  </div>
+</section>
+
+<script>
+  const ghostFormContainer = document.getElementById("ghost-form-container");
+  if (ghostFormContainer && ghostFormContainer.childElementCount === 0) {
+    const script = document.createElement("script");
+    script.src =
+      "https://cdn.jsdelivr.net/ghost/signup-form@~0.2/umd/signup-form.min.js";
+    script.async = true;
+    script.setAttribute("data-button-color", "#FFF100");
+    script.setAttribute("data-button-text-color", "#181A1F");
+    script.setAttribute("data-site", "https://blog.nomic.foundation/");
+    script.setAttribute("data-locale", "en");
+
+    ghostFormContainer.appendChild(script);
+  }
+</script>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .section
+    position: relative
+    width: 100%
+    padding-top: 1px
+
+  .background-image
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 0
+    pointer-events: none
+    background-image: url('../../assets/landing/email-form/bg-light-big.svg')
+    background-size: auto 660px
+    background-position: center
+    background-repeat: no-repeat
+
+    +dark
+      background-image: url('../../assets/landing/email-form/bg-dark-big.svg')
+
+    +tablet
+      background-size: auto 860px
+
+    +laptop
+      background-size: auto 100%
+
+  .form
+    position: relative
+    width: 100%
+    padding: 222px 0
+    background: transparent
+    overflow: hidden
+    margin-top: 100px
+
+    +tablet
+      padding: 292px 0
+
+    +laptop
+      padding: 529px 0
+      margin-top: 0
+
+    +desktop
+      padding: 690px 0
+
+  .form-container
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    max-width: 352px
+    margin: 0 auto
+    gap: 16px
+    position: relative
+    z-index: 1
+
+    +tablet
+      gap: 24px
+      max-width: 377px
+
+    +laptop
+      max-width: 665px
+      padding-top: 0
+      gap: 32px
+
+  .form-title
+    font-family: var(--font-code)
+    font-size: 18px
+    font-weight: 500
+    line-height: 1.35
+    letter-spacing: 0.045em
+    margin: 0
+    text-align: center
+    color: var(--hh-gray920)
+
+    +dark
+      color: var(--hh-gray250)
+
+    +tablet
+      font-size: 20px
+
+    +laptop
+      font-size: 31px
+
+    +desktop
+      font-size: 39px
+
+  .form-row
+    display: flex
+    width: 100%
+    max-width: 300px
+    gap: 32px
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+    +tablet
+      max-width: 665px
+
+    +laptop
+      flex-direction: row
+
+  .lines-container
+    margin-left: auto
+    margin-right: auto
+    width: max-content
+    position: absolute
+    top: 0
+    left: 50%
+    margin-left: -24px
+    z-index: 1
+
+  .lines
+    stroke: var(--hh-gray0)
+
+    +dark
+      stroke: var(--hh-gray920)
+
+  .ghost-form-container
+    width: 400px
+    max-width: 100%
+</style>

@@ -1,0 +1,415 @@
+---
+import { getCollection } from "astro:content";
+
+import HardhatNewsImage from "../../assets/landing/what-is-new/Hardhat-news.svg";
+import { landing } from "../../config";
+import { formatSmartDate } from "../../utils/formatSmartDate";
+import Container from "./Container.astro";
+
+const githubReleases = await getCollection("githubReleases");
+---
+
+<section class="section">
+  <Container>
+    <div class="brackets brackets-top">
+      <svg
+        width="100"
+        height="103"
+        viewBox="0 0 100 103"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="lines"
+      >
+        <path d="M99.3672 1.00098L55.1211 1.00097"></path>
+        <path d="M44.8789 1.00098L0.632812 1.00097"></path>
+        <path d="M50 4.12598L50 48.3721"></path>
+        <path d="M50 58.2236L50 102.47"></path>
+      </svg>
+    </div>
+
+    <h2 class="title">{landing.whatIsNew.title}</h2>
+
+    <div class="list-news">
+      {
+        githubReleases.map((item, index: number) => (
+          <article class={index === 0 ? "news first" : "news"}>
+            <div class="news-header">
+              {index === 0 && (
+                <div class="news-image">
+                  <img src={HardhatNewsImage.src} alt={item.data.name} />
+                </div>
+              )}
+              <div class="news-header-inner">
+                <div class="news-date">
+                  {formatSmartDate(item.data.published_at)}
+                </div>
+                <h3 class="news-title">{item.data.name}</h3>
+              </div>
+            </div>
+            <div class="news-content">
+              <div class="news-text">{item.data.body}</div>
+              <a
+                href={item.data.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="news-link"
+              >
+                <span>Learn more</span>
+                <span>
+                  &nbsp;
+                  <svg
+                    width="16"
+                    height="14"
+                    viewBox="0 0 16 14"
+                    fill="none"
+                    class="icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M9.19795 13.5979C8.93733 13.8585 8.51515 13.8597 8.25308 13.6005L7.84226 13.1942C7.57811 12.933 7.57692 12.5068 7.83961 12.2441L12.098 7.98565H0.874101C0.50407 7.98565 0.204102 7.68568 0.204102 7.31565V6.68595C0.204102 6.31592 0.504071 6.01595 0.874102 6.01595H12.098L7.83904 1.76376C7.57651 1.50166 7.57693 1.07612 7.83998 0.814541L8.25307 0.403744C8.51493 0.143336 8.93814 0.143925 9.19927 0.405061L15.3212 6.52704C15.5829 6.78869 15.5829 7.21291 15.3212 7.47456L9.19795 13.5979Z" />
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="brackets brackets-bottom">
+      <svg
+        width="100"
+        height="103"
+        viewBox="0 0 100 103"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="lines"
+      >
+        <path d="M99.3672 1.00098L55.1211 1.00097"></path>
+        <path d="M44.8789 1.00098L0.632812 1.00097"></path>
+        <path d="M50 4.12598L50 48.3721"></path>
+        <path d="M50 58.2236L50 102.47"></path>
+      </svg>
+    </div>
+  </Container>
+</section>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .section
+    width: 100%
+    position: relative
+
+  .title
+    font-size: 25px
+    font-weight: 600
+    font-family: var(--font-code)
+    line-height: 1.2
+    letter-spacing: 0.045em
+    margin-bottom: 34px
+    text-align: center
+    color: var(--hh-accent700)
+    margin: 0 0 34px
+
+    +dark
+      color: var(--hh-accent800)
+
+    +tablet
+      font-size: 31px
+      margin-bottom: 62px
+
+    +laptop
+      font-size: 39px
+      text-align: left
+
+    +desktop
+      font-size: 49px
+
+  .brackets
+    margin: 0 auto
+    width: max-content
+
+  .brackets-top
+    margin-bottom: 30px
+    +tablet
+      margin-bottom: 45px
+    +laptop
+      margin-bottom: 30px
+
+  .brackets-bottom
+    margin-top: 20px
+    transform: rotate(180deg)
+    +tablet
+      margin-top: 55px
+
+  .lines
+    stroke: var(--hh-gray300)
+    display: block
+
+    +dark
+      stroke: var(--hh-gray800)
+
+  .list-news
+    display: grid
+    gap: 32px 24px
+
+    +tablet
+      grid-template-columns: repeat(2, 1fr)
+      grid-template-rows: repeat(2, auto)
+
+    +laptop
+      gap: 32px
+      grid-template-rows: repeat(2, 1fr)
+
+  .news
+    position: relative
+    width: 100%
+    min-width: 100px
+    min-height: 202px
+    display: grid
+    grid-template-rows: auto 1fr
+
+    +laptop
+      grid-template-columns: 44% 1fr
+      grid-template-rows: auto
+
+    +desktop
+      min-height: 235px
+
+  .first
+    +tablet
+      grid-column: 1 / 3
+
+    +laptop
+      grid-template-columns: 1fr
+      grid-template-rows: 1fr 1fr
+      grid-column: 1 / 2
+      grid-row: 1 / 3
+
+    .news-header
+      padding: 23px
+      border-bottom: none
+      border-color: var(--hh-gray600)
+      background-color: var(--hh-accent800)
+      border-right-width: 1px
+      border-right-style: solid
+      gap: 20px
+
+      +dark
+        border-color: var(--hh-neutral0)
+        background-color: var(--hh-accent800)
+
+      +sm
+        padding: 31px 23px
+        gap: 24px
+
+      +desktop
+        padding: 32px 55px
+
+    .news-header-inner
+      flex-direction: column-reverse
+      gap: 14px
+
+    .news-date
+      font-size: 14px
+      color: var(--hh-gray600)
+      +desktop
+        font-size: 16px
+
+    .news-title
+      font-weight: 700
+      color: var(--hh-gray950) !important
+
+    .news-content
+      padding: 31px 23px
+      border-top: none
+      border-color: var(--hh-accent900)
+      border-left-width: 1px
+      border-left-style: solid
+      gap: 14px
+      +dark
+        border-color: var(--hh-accent700)
+
+      +sm
+        gap: 14px
+
+      +desktop
+        padding: 32px 55px
+
+  .news-header
+    width: 100%
+    min-width: 100px
+    background-color: var(--hh-yellow100)
+    border: 1px solid var(--hh-accent900)
+    border-bottom: none
+    padding: 24px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    gap: 24px
+
+    +dark
+      background-color: var(--hh-gray850)
+      border-color: var(--hh-accent700)
+
+    +tablet
+      min-height: 138px
+
+    +laptop
+      border-right: none
+      border-bottom: 1px solid var(--hh-accent900)
+      min-height: auto
+
+    +desktop
+      padding: 24px 32px
+
+  .news-content
+    width: 100%
+    min-width: 100px
+    background-color: var(--hh-gray100)
+    border: 1px solid var(--hh-gray300)
+    border-top: none
+    padding: 23px
+    display: flex
+    flex-direction: column
+    gap: 20px
+
+    +dark
+      background-color: var(--hh-gray950)
+      border-color: var(--hh-gray600)
+
+    +laptop
+      gap: 23px
+      justify-content: center
+      border-left: none
+      border-top: 1px solid var(--hh-gray300)
+
+  .news-image
+    img
+      max-width: 100%
+      max-height: 200px
+      display: block
+
+  .news-title
+    font-family: var(--font-base)
+    font-weight: 400
+    font-size: 18px
+    line-height: 1.3
+    letter-spacing: 0.05em
+    word-wrap: break-word
+    color: var(--hh-gray950)
+    margin: 0
+
+    +dark
+      color: var(--hh-gray400)
+
+    +tablet
+      font-size: 20px
+
+    +desktop
+      font-size: 25px
+
+  .news-text
+    font-family: var(--font-base)
+    font-size: 14px
+    font-weight: 400
+    line-height: 1.5
+    letter-spacing: 0.045em
+    color: var(--hh-gray700)
+    overflow: hidden
+    text-overflow: ellipsis
+    display: -webkit-box
+    -webkit-line-clamp: 4
+    -webkit-box-orient: vertical
+    white-space: pre-wrap; /* Preserves all whitespace and wraps long lines */
+
+    +dark
+      color: var(--hh-gray400)
+
+    +desktop
+      font-size: 16px
+
+  .news-link
+    gap: 8px
+    font-family: var(--font-base)
+    font-size: 12px
+    font-weight: 600
+    margin-top: auto
+    letter-spacing: 0.02em
+    line-height: 22px
+    word-wrap: break-word
+    color: var(--hh-gray900)
+    text-decoration: none
+    +dark
+      color: var(--hh-gray200)
+
+    +laptop
+      margin-top: 0
+      font-size: 14px
+
+    +desktop
+      font-size: 16px
+      line-height: 26px
+
+    span
+      display: inline
+
+    span:nth-child(2)
+      white-space: nowrap
+
+    &::after
+      content: ""
+      position: absolute
+      display: block
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+
+    &:hover
+      color: var(--hh-accent700) !important
+
+  .icon
+    color: var(--hh-accent900)
+    fill: currentColor
+    width: 12px
+    height: 12px
+    display: inline-block
+    margin-left: 4px
+    top: 5px
+    position: relative
+    vertical-align: top
+    +laptop
+      width: 16px
+      height: 16px
+      top: 3px
+    +desktop
+      top: 4px
+
+    .news-link:hover &
+      color: var(--hh-gray1000)
+      +dark
+        color: var(--hh-neutral0)
+
+  .news-header-inner
+    display: flex
+    flex-direction: column-reverse
+    justify-content: center
+    gap: 8px
+
+    +tablet
+      flex-direction: column
+
+  .news-date
+    font-family: var(--font-base)
+    font-size: 13px
+    font-weight: 400
+    line-height: 22px
+    color: var(--hh-gray700)
+
+    +dark
+      color: var(--hh-gray500)
+
+    +desktop
+      font-size: 14px
+</style>

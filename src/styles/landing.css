@@ -1,0 +1,108 @@
+@import url(./colors.css);
+
+:root {
+  --font-base:
+    "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-code: "Source Code Pro", "Monaco", "Courier New", monospace;
+}
+
+/* Fonts */
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("/fonts/Roboto-Regular.woff2") format("woff2"),
+    url("/fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("/fonts/Roboto-SemiBold.woff2") format("woff2"),
+    url("/fonts/Roboto-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src:
+    url("/fonts/Roboto-Bold.woff2") format("woff2"),
+    url("/fonts/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src:
+    url("/fonts/SourceCodePro-Regular.woff2") format("woff2"),
+    url("/fonts/SourceCodePro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src:
+    url("/fonts/SourceCodePro-Medium.woff2") format("woff2"),
+    url("/fonts/SourceCodePro-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src:
+    url("/fonts/SourceCodePro-SemiBold.woff2") format("woff2"),
+    url("/fonts/SourceCodePro-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src:
+    url("/fonts/SourceCodePro-Bold.woff2") format("woff2"),
+    url("/fonts/SourceCodePro-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  font-family: var(--font-base);
+  background-color: var(--hh-neutral0);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  width: 100%;
+  min-height: 100%;
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] html {
+  background-color: var(--hh-gray900);
+}
+@media (max-width: 1200px) {
+  body.menu-open {
+    overflow: hidden;
+  }
+}
+
+.main {
+  overflow-x: clip;
+}

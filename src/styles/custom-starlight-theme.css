@@ -1,0 +1,37 @@
+@import url(./colors.css);
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low:  var(--hh-yellow1150);  /* subtle accent bg (chips, callouts) */
+  --sl-color-accent:      var(--hh-accent700);  /* main link color on dark (very bright) */
+  --sl-color-accent-high: var(--hh-accent800);  /* hover/active highlight on dark */
+
+  /* Surface & text ladder */
+  --sl-color-white: #FFFFFF;
+  --sl-color-gray-1: #C6C8CC; /* primary text */
+  --sl-color-gray-2: #ADB0B6; /* secondary text */
+  --sl-color-gray-3: #95989E; /* muted text */
+  --sl-color-gray-4: #3B3F46; /* borders / subtle dividers */
+  --sl-color-gray-5: #24272D; /* card/raised surfaces */
+  --sl-color-gray-6: #1B1E24; /* navbar/sidebar bg */
+  --sl-color-black: #181A1F;  /* page background */
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low:  var(--hh-yellow850);
+  --sl-color-accent:      var(--hh-yellow800);  
+  --sl-color-accent-high: var(--hh-yellow750);  
+ 
+  --sl-color-white: var(--hh-gray1000);  /* semantic "white" for contrasts in light mode */
+  --sl-color-gray-1: var(--hh-gray950);
+  --sl-color-gray-2: var(--hh-gray800);
+  --sl-color-gray-3: var(--hh-gray700);
+  --sl-color-gray-4: var(--hh-gray500);
+  --sl-color-gray-5: var(--hh-gray300);
+  --sl-color-gray-6: var(--hh-gray200);
+  --sl-color-gray-7: var(--hh-gray100);
+  --sl-color-black: var(--hh-neutral0);
+
+  --sl-color-text-invert: var(--hh-gray100);
+}
+
+

@@ -1,0 +1,96 @@
+{
+  "$schema": "./community-plugins.schema.json",
+  "plugins": [
+    {
+      "name": "hardhat-deploy",
+      "author": "Ronan Sandford",
+      "authorUrl": "https://twitter.com/wighawag",
+      "description": "A Hardhat Plugin For Replicable Deployments And Easy Testing",
+      "tags": ["Deployment", "Testing", "Scripts"]
+    },
+    {
+      "name": "@solidstate/hardhat-abi-exporter",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Export Ethereum smart contract ABIs",
+      "tags": ["abi", "compilation"]
+    },
+    {
+      "name": "@solidstate/hardhat-accounts",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Display connected accounts and balances",
+      "tags": ["accounts", "signers", "balance"]
+    },
+    {
+      "name": "@solidstate/hardhat-bytecode-exporter",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Export Ethereum smart contract bytecode",
+      "tags": ["bytecode", "compilation"]
+    },
+    {
+      "name": "@solidstate/hardhat-contract-sizer",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Output Solidity contract sizes with Hardhat",
+      "tags": ["bytecode"]
+    },
+    {
+      "name": "@solidstate/hardhat-git",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Git-rev-based HRE execution",
+      "tags": ["git", "hre"]
+    },
+    {
+      "name": "@solidstate/hardhat-license-identifier",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Prepend local Solidity source files with an SPDX License Identifier",
+      "tags": ["solidity", "license", "spdx"]
+    },
+    {
+      "name": "@solidstate/hardhat-linearization",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Calculate Solidity contract inheritance order",
+      "tags": ["solidity", "inheritance"]
+    },
+    {
+      "name": "@solidstate/hardhat-log-remover",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Remove Hardhat console.log imports and calls from Solidity source files",
+      "tags": ["console", "log"]
+    },
+    {
+      "name": "@solidstate/hardhat-selector-uploader",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Upload local function selectors to the Ethereum Selector Database",
+      "tags": ["selector", "4byte"]
+    },
+    {
+      "name": "@solidstate/hardhat-storage-layout-inspector",
+      "author": "Nick Barry",
+      "authorUrl": "https://github.com/ItsNickBarry",
+      "description": "Compare storage layouts between contracts and revisions",
+      "tags": ["storage"]
+    },
+    {
+      "name": "hashscan-verify",
+      "author": "LimeChain",
+      "authorUrl": "https://github.com/LimeChain",
+      "description": "Verify contracts on Hashscan",
+      "tags": ["verification", "hashscan"]
+    },
+    {
+      "name": "hardhat-reown",
+      "author": "olehmisar",
+      "authorUrl": "https://github.com/olehmisar",
+      "description": "Use the reown.com supported wallets with Hardhat",
+      "tags": ["reown", "walletconnect"]
+    }
+  ]
+}

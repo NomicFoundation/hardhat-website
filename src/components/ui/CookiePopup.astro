@@ -1,0 +1,180 @@
+---
+import Button from "../ui/Button.astro";
+import { cookiePopup } from "../../config.js";
+---
+
+<div
+  class="cookie-popup hidden"
+  id="cookie-popup"
+  data-measurement-id={cookiePopup.measurementId}
+>
+  <h3 class="title">{cookiePopup.title}</h3>
+  <p class="text">
+    {cookiePopup.text}
+    <a href={cookiePopup.readMoreHref} class="read-more-link"
+      >{cookiePopup.readMoreText}</a
+    >
+  </p>
+  <div class="buttons">
+    <Button variant="secondary sm" id="cookie-reject">Reject all</Button>
+    <Button variant="sm" id="cookie-accept">Accept all</Button>
+  </div>
+</div>
+
+<script>
+  declare global {
+    interface Window {
+      __analyticsLoaded?: boolean;
+    }
+  }
+
+  const COOKIE_CONSENT_KEY = "cookie-consent" as const;
+  const CONSENT_ACCEPTED = "accepted" as const;
+  const CONSENT_REJECTED = "rejected" as const;
+
+  function loadAnalyticsPartytown(measurementId: string) {
+    if (window.__analyticsLoaded) return;
+    window.__analyticsLoaded = true;
+
+    const loader = document.createElement("script");
+    loader.type = "text/partytown";
+    loader.async = true;
+    loader.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    document.head.appendChild(loader);
+
+    const config = document.createElement("script");
+    config.type = "text/partytown";
+    config.textContent = `
+      // Worker-side stub so gtag exists even if loader hasn't executed yet.
+      self.dataLayer = self.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+
+      gtag('js', new Date());
+      gtag('config', '${measurementId}', { anonymize_ip: true });
+      console.log('[Partytown] GA4 config queued');
+    `;
+    document.head.appendChild(config);
+
+    // Notify Partytown about newly added scripts
+    window.dispatchEvent(new CustomEvent("ptupdate"));
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("cookie-popup");
+    const acceptButton = document.getElementById("cookie-accept");
+    const rejectButton = document.getElementById("cookie-reject");
+
+    if (!popup || !acceptButton || !rejectButton) {
+      console.error("Cookie popup and/or buttons not found");
+      return;
+    }
+
+    const measurementId = popup.dataset.measurementId;
+    if (measurementId === undefined) {
+      console.warn(
+        "No measurement ID found, so we don't display the cookie popup",
+      );
+      console.warn("Make sure to define the GA_MEASUREMENT_ID env var");
+      return;
+    }
+
+    const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
+
+    if (consent) {
+      if (consent === CONSENT_ACCEPTED) {
+        loadAnalyticsPartytown(measurementId);
+      }
+
+      return;
+    }
+
+    const handleChoice = (consentResponse: string) => {
+      localStorage.setItem(COOKIE_CONSENT_KEY, consentResponse);
+      popup.classList.add("hidden");
+
+      if (consentResponse === CONSENT_ACCEPTED) {
+        loadAnalyticsPartytown(measurementId);
+      }
+    };
+
+    acceptButton.addEventListener("click", () =>
+      handleChoice(CONSENT_ACCEPTED),
+    );
+    rejectButton.addEventListener("click", () =>
+      handleChoice(CONSENT_REJECTED),
+    );
+
+    popup.classList.remove("hidden");
+  });
+</script>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .cookie-popup
+    z-index: 100
+    position: fixed
+    bottom: 16px
+    right: 0
+    margin: 0 16px
+    width: calc(100% - 32px)
+    padding: 24px 24px 16px
+    background-color: var(--hh-gray100)
+    box-shadow: 0px 0px 6px 0px var(--hh-shadow-light)
+    display: flex
+    flex-direction: column
+    max-width: 100%
+    font-family: var(--font-code)
+
+    +dark
+      background-color: var(--hh-gray950)
+      box-shadow: 0px 0px 6px 0px var(--hh-shadow-dark)
+
+    +sm
+      margin: 0 24px
+      bottom: 24px
+      max-width: 332px
+
+    &.hidden
+      display: none
+
+  .title
+    font-weight: 700
+    font-size: 12px
+    line-height: 1.5
+    letter-spacing: 0.05em
+    color: var(--hh-gray900)
+    margin: 0
+
+    +dark
+      color: var(--hh-gray200)
+
+  .text
+    margin-top: 8px
+    font-weight: 400
+    font-size: 10px
+    line-height: 1.5
+    font-family: var(--font-base)
+    letter-spacing: 0.045em
+    color: var(--hh-gray700)
+    margin-bottom: 0
+
+    +dark
+      color: var(--hh-gray400)
+
+  .read-more-link
+    margin-left: 4px
+    cursor: pointer
+    color: inherit
+    text-decoration: none
+
+    &:hover
+      opacity: 0.8
+
+  .buttons
+    display: flex
+    gap: 16px
+    margin-top: 16px
+    .cta
+      width: auto
+</style>

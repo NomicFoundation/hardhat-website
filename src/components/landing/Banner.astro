@@ -1,0 +1,126 @@
+---
+import { landing } from "../../config";
+
+const { text, href } = landing.banner;
+---
+
+<a href={href} target="_blank" rel="noreferrer" class="banner-link">
+  <section class="banner">
+    <div class="braces-container">
+      <div class="braces left">
+        <div class="brace" style="animation-delay: 0.5s;">&lt;</div>
+        <div class="brace" style="animation-delay: 1s;">&lt;</div>
+        <div class="brace" style="animation-delay: 1.5s;">&lt;</div>
+        <div class="brace tablet" style="animation-delay: 2s;">&lt;</div>
+        <div class="brace tablet" style="animation-delay: 2.5s;">&lt;</div>
+      </div>
+      <div class="text">{text}</div>
+      <div class="braces right">
+        <div class="brace" style="animation-delay: 0.5s;">&gt;</div>
+        <div class="brace" style="animation-delay: 1s;">&gt;</div>
+        <div class="brace" style="animation-delay: 1.5s;">&gt;</div>
+        <div class="brace tablet" style="animation-delay: 2s;">&gt;</div>
+        <div class="brace tablet" style="animation-delay: 2.5s;">&gt;</div>
+      </div>
+    </div>
+  </section>
+</a>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .banner-link
+    text-decoration: none
+    position: sticky
+    top: 0
+    z-index: 19
+    display: block
+
+  .banner
+    font-family: var(--font-code)
+    user-select: none
+    z-index: 100
+    width: 100%
+    height: 40px
+    padding: 6px 8px 8px
+    display: flex
+    align-items: center
+    justify-content: center
+    text-align: center
+    background-color: var(--hh-gray900)
+    color: var(--hh-neutral0)
+    font-weight: 600
+    line-height: 1.2
+    letter-spacing: 0.02em
+    cursor: pointer
+
+    +dark
+      background-color: #ffffff
+      color: var(--hh-gray900)
+
+    +sm
+      letter-spacing: 0.03em
+
+    +tablet
+      letter-spacing: 0.04em
+
+    +laptop
+      letter-spacing: 0.05em
+
+    :global(span)
+      margin-right: 2px
+
+  .braces-container
+    font-size: 10px
+    line-height: 14px
+
+    +tablet
+      font-size: 16px
+
+    +laptop
+      font-size: 20px
+
+  .braces
+    color: var(--hh-accent900)
+    display: inline-flex
+    align-items: center
+    transition: color ease-out 0.5s
+    vertical-align: middle
+
+    &.left
+      margin-right: 8px
+
+    &.right
+      margin-left: 8px
+
+  .brace
+    display: inline-block
+    vertical-align: middle
+    animation: highlight ease-out 2.5s
+    animation-iteration-count: 3
+
+    &.tablet
+      display: none
+
+      +tablet
+        display: inline-block
+
+  @keyframes highlight
+    10%
+      opacity: 0
+
+    20%
+      opacity: 1
+
+  .text
+    font-size: 10px
+    display: inline
+    vertical-align: middle
+
+    +tablet
+      font-size: 12px
+      padding: 0px 33px
+
+    +laptop
+      font-size: 16px
+</style>

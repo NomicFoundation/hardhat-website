@@ -1,0 +1,492 @@
+---
+import { landing } from "../../../config";
+import Container from "../Container.astro";
+import FeatureCard from "./FeatureCard.astro";
+---
+
+<section class="section">
+  <Container>
+    <div class="heading">
+      <h2 class="title">
+        <svg
+          width="218"
+          height="99"
+          viewBox="0 0 218 99"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="lines-mobile"
+        >
+          <path d="M0.5 0.000976562V44.2471"></path>
+          <path d="M0.5 53.9619V98.208"></path>
+          <path d="M132.625 49.3682L176.871 49.3682"></path>
+          <path d="M173.745 49.3682L217.991 49.3682"></path>
+        </svg>
+        <svg
+          width="218"
+          height="99"
+          viewBox="0 0 218 99"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="lines-mobile"
+        >
+          <path d="M0.5 0.000976562V44.2471"></path>
+          <path d="M0.5 53.9619V98.208"></path>
+          <path d="M132.625 49.3682L176.871 49.3682"></path>
+          <path d="M173.745 49.3682L217.991 49.3682"></path>
+        </svg>
+        {landing.whyHardhat.title}
+        <svg
+          width="232"
+          height="100"
+          viewBox="0 0 232 100"
+          fill="none"
+          class="lines-desktop"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M90 0.481445V44.7275"></path>
+          <path d="M29.5078 0.481445V44.7275"></path>
+          <path d="M90 54.9697V99.2158"></path>
+          <path d="M29.5078 54.4424V98.6885"></path>
+          <path d="M93.125 49.8486L137.371 49.8486"></path>
+          <path d="M139.734 49.8486L183.98 49.8486"></path>
+          <path d="M186.344 49.8486L230.59 49.8486"></path>
+        </svg>
+      </h2>
+    </div>
+
+    <div class="card-list">
+      {
+        landing.whyHardhat.featureCards.map((card, index) => (
+          <FeatureCard content={card} index={index} />
+        ))
+      }
+
+      <div class="image-container-sticky" id="sticky-image-container">
+        {
+          landing.whyHardhat.featureCards.map((card, index) => (
+            <>
+              <div
+                class={`image-wrapper-sticky light image-wrapper-${index} ${index === 0 ? "active" : ""}`}
+                data-image-index={index}
+                data-theme="light"
+              >
+                <picture>
+                  <source
+                    media="(min-width: 1700px)"
+                    srcset={card.imagePaths.lg}
+                  />
+                  <source
+                    media="(min-width: 1199px)"
+                    srcset={card.imagePaths.m}
+                  />
+                  <img
+                    src={card.imagePaths.md}
+                    alt="Feature card picture"
+                    loading="lazy"
+                  />
+                </picture>
+              </div>
+              <div
+                class={`image-wrapper-sticky dark image-wrapper-${index} ${index === 0 ? "active" : ""}`}
+                data-image-index={index}
+                data-theme="dark"
+              >
+                <picture>
+                  <source
+                    media="(min-width: 1700px)"
+                    srcset={card.imageDarkPaths.lg}
+                  />
+                  <source
+                    media="(min-width: 1199px)"
+                    srcset={card.imageDarkPaths.m}
+                  />
+                  <img
+                    src={card.imageDarkPaths.md}
+                    alt="Feature card picture"
+                    loading="lazy"
+                  />
+                </picture>
+              </div>
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>
+<section class="generation">
+  <Container>
+    <div class="generation-title">{landing.whyHardhat.footer.title}</div>
+    <div class="generation-text">{landing.whyHardhat.footer.text}</div>
+  </Container>
+</section>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    let activeIndex: number = 0;
+    const cards = document.querySelectorAll<HTMLElement>("[data-card-index]");
+    const imageWrappers =
+      document.querySelectorAll<HTMLElement>("[data-image-index]");
+
+    const updateImage = (index: number): void => {
+      if (activeIndex === index) return;
+
+      activeIndex = index;
+
+      imageWrappers.forEach((wrapper) => {
+        const wrapperIndex = parseInt(
+          wrapper.getAttribute("data-image-index") || "0",
+        );
+        if (wrapperIndex === index) {
+          wrapper.classList.add("active");
+        } else {
+          wrapper.classList.remove("active");
+        }
+      });
+    };
+
+    cards.forEach((card, index) => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => updateImage(index),
+        onEnterBack: () => updateImage(index),
+      });
+    });
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 250);
+    });
+  });
+</script>
+
+<style lang="sass">
+  @use '../../../styles/mixins' as *
+
+  .section
+    width: 100%
+    position: relative
+    padding-top: 30px
+    padding-bottom: 78px
+    background: linear-gradient(180deg, rgba(245, 245, 255, 0) 2.01%, var(--hh-violet50) 48.63%, rgba(245, 245, 255, 0) 95.25%)
+
+    +dark
+      background: linear-gradient(180deg, var(--hh-gray900) 9.32%, var(--hh-gray860) 53.28%, var(--hh-gray900) 97.24%)
+
+    +tablet
+      padding-top: 102px
+      padding-bottom: 100px
+
+    +laptop
+      padding-bottom: 135px
+
+    +desktop
+      padding-top: 92px
+      padding-bottom: 105px
+
+  .heading
+    position: relative
+    display: flex
+    justify-content: center
+    margin-bottom: 100px
+
+    +tablet
+      margin-bottom: 79px
+
+    +laptop
+      justify-content: flex-start
+
+    +desktop
+      margin-bottom: 52px
+
+  .title
+    color: var(--hh-gray900)
+    text-transform: capitalize
+    font-size: 25px
+    font-weight: 600
+    font-family: var(--font-code)
+    line-height: 1.2
+    letter-spacing: 0.045em
+    position: relative
+    margin: 0
+
+    +dark
+      color: var(--hh-gray200)
+
+    +tablet
+      font-size: 31px
+
+    +laptop
+      font-size: 39px
+
+    +desktop
+      font-size: 49px
+
+  .lines-desktop
+    display: none
+
+    +dark
+      stroke: var(--hh-gray750)
+
+    +laptop
+      right: calc(100% + 24px)
+      position: absolute
+      top: 50%
+      margin-top: -49px
+      stroke: var(--hh-gray300)
+      display: block
+
+  .lines-mobile
+    position: absolute
+    top: 50%
+    transform: translateY(-50%)
+    right: calc(100% + 30px)
+    stroke: var(--hh-gray300)
+
+    +dark
+      stroke: var(--hh-gray750)
+
+    &:nth-child(2)
+      left: calc(100% + 30px)
+      right: auto
+      transform: translateY(-50%) rotate(180deg)
+
+    +laptop
+      display: none
+
+  .card-list
+    display: grid
+    grid-template-rows: auto
+    gap: 102px
+
+    +tablet
+      grid-template-columns: 1fr auto
+      align-items: center
+      gap: 62px 30px
+
+    +laptop
+      gap: 248px 40px
+
+    +desktop
+      gap: 208px 120px
+
+  .image-container-sticky
+    position: sticky
+    top: calc(50vh - 132px)
+    width: 288px
+    height: 264px
+    flex: none
+    display: none
+    align-items: center
+    justify-content: center
+    order: -1
+    grid-column: 2/3
+    grid-row: 1/2
+    background-image: url('../../../assets/landing/why-we/gridMobile.svg')
+    background-size: cover
+    background-position: center
+    background-repeat: no-repeat
+    pointer-events: none
+
+    +dark
+      background-image: url('../../../assets/landing/why-we/gridDarkMobile.svg')
+
+    +tablet
+      display: block
+      order: 1
+      width: 335px
+      height: 302px
+      top: calc(50vh - (302px / 2) + 60px)
+      background-image: url('../../../assets/landing/why-we/gridTablet.svg')
+
+      +dark
+        background-image: url('../../../assets/landing/why-we/gridDarkTablet.svg')
+
+    +laptop
+      width: 528px
+      height: 480px
+      top: calc(50vh - (480px / 2) + 70px)
+      background-image: url('../../../assets/landing/why-we/gridLaptop.svg')
+
+      +dark
+        background-image: url('../../../assets/landing/why-we/gridDarkLaptop.svg')
+
+    +desktop
+      height: 528px
+      width: 576px
+      top: calc(50vh - (528px / 2) + 70px)
+      background-image: url('../../../assets/landing/why-we/gridDesktop.svg')
+
+      +dark
+        background-image: url('../../../assets/landing/why-we/gridDarkDesktop.svg')
+
+    .image-wrapper-3
+      img
+        max-width: 100%
+        max-height: 100%
+
+  .image-wrapper-sticky
+    position: absolute
+    z-index: 1
+    opacity: 0
+    transition: opacity 0.2s linear
+
+    &:global(.light)
+      display: flex
+
+      +dark
+        display: none
+
+    &:global(.dark)
+      display: none
+
+      +dark
+        display: flex
+
+    &:global(.active)
+      opacity: 1
+
+  .image-wrapper-0
+    max-width: 370px
+
+    +tablet
+      left: -18px
+      bottom: -165px
+
+    +laptop
+      max-width: 646px
+      left: -47px
+      bottom: -118px
+
+    +desktop
+      left: calc(50% + 12px)
+      bottom: -94px
+      transform: translateX(-50%)
+
+  .image-wrapper-1
+    max-width: 574px
+
+    +tablet
+      left: 50%
+      bottom: auto
+      top: 50%
+      transform: translate(-50%, -50%)
+
+    +laptop
+      max-width: 576px
+      left: -23px
+      top: auto
+      bottom: -101px
+      transform: none
+
+    +desktop
+      max-width: 624px
+      left: -48px
+      bottom: -77px
+
+  .image-wrapper-2
+    max-width: 402px
+
+    +tablet
+      left: -34px
+      bottom: -162px
+
+    +laptop
+      max-width: 646px
+      left: -47px
+      bottom: -116px
+
+    +desktop
+      max-width: 696px
+      left: -73px
+      bottom: -93px
+
+  .image-wrapper-3
+    width: 572px
+    height: 579px
+
+    +tablet
+      left: -119px
+      bottom: -138px
+
+    +laptop
+      width: 528px
+      height: 702px
+      left: 0
+      bottom: -113px
+
+    +desktop
+      width: 576px
+      height: 702px
+      left: 0
+      bottom: -89px
+
+  .generation
+    text-align: center
+    position: relative
+    padding: 32px 0 63px
+
+    +tablet
+      padding: 32px 0 98px
+
+    +laptop
+      padding: 66px 0
+
+  .generation-title
+    font-size: 18px
+    font-weight: 600
+    font-family: var(--font-code)
+    line-height: 1.2
+    letter-spacing: 0.05em
+    color: var(--hh-gray900)
+
+    +dark
+      color: var(--hh-gray200)
+
+    +tablet
+      font-size: 20px
+
+    +laptop
+      font-size: 25px
+      font-weight: 500
+
+    +desktop
+      font-size: 31px
+
+  .generation-text
+    font-size: 14px
+    font-weight: 400
+    font-family: var(--font-base)
+    line-height: 1.5
+    margin-top: 12px
+    margin-left: auto
+    margin-right: auto
+    letter-spacing: 0.05em
+    max-width: 338px
+    color: var(--hh-gray500)
+
+    +dark
+      color: var(--hh-gray400)
+
+    +tablet
+      font-size: 16px
+      max-width: none
+      line-height: 1.2
+
+    +laptop
+      font-size: 18px
+      margin-top: 14px
+
+    +desktop
+      font-size: 20px
+</style>

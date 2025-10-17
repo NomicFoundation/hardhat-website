@@ -1,0 +1,31 @@
+@use "sass:map"
+
+// Breakpoints
+$breakpoints: (sm: 412px, tablet: 768px, laptop: 1200px, desktop: 1700px)
+
+// Media query mixins
+=sm
+  @media screen and (min-width: map.get($breakpoints, sm))
+    @content
+
+=tablet
+  @media screen and (min-width: map.get($breakpoints, tablet))
+    @content
+
+=laptop
+  @media screen and (min-width: map.get($breakpoints, laptop))
+    @content
+
+=desktop
+  @media screen and (min-width: map.get($breakpoints, desktop))
+    @content
+
+// Theme mixin for scoped styles
+=dark
+  :global([data-theme="dark"]) &
+    @content
+
+// Theme mixin for global styles (is:global)
+=dark-global
+  [data-theme="dark"] &
+    @content

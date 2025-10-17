@@ -1,0 +1,158 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type OtherPops = HTMLAttributes<"a"> & HTMLAttributes<"button">;
+
+type ButtonImportance = "primary" | "secondary";
+type ButtonSize = "sm" | "lg" | "xl";
+type ButtonPadding = "" | "full-padding";
+type Variant =
+  | ButtonImportance
+  | ButtonSize
+  | ButtonPadding
+  | `${ButtonImportance} ${ButtonSize}`
+  | `${ButtonSize} ${ButtonPadding}`
+  | `${ButtonImportance} ${ButtonSize} ${ButtonPadding}`;
+
+interface Props extends OtherPops {
+  href?: string;
+  variant?: Variant;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = "",
+  disabled = false,
+  class: className = "",
+  ...rest
+} = Astro.props;
+const classes = `cta ${variant} ${className}`.trim();
+---
+
+{
+  href ? (
+    <a href={href} class={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class={classes} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}
+
+<style lang="sass" is:global>
+  @use '../../styles/mixins' as *
+
+  .cta
+    display: inline-flex
+    justify-content: center
+    align-items: center
+    gap: 12px
+    padding: 0 28px
+    border: none
+    height: 44px
+    border-radius: 0
+    width: fit-content
+    font-size: 12px
+    font-weight: 600
+    line-height: 1
+    font-family: var(--font-base)
+    letter-spacing: 0.03em
+    white-space: nowrap
+    text-align: center
+    color: var(--hh-gray900)
+    background-color: var(--hh-accent800)
+    transition: all ease-out 0.3s
+    cursor: pointer
+    text-decoration: none
+    +dark-global
+      background-color: var(--hh-accent800)
+      color: var(--hh-gray950)
+
+    &:hover
+      background-color: var(--hh-gray900)
+      text-decoration: none
+      color: var(--hh-accent800)
+
+      +dark-global
+        background-color: var(--hh-neutral200)
+        color: var(--hh-gray950)
+
+    &:active
+      background-color: var(--hh-gray700)
+      color: var(--hh-accent800)
+
+      +dark-global
+        background-color: var(--hh-yellow200)
+        color: var(--hh-gray950)
+
+    &.secondary
+      width: 100%
+      border: 1px solid var(--hh-gray500)
+      text-align: center
+      background-color: transparent
+      transition: 0.3s
+      outline: 1px solid transparent
+      color: var(--hh-gray900)
+
+      +dark-global
+        color: var(--hh-gray400)
+        border-color: var(--hh-gray500)
+        background-color: transparent
+
+      &:hover,
+      &:active
+        border-color: var(--hh-gray900)
+        color: var(--hh-gray900)
+        outline: 1px solid var(--hh-gray900)
+        background-color: transparent
+
+        +dark-global
+          color: var(--hh-gray200)
+          background-color: transparent
+          border-color: var(--hh-gray500)
+          outline: 1px solid var(--hh-gray500)
+
+      &:active
+        border-color: var(--hh-gray500)
+        outline: 1px solid var(--hh-gray500)
+
+    &.primary
+      background-color: var(--hh-gray200)
+      border: none
+      color: var(--hh-gray900)
+      +dark-global
+        color: var(--hh-gray400)
+        background-color: var(--hh-gray750)
+
+      .icon
+        color: var(--hh-accent700)
+
+      &:hover
+        background-color: var(--hh-violet500)
+        color: var(--hh-gray100)
+
+        .icon
+          color: var(--hh-gray300)
+
+    &.sm
+      height: 36px
+
+    &.lg
+      height: 56px
+      font-size: 14px
+
+    &.xl
+      height: 64px
+      font-size: 16px
+
+    &.full-padding
+      padding: 0 28px
+
+    &:disabled
+      opacity: 0.6
+      cursor: not-allowed
+</style>

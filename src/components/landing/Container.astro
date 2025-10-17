@@ -1,0 +1,21 @@
+<div class="container"><slot /></div>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .container
+    width: 100%
+    max-width: 500px
+    margin: 0 auto
+    padding: 0 16px
+
+    +tablet
+      max-width: 680px
+      padding: 0
+
+    +laptop
+      max-width: 1128px
+
+    +desktop
+      max-width: 1408px
+</style>

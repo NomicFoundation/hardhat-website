@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    }
+  ],
+  "public": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/HHE:path",
+      "destination": "/hhe:path",
+      "permanent": false
+    },
+    {
+      "source": "/HH:path",
+      "destination": "https://v2.hardhat.org/hh:path",
+      "permanent": false
+    },
+    {
+      "source": "/hh:path",
+      "destination": "https://v2.hardhat.org/hh:path",
+      "permanent": false
+    },
+    {
+      "source": "/:path*/index.html",
+      "destination": "/:path*",
+      "permanent": false
+    }
+  ]
+}

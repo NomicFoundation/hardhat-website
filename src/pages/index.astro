@@ -1,0 +1,86 @@
+---
+import "../styles/landing.css";
+
+import { landing } from "../config";
+import Banner from "../components/landing/Banner.astro";
+import EmailForm from "../components/landing/EmailForm.astro";
+import Footer from "../components/landing/Footer.astro";
+import HardhatNews from "../components/landing/HardhatNews.astro";
+import HeroBlock from "../components/landing/HeroBlock.astro";
+import LandingHeader from "../components/landing/LandingHeader.astro";
+import WhatIsNewBlock from "../components/landing/WhatIsNewBlock.astro";
+import CookiePopup from "../components/ui/CookiePopup.astro";
+import WhyHardhat from "../components/landing/WhyHardhat/WhyHardhat.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- SEO Meta Tags -->
+    <title>{landing.head.title}</title>
+    <meta name="description" content={landing.head.description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:url" content={landing.head.canonicalUrl} />
+    <meta property="og:image" content="/thumbnail.png" />
+    <meta property="og:title" content={landing.head.title} />
+    <meta property="og:description" content={landing.head.description} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={landing.head.canonicalUrl} />
+
+    <!-- Preload Fonts -->
+    <link
+      rel="preload"
+      href="/fonts/Roboto-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/Roboto-SemiBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/Roboto-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/SourceCodePro-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/SourceCodePro-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body>
+    <Banner />
+    <LandingHeader />
+
+    <main class="main">
+      <HeroBlock />
+      <WhyHardhat />
+      <WhatIsNewBlock />
+      <HardhatNews />
+      <EmailForm />
+    </main>
+    <Footer />
+    <CookiePopup />
+  </body>
+</html>

@@ -1,0 +1,285 @@
+---
+import Button from "../ui/Button.astro";
+import Container from "./Container.astro";
+import heroGraphicDesktop from "../../assets/landing/hero/hero.webp";
+import heroGraphicTablet from "../../assets/landing/hero/heroTablet.webp";
+import heroGraphicMobile from "../../assets/landing/hero/heroMobile.webp";
+import heroGraphicDesktopDark from "../../assets/landing/hero/heroDark.webp";
+import heroGraphicDarkTablet from "../../assets/landing/hero/heroDarkTablet.webp";
+import heroGraphicDarkMobile from "../../assets/landing/hero/heroDarkMobile.webp";
+
+import { landing } from "../../config";
+---
+
+<section class="section">
+  <Container>
+    <div class="content">
+      <span class="tagline" set:html={landing.hero.tagline} />
+      <h1 class="title">{landing.hero.title}</h1>
+      <Button href={landing.hero.cta.url} variant="lg">
+        {landing.hero.cta.title}
+      </Button>
+    </div>
+
+    <div class="block">
+      <h2 class="block-title">{landing.hero.block.title}</h2>
+      <p class="block-text">
+        {landing.hero.block.text}
+      </p>
+    </div>
+  </Container>
+
+  <div class:list={["graphic-container", "light"]}>
+    <picture>
+      <source media="(max-width: 767px)" srcset={heroGraphicMobile.src} />
+      <source media="(max-width: 1199px)" srcset={heroGraphicTablet.src} />
+      <img
+        src={heroGraphicDesktop.src}
+        alt=""
+        role="presentation"
+        loading="eager"
+        decoding="sync"
+      />
+    </picture>
+  </div>
+
+  <div class:list={["graphic-container", "dark"]}>
+    <picture>
+      <source media="(max-width: 767px)" srcset={heroGraphicDarkMobile.src} />
+      <source media="(max-width: 1199px)" srcset={heroGraphicDarkTablet.src} />
+      <img
+        src={heroGraphicDesktopDark.src}
+        alt=""
+        role="presentation"
+        loading="eager"
+        decoding="sync"
+      />
+    </picture>
+  </div>
+</section>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  .section
+    width: 100%
+    padding: 28px 0 95px
+    text-align: center
+    position: relative
+    z-index: 1
+    color: var(--hh-gray900)
+
+    +dark
+      color: var(--hh-gray200)
+
+    +tablet
+      padding: 70px 0 20px
+
+    +laptop
+      padding: 102px 0 122px
+
+    +desktop
+      padding: 102px 0 148px
+
+    &::before
+      background-image: url('../../assets/landing/hero/hero-texture.svg')
+      +dark
+        background-image: url('../../assets/landing/hero/heroDark-texture.svg')
+
+      +tablet
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background-size: auto 100%
+        background-position: top center
+        z-index: -1
+        pointer-events: none
+
+      +desktop
+        top: 40px
+
+  .content
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 22px
+    max-width: 520px
+    margin: 0 auto
+    margin-bottom: 425px
+
+    +tablet
+      gap: 24px
+      margin-bottom: 206px
+
+    +laptop
+      padding-top: 60px
+      max-width: 730px
+      gap: 40px
+      margin-bottom: 373px
+
+    +desktop
+      max-width: 840px
+
+    :global(.cta.lg)
+      font-size: 12px
+      height: 42px
+      padding-inline: 20px
+      +tablet
+        height: 44px
+        padding-inline: 28px
+
+      +laptop
+        height: 56px
+        font-size: 16px
+
+  .graphic-container
+    height: auto
+    position: absolute
+    top: -33px
+    left: 50%
+    width: 993px
+    pointer-events: none
+    transform: translateX(-50%)
+    z-index: -1
+    +tablet
+      top: 42px
+      width: 1165px
+
+    +laptop
+      top: 15px
+      width: 1743px
+
+    +desktop
+      top: 96px
+      width: 1831px
+      left: calc(50% - 1px)
+
+    picture
+      display: block
+      width: 100%
+      height: 100%
+
+    img
+      width: 100%
+
+    &:global(.light)
+      display: flex
+
+      +dark
+        display: none
+
+    &:global(.dark)
+      display: none
+
+      +dark
+        display: flex
+
+  .tagline
+    font-family: var(--font-code)
+    font-size: 16px
+    line-height: 1.4
+    letter-spacing: 0.05em
+
+    +tablet
+      font-size: 20px
+
+    +laptop
+      font-size: 25px
+
+    +desktop
+      font-size: 31px
+
+    :global(strong)
+      display: block
+      font-size: 18px
+      margin-bottom: 4px
+      +tablet
+        display: inline
+        font-size: inherit
+
+  .title
+    font-size: 39px
+    line-height: 1
+    letter-spacing: 0.045em
+    font-family: var(--font-base)
+    font-weight: 700
+    margin: 0
+
+    +tablet
+      font-size: 61px
+      line-height: 1.05
+    +laptop
+      font-size: 76px
+      line-height: 1
+
+    +desktop
+      font-size: 95px
+      letter-spacing: 0.02em
+
+  .block
+    display: flex
+    flex-direction: column
+    gap: 10px 24px
+    text-align: center
+
+    +tablet
+      align-items: center
+      flex-direction: row
+      text-align: left
+
+    +laptop
+      gap: 20px 45px
+
+  .block-title
+    font-size: 18px
+    line-height: 1.35
+    letter-spacing: 0.05em
+    font-family: var(--font-code)
+    font-weight: 600
+    max-width: 180px
+    margin: 0 auto
+    flex: none
+    +tablet
+      margin: 0
+      font-size: 20px
+      max-width: 200px
+
+    +laptop
+      font-size: 25px
+      max-width: 245px
+
+    +desktop
+      font-size: 31px
+      max-width: 310px
+
+    &::after
+      content: "_"
+      display: inline
+      color: var(--hh-accent900)
+
+  .block-text
+    font-size: 14px
+    line-height: 1.45
+    letter-spacing: 0.05em
+    font-family: var(--font-base)
+    max-width: 470px
+    color: var(--hh-gray700)
+    margin: 0
+
+    +dark
+      color: var(--hh-gray400)
+
+    +tablet
+      font-size: 16px
+
+    +laptop
+      font-size: 18px
+      max-width: 540px
+
+    +desktop
+      font-size: 20px
+</style>

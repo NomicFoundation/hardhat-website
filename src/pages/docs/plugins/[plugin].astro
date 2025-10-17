@@ -1,0 +1,43 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { getCollection, getEntry, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const officialPlugins = await getCollection("officialPlugins");
+
+  return officialPlugins.map((plugin) => {
+    if (plugin.rendered === undefined) {
+      throw new Error(`Plugin ${plugin.data.name} has no rendered content`);
+    }
+
+    return {
+      params: { plugin: plugin.data.slug },
+    };
+  });
+}
+
+const entry = await getEntry("officialPlugins", Astro.params.plugin);
+
+if (!entry) {
+  throw new Error(`Entry not found for official plugin ${Astro.params.plugin}`);
+}
+
+const { Content, headings } = await render(entry);
+
+const title = entry.data.shortName;
+const description = entry.data.description;
+---
+
+<StarlightPage
+  frontmatter={{
+    title,
+    description,
+    lastUpdated: false,
+    editUrl: false,
+    next: false,
+    prev: false,
+  }}
+  headings={headings}
+>
+  <Content />
+</StarlightPage>

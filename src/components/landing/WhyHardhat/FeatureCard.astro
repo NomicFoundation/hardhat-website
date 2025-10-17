@@ -1,0 +1,315 @@
+---
+import type { LandingConfig } from "../../../configTypes";
+import Button from "../../ui/Button.astro";
+import CAIcon from "./icons/CAIcon.astro";
+import CCIcon from "./icons/CCIcon.astro";
+import CCReverseIcon from "./icons/CCReverseIcon.astro";
+import CDIcon from "./icons/CDIcon.astro";
+import CubIcon from "./icons/CubIcon.astro";
+import DCDIcon from "./icons/DCDIcon.astro";
+import LayoutIcon from "./icons/LayoutIcon.astro";
+
+const iconMap = {
+  CAIcon,
+  CCIcon,
+  CCReverseIcon,
+  CDIcon,
+  CubIcon,
+  DCDIcon,
+  LayoutIcon,
+} as const;
+
+interface Props {
+  index: number;
+  content: LandingConfig["whyHardhat"]["featureCards"][number];
+}
+
+const { content, index } = Astro.props;
+const { imagePaths, imageDarkPaths, articleOne, articleTwo } = content;
+
+const Icon1 = iconMap[articleOne.icon as keyof typeof iconMap];
+const Icon2 = iconMap[articleTwo.icon as keyof typeof iconMap];
+---
+
+<div class="feature-card" data-card-index={index}>
+  <div class="content-container">
+    <article class="article">
+      <div class="icon-container">
+        <Icon1 />
+      </div>
+      <h3 class="title">{articleOne.title}</h3>
+      <p class="text">{articleOne.text}</p>
+      <div class="cta-wrapper">
+        <Button href={articleOne.cta.url} variant="primary">
+          {articleOne.cta.title}
+          <svg
+            width="16"
+            height="14"
+            viewBox="0 0 16 14"
+            fill="none"
+            class="icon"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.19795 13.5979C8.93733 13.8585 8.51515 13.8597 8.25308 13.6005L7.84226 13.1942C7.57811 12.933 7.57692 12.5068 7.83961 12.2441L12.098 7.98565H0.874101C0.50407 7.98565 0.204102 7.68568 0.204102 7.31565V6.68595C0.204102 6.31592 0.504071 6.01595 0.874102 6.01595H12.098L7.83904 1.76376C7.57651 1.50166 7.57693 1.07612 7.83998 0.814541L8.25307 0.403744C8.51493 0.143336 8.93814 0.143925 9.19927 0.405061L15.3212 6.52704C15.5829 6.78869 15.5829 7.21291 15.3212 7.47456L9.19795 13.5979Z"
+            ></path>
+          </svg>
+        </Button>
+      </div>
+    </article>
+
+    <article class="article">
+      <div class="icon-container">
+        <Icon2 />
+      </div>
+      <h3 class="title">{articleTwo.title}</h3>
+      <p class="text">{articleTwo.text}</p>
+      <div class="cta-wrapper">
+        <Button href={articleTwo.cta.url} variant="primary">
+          {articleTwo.cta.title}
+          <svg
+            width="16"
+            height="14"
+            viewBox="0 0 16 14"
+            fill="none"
+            class="icon"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.19795 13.5979C8.93733 13.8585 8.51515 13.8597 8.25308 13.6005L7.84226 13.1942C7.57811 12.933 7.57692 12.5068 7.83961 12.2441L12.098 7.98565H0.874101C0.50407 7.98565 0.204102 7.68568 0.204102 7.31565V6.68595C0.204102 6.31592 0.504071 6.01595 0.874102 6.01595H12.098L7.83904 1.76376C7.57651 1.50166 7.57693 1.07612 7.83998 0.814541L8.25307 0.403744C8.51493 0.143336 8.93814 0.143925 9.19927 0.405061L15.3212 6.52704C15.5829 6.78869 15.5829 7.21291 15.3212 7.47456L9.19795 13.5979Z"
+            ></path>
+          </svg>
+        </Button>
+      </div>
+    </article>
+  </div>
+
+  <div class="image-container-mobile">
+    <div class="image-wrapper light">
+      <img src={imagePaths.sm} alt="Feature card picture" loading="lazy" />
+    </div>
+    <div class="image-wrapper dark">
+      <img src={imageDarkPaths.sm} alt="Feature card picture" loading="lazy" />
+    </div>
+  </div>
+</div>
+
+<style lang="sass">
+  @use '../../../styles/mixins' as *
+
+  .feature-card
+    position: relative
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 30px
+    grid-column: 1/2
+    margin: 0 -16px
+
+    &:nth-child(1)
+      :global(.light),
+      :global(.dark)
+        margin-left: 11px
+        max-width: 324px
+        margin-top: 4px
+
+    &:nth-child(2)
+      :global(.light),
+      :global(.dark)
+        margin-right: 23px
+        margin-top: -4px
+        max-width: 312px
+
+    &:nth-child(3)
+      :global(.light),
+      :global(.dark)
+        margin-left: -12px
+        margin-top: 31px
+        max-width: 347px
+
+    &:nth-child(4)
+      :global(.light),
+      :global(.dark)
+        margin-top: 3px
+        width: 288px
+        height: 351px
+        img
+          max-height: 100%
+          max-width: 100%
+
+    +tablet
+      flex-direction: row
+      margin: 0
+
+  .image-container-mobile
+    position: relative
+    width: 288px
+    height: 264px
+    flex: none
+    display: flex
+    align-items: center
+    justify-content: center
+    order: -1
+    background-image: url(../../../assets/landing/why-we/gridMobile.svg)
+    background-size: contain
+    background-position: center
+    background-repeat: no-repeat
+
+    +dark
+      background-image: url(../../../assets/landing/why-we/gridDarkMobile.svg)
+
+    +tablet
+      order: 1
+      width: 335px
+      height: 302px
+      display: none
+
+  .image-wrapper
+    position: relative
+    z-index: 1
+
+    &:global(.dark)
+      display: none
+
+    +dark
+      &:global(.dark)
+        display: block
+
+      &:global(.light)
+        display: none
+
+  .content-container
+    flex: 1
+    display: flex
+    flex-direction: column
+    gap: 32px
+
+    +tablet
+      gap: 16px
+
+  .article
+    width: 100%
+    padding: 8px 24px 0 24px
+    border-left-width: 2px
+    border-left-style: solid
+    transition: border-color 0.2s ease-in-out
+    border-left-color: var(--hh-gray300)
+
+    +dark
+      border-left-color: var(--hh-gray750)
+
+    &:hover
+      border-left-color: var(--hh-violet500) !important
+
+      :global(.feature-icon)
+        stroke: var(--hh-violet500)
+        fill: var(--hh-violet500)
+
+      :global(.primary)
+        background-color: var(--hh-violet500) !important
+        color: var(--hh-gray100) !important
+
+        .icon
+          color: var(--hh-gray300) !important
+
+    +tablet
+      border-left-width: 1px
+      padding: 32px 16px 0 24px
+
+    +laptop
+      padding: 32px 16px 0 38px
+
+  .title
+    font-family: var(--font-base)
+    font-weight: 600
+    font-size: 18px
+    line-height: 1.5
+    letter-spacing: 0.046em
+    margin-bottom: 10px
+    color: var(--hh-gray920)
+
+    +dark
+      color: var(--hh-gray250)
+
+    +tablet
+      font-size: 20px
+      line-height: 1.3
+      margin-bottom: 8px
+
+    +laptop
+      font-size: 25px
+      line-height: 1.5
+      margin-bottom: 16px
+
+    +desktop
+      font-size: 31px
+      line-height: 1.32
+
+  .text
+    font-family: var(--font-base)
+    font-size: 14px
+    line-height: 1.5
+    letter-spacing: 0.05em
+    color: var(--hh-gray600)
+
+    +dark
+      color: var(--hh-gray600)
+
+    +desktop
+      font-size: 16px
+
+  .cta-wrapper
+    margin-top: 15px
+
+    +laptop
+      margin-top: 28px
+
+    .icon
+      fill: currentColor
+      width: 12px
+      height: 12px
+
+      +tablet
+        width: 16px
+        height: 16px
+  .primary
+    height: 36px
+    padding: 0 16px
+    font-size: 12px
+    gap: 6px
+    +tablet
+      height: 44px
+      padding: 0 16px
+
+    +laptop
+      gap: 12px
+      font-size: 14px
+      padding: 0 20px
+      height: 56px
+
+    +desktop
+      height: 64px
+      padding: 0 24px
+      font-size: 16px
+
+  .icon-container
+    display: block
+    margin-bottom: 8px
+    font-size: 32px
+
+    +laptop
+      margin-bottom: 12px
+
+    :global(svg)
+      width: auto
+      height: 1em
+      display: block
+      fill: var(--hh-gray100)
+      stroke: var(--hh-gray400)
+      transition: fill 0.2s ease-in-out, stroke 0.2s ease-in-out
+      +dark
+        stroke: var(--hh-gray750)
+        fill: var(--hh-gray950)
+      +laptop
+        font-size: 44px
+</style>

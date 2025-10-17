@@ -1,0 +1,54 @@
+:root {
+  /* Neutral */
+  --hh-neutral0: #ffffff;
+  --hh-neutral100: #f2f2f2;
+  --hh-neutral200: #fcfcf1;
+  --hh-neutral400: #c4c4c4;
+  --hh-neutral500: #4b4d4d;
+  --hh-neutral600: #6e6f70;
+  --hh-neutral700: #9b9fa8;
+  --hh-neutral800: #16181d;
+  --hh-neutral900: #0a0a0a;
+
+  /* Grays - from lightest to darkest */
+  --hh-gray0: #ededee;
+  --hh-gray100: #fbfbfb;
+  --hh-gray200: #e5e6e7;
+  --hh-gray250: #c7cbd1;
+  --hh-gray300: #d2d3d5;
+  --hh-gray400: #b0b2b5;
+  --hh-gray500: #8e9094;
+  --hh-gray600: #6c6f74;
+  --hh-gray700: #4a4d54;
+  --hh-gray750: #333538;
+  --hh-gray800: #282b33;
+  --hh-gray850: #20232a;
+  --hh-gray860: #202329;
+  --hh-gray900: #181a1f;
+  --hh-gray920: #1c1f23;
+  --hh-gray950: #16181d;
+  --hh-gray1000: #0e0f12;
+
+  /* Yellow/Accent */
+  --hh-accent100: #fbfcdb;
+  --hh-accent200: #f8f6e2;
+  --hh-accent300: #fff787;
+  --hh-accent600: #fff04d;
+  --hh-accent700: #ccb200;
+  --hh-accent800: #fff100;
+  --hh-accent900: #edcf00;
+  --hh-yellow100: #fffeeb;
+  --hh-yellow200: #f8ecb4;
+  --hh-yellow800: #e0c600;
+  --hh-yellow850: #ccb400;
+  --hh-yellow900: #b29c00;
+  --hh-yellow1150: #3A3700;
+
+  /* Violet */
+  --hh-violet50: #f5f5ff;
+  --hh-violet500: #5e21ff;
+
+  /* Shadows */
+  --hh-shadow-light: rgba(210, 211, 213, 0.5);
+  --hh-shadow-dark: rgba(74, 77, 84, 0.5);
+}

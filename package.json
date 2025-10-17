@@ -1,0 +1,40 @@
+{
+  "name": "hardhat3-website",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.18.2",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build --force",
+    "prebuild": "pnpm errors",
+    "preview": "astro preview",
+    "errors": "pnpm add @nomicfoundation/hardhat-errors@latest && node scripts/prepare-error-list.ts",
+    "clean": "rm -rf dist .astro .vercel node_modules/.astro",
+    "astro": "astro",
+    "lint": "prettier --check '{src/**,.}/*.{js,ts,md,json,mdx,astro}' --ignore-path .prettierignore --ignore-path .prettierignore-ci && astro check",
+    "lint:fix": "prettier --write '{src/**,.}/*.{js,ts,md,json,mdx,astro}'  && astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/partytown": "^2.1.4",
+    "@astrojs/starlight": "^0.36.0",
+    "@astrojs/vercel": "^8.2.8",
+    "@nomicfoundation/hardhat-errors": "^3.0.2",
+    "astro": "^5.6.1",
+    "github-slugger": "^2.0.0",
+    "gsap": "^3.13.0",
+    "prettier": "3.6.2",
+    "prettier-plugin-astro": "0.14.1",
+    "prettier-plugin-solidity": "2.1.0",
+    "sass": "^1.93.2",
+    "sharp": "^0.34.2",
+    "starlight-links-validator": "^0.18.0",
+    "starlight-markdown-blocks": "^0.1.0",
+    "starlight-sidebar-topics": "^0.6.1",
+    "starlight-sidebar-topics-dropdown": "^0.5.1",
+    "typescript": "5.9.3",
+    "undici": "^7.16.0"
+  }
+}

@@ -1,0 +1,115 @@
+<button id="theme-btn" aria-label="Toggle theme">
+  <span id="theme-label"></span>
+  <span class="icon-wrapper">
+    <img src="/images/theme-switcher.svg" alt="theme-switcher" class="light" />
+    <img
+      src="/images/theme-switcher-dark.svg"
+      alt="theme-switcher"
+      class="dark"
+    />
+  </span>
+</button>
+
+<script is:inline>
+  const KEY = "starlight-theme";
+
+  const prefersDark = () =>
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const getStoredPref = () => {
+    try {
+      return localStorage?.getItem(KEY) || "auto";
+    } catch {
+      return "auto";
+    }
+  };
+
+  const setStoredPref = (pref) => {
+    localStorage?.setItem(KEY, pref);
+  };
+
+  const applyTheme = (pref) => {
+    const html = document.documentElement;
+    const applied = pref === "auto" ? (prefersDark() ? "dark" : "light") : pref;
+    html.setAttribute("data-theme", applied);
+    html.setAttribute("data-theme-preference", pref);
+    updateButton(pref);
+  };
+
+  const updateButton = (pref) => {
+    const label = document.getElementById("theme-label");
+    label.textContent = pref === "auto" ? "A" : "";
+  };
+
+  const nextPref = (pref) =>
+    pref === "auto" ? "light" : pref === "light" ? "dark" : "auto";
+
+  let pref = getStoredPref();
+  applyTheme(pref);
+
+  let mql = window.matchMedia("(prefers-color-scheme: dark)");
+  const mqlHandler = () => {
+    if (pref === "auto") applyTheme(pref);
+  };
+  mql.addEventListener?.("change", mqlHandler);
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === KEY && e.newValue && e.newValue !== pref) {
+      pref = e.newValue;
+      applyTheme(pref);
+    }
+  });
+
+  document.getElementById("theme-btn").addEventListener("click", () => {
+    pref = nextPref(pref);
+    setStoredPref(pref);
+    applyTheme(pref);
+  });
+</script>
+
+<style lang="sass">
+  @use '../../styles/mixins' as *
+
+  button
+    font-size: 15px
+    line-height: 13px
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    background-color: transparent
+    color: var(--hh-gray600)
+    border: none
+    gap: 8px
+    cursor: pointer
+    transform-origin: center
+    min-width: 56px
+    height: 50px
+    font-family: var(--font-code)
+    font-size: 18px
+    transition: transform ease-in-out 0.25s
+
+    &:hover
+      opacity: 0.8
+
+    +dark
+      color: var(--hh-gray100)
+
+  .icon-wrapper
+    transition: transform ease-in-out 0.25s
+
+    img
+      display: none
+      width: 30px
+      height: 30px
+
+    .light
+      display: inline
+
+    +dark
+      .light
+        display: none
+
+      .dark
+        display: inline
+</style>

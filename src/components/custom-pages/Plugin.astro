@@ -1,0 +1,99 @@
+---
+interface Props {
+  name: string;
+  href: string;
+  author: string;
+  authorUrl: string;
+  description: string;
+  tags: string[];
+  anchorSlug?: string;
+}
+
+const { name, href, author, authorUrl, description, tags, anchorSlug } =
+  Astro.props;
+const isExternalLink = href.startsWith("http");
+---
+
+<div class="styled-plugin-snippet-container" id={anchorSlug}>
+  <div class="plugin-name-author-container">
+    {
+      isExternalLink ? (
+        <a class="plugin-name" href={href} target="_blank" rel="noreferrer">
+          {name}
+        </a>
+      ) : (
+        <a class="plugin-name" href={href}>
+          {name}
+        </a>
+      )
+    }
+    <a class="author" href={authorUrl} target="_blank" rel="noreferrer">
+      {author}
+    </a>
+  </div>
+  <div class="description">{description}</div>
+  <div class="tags-container">
+    {tags.map((tagName) => <div class="tag">{tagName}</div>)}
+  </div>
+</div>
+
+<style lang="sass">
+  .styled-plugin-snippet-container
+    width: 100%
+    display: flex
+    flex-direction: column
+    margin-bottom: 50px
+
+  .plugin-name-author-container
+    display: flex
+    flex-direction: row
+    align-items: center
+
+    @media (max-width: 49.9rem)
+      align-items: normal
+      flex-direction: column
+
+  .plugin-name
+    font-size: 20px
+    line-height: 150%
+    font-weight: 700
+    margin-right: 18px
+    &:hover
+      opacity: 0.8
+
+  .author
+    font-size: 16px
+    line-height: 150%
+
+    color: var(--sl-color-text)
+
+    padding-left: 16px
+    border-left: 1px solid var(--sl-color-gray-4)
+
+    &:hover
+      color: var(--sl-color-accent-high)
+
+    @media (max-width: 49.9rem)
+      margin-top: 8px
+      padding-left: 0px
+      border-left: none
+
+  .description
+    font-size: 16
+    line-height: 150%
+    width: 100%
+    margin-top: 12px
+
+  .tags-container
+    display: flex
+    flex-wrap: wrap
+    margin-top: 16px
+
+  .tag
+    padding: 4px 16px
+    margin: 8px 8px 0 0
+    border-radius: 5px
+    font-size: 13px
+    line-height: 19.5px
+    background-color: var(--sl-color-gray-5)
+</style>

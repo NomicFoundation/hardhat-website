@@ -1,0 +1,39 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+const url = Astro.request.url;
+const prasedUrl = new URL(url);
+const relativeUrl = url.substring(prasedUrl.origin.length);
+const hh2Url = `https://v2.hardhat.org${relativeUrl}`;
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "404: Not Found",
+    description: "Page not found. Check the URL or try using the search bar",
+    lastUpdated: false,
+    editUrl: false,
+    next: false,
+    prev: false,
+    topic: "hardhat",
+    tableOfContents: false,
+  }}
+>
+  <p>Page not found. Check the URL or try using the search bar.</p>
+  <div class="hh2">
+    <h2>Looking for a Hardhat 2 page?</h2>
+    <p>
+      You can try to find the page in the Hardhat 2 docs by clicking <a
+        id="hh2link"
+        href={hh2Url}>here</a
+      >.
+    </p>
+  </div>
+</StarlightPage>
+
+<style lang="sass">
+  .hh2
+    margin-top: 2.5rem
+
+    h2
+      font-size: 1.2rem
+</style>
