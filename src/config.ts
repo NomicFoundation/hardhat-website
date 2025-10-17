@@ -29,9 +29,9 @@ export const landing: LandingConfig = {
         label: "documentation",
         url: "/docs/getting-started",
         dropdown: [
-          { label: "Hardhat 3", url: "/docs/getting-started" },
-          { label: "Hardhat Ignition", url: "/ignition" },
-          { label: "Hardhat VSCode", url: "/docs/overview" },
+          { label: "Hardhat 3", url: "/docs" },
+          { label: "Hardhat Ignition", url: "/ignition/docs" },
+          { label: "Hardhat VSCode", url: "/hardhat-vscode/docs" },
         ],
       },
       { label: "plugins", url: "/plugins" },
