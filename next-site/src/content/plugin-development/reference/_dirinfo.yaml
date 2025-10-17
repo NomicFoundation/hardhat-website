@@ -1,9 +1,0 @@
-section-type: group
-section-title: Reference
-order:
-  - href: /hardhat-plugin-object
-    title: The HardhatPlugin object
-  # - href: /hooks
-  #   title: Hooks and Hook Handlers
-  # - href: /tasks
-  #   title: Task definitions
