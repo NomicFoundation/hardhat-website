@@ -15,7 +15,6 @@
       ]
     }
   ],
-  "public": true,
   "trailingSlash": false,
   "framework": "astro",
   "redirects": [
