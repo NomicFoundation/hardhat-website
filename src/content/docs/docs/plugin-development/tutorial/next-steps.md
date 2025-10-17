@@ -1,19 +1,19 @@
 ---
 title: Next steps
 description: Hardhat 3 plugin tutorial - Next steps
+sidebar:
+  order: 6
 ---
-
-# Next steps
 
 Congratulations, you have built your first Hardhat 3 plugin!
 
 Here are some things you can do next:
 
-- [Use dependencies in your plugin](../guides/dependencies.md) to build on top of other plugins.
+- [Use dependencies in your plugin](/docs/plugin-development/guides/dependencies) to build on top of other plugins.
 
-- [Publish your plugin](../guides/publishing.md) to share it with the community.
+- [Publish your plugin](/docs/plugin-development/guides/publishing) to share it with the community.
 
-- [Learn more about how to write integration tests for plugins](../guides/integration-tests.md) to ensure they work correctly.
+- [Learn more about how to write integration tests for plugins](/docs/plugin-development/guides/integration-tests) to ensure they work correctly.
 
 - Read the explanations section for a deeper understanding of the plugin system.
 

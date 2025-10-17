@@ -1,9 +1,10 @@
 ---
 title: Peer dependencies in Hardhat 3 plugins
 description: An explanation about Hardhat 3 plugins and peer dependencies
+sidebar:
+  label: Peer dependencies
+  order: 5
 ---
-
-# Peer dependencies in Hardhat 3 plugins
 
 Hardhat plugins make extensive use of `peerDependencies`, so it's important to understand what they are and how to use them.
 

@@ -1,9 +1,10 @@
 ---
 title: Writing integration tests for plugins
 description: How to write integration tests for your plugin
+sidebar:
+  label: Integration tests for plugin
+  order: 9
 ---
-
-# Writing integration tests for plugins
 
 While you can test some parts of your plugin in isolation, most testing happens through integration tests that verify how your plugin works with Hardhat and other plugins.
 
@@ -13,7 +14,7 @@ In Hardhat 3 there are two main approaches for writing integration tests.
 
 The simplest way to create an integration test for your plugin is by defining a Hardhat project and using it as a test fixture.
 
-Here's how to do this using the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/). Follow [this guide](../guides/hardhat3-plugin-template.md) to learn how to use the template before continuing.
+Here's how to do this using the [Hardhat 3 plugin template](https://github.com/nomicfoundation/hardhat3-plugin-template/). Follow [this guide](/docs/plugin-development/guides/hardhat3-plugin-template) to learn how to use the template before continuing.
 
 To define a fixture project in your template-based repository, create a directory in `packages/plugin/test/fixture-projects` with a `hardhat.config.ts` and a `package.json`.
 

@@ -1,9 +1,9 @@
 ---
 title: Type extensions
 description: What are type extensions in a Hardhat 3 plugin and how to use them
+sidebar:
+  order: 3
 ---
-
-# Type extensions
 
 When building a Hardhat 3 plugin, you'll often need to extend a TypeScript type from Hardhat or a plugin you're using as a dependency. This is done with a Type Extension.
 

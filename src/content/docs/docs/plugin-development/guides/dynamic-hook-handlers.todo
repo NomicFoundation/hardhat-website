@@ -1,6 +1,7 @@
 ---
 title: Using Dynamic Hook Handlers
 description: How to use Dynamic Hook Handlers to customize the behavior of Hardhat at runtime
+sidebar:
+  order: 8
 ---
 
-# Using Dynamic Hook Handlers

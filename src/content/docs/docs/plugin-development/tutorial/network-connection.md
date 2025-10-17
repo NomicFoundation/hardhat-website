@@ -1,19 +1,19 @@
 ---
 title: Extending the NetworkConnection
 description: Hardhat 3 plugin tutorial - Extending the NetworkConnection
+sidebar:
+  order: 2
 ---
-
-# Extending the `NetworkConnection`
 
 Let's start by adding the `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
 
 ## Defining a network Hook Handler
 
-To add a network property to the `NetworkConnection` object, we'll use a network [Hook Handler](../explanations/hooks.md).
+To add a network property to the `NetworkConnection` object, we'll use a network [Hook Handler](/docs/plugin-development/explanations/hooks).
 
 The template already comes with the `packages/plugin/src/hooks/network.ts` file, so we'll replace its contents with this:
 
-```ts{18}
+```ts {18}
 import type { HookContext, NetworkHooks } from "hardhat/types/hooks";
 import { ChainType, NetworkConnection } from "hardhat/types/network";
 
@@ -21,7 +21,9 @@ export default async (): Promise<Partial<NetworkHooks>> => {
   const handlers: Partial<NetworkHooks> = {
     async newConnection<ChainTypeT extends ChainType | string>(
       context: HookContext,
-      next: (nextContext: HookContext) => Promise<NetworkConnection<ChainTypeT>>
+      next: (
+        nextContext: HookContext,
+      ) => Promise<NetworkConnection<ChainTypeT>>,
     ): Promise<NetworkConnection<ChainTypeT>> {
       const connection = await next(context);
 
@@ -53,7 +55,7 @@ We'll fix it by extending the `NetworkConnection` type.
 
 ## Extending the `NetworkConnection` type
 
-The TypeScript type system lets you add properties to an existing type, what we call [Type Extensions](../explanations/type-extensions.md).
+The TypeScript type system lets you add properties to an existing type, what we call [Type Extensions](/docs/plugin-development/explanations/type-extensions).
 
 Open `packages/plugin/src/type-extensions.ts`, where you'll find something like this:
 
@@ -65,7 +67,7 @@ declare module "hardhat/types/network" {
   // eslint comments...
   interface NetworkConnection<
     // eslint comments...
-    ChainTypeT extends ChainType | string = DefaultChainType
+    ChainTypeT extends ChainType | string = DefaultChainType,
   > {
     // Add your network connection properties here
   }
@@ -87,7 +89,7 @@ declare module "hardhat/types/network" {
 
 Extending the `NetworkConnection` type fixes the error from the previous section.
 
-### Trying out your `NetworkConnection` extension
+## Trying out your `NetworkConnection` extension
 
 Let's try your extension out!
 

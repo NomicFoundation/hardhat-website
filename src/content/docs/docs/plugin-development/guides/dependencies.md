@@ -1,9 +1,9 @@
 ---
 title: Plugin dependencies
 description: How to use other plugins as dependencies
+sidebar:
+  order: 4
 ---
-
-# Plugin dependencies
 
 This guide shows you how to build on top of other Hardhat plugins by using them as dependencies in your plugin.
 
@@ -35,6 +35,6 @@ When you declare a plugin as a dependency, its Hook Handlers, Tasks, and Global 
 
 ## Learn more
 
-To learn more about why and how to use `peerDependencies` in Hardhat plugins, read the [Peer dependencies in Hardhat 3 plugins](../explanations/peer-dependencies.md) explanation.
+To learn more about why and how to use `peerDependencies` in Hardhat plugins, read the [Peer dependencies in Hardhat 3 plugins](/docs/plugin-development/explanations/peer-dependencies) explanation.
 
-To learn more about how the plugin dependencies are loaded, read the [Lifecycle of the components of a Hardhat 3 plugin](../explanations/lifecycle.md) explanation.
+To learn more about how the plugin dependencies are loaded, read the [Lifecycle of the components of a Hardhat 3 plugin](/docs/plugin-development/explanations/lifecycle) explanation.

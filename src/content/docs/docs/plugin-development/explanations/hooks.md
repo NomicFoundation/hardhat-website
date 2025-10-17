@@ -1,9 +1,9 @@
 ---
 title: Hooks and Hook Handlers
 description: An explanation about Hardhat 3's Hooks and Hook Handlers
+sidebar:
+  order: 2
 ---
-
-# Hooks and Hook Handlers
 
 Hardhat 3 allows plugins to extend its functionality and that of other plugins using the Hooks system.
 
@@ -25,7 +25,7 @@ Hooks are divided into categories. Each of them provides a set of Hooks for spec
 2. Hardhat can load faster, as not every category is needed every time
 3. We make Hardhat more robust, as an error in a Hook Handler won't affect workloads that don't use that Hook Category
 
-To learn more about this, read [Hook Handlers' lifecycle](./lifecycle.md#hook-handlers-lifecycle) explanation.
+To learn more about this, read [Hook Handlers' lifecycle](/docs/plugin-development/explanations/lifecycle#hook-handlers-lifecycle) explanation.
 
 Some examples of Hook Categories are:
 
@@ -38,7 +38,7 @@ Some examples of Hook Categories are:
 
 A Hook Handler is a function that is executed when a Hook is run. They are defined by plugins and implement their custom logic. You can think of them as callbacks that implement a Hook's type and are executed when the Hook runs.
 
-Most Hook Handlers are defined in the [`HardhatPlugin`'s `hookHandlers` property](../reference/hardhat-plugin-object.md#hookhandlers) and only loaded when needed. To learn more about their lifecycle, read the [Lifecycle of the components of a Hardhat 3 plugin](../explanations/lifecycle.md) explanation.
+Most Hook Handlers are defined in the [`HardhatPlugin`'s `hookHandlers` property](/docs/plugin-development/reference/hardhat-plugin-object#hookhandlers) and only loaded when needed. To learn more about their lifecycle, read the [Lifecycle of the components of a Hardhat 3 plugin](/docs/plugin-development/explanations/lifecycle) explanation.
 
 ## Different types of Hooks
 
@@ -66,7 +66,7 @@ When a Chained Hook is run, its Hook Handlers receive a `next` function as their
 The `next` function forms a chain of responsibility, where each Hook Handler of a Hook is connected to the next one. The order of this chain is defined as follows:
 
 - [Dynamic Hook Handlers](#dynamic-hook-handlers) are first, in reverse order of their registration.
-- The Hook Handlers defined in the plugins' `hookHandlers` properties come next. They are in the reverse order of the resolved list of plugins, which means that the Hook Handlers defined by the plugins you depend on always come after your own. Read [this section](./lifecycle.md#plugin-list-resolution) to understand how this order is determined.
+- The Hook Handlers defined in the plugins' `hookHandlers` properties come next. They are in the reverse order of the resolved list of plugins, which means that the Hook Handlers defined by the plugins you depend on always come after your own. Read [this section](/docs/plugin-development/explanations/lifecycle#plugin-list-resolution) to understand how this order is determined.
 - The default behavior comes last and doesn't have a `next` function.
 
 The first Hook Handler to be executed will receive the parameters passed to the Hook run as `hookHandlerArguments`.
@@ -138,7 +138,7 @@ For example, this task action registers a Hook Handler for the `NetworkHooks#new
 ```ts
 export default async function (
   taskArguments: MyTaskTaskArguments,
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
 ) {
   const networkHandlers: Partial<NetworkHooks> = {
     async newConnection(context, next) {

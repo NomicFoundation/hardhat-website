@@ -1,6 +1,7 @@
 ---
 title: Tasks
 description: An explanation about Hardhat 3's tasks runner
+sidebar:
+  order: 6
 ---
 
-# Tasks

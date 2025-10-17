@@ -1,15 +1,15 @@
 ---
 title: Testing your plugin
 description: Hardhat 3 plugin tutorial - Testing your plugin
+sidebar:
+  order: 5
 ---
-
-# Testing your plugin
 
 We'll create a few simple integration tests for the `myAccount` property of the `NetworkConnection` object.
 
 We'll do it by using the Hardhat project in `packages/plugin/test/fixture-projects/base-project` as a test fixture.
 
-The template repository comes with utilities to work with fixture projects. To learn more about them and other integration test strategies, read the [Writing integration tests for plugins guide](../guides/integration-tests.md).
+The template repository comes with utilities to work with fixture projects. To learn more about them and other integration test strategies, read the [Writing integration tests for plugins guide](/docs/plugin-development/guides/integration-tests).
 
 Now create a new file in `packages/plugin/test/myAccount.ts` and add the following code:
 
@@ -61,7 +61,7 @@ it("should throw a plugin error if the myAccountIndex is too high with respect t
       await hre.network.connect("withMyAccountIndexTooHigh");
     },
     HardhatPluginError, // Import it from "hardhat/plugins"
-    "hardhat-plugin-template: Invalid index 100000 for myAccount when connecting to network withMyAccountIndexTooHigh"
+    "hardhat-plugin-template: Invalid index 100000 for myAccount when connecting to network withMyAccountIndexTooHigh",
   );
 });
 ```

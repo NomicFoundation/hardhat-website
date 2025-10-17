@@ -1,9 +1,9 @@
 ---
 title: Creating a custom task
 description: Hardhat 3 plugin tutorial - Creating a custom task
+sidebar:
+  order: 4
 ---
-
-# Creating a custom task
 
 Let's now define a task that prints the `myAccount` address of the network Hardhat is connected to, with a customizable title.
 
@@ -27,7 +27,7 @@ task("my-task", "Prints a greeting.")
 
 Replace it with this code:
 
-```ts{8}
+```ts {8}
 task("my-account", "Prints your account.")
   .addOption({
     name: "title",
@@ -56,7 +56,7 @@ interface MyAccountTaskArguments {
 
 export default async function (
   taskArguments: MyAccountTaskArguments,
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
 ) {
   const conn = await hre.network.connect();
   console.log(taskArguments.title);

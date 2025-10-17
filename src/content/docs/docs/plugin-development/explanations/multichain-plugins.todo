@@ -1,6 +1,7 @@
 ---
 title: Multichain plugins
 description: An explanation about the Hardhat 3's multichain plugins
+sidebar:
+  order: 9
 ---
 
-# Multichain plugins

@@ -1,9 +1,9 @@
 ---
 title: Config system
 description: An explanation about the Hardhat 3 config system and how to extend it
+sidebar:
+  order: 4
 ---
-
-# Config system
 
 Hardhat has a flexible and extensible configuration system. This document explains how it works and how to extend it.
 
@@ -24,7 +24,7 @@ A user config is converted into a resolved config in three phases:
 
 ## Extending the config
 
-Each of the three phases in the initialization process can be extended using [Hooks](./hooks.md). While each phase can be extended independently, in practice most use cases will fall into one of the following two categories:
+Each of the three phases in the initialization process can be extended using [Hooks](/docs/plugin-development/explanations/hooks). While each phase can be extended independently, in practice most use cases will fall into one of the following two categories:
 
 - Hook into the loading phase to extend the user config
 - Hook into both the validation and resolution phases to add new settings to the config
@@ -43,13 +43,13 @@ To add new settings to the config, you need to extend the config types. Since th
 
 For new top-level options, this means extending the `HardhatUserConfig` and `HardhatConfig` types. But it's also possible to extend nested options without having to redefine the entire config structure. For example, you can extend the `NetworkUserConfig` and `NetworkConfig` types to add new options to network configs.
 
-You can learn more about type extensions in [this explanation](./type-extensions.md).
+You can learn more about type extensions in [this explanation](/docs/plugin-development/explanations/type-extensions).
 
 #### Extending the validation
 
-Once you've extended the config types, you can hook into the validation phase using the `HardhatConfigHooks#validateUserConfig` [Hook](./hooks.md#whats-a-hook). This Hook is used when you want to validate the values of _new_ options. In this case, you need to validate them yourself, since Hardhat doesn't know about them. For example, you can use this to ensure that a numeric setting is within a certain range or that a string setting matches a specific format.
+Once you've extended the config types, you can hook into the validation phase using the `HardhatConfigHooks#validateUserConfig` [Hook](/docs/plugin-development/explanations/hooks#whats-a-hook). This Hook is used when you want to validate the values of _new_ options. In this case, you need to validate them yourself, since Hardhat doesn't know about them. For example, you can use this to ensure that a numeric setting is within a certain range or that a string setting matches a specific format.
 
-When validating the user config, the [Hook Handler](./hooks.md#whats-a-hook-handler) should only check the values of your plugin's settings. You don't need to re-validate the existing settings, since other registered Hook Handlers will take care of that.
+When validating the user config, the [Hook Handler](/docs/plugin-development/explanations/hooks#whats-a-hook-handler) should only check the values of your plugin's settings. You don't need to re-validate the existing settings, since other registered Hook Handlers will take care of that.
 
 #### Extending the resolution
 
@@ -63,4 +63,4 @@ The config system has support for Configuration Variables, which are a way to re
 
 When adding new settings to the config, you can define them to accept configuration variables. Use the `ConfigurationVariable` type in the user config type and resolve them using the `resolveConfigurationVariable` function received by your Hook Handler.
 
-To learn more about how configuration variables are loaded and used, read the [lifecycle explanation](./lifecycle.md#configuration-variables-lifecycle).
+To learn more about how configuration variables are loaded and used, read the [lifecycle explanation](/docs/plugin-development/explanations/lifecycle#configuration-variables-lifecycle).

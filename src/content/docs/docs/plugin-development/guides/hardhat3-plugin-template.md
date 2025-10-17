@@ -1,9 +1,10 @@
 ---
 title: Using the Hardhat 3 plugin template
 description: How to use the Hardhat 3 plugin template repository to build your own plugin
+sidebar:
+  label: Using the plugin template
+  order: 1
 ---
-
-# Using the Hardhat 3 plugin template
 
 This guide shows you how to use the [official GitHub template repository](https://github.com/nomicfoundation/hardhat3-plugin-template/) to build your own Hardhat 3 plugin. The template includes all the boilerplate needed for a new plugin.
 
@@ -26,7 +27,7 @@ The repository you just created is structured as a [`pnpm`](https://pnpm.io/) mo
 
 You'll do all development in the `packages/plugin` directory, while `packages/example-project` is a playground to experiment with your plugin and manually test it.
 
-To learn how to write automated tests for your plugin, read [this guide](./integration-tests.md).
+To learn how to write automated tests for your plugin, read [this guide](/docs/plugin-development/guides/integration-tests).
 
 ## Trying out your plugin
 
@@ -54,6 +55,6 @@ If you keep a terminal running it, the plugin will normally rebuild by the time 
 
 :::
 
-### Learn more
+## Learn more
 
-Learn more about the Hardhat 3 plugin template's setup by reading its [README.md](https://github.com/NomicFoundation/hardhat3-plugin-template/blob/main/README.md).
+Learn more about the Hardhat 3 plugin template's setup by reading its [README.md](https://github.com/NomicFoundation/hardhat3-plugin-template/blob/main/README).

@@ -1,9 +1,9 @@
 ---
 title: The HardhatPlugin object
 description: Reference documentation for the HardhatPlugin object
+sidebar:
+  order: 1
 ---
-
-# The `HardhatPlugin` object
 
 This document explains the `HardhatPlugin` type, which is used to define a Hardhat 3 plugin.
 
@@ -54,7 +54,7 @@ It typically looks like this:
 dependencies: () => [import("dependency1"), import("dependency2"), ...],
 ```
 
-To learn when this function is called, read the [Lifecycle of the components of a Hardhat 3 plugin](../explanations/lifecycle.md) explanation.
+To learn when this function is called, read the [Lifecycle of the components of a Hardhat 3 plugin](/docs/plugin-development/explanations/lifecycle) explanation.
 
 ### `conditionalDependencies`
 
@@ -71,7 +71,7 @@ conditionalDependencies: [
 ],
 ```
 
-Learn more about how they are loaded in the [Lifecycle of the components of a Hardhat 3 plugin](../explanations/lifecycle.md) explanation.
+Learn more about how they are loaded in the [Lifecycle of the components of a Hardhat 3 plugin](/docs/plugin-development/explanations/lifecycle) explanation.
 
 ### `hookHandlers`
 
@@ -79,7 +79,7 @@ An object that defines the Hook Handlers of the plugin.
 
 Its keys are the different categories of Hooks, and their values are functions that return a `HookHandlerCategoryFactory`.
 
-You can learn more about Hook Handlers in the [Hooks and Hook Handlers](../explanations/hooks.md) explanation.
+You can learn more about Hook Handlers in the [Hooks and Hook Handlers](/docs/plugin-development/explanations/hooks) explanation.
 
 ### `globalOptions`
 

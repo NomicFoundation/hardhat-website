@@ -1,9 +1,9 @@
 ---
 title: Getting help
 description: Where to get help building Hardhat 3 plugins
+sidebar:
+  order: 11
 ---
-
-# Getting help
 
 We value the community of Hardhat plugin authors and support their efforts to build on top of Hardhat. If you need help with your plugins, here's how to get it.
 

@@ -1,9 +1,10 @@
 ---
 title: Lifecycle of the components of a Hardhat 3 plugin
 description: An explanation about the lifecycles of a Hardhat 3 plugin
+sidebar:
+  label: Lifecycle of a plugin
+  order: 1
 ---
-
-# Lifecycle of the components of a Hardhat 3 plugin
 
 This section explains the lifecycle of a Hardhat 3 plugin and its different components.
 
@@ -15,7 +16,7 @@ The lifecycle of a Hardhat plugin can be divided into two parts: importing the p
 
 A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
 
-Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](./type-extensions.md). All the actual behavior must be in separate files that are loaded dynamically.
+Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](/docs/plugin-development/explanations/type-extensions). All the actual behavior must be in separate files that are loaded dynamically.
 
 For example, the `index.ts` file of the [Hardhat 3 plugin template](https://github.com/NomicFoundation/hardhat3-plugin-template/blob/tutorial/packages/plugin/src/index.ts) looks like this:
 
@@ -66,9 +67,9 @@ Note that in Hardhat 3 you can initialize multiple instances of the Hardhat Runt
 
 When initializing the Hardhat Runtime Environment, Hardhat creates an ordered list of plugins based on the `plugins` field in the user config and the built-in plugins bundled with Hardhat.
 
-To do this, Hardhat executes the [`dependencies`](../reference/hardhat-plugin-object.md#dependencies) function of each plugin, adding any new plugin to the list.
+To do this, Hardhat executes the [`dependencies`](/docs/plugin-development/reference/hardhat-plugin-object#dependencies) function of each plugin, adding any new plugin to the list.
 
-At the same time, it loads the [`conditionalDependencies`](../reference/hardhat-plugin-object.md#conditionaldependencies) of each plugin by calling the `condition` function of each of them and checking if they're already loaded. If they are, the `plugin` function is called and the plugin is added to the list.
+At the same time, it loads the [`conditionalDependencies`](/docs/plugin-development/reference/hardhat-plugin-object#conditionaldependencies) of each plugin by calling the `condition` function of each of them and checking if they're already loaded. If they are, the `plugin` function is called and the plugin is added to the list.
 
 This is a recursive process where the dependencies of dependencies are also added, along with conditional dependencies. Hardhat runs it until all plugins are loaded.
 
@@ -86,7 +87,7 @@ Later in the initialization process, Hardhat runs the different Hook Handlers in
 
 The only difference from config Hook Handlers is that they don't have access to the Hook Context, as they're executed before it's created.
 
-To learn more about this process, read the [Config System explanation](./config.md).
+To learn more about this process, read the [Config System explanation](/docs/plugin-development/explanations/config).
 
 #### Global Options resolution
 
@@ -157,7 +158,9 @@ export default async (): Promise<Partial<NetworkHooks>> => {
   const handlers: Partial<NetworkHooks> = {
     async newConnection<ChainTypeT extends ChainType | string>(
       context: HookContext,
-      next: (nextContext: HookContext) => Promise<NetworkConnection<ChainTypeT>>
+      next: (
+        nextContext: HookContext,
+      ) => Promise<NetworkConnection<ChainTypeT>>,
     ): Promise<NetworkConnection<ChainTypeT>> {
       const connection = await next(context);
 
@@ -171,8 +174,8 @@ export default async (): Promise<Partial<NetworkHooks>> => {
       networkConnection: NetworkConnection<ChainTypeT>,
       next: (
         nextContext: HookContext,
-        nextNetworkConnection: NetworkConnection<ChainTypeT>
-      ) => Promise<void>
+        nextNetworkConnection: NetworkConnection<ChainTypeT>,
+      ) => Promise<void>,
     ): Promise<void> {
       if (statePerConnection.has(networkConnection) === true) {
         statePerConnection.delete(networkConnection);
@@ -196,7 +199,7 @@ You define Task Actions using the `setAction` method of the `TaskDefinitionBuild
 
 It looks like this:
 
-```ts{8}
+```ts {8}
 task("my-task", "Prints a greeting.")
   .addOption({
     name: "who",
@@ -217,7 +220,7 @@ For example, the `./tasks/my-task.js` could look like this:
 ```ts
 export default async function (
   taskArguments: MyTaskTaskArguments,
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
 ) {
   console.log(`${hre.config.myConfig.greeting}, ${taskArguments.who}!`);
 }

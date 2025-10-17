@@ -1,9 +1,9 @@
 ---
 title: Hardhat plugin development
 description: How to build Hardhat 3 plugins to extend and customize its behavior
+sidebar:
+  label: Overview
 ---
-
-# Hardhat plugin development
 
 Welcome to the Hardhat plugin development documentation. In this section, you'll learn how to extend and customize Hardhat's behavior using plugins.
 
@@ -44,18 +44,18 @@ export default plugin;
 
 A plugin can define:
 
-- **Type Extensions** allow you to extend Hardhat's built-in types. For example, you can add custom fields to the `HardhatUserConfig` type. Read more about them [here](/plugin-development/explanations/type-extensions.md).
+- **Type Extensions** allow you to extend Hardhat's built-in types. For example, you can add custom fields to the `HardhatUserConfig` type. Read more about them [here](/docs/plugin-development/explanations/type-extensions).
 
-- **Hook Handlers** are functions that customize different parts of Hardhat's behavior. Each extensibility point is called a Hook. Learn more about them [here](/plugin-development/explanations/hooks.md).
+- **Hook Handlers** are functions that customize different parts of Hardhat's behavior. Each extensibility point is called a Hook. Learn more about them [here](/docs/plugin-development/explanations/hooks).
 
 - **Hardhat Tasks** are exposed in the CLI and can be run with `npx hardhat <task>`.
 
 - **Global Options** are exposed in the CLI and can be used with `--<option>`. When you define a Global Option, its value is available everywhere (Hook Handlers, Hardhat Tasks, tests, etc.).
 
-- **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself. Read [this guide](/plugin-development/guides/dependencies.md) to learn how to use them.
+- **Dependencies** specify other plugins that this plugin depends on. Hardhat guarantees that dependencies are loaded before the plugin itself. Read [this guide](/docs/plugin-development/guides/dependencies) to learn how to use them.
 
 - **Conditional Dependencies** declare plugins that are loaded only if the user is already using certain other plugins, without forcing those to be loaded.
 
 ## Get started
 
-Ready to build your first plugin? The [tutorial](/plugin-development/tutorial/index.md) walks you through creating a complete plugin from scratch, covering project setup, defining hooks, adding tasks, and testing your plugin.
+Ready to build your first plugin? The [tutorial](/docs/plugin-development/tutorial) walks you through creating a complete plugin from scratch, covering project setup, defining hooks, adding tasks, and testing your plugin.

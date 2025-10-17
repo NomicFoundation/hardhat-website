@@ -1,17 +1,17 @@
 ---
 title: Adding config to your plugin
 description: Hardhat 3 plugin tutorial - Adding config to your plugin
+sidebar:
+  order: 3
 ---
 
-# Adding config to your plugin
-
-In this section we'll add a way to configure your plugin using the [Config System](../explanations/config.md).
+In this section we'll add a way to configure your plugin using the [Config System](/docs/plugin-development/explanations/config).
 
 We'll add a new `myAccountIndex` property to each network config so that the user can specify which account to use.
 
 ## Extending the config types
 
-The network config types don't have a `myAccountIndex` property, so we'll need to extend them using a [Type Extension](../explanations/type-extensions.md).
+The network config types don't have a `myAccountIndex` property, so we'll need to extend them using a [Type Extension](/docs/plugin-development/explanations/type-extensions).
 
 First, open `packages/plugin/src/type-extensions.ts` and replace the code above the one we added in the previous section with the following:
 
@@ -62,7 +62,7 @@ interface MyTaskTaskArguments {
 
 export default async function (
   taskArguments: MyTaskTaskArguments,
-  hre: HardhatRuntimeEnvironment
+  hre: HardhatRuntimeEnvironment,
 ) {}
 ```
 
@@ -95,7 +95,7 @@ const DEFAULT_MY_ACCOUNT_INDEX = 0;
  * @returns An array of validation errors, or an empty array if valid.
  */
 export async function validatePluginConfig(
-  userConfig: HardhatUserConfig
+  userConfig: HardhatUserConfig,
 ): Promise<HardhatUserConfigValidationError[]> {
   if (
     userConfig.networks === undefined ||
@@ -108,7 +108,7 @@ export async function validatePluginConfig(
 
   const errors = [];
   for (const [networkName, networkConfig] of Object.entries(
-    userConfig.networks
+    userConfig.networks,
   )) {
     if (networkConfig.myAccountIndex === undefined) {
       continue;
@@ -141,12 +141,12 @@ export async function validatePluginConfig(
  */
 export async function resolvePluginConfig(
   userConfig: HardhatUserConfig,
-  partiallyResolvedConfig: HardhatConfig
+  partiallyResolvedConfig: HardhatConfig,
 ): Promise<HardhatConfig> {
   const networks: HardhatConfig["networks"] = {};
 
   for (const [networkName, networkConfig] of Object.entries(
-    partiallyResolvedConfig.networks
+    partiallyResolvedConfig.networks,
   )) {
     const myAccountIndex =
       userConfig.networks?.[networkName]?.myAccountIndex ??
@@ -173,7 +173,7 @@ The `resolvePluginConfig` function is in charge of returning a new `HardhatConfi
 
 To use the config in the network hook, we just need to modify the implementation of our `NetworkHooks#newConnection` Hook Handler so that it looks like this:
 
-```ts{8}
+```ts {8}
 const connection = await next(context);
 
 // Get the accounts from the connection
