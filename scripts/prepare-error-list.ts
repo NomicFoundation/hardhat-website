@@ -1,4 +1,4 @@
-import { writeFile, readFile } from "node:fs/promises";
+import { writeFile, readFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { getErrors } from "../src/content/hardhat-errors.ts";
 
@@ -75,4 +75,5 @@ ${error.description}
   return content;
 }
 
+await mkdir(path.dirname(ERROR_LIST_MD_PATH), { recursive: true });
 await writeFile(ERROR_LIST_MD_PATH, await generateErrorListMarkdown(), "utf8");
