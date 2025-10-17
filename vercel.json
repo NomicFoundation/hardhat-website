@@ -17,6 +17,7 @@
   ],
   "public": true,
   "trailingSlash": false,
+  "framework": "astro",
   "redirects": [
     {
       "source": "/HHE:path",
