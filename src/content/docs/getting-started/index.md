@@ -167,6 +167,12 @@ Tests are a critical part of any Ethereum project. Hardhat lets you write tests 
 
 Hardhat tests run against a local in-memory blockchain, which is much faster than using a real network and doesn't require you to spend ETH or obtain testnet tokens.
 
+:::tip
+
+The `NODE_ENV` variable is set to the value `"test"` whenever tests are running if it was not set before. This enables the tests and code under test to detect that tests are running and react accordingly. The variable is not modified if it was set before the tests started.
+
+:::
+
 ### Solidity tests
 
 Hardhat 3 has full support for writing Solidity tests. The sample project includes a Solidity test file at `contracts/Counter.t.sol`:
