@@ -1,22 +1,24 @@
 # Deploying with a Ledger hardware wallet
 
-Hardhat Ignition supports deploying contracts using a Ledger hardware wallet via the `hardhat-ledger` plugin. This guide will show you how to deploy your contracts using a Ledger device.
+Hardhat Ignition supports deploying contracts using a Ledger hardware wallet via the `Hardhat Ledger plugin`. This guide will show you how to deploy your contracts using a Ledger device.
 
 ## Prerequisites
 
-Before starting, make sure you install and understand how to configure the `Hardhat Ledger plugin`. To do this, check out the [Hardhat Ledger plugin's documentation](../../../plugins/nomicfoundation-hardhat-ledger.md).
+Before starting, make sure you understand how to:
 
-## Configuring the Ledger plugin
+- configure the [Hardhat Ledger plugin](../../../plugins/nomicfoundation-hardhat-ledger.md).
+- use [configuration variables](../../../docs/learn-more/configuration-variables.md) with the [Hardhat keystore](../../../plugins/nomicfoundation-hardhat-keystore.md).
+
+## Hardhat configuration
 
 We are going to use the [Sepolia testnet](https://ethereum.org/en/developers/docs/networks/#sepolia) to deploy our Ignition module, so you need to add this network in your Hardhat config. Here we are using [Alchemy](https://alchemy.com/) to connect to the network.
 
-Note: also make sure to set your `configuration variables` using the [Hardhat keystore](../../../plugins/nomicfoundation-hardhat-keystore.md).
-
-This is how your `hardhat.config.ts` file should look:
+Example `hardhat.config.ts`:
 
 ```ts
 // ...rest of your imports...
 import hardhatLedgerPlugin from "@nomicfoundation/hardhat-ledger";
+import { configVariable } from "hardhat/config";
 
 export default {
   // ...rest of your config...
