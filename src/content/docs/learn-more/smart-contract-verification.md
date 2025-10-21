@@ -1,6 +1,6 @@
 # Verifying smart contracts
 
-Smart contract verification is used to prove that a deployed contract's bytecode comes from a specific source code. This allows users and tools to inspect the original source on block explorers, like Etherscan and Blockscout.
+Smart contract verification is used to prove that a deployed contract's bytecode comes from a specific source code. This allows users and tools to inspect the original source on block explorers, like Etherscan and Blockscout, and verification services, like Sourcify.
 
 In this guide, you'll learn how to verify your contracts using the `hardhat-verify` plugin.
 
@@ -81,7 +81,7 @@ In the previous version of the Etherscan API, you needed a different API key for
 
 :::
 
-To verify contracts on Blockscout, you don't need to set an API key, nor any config.
+To verify contracts on Blockscout and Sourcify, you don't need to set an API key, nor any config.
 
 You can also disable a block explorer by setting its `enabled` property to `false`. For example, you can disable Blockscout verification like this:
 
@@ -104,7 +104,7 @@ To verify a contract, run the `verify` task with the contract's address and the 
 npx hardhat verify --network sepolia 0x1234567890...
 ```
 
-If your contract has constructor arguments, you have to also pass the values that were used during deployment. For example, if the contract received a `string` and a `uint` as constructor parameters:
+While Sourcify verification works without passing constructor arguments, Etherscan and Blockscout need them to verify the contract. In order to verify on Etherscan and Blockscout, you have to pass the values that were used during deployment, if your contract has constructor arguments. For example, if the contract received a `string` and a `uint` as constructor parameters:
 
 ```bash
 npx hardhat verify --network sepolia 0x1234567890... "Hello" 1000
@@ -137,15 +137,15 @@ npx hardhat verify --network sepolia --build-profile default 0x1234567890...
 
 ## Verifying contracts on different block explorers
 
-The plugin currently supports Etherscan and Blockscout. You can use subtasks to verify on each of the block explorers:
+The plugin currently supports Etherscan, Blockscout, and Sourcify. You can use subtasks to verify on each of the block explorers:
 
 ```bash
 npx hardhat verify etherscan ...
 ```
 
-They have the same interface, but verify on a different block explorer.
+They have the same interface, but verify on a different service.
 
-Running `verify` without any subtask will verify on both Etherscan and Blockscout.
+Running `verify` without any subtask will verify on Etherscan, Blockscout, and Sourcify.
 
 ## Verifying on a block explorer of a different network
 
