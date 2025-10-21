@@ -54,7 +54,13 @@ After configuring the plugin, you can now deploy your Hardhat Ignition module as
 npx hardhat ignition deploy ignition/modules/Apollo.ts --network sepolia
 ```
 
-This will deploy as usual, however, you will now be prompted on your Ledger device to confirm each transaction before it's sent to the network. You should see a message like the following in your terminal:
+This will deploy as usual, however, you will first be prompted to enter your Hardhat keystore password to retrieve the `ALCHEMY_URL`:
+
+```
+[hardhat-keystore] Enter the password: ********
+```
+
+and then you will be prompted on your Ledger device to confirm each transaction before it's sent to the network. You should see a message like the following in your terminal:
 
 ```
 Hardhat Ignition 🚀
