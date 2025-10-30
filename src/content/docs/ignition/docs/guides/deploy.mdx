@@ -5,11 +5,11 @@ sidebar:
   order: 2
 ---
 
+import Run from "@hh/Run.astro";
+
 To execute your deployments, you need to use the `ignition deploy` task. It takes a path to a module file as an argument:
 
-```sh
-npx hardhat ignition deploy ignition/modules/MyModule.ts
-```
+<Run command="hardhat ignition deploy ignition/modules/MyModule.ts" />
 
 Hardhat Ignition will load the Ignition Module exported by the file you provided, and deploy it.
 
@@ -55,25 +55,7 @@ This makes the `name` parameter for the `Apollo` module be `"Saturn V"`.
 
 To execute a deployment using parameters, you need to use the `--parameters` argument, like this:
 
-::::tabsgroup{options="TypeScript,JavaScript"}
-
-:::tab{value="TypeScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.ts --parameters ignition/parameters.json
-```
-
-:::
-
-:::tab{value="JavaScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.js --parameters ignition/parameters.json
-```
-
-:::
-
-::::
+<Run command="hardhat ignition deploy ignition/modules/Apollo.ts --parameters ignition/parameters.json" />
 
 To pass a `bigint` as a Module parameter, you can encode it as a string. Any string parameter value that matches the regex `/\d+n/` will be converted to a `bigint` before being passed to the module, for instance the `endowment` parameter in the following example:
 

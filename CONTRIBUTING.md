@@ -15,9 +15,9 @@ You don't need to learn about Starlight to be able to edit the content.
 Most pages shold be written in Markdown, but if you want to use any of these features you should use MDX instead:
 
 - Our custom MDX components:
-  - `@mdx/Install.astro`: Which shows how to install npm packages with the different package managers (e.g. `pnpm add --save-dev foo`)
-  - `@mdx/Run.astro`: Which shows how to run an npm binary with the different package managers (e.g. `pnpm hardhat test`)
-  - `@mdx/RunRemote.astro`: Which shows how to run a remote binary with the different package managers (e.g. `pnpm dlx hardhat --init`)
+  - `@hh/Install.astro`: Which shows how to install npm packages with the different package managers (e.g. `pnpm add --save-dev foo`)
+  - `@hh/Run.astro`: Which shows how to run an npm binary with the different package managers (e.g. `pnpm hardhat test`)
+  - `@hh/RunRemote.astro`: Which shows how to run a remote binary with the different package managers (e.g. `pnpm dlx hardhat --init`)
 - Some advaned Starlight components:
   - [`FileTree`](https://starlight.astro.build/components/file-tree/): To display the structure of a directory with file icons and collapsible sub-directories
   - [`Steps`](https://starlight.astro.build/components/steps/): To style a numbered list of tasks to create step-by-step guides
@@ -32,7 +32,7 @@ title: Example
 description: An example of MDX
 ---
 
-import Install from "@mdx/Install.astro";
+import Install from "@hh/Install.astro";
 
 <Install packages="hardhat" />
 ```

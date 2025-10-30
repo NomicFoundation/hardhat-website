@@ -5,6 +5,8 @@ sidebar:
   order: 9
 ---
 
+import Install from "@hh/Install.astro";
+
 When developing smart contracts, you may decide to use an upgradeable proxy pattern to allow for future upgrades to your contracts. This guide will explain how to create Ignition modules to deploy and interact with your upgradeable proxy contracts.
 
 While there are several different proxy patterns, each with their own tradeoffs, this guide will focus on the [TransparentUpgradeableProxy](https://docs.openzeppelin.com/contracts/5.x/api/proxy#TransparentUpgradeableProxy) pattern. You can read more about upgradeable proxy patterns [on OpenZeppelin's blog](https://blog.openzeppelin.com/proxy-patterns).
@@ -13,33 +15,7 @@ While there are several different proxy patterns, each with their own tradeoffs,
 
 Before we get started, make sure you have the OpenZeppelin Contracts library installed in your project. You can install it using npm, pnpm, or yarn:
 
-::::tabsgroup{options="npm,pnpm,yarn"}
-
-:::tab{value="npm"}
-
-```sh
-npm install @openzeppelin/contracts
-```
-
-:::
-
-:::tab{value="pnpm"}
-
-```sh
-pnpm add @openzeppelin/contracts
-```
-
-:::
-
-:::tab{value="yarn"}
-
-```sh
-yarn add @openzeppelin/contracts
-```
-
-:::
-
-::::
+<Install packages="@openzeppelin/contracts" />
 
 ## Getting to know our contracts
 

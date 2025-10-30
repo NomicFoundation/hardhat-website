@@ -6,6 +6,8 @@ sidebar:
   order: 4
 ---
 
+import Install from "@hh/Install.astro";
+
 Smart contract verification is used to prove that a deployed contract's bytecode comes from a specific source code. This allows users and tools to inspect the original source on block explorers, like Etherscan and Blockscout.
 
 In this guide, you'll learn how to verify your contracts using the `hardhat-verify` plugin.
@@ -18,33 +20,7 @@ If you want to add the plugin manually:
 
 1. Install the plugin:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npm install --save-dev @nomicfoundation/hardhat-verify
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm install --save-dev @nomicfoundation/hardhat-verify
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn add --dev @nomicfoundation/hardhat-verify
-   ```
-
-   :::
-
-   ::::
+   <Install packages="@nomicfoundation/hardhat-verify" />
 
 2. Add it to the list of plugins in your Hardhat configuration:
 

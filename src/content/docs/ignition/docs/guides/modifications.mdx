@@ -5,6 +5,8 @@ sidebar:
   order: 4
 ---
 
+import Run from "@hh/Run.astro";
+
 It's possible to make changes to modules after having deployed them.
 
 For example, if we wanted to add a new `Rocket` contract instance to the module we deployed in the [Quick Start guide](/ignition/docs/getting-started#quick-start), this is what we would do:
@@ -27,25 +29,7 @@ export default buildModule("Apollo", (m) => {
 
 Then run it again. Hardhat Ignition will continue from where it left off, and execute the new parts of the module.
 
-::::tabsgroup{options="TypeScript,JavaScript"}
-
-:::tab{value="TypeScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.ts --network localhost
-```
-
-:::
-
-:::tab{value="JavaScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.js --network localhost
-```
-
-:::
-
-::::
+<Run command="hardhat ignition deploy ignition/modules/Apollo.ts --network localhost" />
 
 This is what the output would look like:
 
@@ -75,9 +59,7 @@ There are certain modifications one can make to a `Future` definition that would
 
 In the above case, or if you simply want to start over, you can use the `--reset` option to clear the previous deployment and start from scratch:
 
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.ts --network localhost --reset
-```
+<Run command="hardhat ignition deploy ignition/modules/Apollo.ts --network localhost --reset" />
 
 :::tip
 

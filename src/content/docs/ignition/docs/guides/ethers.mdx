@@ -5,6 +5,8 @@ sidebar:
   order: 7
 ---
 
+import Install from "@hh/Install.astro";
+
 # Using Ethers
 
 Hardhat Ignition provides a variant based on using [Ethers](https://docs.ethers.org) as your connection library. Ethers is an alternative to [Viem](https://viem.sh) for interacting with the Ethereum Blockchain and its ecosystem.
@@ -22,33 +24,7 @@ You can also follow [Hardhat's Quick Start guide](/docs/getting-started) and pic
 
 From the root directory of your Hardhat project run:
 
-::::tabsgroup{options="npm,pnpm,yarn"}
-
-:::tab{value="npm"}
-
-```shell
-npm install --save-dev @nomicfoundation/hardhat-ignition-ethers
-```
-
-:::
-
-:::tab{value="pnpm"}
-
-```shell
-pnpm add -D @nomicfoundation/hardhat-ignition-ethers ethers
-```
-
-:::
-
-:::tab{value="yarn"}
-
-```shell
-yarn add -D @nomicfoundation/hardhat-ignition-ethers ethers
-```
-
-:::
-
-::::
+<Install packages="@nomicfoundation/hardhat-ignition-ethers" />
 
 Then enable the plugin in your config file:
 

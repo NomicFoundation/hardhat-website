@@ -5,6 +5,9 @@ sidebar:
   label: Overview
 ---
 
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
 :::tip
 
 Hardhat 3 is production-ready and you can migrate today! We'll keep it in beta status as we work on missing features and stabilize it in the near future.
@@ -38,33 +41,7 @@ Before making any changes, prepare your project so that installing and running H
 
    Run the `clean` task to avoid issues with stale artifacts or caches:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npx hardhat clean
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm hardhat clean
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn hardhat clean
-   ```
-
-   :::
-
-   ::::
+   <Run command="hardhat clean" />
 
 3. **Remove Hardhat 2 dependencies**
 
@@ -75,33 +52,7 @@ Before making any changes, prepare your project so that installing and running H
 
    Then reinstall and check for remaining packages that depend on Hardhat:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npm install && npm ls hardhat
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm install && pnpm why hardhat
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn install && yarn why hardhat
-   ```
-
-   :::
-
-   ::::
+   <Run command={["install", "why hardhat"]} />
 
    Repeat until no Hardhat-related dependencies remain.
 
@@ -115,36 +66,7 @@ Before making any changes, prepare your project so that installing and running H
 
 5. **Make your project ESM**
 
-   Run the following command to set the correct `type` field in your `package.json`:
-
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npm pkg set type=module
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm pkg set type=module
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   # yarn doesn't have a direct command to set the type,
-   # so you'll have to manually add it to your package.json
-   ```
-
-   :::
-
-   ::::
+   Add `"type": "module"` to your `package.json`.
 
 6. **(Optional) Adapt your `tsconfig.json`**
 
@@ -158,33 +80,7 @@ With your npm project ready, you can start setting up Hardhat 3.
 
    Run the following command to install Hardhat 3:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npm install --save-dev hardhat
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm install --save-dev hardhat
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn add --dev hardhat
-   ```
-
-   :::
-
-   ::::
+   <Install packages="hardhat" />
 
 2. **Create an empty config file**
 
@@ -202,33 +98,7 @@ With your npm project ready, you can start setting up Hardhat 3.
 
    Verify that Hardhat 3 is working by running the help command:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npx hardhat --help
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm hardhat --help
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn hardhat --help
-   ```
-
-   :::
-
-   ::::
+   <Run command="hardhat --help" />
 
 ## Progresively migrating your config
 
@@ -252,33 +122,7 @@ Let's start with the minimal settings required to compile your contracts.
 
    Run the `build` task to verify that your config is working:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npx hardhat build
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm hardhat build
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn hardhat build
-   ```
-
-   :::
-
-   ::::
+   <Run command="hardhat build" />
 
 To learn more about the updated config format, and continue with your migration, please take a look at [this section](/docs/reference/configuration#solidity-configuration).
 
@@ -290,33 +134,7 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
 
    Install the plugin:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
-
-   :::tab{value=npm}
-
-   ```bash
-   npm install --save-dev @nomicfoundation/hardhat-toolbox-mocha-ethers
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm install --save-dev @nomicfoundation/hardhat-toolbox-mocha-ethers
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn add --dev @nomicfoundation/hardhat-toolbox-mocha-ethers
-   ```
-
-   :::
-
-   ::::
+   <Install packages="@nomicfoundation/hardhat-toolbox-mocha-ethers" />
 
    Then in your Hardhat config, import the plugin and add it to the list of plugins:
 
@@ -340,59 +158,9 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
 
    You can start by migrating a single test and run it individually to verify that it works as expected:
 
-   ::::tabsgroup{options=npm,pnpm,yarn}
+   <Run command="hardhat test test/some-test.ts" />
 
-   :::tab{value=npm}
-
-   ```bash
-   npx hardhat test test/some-test.ts
-   ```
-
-   :::
-
-   :::tab{value=pnpm}
-
-   ```bash
-   pnpm hardhat test test/some-test.ts
-   ```
-
-   :::
-
-   :::tab{value=yarn}
-
-   ```bash
-   yarn hardhat test test/some-test.ts
-   ```
-
-   :::
-
-   ::::
-
-<!-- Commented out until we have setInlineAction(...)
-
-## Migrating tasks
-
-In Hardhat 2, tasks are created just by calling the `task` function and defining the task. As a side-effect, this task gets registered in the Hardhat Runtime Environment. In Hardhat 3 the config is fully declarative, meaning that tasks must be included in the `tasks` array:
-
-```ts
-import { HardhatUserConfig, task } from "hardhat/config";
-
-const myTask = task("my-task", "Description of the task")
-  .setAction(async (args, hre) => {
-    // Task implementation
-  })
-  .build();
-
-const config: HardhatUserConfig = {
-  tasks: [myTask],
-};
-
-export default config;
-```
-
-Notice that we are also calling a `.build` function on the task. This is necessary in Hardhat 3 to finalize the task definition and make it available for use.
-
--->
+{/* A section was removed here until we have setInlineAction. Take a look at the git history to restore it. */}
 
 ## Migrating `extendConfig` and `extendEnvironment`
 

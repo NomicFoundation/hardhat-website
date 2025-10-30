@@ -3,21 +3,36 @@ import { TabItem, Tabs } from "@astrojs/starlight/components";
 import { Code } from "@astrojs/starlight/components";
 
 interface Props {
-  command: string;
+  command: string | string[];
+  prefix?: string;
 }
 
 const { command } = Astro.props;
+const prefix = Astro.props.prefix ? `${Astro.props.prefix} ` : "";
+const commands = Array.isArray(command) ? command : [command];
 ---
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="npm">
-    <Code code={`npx ${command}`} lang="sh" frame="terminal" />
+    <Code
+      code={commands.map((c) => `${prefix}npx ${c}`).join("\n")}
+      lang="sh"
+      frame="terminal"
+    />
   </TabItem>
 
   <TabItem label="pnpm" icon="pnpm">
-    <Code code={`pnpm ${command}`} lang="sh" frame="terminal" />
+    <Code
+      code={commands.map((c) => `${prefix}pnpm ${c}`).join("\n")}
+      lang="sh"
+      frame="terminal"
+    />
   </TabItem>
   <TabItem label="Yarn" icon="seti:yarn">
-    <Code code={`yarn ${command}`} lang="sh" frame="terminal" />
+    <Code
+      code={commands.map((c) => `${prefix}yarn ${c}`).join("\n")}
+      lang="sh"
+      frame="terminal"
+    />
   </TabItem>
 </Tabs>

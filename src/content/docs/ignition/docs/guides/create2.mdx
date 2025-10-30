@@ -5,6 +5,8 @@ sidebar:
   order: 9
 ---
 
+import Run from "@hh/Run.astro";
+
 When deploying contracts, you may want to deploy them to a deterministic address. This can be useful for a variety of reasons, such as deploying a contract to the same address on multiple networks. Hardhat Ignition makes this easy by allowing you to deploy your existing Ignition modules via a `create2` deployment utilizing the [CreateX factory](https://createx.rocks/).
 
 :::tip
@@ -79,25 +81,7 @@ export default {
 
 You can now run the deployment with `create2` using the newly added Sepolia network:
 
-::::tabsgroup{options="TypeScript,JavaScript"}
-
-:::tab{value="TypeScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.ts --network sepolia --strategy create2
-```
-
-:::
-
-:::tab{value="JavaScript"}
-
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.js --network sepolia --strategy create2
-```
-
-:::
-
-::::
+<Run command="hardhat ignition deploy ignition/modules/Apollo.ts --network sepolia --strategy create2" />
 
 The `--strategy create2` flag tells Ignition to deploy the module using `create2`. You should see output similar to the following:
 

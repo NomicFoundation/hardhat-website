@@ -5,6 +5,8 @@ sidebar:
   label: Getting started
 ---
 
+import Install from "@hh/Install.astro";
+
 ## Overview
 
 Hardhat Ignition is a [declarative](https://en.wikipedia.org/wiki/Declarative_programming) system for deploying smart contracts on Ethereum. It enables you to define smart contract instances you want to deploy, and any operation you want to run on them. By taking over the deployment and execution, Hardhat Ignition lets you focus on your project instead of getting caught up in the deployment details.
@@ -45,33 +47,7 @@ If you prefer to use **Ethers** instead of **Viem**, check out the [Ethers.js gu
 
 Once you have a Hardhat project ready, open a terminal in its root directory, and run:
 
-::::tabsgroup{options="npm,pnpm,yarn"}
-
-:::tab{value="npm"}
-
-```sh
-npm install --save-dev @nomicfoundation/hardhat-ignition-viem
-```
-
-:::
-
-:::tab{value="pnpm"}
-
-```sh
-pnpm add -D @nomicfoundation/hardhat-ignition-viem
-```
-
-:::
-
-:::tab{value="yarn"}
-
-```sh
-yarn add -D @nomicfoundation/hardhat-ignition-viem
-```
-
-:::
-
-::::
+<Install packages="@nomicfoundation/hardhat-ignition-viem" />
 
 Finally, add this to your config file to enable the plugin:
 

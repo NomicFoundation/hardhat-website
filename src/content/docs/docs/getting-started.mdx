@@ -5,6 +5,10 @@ sidebar:
   label: Getting started
 ---
 
+import { FileTree } from "@astrojs/starlight/components";
+import RunRemote from "@hh/RunRemote.astro";
+import Run from "@hh/Run.astro";
+
 :::tip
 
 Hardhat 3 is production-ready and you can migrate today! We'll keep it in beta status as we work on missing features and stabilize it in the near future.
@@ -28,43 +32,7 @@ cd hardhat-example
 
 Once that's done, initialize your Hardhat project by running:
 
-::::tabsgroup{options="npm,pnpm,yarn 1,yarn 4"}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat --init
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm dlx hardhat --init
-```
-
-:::
-
-:::tab{value="yarn 1"}
-
-```bash
-yarn add -D hardhat
-yarn hardhat --init
-```
-
-:::
-
-:::tab{value="yarn 4"}
-
-```bash
-# Be sure to set `nodeLinker` to `node-modules` in your `.yarnrc.yml` file first
-yarn dlx hardhat --init
-```
-
-:::
-
-::::
+<RunRemote command="hardhat --init" />
 
 This command will prompt you with a few configuration options. You can accept the default answers to quickly scaffold a working setup.
 
@@ -76,55 +44,26 @@ Using the defaults will:
 
 After the setup is complete, you'll have a fully working Hardhat 3 project with everything you need to get started. Run the Hardhat help to verify the project was set up correctly:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat --help
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat --help
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat --help
-```
-
-:::
-
-::::
+<Run command="hardhat --help" />
 
 ## Project structure
 
 The Hardhat project initialization from the previous section creates the following file structure:
 
-```
-hardhat.config.ts
-
-contracts
-├── Counter.sol
-└── Counter.t.sol
-
-test
-└── Counter.ts
-
-ignition
-└── modules
-    └── Counter.ts
-
-scripts
-└── send-op-tx.ts
-```
+{/* prettier-ignore */}
+<FileTree>
+- hardhat.config.ts
+- contracts
+  - Counter.sol
+  - Counter.t.sol
+- test
+  - Counter.ts
+- ignition
+  - modules
+    - Counter.ts
+- scripts
+  - send-op-tx.ts
+</FileTree>
 
 Here's a quick overview of these files and directories:
 
@@ -171,33 +110,7 @@ contract Counter {
 
 Hardhat will automatically detect it, and compile it with the correct version of Solidity based on its `pragma` statement and your Hardhat configuration. All you need to do is run:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat build
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat build
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat build
-```
-
-:::
-
-::::
+<Run command="hardhat build" />
 
 You can learn more about how to customize your Solidity version and settings in [this guide](/docs/guides/configuring-the-compiler).
 
@@ -242,63 +155,11 @@ contract CounterTest is Test {
 
 You can run all the tests in your project—both Solidity and TypeScript—using the `test` task:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test
-```
-
-:::
-
-::::
+<Run command="hardhat test" />
 
 If you only want to run your Solidity tests, you can use this instead:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test solidity
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test solidity
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test solidity
-```
-
-:::
-
-::::
+<Run command="hardhat test solidity" />
 
 When you run this command, Hardhat will:
 
@@ -379,33 +240,7 @@ Writing this same test in Solidity is possible, but less convenient, and the tes
 
 To run your TypeScript tests, use the `test nodejs` task:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test nodejs
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test nodejs
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test nodejs
-```
-
-:::
-
-::::
+<Run command="hardhat test nodejs" />
 
 You can write any TypeScript code you want in your tests, as they are normal TypeScript files with access to Hardhat. In this example, we use `viem` to interact with the contracts and test the expected behavior. To learn more about how to use `viem` with Hardhat, read [this guide](/docs/guides/using-viem).
 
@@ -427,33 +262,7 @@ The sample project includes two scripts. One of them, `scripts/send-op-tx.ts`, s
 
 To run a script, you can use the `run` task:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat run scripts/send-op-tx.ts
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat run scripts/send-op-tx.ts
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat run scripts/send-op-tx.ts
-```
-
-:::
-
-::::
+<Run command="hardhat run scripts/send-op-tx.ts" />
 
 By doing this, Hardhat will compile your contracts and run your script with access to all of Hardhat's functionality.
 
@@ -481,33 +290,7 @@ Inside a module you call functions, like `m.contract` and `m.call`, to describe 
 
 Modules are deployed with the `ignition deploy` task. To check that the deployment works correctly, let's run it in a simulated network:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat ignition deploy ignition/modules/Counter.ts
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat ignition deploy ignition/modules/Counter.ts
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat ignition deploy ignition/modules/Counter.ts
-```
-
-:::
-
-::::
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts" />
 
 Your deployment was successfully executed in a network simulated by Hardhat! To learn more about how to deploy contracts with Ignition, including how to connect to a real network and how to manage your private keys, please read [this guide](/docs/guides/deploying-contracts).
 

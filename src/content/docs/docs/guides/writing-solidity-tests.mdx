@@ -5,6 +5,9 @@ sidebar:
   order: 1
 ---
 
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
 Hardhat supports writing tests in both TypeScript and Solidity. TypeScript is typically used for higher-level integration tests, whereas Solidity is better suited for unit tests. This guide explains how to add Solidity tests to a Hardhat project, run them, and configure their execution. This isn't meant to serve as an introduction to Solidity tests and assumes familiarity with them.
 
 ## Writing Solidity tests
@@ -50,33 +53,7 @@ In the previous example, the error message doesn't show the actual value of `by`
 
 To use `forge-std` in a Hardhat project, first install it:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npm install --save-dev github:foundry-rs/forge-std#v1.9.7
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm install --save-dev github:foundry-rs/forge-std#v1.9.7
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn add --dev github:foundry-rs/forge-std#v1.9.7
-```
-
-:::
-
-::::
+<Install packages="'github:foundry-rs/forge-std#v1.9.7'" />
 
 You can then import the `Test` base contract and extend your test contracts from it. This lets you use helper functions like `assertEq`, which shows the mismatched values when the assertion fails:
 
@@ -120,93 +97,15 @@ contract CounterTest {
 
 You can run all the tests in your Hardhat project using the `test` task:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test
-```
-
-:::
-
-::::
+<Run command="hardhat test" />
 
 If you only want to run your Solidity tests, use the `test solidity` task instead:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test solidity
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test solidity
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test solidity
-```
-
-:::
-
-::::
+<Run command="hardhat test solidity" />
 
 You can also pass one or more paths as arguments to these tasks, in which case only those files are executed:
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test <test-file-1> <test-file-2> ...
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test <test-file-1> <test-file-2> ...
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test <test-file-1> <test-file-2> ...
-```
-
-:::
-
-::::
+<Run command="hardhat test <test-file-1> <test-file-2> ..." />
 
 ## Configuring Solidity tests
 
