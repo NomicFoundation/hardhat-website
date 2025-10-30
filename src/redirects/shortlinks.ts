@@ -17,6 +17,10 @@ const redirects: Record<string, { status: 302; destination: string }> = {
     status: 302,
     destination: "/ignition/docs/getting-started",
   },
+  "/privacy-policy.html": {
+    status: 302,
+    destination: "/static/privacy-policy.html",
+  },
   "/reportbug": {
     status: 302,
     destination: "https://github.com/NomicFoundation/hardhat/issues/new",
