@@ -6,6 +6,8 @@ sidebar:
   order: 2
 ---
 
+import Install from "@hh/Install.astro";
+
 [viem](https://viem.sh/) is a modern, type-safe library to deploy contracts, manage accounts, read chain state, and more. It's the library we recommend for interacting with Ethereum. You can integrate viem with Hardhat by using the `hardhat-viem` plugin.
 
 ## Setup
@@ -16,15 +18,7 @@ If you want to add the plugin manually:
 
 1. Install the plugin:
 
-   ```bash
-   npm install --save-dev @nomicfoundation/hardhat-viem
-
-   # or
-   pnpm install --save-dev @nomicfoundation/hardhat-viem
-
-   # or
-   yarn add --dev @nomicfoundation/hardhat-viem
-   ```
+   <Install packages="@nomicfoundation/hardhat-viem" />
 
 2. Add it to the list of plugins in your Hardhat configuration:
 
