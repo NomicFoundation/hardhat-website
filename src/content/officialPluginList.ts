@@ -100,4 +100,7 @@ export const officialPluginsList: OfficialPlugin[] = [
       "Integrates Node.js' builtin test runner into a Hardhat project",
     tags: ["Node.js test runner", "node:test", "Test runner"],
   },
-].map((p) => ({ ...p, slug: generateSlug(p.npmPackage) }));
+].map((p) => ({
+  ...p,
+  slug: generateSlug(p.npmPackage.replace(/^@nomicfoundation\//, "")),
+}));

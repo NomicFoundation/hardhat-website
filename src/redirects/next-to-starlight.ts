@@ -26,19 +26,18 @@ export default {
   },
   "/hardhat-network-helpers": {
     status: 302,
-    destination: "/docs/plugins/nomicfoundationhardhat-network-helpers",
+    destination: "/docs/plugins/hardhat-network-helpers",
   },
   "/hardhat-network-helpers/docs": {
     status: 302,
-    destination: "/docs/plugins/nomicfoundationhardhat-network-helpers",
+    destination: "/docs/plugins/hardhat-network-helpers",
   },
   "/hardhat-network-helpers/docs/overview": {
     status: 302,
-    destination: "/docs/plugins/nomicfoundationhardhat-network-helpers",
+    destination: "/docs/plugins/hardhat-network-helpers",
   },
   "/hardhat-network-helpers/docs/reference": {
     status: 302,
-    destination:
-      "/docs/plugins/nomicfoundationhardhat-network-helpers#reference",
+    destination: "/docs/plugins/hardhat-network-helpers#reference",
   },
 } satisfies AstroConfig["redirects"];
