@@ -72,7 +72,9 @@ export async function getErrors(): Promise<HardhatError[]> {
         errors: [],
       };
 
-      for (const error of Object.values(ERRORS[packageName]![categoryName]!)) {
+      for (const error of Object.values(
+        ERRORS[packageName]?.[categoryName] ?? {},
+      )) {
         const title = `HHE${error.number}: ${error.websiteTitle}`;
         categoryErrors.errors.push({
           code: error.number,
