@@ -18,7 +18,7 @@ To install Hardhat Ignition with Ethers support in an existing Hardhat project, 
 - Hardhat version 3.0.0 or higher
 - Ethers version 6.14.0 or higher
 
-You can also follow [Hardhat's Quick Start guide](../../../docs/getting-started/index.md) and pick the option for Ethers and Mocha during initialization to create a new Hardhat Ethers project from scratch.
+You can also follow [Hardhat's Quick Start guide](/docs/getting-started) and pick the option for Ethers and Mocha during initialization to create a new Hardhat Ethers project from scratch.
 
 From the root directory of your Hardhat project run:
 

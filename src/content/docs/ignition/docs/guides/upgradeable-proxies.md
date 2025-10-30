@@ -299,5 +299,5 @@ Here are some additional resources to learn more about topics discussed in this 
 
 - [OpenZeppelin's blog post on proxy patterns](https://blog.openzeppelin.com/proxy-patterns)
 - [OpenZeppelin's documentation on the TransparentUpgradeableProxy used in this guide](https://docs.openzeppelin.com/contracts/5.x/api/proxy#TransparentUpgradeableProxy)
-- [Hardhat Ignition's documentation on creating Ignition modules](./creating-modules.md)
-- [Hardhat Ignition's documentation on testing Ignition modules](./tests.md)
+- [Hardhat Ignition's documentation on creating Ignition modules](/ignition/docs/guides/creating-modules)
+- [Hardhat Ignition's documentation on testing Ignition modules](/ignition/docs/guides/tests)

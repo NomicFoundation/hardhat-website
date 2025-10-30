@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-This section explains how Hardhat Ignition deploys your modules. You don't need to understand this to start using it, you can read the [Quick Start guide](../getting-started/index.md#quick-start) instead.
+This section explains how Hardhat Ignition deploys your modules. You don't need to understand this to start using it, you can read the [Quick Start guide](/ignition/docs/getting-started#quick-start) instead.
 
 ## Module loading and validation
 
@@ -23,7 +23,7 @@ Note that the journal does not store your module definition, but only the action
 
 Whenever you run a deployment, Hardhat Ignition will first check if there's an existing journal. If there is one, Hardhat Ignition will use it to reconstruct the state of the deployment on its last run. There is then a check to determine if the modules to be deployed are compatible with the deployment's state. This process is called Reconciliation.
 
-You can think of the reconciliation process as a validation that tries to understand if the previous state is compatible with your current modules. To learn more about this process, read the [Reconciliation guide](./reconciliation.md).
+You can think of the reconciliation process as a validation that tries to understand if the previous state is compatible with your current modules. To learn more about this process, read the [Reconciliation guide](/ignition/docs/explanations/reconciliation).
 
 If there's a journal, and the reconciliation process passes, Hardhat Ignition starts the deployment using the previous state. The next steps of the deployment process are the same whether a fresh state is used or the state of the previous run.
 
@@ -31,7 +31,7 @@ If there's a journal, and the reconciliation process passes, Hardhat Ignition st
 
 Deploying a module means executing all of its futures, which in turn requires executing all of their dependencies, which may come from different modules.
 
-To decide the right order of execution, Hardhat Ignition creates a graph of `Future` objects, including those in your module, and those in submodules. In this graph, edges represent [explicit or implicit dependencies between `Future` objects](../guides/creating-modules.md#dependencies-between--future--objects).
+To decide the right order of execution, Hardhat Ignition creates a graph of `Future` objects, including those in your module, and those in submodules. In this graph, edges represent [explicit or implicit dependencies between `Future` objects](/ignition/docs/guides/creating-modules#dependencies-between-future-objects).
 
 Using this graph, Hardhat Ignition will create different execution batches. Each batch has a set of `Future` objects that can be executed in parallel.
 
@@ -57,9 +57,9 @@ As explained above, Hardhat Ignition uses a journal to be able to recreate its i
 
 The first message recorded into the journal indicates that Hardhat Ignition will start executing a `Future`. This message records a concrete view of your `Future`, where any `Future`, Module Parameter or account used as argument or option is replaced with their concrete value. This allows Hardhat Ignition, during the reconciliation process, to prevent the execution of an unmodified `Future` with different values (e.g. different Module Parameters).
 
-Subsequent steps of the `Future` execution are also recorded to the journal, including both success and failure results. The only exception to this rule are failed transaction simulations; these are not recorded. See [Transaction execution](./execution.md#transaction-execution) to learn more about transaction simulations.
+Subsequent steps of the `Future` execution are also recorded to the journal, including both success and failure results. The only exception to this rule are failed transaction simulations; these are not recorded. See [Transaction execution](/ignition/docs/explanations/execution#transaction-execution) to learn more about transaction simulations.
 
-Hardhat Ignition will error if you try to resume the execution of a `Future` that has a failed result recorded in the journal. It will indicate that you need to [wipe the future's previous execution](../guides/error-handling.md#wiping-a-previous-execution).
+Hardhat Ignition will error if you try to resume the execution of a `Future` that has a failed result recorded in the journal. It will indicate that you need to [wipe the future's previous execution](/ignition/docs/explanations/error-handling#wiping-a-previous-execution).
 
 ### Executing the different kinds of `Future`
 
@@ -69,14 +69,14 @@ Some of these require sending transactions, which Hardhat Ignition does through 
 
 ### Transaction execution
 
-When Hardhat Ignition needs to send a transaction it first simulates it by running `eth_call`. If this simulation fails (i.e. the `eth_call` reverts) the execution is interrupted. Read the [Error handling guide](../guides/error-handling.md) to learn how to deal with this situation.
+When Hardhat Ignition needs to send a transaction it first simulates it by running `eth_call`. If this simulation fails (i.e. the `eth_call` reverts) the execution is interrupted. Read the [Error handling section](/ignition/docs/explanations/error-handling) to learn how to deal with this situation.
 
-If the simulation is successful, Hardhat Ignition will send the transaction and start monitoring its progress until it is included in a block and accumulates the [required number of confirmations](../config/index.md#requiredconfirmations) to be considered successful.
+If the simulation is successful, Hardhat Ignition will send the transaction and start monitoring its progress until it is included in a block and accumulates the [required number of confirmations](/ignition/docs/reference/config#requiredconfirmations) to be considered successful.
 
 The execution of a `Future` is not considered complete until all of its transactions have the required number of confirmations. This means that if the `Future` Child depends on the `Future` Parent, Child won't start executing before every `Future` in Parent's batch has all of their transactions confirmed with the required number of confirmations.
 
-Once a transaction is sent, Hardhat Ignition will wait for [a period of time](../config/index.md#timebeforebumpingfees) for it to confirm. If it doesn't get its first confirmation during that time, it will resend it with higher fees.
+Once a transaction is sent, Hardhat Ignition will wait for [a period of time](/ignition/docs/reference/config#timebeforebumpingfees) for it to confirm. If it doesn't get its first confirmation during that time, it will resend it with higher fees.
 
-If a transaction needs to be resent more than the configured [maximum number of times](../config/index.md#maxfeebumps), Hardhat Ignition will stop resending it and will consider the execution of the `Future` to have timed out, aborting the deployment.
+If a transaction needs to be resent more than the configured [maximum number of times](/ignition/docs/reference/config#maxfeebumps), Hardhat Ignition will stop resending it and will consider the execution of the `Future` to have timed out, aborting the deployment.
 
 Finally, if the transaction gets dropped from the mempool or replaced by an unexpected transaction (e.g. sent by the user), the execution will be aborted. You will have to rerun Hardhat Ignition, which will recover from the situation automatically, though on rerun it may indicate a wait is required for unexpected transactions to fully confirm.

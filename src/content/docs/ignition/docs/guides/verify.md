@@ -30,7 +30,7 @@ export default {
 
 :::tip
 
-You can find more info about using Hardhat configuration variables in the [configuration variable guide](../../../docs/learn-more/configuration-variables.md).
+You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/learn-more/configuration-variables).
 
 :::
 
@@ -72,7 +72,7 @@ To deploy on Sepolia you need to send some Sepolia ether to the address that's g
 
 :::tip
 
-This guide assumes you are using the contracts and Ignition module from the [quick start guide](../getting-started/index.md), but the steps are the same for any deployment.
+This guide assumes you are using the contracts and Ignition module from the [quick start guide](/ignition/docs/getting-started), but the steps are the same for any deployment.
 
 :::
 
@@ -123,4 +123,4 @@ If you get an error saying that the address does not have bytecode, it probably 
 
 After the task has successfully executed, for each deployed contract you'll see a link to its publicly verified code.
 
-To learn more about verifying, read our guide on [smart contract verification](../../../docs/learn-more/smart-contract-verification.md) documentation.
+To learn more about verifying, read our guide on [smart contract verification](/docs/learn-more/smart-contract-verification) documentation.

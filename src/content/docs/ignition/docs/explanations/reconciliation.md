@@ -5,9 +5,9 @@ sidebar:
   order: 3
 ---
 
-Being able to resume the deployment of a module is a key feature of Hardhat Ignition. Resuming is used to [recover from errors](../guides/error-handling.md), and to allow you to [continue the deployment of modified modules](../guides/modifications.md).
+Being able to resume the deployment of a module is a key feature of Hardhat Ignition. Resuming is used to [recover from errors](/ignition/docs/explanations/error-handling), and to allow you to [continue the deployment of modified modules](/ignition/docs/guides/modifications).
 
-As explained in the [Module execution](./execution.md) guide, Hardhat Ignition can resume a previous deployment thanks to its journal, which is used to reconstruct the internal state of the previous deployment run.
+As explained in the [Module execution](/ignition/docs/explanations/execution) guide, Hardhat Ignition can resume a previous deployment thanks to its journal, which is used to reconstruct the internal state of the previous deployment run.
 
 This previous state may have been created with a different version of your modules or contracts though. Hardhat Ignition runs a process called Reconciliation to understand if the previous state is compatible with your current modules and contracts.
 
@@ -44,4 +44,4 @@ There are three ways to recover from incompatible changes:
 
 1. Revert the change.
 2. Apply a new change so that your module matches what you have already deployed in a different way, as explained above.
-3. Delete the previous execution of a `Future`, as explained [here](../guides/error-handling.md#wiping-a-previous-execution).
+3. Delete the previous execution of a `Future`, as explained [here](/ignition/docs/explanations/error-handling#wiping-a-previous-execution).

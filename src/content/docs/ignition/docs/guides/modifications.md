@@ -7,7 +7,7 @@ sidebar:
 
 It's possible to make changes to modules after having deployed them.
 
-For example, if we wanted to add a new `Rocket` contract instance to the module we deployed in the [Quick Start guide](../getting-started/index.md#quick-start), this is what we would do:
+For example, if we wanted to add a new `Rocket` contract instance to the module we deployed in the [Quick Start guide](/ignition/docs/getting-started#quick-start), this is what we would do:
 
 ```typescript
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
@@ -69,7 +69,7 @@ We can see two new batches that execute the new parts of the module, while keepi
 
 ## Incompatible modifications
 
-There are certain modifications one can make to a `Future` definition that would make the new version incompatible with the previous one _if_ the previous one has already been partially or completely executed. This would lead to Hardhat Ignition being unable to continue your deployment from where it was left off. Read the [Reconciliation](../advanced/reconciliation.md) guide to learn more about this.
+There are certain modifications one can make to a `Future` definition that would make the new version incompatible with the previous one _if_ the previous one has already been partially or completely executed. This would lead to Hardhat Ignition being unable to continue your deployment from where it was left off. Read the [Reconciliation](/ignition/docs/explanations/reconciliation) guide to learn more about this.
 
 ## Clearing an existing deployment with reset
 

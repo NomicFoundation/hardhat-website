@@ -21,13 +21,13 @@ This guide will walk you through the steps to install Hardhat Ignition into an e
 
 :::tip
 
-If you don't have a Hardhat project yet, or if you want to create a new one to try Hardhat Ignition, please follow [this guide](../../../docs/getting-started/index.md) first.
+If you don't have a Hardhat project yet, or if you want to create a new one to try Hardhat Ignition, please follow [this guide](/docs/getting-started) first.
 
 :::
 
 ## Installation
 
-> Hardhat Ignition is part of the [Viem Hardhat Toolbox](/v-next/hardhat-toolbox-viem/). If you are using this toolbox, there's nothing else you need to do.
+> Hardhat Ignition is part of the [Viem Hardhat Toolbox](/docs/plugins/nomicfoundationhardhat-toolbox-viem). If you are using this toolbox, there's nothing else you need to do.
 
 To install Hardhat Ignition in an existing Hardhat project, you will need:
 
@@ -35,11 +35,11 @@ To install Hardhat Ignition in an existing Hardhat project, you will need:
 - [Node.js](https://nodejs.org/) version 22.10.0 or higher
 - A package manager like [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), or [yarn](https://yarnpkg.com/)
 
-You can also follow [Hardhat's Quick Start guide](../../../docs/getting-started/index.md) to create a new project from scratch to follow this guide.
+You can also follow [Hardhat's Quick Start guide](/docs/getting-started) to create a new project from scratch to follow this guide.
 
 :::tip
 
-If you prefer to use **Ethers** instead of **Viem**, check out the [Ethers.js guide](../../../ignition/docs/guides/ethers.md) for installation instructions.
+If you prefer to use **Ethers** instead of **Viem**, check out the [Ethers.js guide](/ignition/docs/guides/ethers) for installation instructions.
 
 :::
 

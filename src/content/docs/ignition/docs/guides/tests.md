@@ -9,7 +9,7 @@ If you want to test that your deployment was correctly defined, or if you want t
 
 :::tip
 
-If you prefer to use **Ethers** instead of **Viem**, check out the [Ethers.js guide](../../../ignition/docs/guides/ethers.md) for more details.
+If you prefer to use **Ethers** instead of **Viem**, check out the [Ethers.js guide](/ignition/docs/guides/ethers) for more details.
 
 :::
 
@@ -46,7 +46,7 @@ The `ignition.deploy` method returns an object with a `viem` contract per contra
 
 ## Using module parameters
 
-The `ignition.deploy` receives an options object as second argument which can be used to provide [Module parameters](./creating-modules.md#module-parameters) under the `parameters` field of the object. You should provide an object mapping module ID to parameters, like this:
+The `ignition.deploy` receives an options object as second argument which can be used to provide [Module parameters](/ignition/docs/guides/creating-modules#module-parameters) under the `parameters` field of the object. You should provide an object mapping module ID to parameters, like this:
 
 ```js
 import { network } from "hardhat";
@@ -70,7 +70,7 @@ it("should allow setting the start count for new counters", async function () {
 
 ## Using Ignition Modules as fixtures
 
-You can combine Hardhat Ignition with [Hardhat Network Helper's `loadFixture`](../../../hardhat-network-helpers/docs/reference.md#loadfixture) to use them to easily define your fixtures by calling `ignition.deploy` within them.
+You can combine Hardhat Ignition with [Hardhat Network Helper's `loadFixture`](/hardhat-network-helpers/docs/reference) to use them to easily define your fixtures by calling `ignition.deploy` within them.
 
 ```js
 import { network } from "hardhat";

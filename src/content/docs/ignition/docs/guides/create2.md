@@ -19,7 +19,7 @@ We are going to use the [Sepolia testnet](https://ethereum.org/en/developers/doc
 
 :::tip
 
-You can find more info about using Hardhat configuration variables in the [configuration variable guide](../../../docs/learn-more/configuration-variables.md).
+You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/learn-more/configuration-variables).
 
 :::
 
@@ -57,7 +57,7 @@ To deploy on Sepolia you need to send some Sepolia ether to the address that's g
 
 :::tip
 
-This guide assumes you are using the contracts and Ignition module from the [quick start guide](../getting-started/index.md), but the steps are the same for any deployment.
+This guide assumes you are using the contracts and Ignition module from the [quick start guide](/ignition/docs/getting-started), but the steps are the same for any deployment.
 
 :::
 

@@ -194,11 +194,11 @@ const receiver = m.contract("Receiver", [], {
 
 When defining Ignition Modules, you can use configurable parameters for flexibility.
 
-During deployment, you can specify these parameters in a JSON file that maps module IDs with respective parameter names and values. This section will focus on retrieving parameters, while the [Defining parameters during deployment](./deploy.md#defining-parameters-during-deployment) section explains how to provide them.
+During deployment, you can specify these parameters in a JSON file that maps module IDs with respective parameter names and values. This section will focus on retrieving parameters, while the [Defining parameters during deployment](/ignition/docs/guides/deploy#defining-parameters-during-deployment) section explains how to provide them.
 
 To access these values, you can call `m.getParameter` providing the name for the parameter as the first argument. You can also make your parameters optional by providing a second argument to `m.getParameter` which will act as the default value in case the parameter isn't provided.
 
-For example, we can modify the `Apollo` module from the [Quick Start guide](../getting-started/index.md#quick-start) to make the `name` field in the `Rocket` smart contract configurable with a parameter:
+For example, we can modify the `Apollo` module from the [Quick Start guide](/ignition/docs/getting-started#quick-start) to make the `name` field in the `Rocket` smart contract configurable with a parameter:
 
 ```typescript
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
@@ -214,7 +214,7 @@ export default buildModule("Apollo", (m) => {
 
 The above module code will deploy `Rocket` with the name provided in the parameters.
 
-Learn more about how to provide a deployment with parameters in the [Defining parameters during deployment](./deploy.md#defining-parameters-during-deployment) section.
+Learn more about how to provide a deployment with parameters in the [Defining parameters during deployment](/ignition/docs/guides/deploy#defining-parameters-during-deployment) section.
 
 ## Creating a module hierarchy using submodules
 

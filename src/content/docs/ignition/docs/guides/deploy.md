@@ -21,7 +21,7 @@ You can customize the deployment folder name by providing an explicit deployment
 
 This folder will contain all the deployment results, and a journal file which records every deployment action executed, enabling recovery from errors and resuming deployments.
 
-Read the [Deployment artifacts section](./../advanced/deployment-artifacts.md) to learn more about the files in your deployment folder.
+Read the [Deployment artifacts section](/ignition/docs/explanations/deployment-artifacts) to learn more about the files in your deployment folder.
 
 ## Extending an existing deployment
 
@@ -33,7 +33,7 @@ Hardhat Ignition will figure out how to pick up from where it left off last time
 
 ## Defining parameters during deployment
 
-Ignition Modules can define [Module Parameters](./creating-modules.md#module-parameters) and use them programmatically. When you deploy a module using the `ignition deploy` task you can provide a JSON file with their values. This section will focus on providing the parameters, while the [Module Parameters section](./creating-modules.md#module-parameters) explains how to retrieve them within a module.
+Ignition Modules can define [Module Parameters](/ignition/docs/guides/creating-modules#module-parameters) and use them programmatically. When you deploy a module using the `ignition deploy` task you can provide a JSON file with their values. This section will focus on providing the parameters, while the [Module Parameters section](/ignition/docs/guides/creating-modules#module-parameters) explains how to retrieve them within a module.
 
 An example file could be called `./ignition/parameters.json` and contain the following:
 
@@ -147,7 +147,7 @@ To check on the current status of a deployment, run:
 npx hardhat ignition status DeploymentId
 ```
 
-If you run these tasks on the [Quick Start guide](../getting-started/index.md#quick-start) project after executing the deployment, you'd see something like this:
+If you run these tasks on the [Quick Start guide](/ignition/docs/getting-started#quick-start) project after executing the deployment, you'd see something like this:
 
 ```
 $ npx hardhat ignition deployments
