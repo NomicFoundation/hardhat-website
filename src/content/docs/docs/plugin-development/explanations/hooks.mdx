@@ -48,7 +48,7 @@ This section explains the different types of Hooks and how they work.
 
 This is the most common type of Hook, and they always look like this:
 
-<!-- prettier-ignore-start -->
+{/* prettier-ignore */}
 ```ts
 type MyChainedHook = (
   context: HookContext,
@@ -59,7 +59,6 @@ type MyChainedHook = (
   ) => Promise<ReturnType>
 ) => Promise<ReturnType>;
 ```
-<!-- prettier-ignore-end -->
 
 When a Chained Hook is run, its Hook Handlers receive a `next` function as their last parameter.
 

@@ -6,13 +6,15 @@ This website is built using [Astro](https://astro.build), and [Starlight](https:
 
 ## Editing content
 
-The website's content is located in the [`src/content`](./src/content) directory, and written in Markdown and MDX (no Markdoc).
+The website's content is located in the [`src/content`](./src/content) directory, and written in GitHub Flavored Markdown in MDX files.
 
 You don't need to learn about Starlight to be able to edit the content.
 
-### When to use MDX?
+### Using Astro components in MDX files
 
-Most pages shold be written in Markdown, but if you want to use any of these features you should use MDX instead:
+In MDX you can use an Astro component by importing it right below the frontmatter and then using it inline.
+
+You can use:
 
 - Our custom MDX components:
   - `@hh/Install.astro`: Which shows how to install npm packages with the different package managers (e.g. `pnpm add --save-dev foo`)
