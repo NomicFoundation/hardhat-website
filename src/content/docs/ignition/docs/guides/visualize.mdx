@@ -5,13 +5,13 @@ sidebar:
   order: 3
 ---
 
+import Run from "@hh/Run.astro";
+
 Hardhat Ignition comes built-in with a `visualize` task that generates an HTML report, illustrating visually the module's deployment process execution. This can be helpful for debugging and verifying that your perception of your modules aligns with Hardhat Ignition's execution plan.
 
 The `visualize` task takes the path to the module to visualize as an argument:
 
-```bash
-npx hardhat ignition visualize ./ignition/modules/Apollo.ts
-```
+<Run command="hardhat ignition visualize ./ignition/modules/Apollo.ts" />
 
 Running `visualize` will generate the report and open it in your system's default browser.
 

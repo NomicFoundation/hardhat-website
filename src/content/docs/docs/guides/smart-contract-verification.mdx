@@ -7,6 +7,7 @@ sidebar:
 ---
 
 import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
 
 Smart contract verification is used to prove that a deployed contract's bytecode comes from a specific source code. This allows users and tools to inspect the original source on block explorers, like Etherscan and Blockscout.
 
@@ -82,15 +83,11 @@ const config: HardhatUserConfig = {
 
 To verify a contract, run the `verify` task with the contract's address and the network you deployed it to:
 
-```bash
-npx hardhat verify --network sepolia 0x1234567890...
-```
+<Run command="hardhat verify --network sepolia 0x1234567890..." />
 
 If your contract has constructor arguments, you have to also pass the values that were used during deployment. For example, if the contract received a `string` and a `uint` as constructor parameters:
 
-```bash
-npx hardhat verify --network sepolia 0x1234567890... "Hello" 1000
-```
+<Run command='hardhat verify --network sepolia 0x1234567890... "Hello" 1000' />
 
 If the arguments are too complex to pass directly in the shell—for example, an array of numbers—you can define them in a TypeScript or JavaScript file:
 
@@ -103,9 +100,7 @@ export default constructorArgs;
 
 and then pass it with the `--constructor-args-path` flag:
 
-```bash
-npx hardhat verify --network sepolia --constructor-args-path constructor-args.ts 0x1234567890...
-```
+<Run command="hardhat verify --network sepolia --constructor-args-path constructor-args.ts 0x1234567890..." />
 
 ## Using different build profiles
 
@@ -113,17 +108,13 @@ By default, the `verify` task uses the `production` build profile, as this is th
 
 If you want to use a different build profile, you can pass the `--build-profile` flag:
 
-```bash
-npx hardhat verify --network sepolia --build-profile default 0x1234567890...
-```
+<Run command="hardhat verify --network sepolia --build-profile default 0x1234567890..." />
 
 ## Verifying contracts on different block explorers
 
 The plugin currently supports Etherscan and Blockscout. You can use subtasks to verify on each of the block explorers:
 
-```bash
-npx hardhat verify etherscan ...
-```
+<Run command="hardhat verify etherscan ..." />
 
 They have the same interface, but verify on a different block explorer.
 

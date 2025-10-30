@@ -5,6 +5,8 @@ sidebar:
   order: 4
 ---
 
+import Run from "@hh/Run.astro";
+
 There are many reasons that can lead to a failure when operating a smart contract. Hardhat Ignition uses different approaches for error handling depending on the error type. This guide explains these methods thoroughly.
 
 ## Contract errors
@@ -21,9 +23,7 @@ Hardhat Ignition uses a journal to record every execution step it performs, as w
 
 If your deployment is failing due to a `Future`, and you need to change its definition to fix it, you will need to wipe the `Future` object's previous execution from the journal, since its definition changed. You can use the `ignition wipe` task for this, by providing it with a deployment ID **and** a future ID.
 
-```sh
-npx hardhat ignition wipe deploymentId futureId
-```
+<Run command="hardhat ignition wipe deploymentId futureId" />
 
 ## Network-related errors
 

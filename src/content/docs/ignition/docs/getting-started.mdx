@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
 
 ## Overview
 
@@ -128,15 +129,11 @@ Finally, we return the `Future` object representing the `Rocket` contract instan
 
 Now that our module definition is ready, let's deploy it to a local Hardhat node. Let's start by spinning up a local node:
 
-```sh
-npx hardhat node
-```
+<Run command="hardhat node" />
 
 Next, in a terminal in the root of your Hardhat project, run:
 
-```sh
-npx hardhat ignition deploy ignition/modules/Apollo.ts --network localhost
-```
+<Run command="hardhat ignition deploy ignition/modules/Apollo.ts --network localhost" />
 
 Hardhat Ignition will execute every `Future` that we defined in the right order, and display the results:
 
