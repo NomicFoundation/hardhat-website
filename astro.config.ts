@@ -7,6 +7,7 @@ import vercel from "@astrojs/vercel";
 import { setGlobalDispatcher, Agent } from "undici";
 
 import redirects from "./src/redirects";
+import { officialPluginsList } from "./src/content/officialPluginList";
 
 // We set this up to prefer IPv4 connections to IPv6 connections
 // as otherwise the Vercel deployments were failing when trying to access
@@ -170,7 +171,11 @@ export default defineConfig({
             },
           },
         ),
-        starlightLinksValidator({ exclude: Object.keys(redirects) }),
+        starlightLinksValidator({
+          exclude: Object.keys(redirects).concat(
+            officialPluginsList.map((p) => `/docs/plugins/${p.slug}`),
+          ),
+        }),
       ],
       customCss: ["./src/styles/custom-starlight-theme.css"],
       components: {
