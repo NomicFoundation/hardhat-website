@@ -336,7 +336,7 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
 
 2. **Update your test files**
 
-   This is usually the most involved part of the migration, and so it has [its own page](/migrate-from-hardhat2/mocha-tests) with the details.
+   This is usually the most involved part of the migration, and so it has [its own page](/docs/migrate-from-hardhat2/guides/mocha-tests) with the details.
 
    You can start by migrating a single test and run it individually to verify that it works as expected:
 

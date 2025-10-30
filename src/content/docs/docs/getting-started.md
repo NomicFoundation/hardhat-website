@@ -134,7 +134,7 @@ Here's a quick overview of these files and directories:
 
 - `test`: Used for TypeScript integration tests. You can also include Solidity test files here.
 
-- `ignition`: Holds your [Hardhat Ignition](https://hardhat.org/ignition) deployment modules, which describe how your contracts should be deployed.
+- `ignition`: Holds your [Hardhat Ignition](/ignition) deployment modules, which describe how your contracts should be deployed.
 
 - `scripts`: A place for any custom scripts that automate parts of your workflow. Scripts have full access to Hardhat's runtime and can use plugins, connect to networks, deploy contracts, and more.
 
@@ -142,7 +142,7 @@ Here's a quick overview of these files and directories:
 
 :::tip
 
-[Hardhat for Visual Studio Code](../hardhat-vscode/) is the official Hardhat extension that adds advanced support for Solidity to VSCode. If you use Visual Studio Code, give it a try!
+[Hardhat for Visual Studio Code](/hardhat-vscode) is the official Hardhat extension that adds advanced support for Solidity to VSCode. If you use Visual Studio Code, give it a try!
 
 :::
 
@@ -199,7 +199,7 @@ yarn hardhat build
 
 ::::
 
-You can learn more about how to customize your Solidity version and settings in [this guide](/docs/learn-more/configuring-the-compiler.md).
+You can learn more about how to customize your Solidity version and settings in [this guide](/docs/guides/configuring-the-compiler).
 
 ## Testing your contracts
 
@@ -332,7 +332,7 @@ Reason: revert: incBy: increment should be positive
 
 This lets you quickly pinpoint the issue, even across deeply nested calls.
 
-Learn more at [writing Solidity tests here](/docs/learn-more/writing-solidity-tests.md).
+Learn more at [writing Solidity tests here](/docs/guides/writing-solidity-tests).
 
 ### TypeScript tests
 
@@ -407,7 +407,7 @@ yarn hardhat test nodejs
 
 ::::
 
-You can write any TypeScript code you want in your tests, as they are normal TypeScript files with access to Hardhat. In this example, we use `viem` to interact with the contracts and test the expected behavior. To learn more about how to use `viem` with Hardhat, read [this guide](/docs/learn-more/using-viem.md).
+You can write any TypeScript code you want in your tests, as they are normal TypeScript files with access to Hardhat. In this example, we use `viem` to interact with the contracts and test the expected behavior. To learn more about how to use `viem` with Hardhat, read [this guide](/docs/guides/using-viem).
 
 ### Solidity vs TypeScript tests
 
@@ -509,16 +509,16 @@ yarn hardhat ignition deploy ignition/modules/Counter.ts
 
 ::::
 
-Your deployment was successfully executed in a network simulated by Hardhat! To learn more about how to deploy contracts with Ignition, including how to connect to a real network and how to manage your private keys, please read [this guide](/docs/learn-more/deploying-contracts.md).
+Your deployment was successfully executed in a network simulated by Hardhat! To learn more about how to deploy contracts with Ignition, including how to connect to a real network and how to manage your private keys, please read [this guide](/docs/guides/deploying-contracts).
 
 ## Learn more
 
 To learn more about Hardhat, check out these other guides:
 
-- [What's new in Hardhat 3](/docs/learn-more/whats-new.md)
-- [Writing Solidity tests](/docs/learn-more/writing-solidity-tests.md)
-- [Using Viem with Hardhat](/docs/learn-more/using-viem.md)
-- [Deploying contracts](/docs/learn-more/deploying-contracts.md)
-- [Configuring the compiler](/docs/learn-more/configuring-the-compiler.md)
+- [What's new in Hardhat 3](/docs/hardhat3/whats-new)
+- [Writing Solidity tests](/docs/guides/writing-solidity-tests)
+- [Using Viem with Hardhat](/docs/guides/using-viem)
+- [Deploying contracts](/docs/guides/deploying-contracts)
+- [Configuring the compiler](/docs/guides/configuring-the-compiler)
 
 and join our [Hardhat 3](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group to share feedback and stay updated on new releases.

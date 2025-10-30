@@ -30,7 +30,7 @@ export default {
 
 :::tip
 
-You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/learn-more/configuration-variables).
+You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/guides/configuration-variables).
 
 :::
 
@@ -123,4 +123,4 @@ If you get an error saying that the address does not have bytecode, it probably 
 
 After the task has successfully executed, for each deployed contract you'll see a link to its publicly verified code.
 
-To learn more about verifying, read our guide on [smart contract verification](/docs/learn-more/smart-contract-verification) documentation.
+To learn more about verifying, read our guide on [smart contract verification](/docs/guides/smart-contract-verification) documentation.

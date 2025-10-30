@@ -19,7 +19,7 @@ We are going to use the [Sepolia testnet](https://ethereum.org/en/developers/doc
 
 :::tip
 
-You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/learn-more/configuration-variables).
+You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/guides/configuration-variables).
 
 :::
 

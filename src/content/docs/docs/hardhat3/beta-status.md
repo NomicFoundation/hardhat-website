@@ -13,7 +13,7 @@ We'll keep it in beta status as we work on missing features and stabilize it in 
 
 We don't expect any major user-facing breaking change in the API, so we encourage projects to migrate to Hardhat 3.
 
-Take a look at the [migration guide](docs/migrate-from-hardhat2) to see how to do it.
+Take a look at the [migration guide](/docs/migrate-from-hardhat2) to see how to do it.
 
 ## Work in progress features
 

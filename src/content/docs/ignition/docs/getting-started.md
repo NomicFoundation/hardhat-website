@@ -27,7 +27,7 @@ If you don't have a Hardhat project yet, or if you want to create a new one to t
 
 ## Installation
 
-> Hardhat Ignition is part of the [Viem Hardhat Toolbox](/docs/plugins/nomicfoundationhardhat-toolbox-viem). If you are using this toolbox, there's nothing else you need to do.
+> Hardhat Ignition is part of the [Viem Hardhat Toolbox](/docs/plugins/hardhat-toolbox-viem). If you are using this toolbox, there's nothing else you need to do.
 
 To install Hardhat Ignition in an existing Hardhat project, you will need:
 

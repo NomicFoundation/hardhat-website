@@ -7,7 +7,7 @@ sidebar:
 
 This section contains a collection of recipes for common tasks.
 
-We encourage you to contribute your own recipes to this section, by submitting a pull request to this [document](https://github.com/NomicFoundation/hardhat-website/edit/main/src/content/docs/learn-more/cookbook.md).
+We encourage you to contribute your own recipes to this section, by submitting a pull request to this [document](https://github.com/NomicFoundation/hardhat-website/edit/main/src/content/docs/docs/guides/cookbook.md).
 
 ## Using Hardhat 3 with a proxy server
 

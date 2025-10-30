@@ -84,7 +84,7 @@ Resolving _Config Variables_ from environment variables isn't safe (due to comma
 
 If you are using a Hardhat Toolbox or created a sample project using Hardhat 3, you already have the plugin installed.
 
-Otherwise, check out [the `hardhat-keystore` documentation](../../plugins/nomicfoundation-hardhat-keystore.md) to install it.
+Otherwise, check out [the `hardhat-keystore` documentation](/docs/plugins/hardhat-keystore) to install it.
 
 ### Using the keystore
 

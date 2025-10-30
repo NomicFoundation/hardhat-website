@@ -66,7 +66,7 @@ export default {
 
 :::tip
 
-You can find more info about using Hardhat configuration variables in the [configuration variable guide](../learn-more/configuration-variables.md).
+You can find more info about using Hardhat configuration variables in the [configuration variable guide](/docs/guides/configuration-variables).
 
 :::
 
@@ -166,8 +166,8 @@ The following options are specific to simulated networks:
 
 The following options are specific to JSON-RPC networks:
 
-- `accounts`: This field controls which accounts Hardhat uses. It can use the node's accounts (by setting it to `"remote"`), a list of local accounts (by setting it to an array of [configuration variables](../learn-more/configuration-variables.md)), or use an [HD Wallet](#hd-wallet-config). Default value: `"remote"`.
-- `url`: The URL of the node, passed in via [configuration variable](../learn-more/configuration-variables.md). This argument is required for HTTP networks.
+- `accounts`: This field controls which accounts Hardhat uses. It can use the node's accounts (by setting it to `"remote"`), a list of local accounts (by setting it to an array of [configuration variables](/docs/guides/configuration-variables)), or use an [HD Wallet](#hd-wallet-config). Default value: `"remote"`.
+- `url`: The URL of the node, passed in via [configuration variable](/docs/guides/configuration-variables). This argument is required for HTTP networks.
 - `httpHeaders`: An optional object with headers to be sent in every request to the node. This can be useful for authentication or other purposes.
 - `timeout`: An optional number that specifies the timeout for requests to the node, in milliseconds.
 
@@ -175,11 +175,11 @@ The following options are specific to JSON-RPC networks:
 
 To use an [HD Wallet](https://github.com/ethereumbook/ethereumbook/blob/develop/05wallets.asciidoc#hd_wallets) with Hardhat you should set your network's `accounts` field to an object with the following fields:
 
-- `mnemonic`: A required string with the mnemonic phrase of the wallet. Passed in via [configuration variable](../learn-more/configuration-variables.md).
+- `mnemonic`: A required string with the mnemonic phrase of the wallet. Passed in via [configuration variable](/docs/guides/configuration-variables).
 - `path`: The HD parent of all the derived keys. Default value: `"m/44'/60'/0'/0"`.
 - `initialIndex`: The initial index to derive. Default value: `0`.
 - `count`: The number of accounts to derive. Default value: `20`.
-- `passphrase`: The passphrase for the wallet, passed in via [configuration variable](../learn-more/configuration-variables.md). Default value: empty string.
+- `passphrase`: The passphrase for the wallet, passed in via [configuration variable](/docs/guides/configuration-variables). Default value: empty string.
 - `accountsBalance`: **Only available in simulated networks.** The balance of the accounts derived from the HD wallet.
 
 For example:
@@ -273,12 +273,12 @@ If write access to a directory is needed, please make sure that it doesn't conta
 
 ## Toolbox options
 
-Hardhat provides two official toolboxes, each with a set of plugins meant to simplify setup: [`hardhat-toolbox-viem`](/plugins/nomicfoundation-hardhat-toolbox-viem) and [`hardhat-toolbox-mocha-ethers`](/plugins/nomicfoundation-hardhat-toolbox-mocha-ethers).
+Hardhat provides two official toolboxes, each with a set of plugins meant to simplify setup: [`hardhat-toolbox-viem`](/docs/plugins/hardhat-toolbox-viem) and [`hardhat-toolbox-mocha-ethers`](/docs/plugins/hardhat-toolbox-mocha-ethers).
 
 Both toolboxes include the `hardhat-ignition` and `hardhat-verify` plugins, and their configuration is documented elsewhere:
 
-- `hardhat-ignition`: see the [Hardhat Ignition documentation](/ignition/docs/config/index.md).
-- `hardhat-verify`: see the [verification guide](/docs/learn-more/smart-contract-verification.md).
+- `hardhat-ignition`: see the [Hardhat Ignition documentation](/ignition/docs/reference/config).
+- `hardhat-verify`: see the [verification guide](/docs/guides/smart-contract-verification).
 
 ## Viem Toolbox options
 
