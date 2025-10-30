@@ -1,8 +1,9 @@
 ---
-prev: false
+title: Configuring the compiler
+description: How to configure the compiler
+sidebar:
+  order: 5
 ---
-
-# How to configure the compiler
 
 Solidity compilation in Hardhat is fully customizable. This guide explains the main ways in which compilation can be configured.
 

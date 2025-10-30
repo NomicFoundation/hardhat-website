@@ -1,4 +1,10 @@
-# Deploying smart contracts
+---
+title: Deploying smart contracts
+description: How to deploy a smart contract
+sidebar:
+  label: Deploying contracts
+  order: 3
+---
 
 Hardhat comes with an official deployment solution: [**Hardhat Ignition**](https://hardhat.org/ignition), a declarative system for deploying smart contracts. It's already available in Hardhat 2 and has been adopted by many projects. The API hasn't changed in Hardhat 3: if you're familiar with it, you won't encounter any surprises.
 
@@ -72,7 +78,7 @@ This deployment is executed on the default network, which lasts only for the dur
 3. Run the same command again once the deployment finishes. Since the module has already been deployed, Ignition won't send any transactions.
 4. Without stopping the node, add the following line to the Ignition module in `ignition/modules/Counter.ts`:
 
-   ```ts{3}
+   ```ts {3}
    m.call(counter, "incBy", [5n]);
 
    m.call(counter, "inc");

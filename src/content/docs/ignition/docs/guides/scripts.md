@@ -59,7 +59,7 @@ npx hardhat run scripts/deploy.js
 
 For this example, let's say we want to dynamically change the name of the `Rocket` contract according to some external data. We need to make an asynchronous call to an API to retrieve this data, and we also need to adjust our Ignition module to accept this data as a parameter. First, let's update our Ignition module:
 
-```typescript{4}
+```typescript {4}
 import hre from "hardhat";
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 

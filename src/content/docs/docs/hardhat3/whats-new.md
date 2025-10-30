@@ -1,8 +1,9 @@
 ---
-prev: false
+title: What's new in Hardhat 3
+description: What's new in Hardhat 3
+sidebar:
+  order: 1
 ---
-
-# What's new in Hardhat 3
 
 Hardhat 3 comes with many new features and improvements. Most of these changes are backwards-compatible or easy to adapt to existing projects.
 

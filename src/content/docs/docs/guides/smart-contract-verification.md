@@ -1,4 +1,10 @@
-# Verifying smart contracts
+---
+title: Verifying smart contracts
+description: How to verify a smart contract
+sidebar:
+  label: Verifying contracts
+  order: 4
+---
 
 Smart contract verification is used to prove that a deployed contract's bytecode comes from a specific source code. This allows users and tools to inspect the original source on block explorers, like Etherscan and Blockscout.
 

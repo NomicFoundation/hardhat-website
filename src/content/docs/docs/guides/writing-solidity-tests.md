@@ -1,4 +1,9 @@
-# Writing unit tests in Solidity
+---
+title: Writing unit tests in Solidity
+description: How to write unit tests in Solidity
+sidebar:
+  order: 1
+---
 
 Hardhat supports writing tests in both TypeScript and Solidity. TypeScript is typically used for higher-level integration tests, whereas Solidity is better suited for unit tests. This guide explains how to add Solidity tests to a Hardhat project, run them, and configure their execution. This isn't meant to serve as an introduction to Solidity tests and assumes familiarity with them.
 
@@ -17,11 +22,11 @@ For example, if you have a file named `contracts/CounterTest.t.sol` or `test/Cou
 
 ```solidity
 contract CounterTest {
-    function testInc() public {
-        Counter counter = new Counter();
-        counter.inc();
-        require(counter.count() == 1, "count should be 1");
-    }
+  function testInc() public {
+    Counter counter = new Counter();
+    counter.inc();
+    require(counter.count() == 1, "count should be 1");
+  }
 }
 ```
 
@@ -31,11 +36,11 @@ Hardhat also supports **fuzz tests**, which are similar to regular tests but acc
 
 ```solidity
 contract CounterTest {
-    function testIncBy(uint by) public {
-        Counter counter = new Counter();
-        counter.incBy(by);
-        require(counter.count() == by, "count should match the 'by' value");
-    }
+  function testIncBy(uint by) public {
+    Counter counter = new Counter();
+    counter.incBy(by);
+    require(counter.count() == by, "count should match the 'by' value");
+  }
 }
 ```
 
@@ -79,11 +84,11 @@ You can then import the `Test` base contract and extend your test contracts from
 import { Test } from "forge-std/Test.sol";
 
 contract CounterTest is Test {
-    function testIncBy(uint by) public {
-        Counter counter = new Counter();
-        counter.incBy(by);
-        assertEq(counter.count(), by, "count should match the 'by' value");
-    }
+  function testIncBy(uint by) public {
+    Counter counter = new Counter();
+    counter.incBy(by);
+    assertEq(counter.count(), by, "count should match the 'by' value");
+  }
 }
 ```
 
@@ -93,21 +98,21 @@ Both the unit and fuzz test examples shown above create an instance of the `Coun
 
 ```solidity
 contract CounterTest {
-    Counter counter;
+  Counter counter;
 
-    function setUp() public {
-      counter = new Counter();
-    }
+  function setUp() public {
+    counter = new Counter();
+  }
 
-    function testInc() public {
-        counter.inc();
-        require(counter.count() == 1, "count should be 1");
-    }
+  function testInc() public {
+    counter.inc();
+    require(counter.count() == 1, "count should be 1");
+  }
 
-    function testIncBy(uint by) public {
-        counter.incBy(by);
-        require(counter.count() == by, "count should match the 'by' value");
-    }
+  function testIncBy(uint by) public {
+    counter.incBy(by);
+    require(counter.count() == by, "count should match the 'by' value");
+  }
 }
 ```
 

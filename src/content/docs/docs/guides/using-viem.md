@@ -1,4 +1,10 @@
-# How to use viem with Hardhat
+---
+title: How to use viem with Hardhat 3
+description: How to use viem with Hardhat
+sidebar:
+  label: Using viem
+  order: 2
+---
 
 [viem](https://viem.sh/) is a modern, type-safe library to deploy contracts, manage accounts, read chain state, and more. It's the library we recommend for interacting with Ethereum. You can integrate viem with Hardhat by using the `hardhat-viem` plugin.
 
@@ -134,7 +140,7 @@ const { deploymentTransaction } = await viem.sendDeploymentTransaction(
     client: {
       wallet: wallet2,
     },
-  }
+  },
 );
 ```
 
@@ -167,7 +173,7 @@ it("Should emit the Increment event when calling the inc() function", async func
     counter.write.inc(),
     counter,
     "Increment",
-    [1n]
+    [1n],
   );
 });
 ```

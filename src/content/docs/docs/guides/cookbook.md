@@ -1,4 +1,9 @@
-# Hardhat 3 Cookbook
+---
+title: Cookbook
+description: Cookbook
+sidebar:
+  order: 9
+---
 
 This section contains a collection of recipes for common tasks.
 

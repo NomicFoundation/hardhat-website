@@ -1,4 +1,10 @@
-# Managing config values and secrets safely
+---
+title: Managing config values and secrets safely
+description: How to to manage config variables and secrets safely
+sidebar:
+  label: Managing config values and secrets
+  order: 6
+---
 
 Hardhat projects often need values that shouldn’t be committed to shared repositories, like private keys or API keys.
 
@@ -116,7 +122,7 @@ When you run this task for the first time, you’ll be prompted to create a pass
 
 Once a value is stored in the keystore, you can use it in your configuration:
 
-```tsx{6}
+```tsx {6}
 import { configVariable } from "hardhat/config";
 
 const config = {

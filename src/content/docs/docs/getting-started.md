@@ -1,8 +1,9 @@
 ---
-prev: true
+title: Getting started with Hardhat 3
+description: Get started using Hardhat 3
+sidebar:
+  label: Getting started
 ---
-
-# Getting started with Hardhat 3
 
 :::tip
 
@@ -315,7 +316,7 @@ If any of your tests fails, Hardhat will provide detailed **Solidity stack trace
 
 ```solidity
 function test_IncByZero() public {
-    // vm.expectRevert();
+  // vm.expectRevert();
   counter.incBy(0);
 }
 ```

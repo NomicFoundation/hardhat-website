@@ -1,4 +1,9 @@
-# Configuration
+---
+title: Configuration
+description: Hardhat 3 configuration reference
+sidebar:
+  order: 1
+---
 
 :::tip
 
