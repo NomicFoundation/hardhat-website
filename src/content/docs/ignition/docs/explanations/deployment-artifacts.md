@@ -1,4 +1,9 @@
-# Deployment artifacts
+---
+title: Deployment artifacts
+description: An explanation about Ignition's deployment artifacts
+sidebar:
+  order: 2
+---
 
 Hardhat Ignition stores the information for each of your deployments in folders inside of `./ignition/deployments`.
 

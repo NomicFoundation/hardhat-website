@@ -1,4 +1,10 @@
-# Deploying within Hardhat scripts
+---
+title: Deploying within Hardhat scripts
+description: How to to deploy with Hardhat Ignition using a Ledger wallet
+sidebar:
+  label: Complex deployments with scripts
+  order: 12
+---
 
 Hardhat Ignition is a powerful deployment engine, but you may find there are some programming concepts that are not allowed within an Ignition module. Conditional logic, `async/await`, and `console.log` of deployment variables are some examples of operations that cannot be performed within an Ignition module. However, this guide will show you how you can perform all of these operations by pairing Ignition with Hardhat scripts.
 

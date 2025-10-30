@@ -1,4 +1,9 @@
-# Environment variables
+---
+title: Environment variables
+description: Hardhat Ignition env variables
+sidebar:
+  order: 2
+---
 
 Hardhat Ignition supports special environment variables that affects how deployment works:
 

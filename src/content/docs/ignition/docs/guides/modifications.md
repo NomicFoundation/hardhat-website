@@ -1,4 +1,9 @@
-# Modifying an existing module
+---
+title: Modifying an existing module
+description: How to modify an existing Ignition Module
+sidebar:
+  order: 4
+---
 
 It's possible to make changes to modules after having deployed them.
 

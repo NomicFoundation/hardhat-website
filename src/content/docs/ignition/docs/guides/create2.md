@@ -1,4 +1,9 @@
-# Deploying via Create2
+---
+title: Deploying via create2
+description: How to use create2 with Ignition
+sidebar:
+  order: 9
+---
 
 When deploying contracts, you may want to deploy them to a deterministic address. This can be useful for a variety of reasons, such as deploying a contract to the same address on multiple networks. Hardhat Ignition makes this easy by allowing you to deploy your existing Ignition modules via a `create2` deployment utilizing the [CreateX factory](https://createx.rocks/).
 

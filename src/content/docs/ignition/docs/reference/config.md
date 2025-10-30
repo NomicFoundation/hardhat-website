@@ -1,4 +1,9 @@
-# Configuration
+---
+title: Hardhat Ignition configuration
+description: Reference documentation about Hardhat Ignition's configuration
+sidebar:
+  order: 1
+---
 
 Hardhat Ignition has configuration options at both the global and network level.
 

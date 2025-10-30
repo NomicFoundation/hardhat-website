@@ -1,4 +1,9 @@
-# Verifying your deployment
+---
+title: Verifying your deployment
+description: How to verify an Ignition deployment
+sidebar:
+  order: 6
+---
 
 Once your Ignition module is tested and ready, the next step is to deploy it to a live network and verify the source code of each of its contracts.
 

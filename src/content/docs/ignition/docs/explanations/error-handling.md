@@ -1,4 +1,9 @@
-# Handling errors
+---
+title: Error handling
+description: How to Hardhat Ignition handles errors
+sidebar:
+  order: 4
+---
 
 There are many reasons that can lead to a failure when operating a smart contract. Hardhat Ignition uses different approaches for error handling depending on the error type. This guide explains these methods thoroughly.
 

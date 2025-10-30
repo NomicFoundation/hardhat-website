@@ -1,4 +1,9 @@
-# Reconciliation
+---
+title: Reconciliation
+description: An explanation about Ignition's reconciliation process
+sidebar:
+  order: 3
+---
 
 Being able to resume the deployment of a module is a key feature of Hardhat Ignition. Resuming is used to [recover from errors](../guides/error-handling.md), and to allow you to [continue the deployment of modified modules](../guides/modifications.md).
 

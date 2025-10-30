@@ -13,6 +13,10 @@ const redirects: Record<string, { status: 302; destination: string }> = {
   "/plugins": { status: 302, destination: "/docs/plugins" },
   "/docs": { status: 302, destination: "/docs/getting-started" },
   "/ignition": { status: 302, destination: "/ignition/docs" },
+  "/ignition/docs": {
+    status: 302,
+    destination: "/ignition/docs/getting-started",
+  },
   "/reportbug": {
     status: 302,
     destination: "https://github.com/NomicFoundation/hardhat/issues/new",

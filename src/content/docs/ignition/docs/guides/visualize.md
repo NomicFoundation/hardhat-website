@@ -1,4 +1,9 @@
-# Visualizing your module
+---
+title: Visualizing your Ignition Modules
+description: How to visualize an Ignition Module
+sidebar:
+  order: 3
+---
 
 Hardhat Ignition comes built-in with a `visualize` task that generates an HTML report, illustrating visually the module's deployment process execution. This can be helpful for debugging and verifying that your perception of your modules aligns with Hardhat Ignition's execution plan.
 

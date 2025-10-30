@@ -1,4 +1,9 @@
-# Module execution
+---
+title: Module execution
+description: An explanation about Ignition's module execution
+sidebar:
+  order: 1
+---
 
 This section explains how Hardhat Ignition deploys your modules. You don't need to understand this to start using it, you can read the [Quick Start guide](../getting-started/index.md#quick-start) instead.
 

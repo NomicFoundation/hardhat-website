@@ -1,3 +1,10 @@
+---
+title: Using Ethers
+description: How to use Ethers.js with Ignition
+sidebar:
+  order: 7
+---
+
 # Using Ethers
 
 Hardhat Ignition provides a variant based on using [Ethers](https://docs.ethers.org) as your connection library. Ethers is an alternative to [Viem](https://viem.sh) for interacting with the Ethereum Blockchain and its ecosystem.

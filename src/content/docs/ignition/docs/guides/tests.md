@@ -1,4 +1,9 @@
-# Using Hardhat Ignition in your tests
+---
+title: Using Hardhat Ignition in your tests
+description: How to use Hardhat Ignition in your tests
+sidebar:
+  order: 5
+---
 
 If you want to test that your deployment was correctly defined, or if you want to use your Ignition Modules to simplify your test setup, continue reading this guide.
 
@@ -81,7 +86,7 @@ async function deployCounterModuleFixture() {
 it("should set the start count to 0 by default", async function () {
   const { networkHelpers } = await network.connect();
   const { counter } = await networkHelpers.loadFixture(
-    deployCounterModuleFixture
+    deployCounterModuleFixture,
   );
 
   assert.equal(await counter.read.count(), 0);

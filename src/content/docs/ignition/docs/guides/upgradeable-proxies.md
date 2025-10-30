@@ -1,4 +1,9 @@
-# Upgradeable Contracts
+---
+title: Upgradeable Contracts
+description: How to use upgradeable contracts with Hardhat Ignition
+sidebar:
+  order: 9
+---
 
 When developing smart contracts, you may decide to use an upgradeable proxy pattern to allow for future upgrades to your contracts. This guide will explain how to create Ignition modules to deploy and interact with your upgradeable proxy contracts.
 
@@ -116,7 +121,7 @@ const proxyModule = buildModule("ProxyModule", (m) => {
   const proxyAdminAddress = m.readEventArgument(
     proxy,
     "AdminChanged",
-    "newAdmin"
+    "newAdmin",
   );
 
   const proxyAdmin = m.contractAt("ProxyAdmin", proxyAdminAddress);
@@ -253,7 +258,7 @@ describe("Demo Proxy", async function () {
 
       assert.equal(
         await demo.read.version({ account: otherAccount.account.address }),
-        "1.0.0"
+        "1.0.0",
       );
     });
   });
@@ -266,7 +271,7 @@ describe("Demo Proxy", async function () {
 
       assert.equal(
         await demo.read.version({ account: otherAccount.account.address }),
-        "2.0.0"
+        "2.0.0",
       );
     });
 
@@ -277,7 +282,7 @@ describe("Demo Proxy", async function () {
 
       assert.equal(
         await demo.read.name({ account: otherAccount.account.address }),
-        "Example Name"
+        "Example Name",
       );
     });
   });

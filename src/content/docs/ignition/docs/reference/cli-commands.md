@@ -1,4 +1,9 @@
-# CLI commands
+---
+title: CLI commands
+description: Hardhat Ignition command line commands
+sidebar:
+  order: 3
+---
 
 The Hardhat Ignition CLI provides a set of commands to interact with the deployment process. The following is a list of available commands:
 

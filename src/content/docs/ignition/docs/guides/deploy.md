@@ -1,4 +1,9 @@
-# Deploying a module
+---
+title: Deploying a module
+description: How to deploy an Ignition Module
+sidebar:
+  order: 2
+---
 
 To execute your deployments, you need to use the `ignition deploy` task. It takes a path to a module file as an argument:
 
@@ -111,7 +116,7 @@ async function main() {
     // This must be an absolute path to your parameters JSON file
     parameters: path.resolve(
       import.meta.dirname,
-      "../ignition/parameters.json"
+      "../ignition/parameters.json",
     ),
   });
 

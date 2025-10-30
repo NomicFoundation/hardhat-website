@@ -94,11 +94,23 @@ export default defineConfig({
               id: "ignition",
               link: "/ignition/docs",
               items: [
-                { slug: "ignition/docs" },
+                { slug: "ignition/docs/getting-started" },
                 {
                   label: "Guides",
                   autogenerate: {
                     directory: "ignition/docs/guides",
+                  },
+                },
+                {
+                  label: "Reference",
+                  autogenerate: {
+                    directory: "ignition/docs/reference",
+                  },
+                },
+                {
+                  label: "Explanations",
+                  autogenerate: {
+                    directory: "ignition/docs/explanations",
                   },
                 },
               ],
