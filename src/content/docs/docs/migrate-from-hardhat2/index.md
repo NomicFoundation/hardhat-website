@@ -1,9 +1,9 @@
 ---
 title: Migrate from Hardhat 2
 description: How to migrate from Hardhat 2 to Hardhat 3
+sidebar:
+  label: Overview
 ---
-
-# Migrate from Hardhat 2
 
 :::tip
 
@@ -69,7 +69,6 @@ Before making any changes, prepare your project so that installing and running H
 3. **Remove Hardhat 2 dependencies**
 
    Start by removing these packages from your `package.json`:
-
    - `hardhat`
    - Any packages starting with `hardhat-`, `@nomicfoundation/`, or `@nomiclabs/`
    - `solidity-coverage`
@@ -281,7 +280,7 @@ Let's start with the minimal settings required to compile your contracts.
 
    ::::
 
-To learn more about the updated config format, and continue with your migration, please take a look at [this section](../docs/reference/configuration.md#solidity-configuration).
+To learn more about the updated config format, and continue with your migration, please take a look at [this section](/docs/reference/configuration#solidity-configuration).
 
 ## Migrating tests
 

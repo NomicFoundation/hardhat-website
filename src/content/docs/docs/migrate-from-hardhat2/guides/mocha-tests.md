@@ -1,4 +1,7 @@
-# Migrating Mocha tests
+---
+title: Migrate from Hardhat 2
+description: How to migrate Mocha tests from Hardhat 2 to Hardhat 3
+---
 
 This page covers the changes needed to migrate your Mocha tests from Hardhat 2 to Hardhat 3.
 
