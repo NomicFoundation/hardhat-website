@@ -151,38 +151,6 @@ export default defineConfig({
                 },
               ],
             },
-            {
-              label: "Hardhat Network Helpers",
-              id: "hardhat-network-helpers",
-              link: "/hardhat-network-helpers/docs",
-              items: [
-                {
-                  slug: "hardhat-network-helpers/docs",
-                },
-                {
-                  label: "Reference",
-                  autogenerate: {
-                    directory: "hardhat-network-helpers/docs/reference",
-                  },
-                },
-              ],
-            },
-            {
-              label: "Hardhat VSCode",
-              id: "hardhat-vscode",
-              link: "/hardhat-vscode/docs",
-              items: [
-                {
-                  slug: "hardhat-vscode/docs",
-                },
-                {
-                  label: "Reference",
-                  autogenerate: {
-                    directory: "hardhat-vscode/docs/reference",
-                  },
-                },
-              ],
-            },
           ],
           {
             topics: {
