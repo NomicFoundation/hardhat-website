@@ -209,4 +209,11 @@ export default defineConfig({
   ],
   trailingSlash: "never",
   redirects,
+  vite: {
+    server: {
+      watch: {
+        ignored: ["**/.vercel/**", "**/.vscode/**"],
+      },
+    },
+  },
 });
