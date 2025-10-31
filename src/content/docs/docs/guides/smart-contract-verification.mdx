@@ -25,7 +25,7 @@ If you want to add the plugin manually:
 
 2. Add it to the list of plugins in your Hardhat configuration:
 
-   ```tsx
+   ```ts
    import hardhatVerify from "@nomicfoundation/hardhat-verify";
 
    const config: HardhatUserConfig = {
@@ -45,7 +45,7 @@ The `hardhat-verify` plugin adds a `verify` object to the Hardhat configuration.
 
 To verify contracts on Etherscan, you need to set an API key in your Hardhat configuration:
 
-```tsx
+```ts
 const config: HardhatUserConfig = {
   // ...
   verify: {
@@ -68,7 +68,7 @@ To verify contracts on Blockscout, you don't need to set an API key, nor any con
 
 You can also disable a block explorer by setting its `enabled` property to `false`. For example, you can disable Blockscout verification like this:
 
-```tsx
+```ts
 const config: HardhatUserConfig = {
   // ...
   verify: {
@@ -91,7 +91,7 @@ If your contract has constructor arguments, you have to also pass the values tha
 
 If the arguments are too complex to pass directly in the shell—for example, an array of numbers—you can define them in a TypeScript or JavaScript file:
 
-```tsx
+```ts
 // constructor-args.ts
 const constructorArgs = ["Hello", [1000, 2000]];
 
@@ -126,7 +126,7 @@ If you want to verify a contract on a block explorer of a network that isn't nat
 
 Adding a chain descriptor for a network called "ExampleChain", with chain id `123456`, would look like this:
 
-```tsx
+```ts
 const config: HardhatUserConfig = {
   // ...
   chainDescriptors: {

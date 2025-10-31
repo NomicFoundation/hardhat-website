@@ -20,7 +20,7 @@ This guide will be using the contracts and Ignition module from the [quick start
 
 We will begin by creating a `scripts` directory within our Hardhat project. Within this directory, create a new file called `deploy.ts` (or `deploy.js` if you're using JavaScript) and add the following code:
 
-```typescript
+```ts
 import hre from "hardhat";
 import ApolloModule from "../ignition/modules/Apollo.js";
 
@@ -43,7 +43,7 @@ This script imports the `Apollo` module and deploys it using `connection.ignitio
 
 For this example, let's say we want to dynamically change the name of the `Rocket` contract according to some external data. We need to make an asynchronous call to an API to retrieve this data, and we also need to adjust our Ignition module to accept this data as a parameter. First, let's update our Ignition module:
 
-```typescript {4}
+```ts {4}
 import hre from "hardhat";
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
@@ -59,7 +59,7 @@ export default buildModule("Apollo", (m) => {
 
 We've added a new parameter to the Ignition module called `rocketName`. This parameter will be passed to the `Rocket` contract when it is deployed. Next, let's update our deployment script to make an asynchronous call to an API:
 
-```typescript
+```ts
 import hre from "hardhat";
 import ApolloModule from "../ignition/modules/Apollo.js";
 
@@ -94,7 +94,7 @@ You can read more about defining and using parameters in Ignition modules in the
 
 Lastly, let's add some conditional logic to our deployment script. Suppose we want to deploy the `Apollo` module only if the rocket name is not empty. We can achieve this by adding a simple `if` statement to our script:
 
-```typescript
+```ts
 import ApolloModule from "../ignition/modules/Apollo.js";
 
 async function getRocketNameFromAPI() {

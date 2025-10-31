@@ -52,7 +52,7 @@ Once you have a Hardhat project ready, open a terminal in its root directory, an
 
 Finally, add this to your config file to enable the plugin:
 
-```typescript
+```ts
 import hardhatIgnitionViemPlugin from "@nomicfoundation/hardhat-ignition-viem";
 
 export default {
@@ -101,7 +101,7 @@ mkdir ignition/modules
 
 And paste the following code into a `ignition/modules/Apollo.ts` (or `ignition/modules/Apollo.js`). We'll explain it in a moment.
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 export default buildModule("Apollo", (m) => {

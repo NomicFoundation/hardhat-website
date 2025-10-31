@@ -20,7 +20,7 @@ This guide covers how to use _Config Variables_ and the `hardhat-keystore` plugi
 
 A common example of a value that you don’t want to hardcode is an RPC URL that includes an API key, such as one from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/):
 
-```tsx
+```ts
 const config = {
   networks: {
     sepolia: {
@@ -33,7 +33,7 @@ const config = {
 
 Instead of this, you can call the `configVariable` function to get the value at runtime:
 
-```tsx
+```ts
 import { configVariable } from "hardhat/config";
 
 const config = {
@@ -75,7 +75,7 @@ When you run this task for the first time, you’ll be prompted to create a pass
 
 Once a value is stored in the keystore, you can use it in your configuration:
 
-```tsx {6}
+```ts {6}
 import { configVariable } from "hardhat/config";
 
 const config = {

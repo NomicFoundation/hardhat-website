@@ -28,7 +28,7 @@ From the root directory of your Hardhat project run:
 
 Then enable the plugin in your config file:
 
-```typescript
+```ts
 import HardhatIgnitionEthersPlugin from "@nomicfoundation/hardhat-ignition-ethers";
 
 export default {
@@ -51,7 +51,7 @@ The `ignition` object exposes a `deploy` method, which takes an Ignition module,
 
 The `deploy` method takes the Module as its first argument:
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 import hre from "hardhat";
 
@@ -77,7 +77,7 @@ The `ignition.deploy` method will default to using the first account in the `acc
 
 You can change this by passing a `defaultSender` within the options object as a second argument to the `deploy` method:
 
-```typescript
+```ts
 const connection = await hre.network.connect();
 const [first, second] = await connection.ethers.getSigners();
 

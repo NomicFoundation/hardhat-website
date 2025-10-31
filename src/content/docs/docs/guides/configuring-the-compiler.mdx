@@ -11,7 +11,7 @@ Solidity compilation in Hardhat is fully customizable. This guide explains the m
 
 The simplest way to configure compilation is to specify the solc compiler version and, optionally, its settings:
 
-```typescript
+```ts
 solidity: {
   version: "0.8.29",
   settings: {
@@ -22,7 +22,7 @@ solidity: {
 
 One common use of settings is enabling optimizations. You can also define the number of runs, which affects how the optimizer balances code size and execution cost:
 
-```typescript
+```ts
 solidity: {
   version: "0.8.29",
   settings: {
@@ -36,7 +36,7 @@ solidity: {
 
 Another use case is enabling the [IR-based code generator](https://docs.soliditylang.org/en/latest/ir-breaking-changes.html). This compilation mode can be slower, but it enables more powerful optimizations:
 
-```typescript
+```ts
 solidity: {
   version: "0.8.29",
   settings: {
@@ -51,7 +51,7 @@ The `settings` property accepts the same options supported by the chosen compile
 
 Some projects need to compile different files with different solc versions. To enable this, Hardhat lets you define multiple compiler configurations using an extended format of the `solidity` property:
 
-```typescript
+```ts
 solidity: {
   compilers: [
     {
@@ -81,7 +81,7 @@ For example, given the configuration above:
 
 Some projects need to compile specific files using a different compiler version than Hardhat's default choice. You can handle this with the `overrides` property:
 
-```typescript
+```ts
 solidity: {
   compilers: [
     /* configured compilers */
@@ -100,7 +100,7 @@ Each entry in the `overrides` object maps a file to a custom compiler configurat
 
 You can use overrides even if you are using a single solc version, but you still need to use the extended format of the `solidity` property. For example, you can enable the optimizer only for a single file:
 
-```typescript
+```ts
 solidity: {
   compilers: [
     {
@@ -128,7 +128,7 @@ Hardhat supports custom compilers like [solx](https://solx.zksync.io). You need 
 
 You can configure the path to the custom compiler binary using the `path` property. This property can be used in both the simple and extended formats of the `solidity` property. For example, using the simple format:
 
-```typescript
+```ts
 solidity: {
   version: "0.8.29",
   path: "/path/to/solx" // Replace with the actual path to the solx binary
@@ -137,7 +137,7 @@ solidity: {
 
 Or using the extended format:
 
-```typescript
+```ts
 solidity: {
   compilers: [
     {
@@ -152,7 +152,7 @@ solidity: {
 
 By default, Hardhat generates compilation artifacts for all the contracts in your project, but not for those in the project's npm dependencies. If you want to generate artifacts for a specific file in a dependency, you can use the `npmFilesToBuild` property:
 
-```typescript
+```ts
 solidity: {
   version: "0.8.29",
   npmFilesToBuild: [
@@ -163,6 +163,6 @@ solidity: {
 
 Artifacts can be used to deploy contracts or to obtain their ABIs, among other things. For example, once you've configured Hardhat to generate artifacts for `some-dependency/contracts/SomeContract.sol`, you can use that contract in a TypeScript test:
 
-```typescript
+```ts
 const someContract = await viem.deployContract("SomeContract");
 ```

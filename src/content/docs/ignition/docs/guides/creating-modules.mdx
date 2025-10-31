@@ -15,7 +15,7 @@ To create an Ignition Module, import the `buildModule` function from `@nomicfoun
 
 This is a module which will be identified as `"MyToken"`:
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 export default buildModule("MyToken", (m) => {
@@ -121,7 +121,7 @@ To execute this `Future`, Hardhat Ignition won't send any transactions and it wi
 
 If you're dealing with a `Future` that emits a Solidity event when executed, and you need to extract an argument from said event, then you can use `m.readEventArgument`:
 
-```tsx
+```ts
 const transfer = m.call(token, "transfer", [receiver, amount]);
 
 const value = m.readEventArgument(transfer, "Transfer", "_value");
@@ -200,7 +200,7 @@ To access these values, you can call `m.getParameter` providing the name for the
 
 For example, we can modify the `Apollo` module from the [Quick Start guide](/ignition/docs/getting-started#quick-start) to make the `name` field in the `Rocket` smart contract configurable with a parameter:
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 export default buildModule("Apollo", (m) => {

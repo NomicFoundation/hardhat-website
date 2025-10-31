@@ -61,7 +61,7 @@ In addition to updating the version string, this contract also adds a `name` sta
 
 Finally, because we'll be using the OpenZeppelin proxy contracts in our Ignition modules, we need to tell Hardhat to compile them. To do this, we need to edit our `hardhat.config.ts` (or `hardhat.config.js` if you're using JavaScript) file to include the OpenZeppelin contracts in our compilation process. Add the following `npmFilesToBuild` field to your existing Hardhat configuration:
 
-```typescript
+```ts
 export default {
   solidity: {
     npmFilesToBuild: [
@@ -80,7 +80,7 @@ Inside our `ignition` directory, we'll create a directory called `modules`, if o
 
 As always, we'll begin by importing `buildModule` from `@nomicfoundation/hardhat-ignition/modules`, then we'll define our first module, which we'll call `ProxyModule`:
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 const proxyModule = buildModule("ProxyModule", (m) => {
@@ -140,7 +140,7 @@ Finally, we return the `Demo` contract instance so that we can use it in other m
 
 As a last step, we'll export `demoModule` from our file so that we can deploy it and use it in our tests or scripts:
 
-```typescript
+```ts
 export default demoModule;
 ```
 
@@ -204,7 +204,7 @@ As before, we return the `DemoV2` contract instance so that we can use it in oth
 
 As a last step, we'll export `demoV2Module` from our file so that we can deploy it and use it in our tests or scripts:
 
-```typescript
+```ts
 export default demoV2Module;
 ```
 
@@ -214,7 +214,7 @@ Now that we've written our Ignition modules for deploying and interacting with o
 
 Inside our `test` directory, we'll create a file called `ProxyDemo.ts` (or `ProxyDemo.js` if you're using JavaScript):
 
-```typescript
+```ts
 import hre from "hardhat";
 
 import assert from "node:assert/strict";

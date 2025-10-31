@@ -25,7 +25,7 @@ To get started with Hardhat 3, you'll need [Node.js](https://nodejs.org/) v22 or
 
 First, create a new directory for your project:
 
-```bash
+```sh
 mkdir hardhat-example
 cd hardhat-example
 ```
@@ -207,7 +207,7 @@ To support these use cases, Hardhat lets you write tests in TypeScript (or JavaS
 
 The sample project comes with a TypeScript test file at `test/Counter.ts`, which includes the following test:
 
-```tsx
+```ts
 it("The sum of the Increment events should match the current value", async function () {
   const counter = await viem.deployContract("Counter");
 
@@ -274,7 +274,7 @@ With Hardhat Ignition, you define the smart contract instances you want to deplo
 
 Ignition modules are located in the `ignition/modules/` directory. This is the example module, `ignition/modules/Counter.ts`:
 
-```typescript
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 export default buildModule("CounterModule", (m) => {

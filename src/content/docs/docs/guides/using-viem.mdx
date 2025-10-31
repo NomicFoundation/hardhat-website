@@ -22,7 +22,7 @@ If you want to add the plugin manually:
 
 2. Add it to the list of plugins in your Hardhat configuration:
 
-   ```tsx
+   ```ts
    import hardhatViem from "@nomicfoundation/hardhat-viem";
 
    const config: HardhatUserConfig = {
@@ -40,7 +40,7 @@ If you want to add the plugin manually:
 
 In Hardhat, you interact with networks using _network connections_. You can create connections with the network manager, which can be imported directly from Hardhat:
 
-```tsx
+```ts
 import { network } from "hardhat";
 
 const connection = await network.connect();
@@ -48,7 +48,7 @@ const connection = await network.connect();
 
 Plugins can extend the objects returned by the network manager. The `hardhat-viem` plugin extends them with a `viem` property, which provides helpers to interact with the network you connected to:
 
-```tsx
+```ts
 const { viem } = await network.connect();
 
 const publicClient = await viem.getPublicClient();
@@ -61,7 +61,7 @@ Viem functionality is grouped into [clients](https://viem.sh/docs/clients/intro)
 
 You can create a [public client](https://viem.sh/docs/clients/public) using the `getPublicClient` method:
 
-```tsx
+```ts
 const { viem } = await network.connect();
 
 const publicClient = await viem.getPublicClient();
@@ -71,7 +71,7 @@ console.log("Latest block number:", await publicClient.getBlockNumber());
 
 Use the `getWalletClients` function to obtain [wallet clients](https://viem.sh/docs/clients/wallet). It returns an array of wallet clients, one for each account set up in the Hardhat config:
 
-```tsx
+```ts
 const [senderClient, receiverClient] = await viem.getWalletClients();
 
 await senderClient.sendTransaction({
@@ -82,7 +82,7 @@ await senderClient.sendTransaction({
 
 Finally, if you are connecting to a Hardhat network, you can call `getTestClient` to get a [test client](https://viem.sh/docs/clients/test):
 
-```tsx
+```ts
 const testClient = await viem.getTestClient();
 
 await testClient.mine({
@@ -94,7 +94,7 @@ await testClient.mine({
 
 `hardhat-viem` includes a `deployContract` function to deploy contracts defined in the project. This function returns a viem [contract instance](https://viem.sh/docs/contract/getContract) of the deployed contract:
 
-```tsx
+```ts
 import { network } from "hardhat";
 
 const { viem } = await network.connect();
@@ -107,14 +107,14 @@ console.log("Counter value:", await counter.read.x());
 
 If the constructor takes parameters, you can pass them as the second argument:
 
-```tsx
+```ts
 const initialValue = 10n;
 const counter = await viem.deployContract("Counter", [initialValue]);
 ```
 
 By default, contracts are deployed from the first account defined in the Hardhat configuration, but you can specify a different one:
 
-```tsx
+```ts
 const [wallet1, wallet2] = await viem.getWalletClients();
 
 const counter = await viem.deployContract("Counter", [10n], {
@@ -126,7 +126,7 @@ const counter = await viem.deployContract("Counter", [10n], {
 
 The `deployContract` function waits until the contract is deployed. If you just want to send the deployment without waiting until it's mined, you can use `sendDeploymentTransaction`:
 
-```tsx
+```ts
 const { deploymentTransaction } = await viem.sendDeploymentTransaction(
   "Counter",
   [10n],
@@ -140,7 +140,7 @@ const { deploymentTransaction } = await viem.sendDeploymentTransaction(
 
 All the previous examples deploy a new contract instance, but sometimes you need to interact with an already deployed contract. In those cases, use the `getContractAt` function:
 
-```tsx
+```ts
 const counterAddress = "0x1234567890123456789012345678901234567890";
 const counter = await viem.getContractAt("Counter", counterAddress);
 ```
@@ -159,7 +159,7 @@ The example project includes the `hardhat-viem-assertions` plugin, which helps y
 
 This plugin adds an `assertions` property to the `viem` object, giving you utility functions to test contract behavior more easily. For example, the following test checks that calling a function emits the expected event:
 
-```typescript
+```ts
 it("Should emit the Increment event when calling the inc() function", async function () {
   const counter = await viem.deployContract("Counter");
 
@@ -178,7 +178,7 @@ You can also assert that transactions revert (and why), or check that account ba
 
 Viem has powerful typing capabilities, triggering compilation errors when you make mistakes like using the wrong type in a function argument or sending value to a non-payable function:
 
-```tsx
+```ts
 // doesn't compile if getItem expects a number but receives a string:
 await contract.read.getItem(["3"]);
 
@@ -200,7 +200,7 @@ Note that VSCode may not always pick up the type updates automatically. If you a
 
 The `viem` object in the connection only includes the functionality added by `hardhat-viem`. To use viem's own functionality, import it from the `viem` module:
 
-```tsx
+```ts
 import { keccak256 } from "viem";
 import { network } from "hardhat";
 
@@ -209,7 +209,7 @@ const { viem } = await network.connect();
 
 Keep in mind that you can get a name clash if you use a namespace import:
 
-```tsx
+```ts
 import * as viem from "viem";
 import { network } from "hardhat";
 
@@ -219,7 +219,7 @@ const { viem } = await network.connect();
 
 One way to work around this problem is to use a different name for the Hardhat viem object:
 
-```tsx
+```ts
 const { viem: hhViem } = await network.connect();
 
 const publicClient = await hhViem.getPublicClient();

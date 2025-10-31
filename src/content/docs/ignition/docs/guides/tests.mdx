@@ -99,7 +99,7 @@ The `ignition.deploy` method will default to using the first account in Hardhat 
 
 You can change this by passing a `defaultSender` within the options object as a second argument to the `deploy` method:
 
-```typescript
+```ts
 const connection = await network.connect();
 
 const [first, second] = await connection.viem.getWalletClients();
