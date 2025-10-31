@@ -1,34 +1,15 @@
-import type { AstroConfig } from "astro";
+import type { Redirects } from "./types";
 
-const redirects: Record<string, { status: 302; destination: string }> = {
-  "/plugin-authors-group": {
-    status: 302,
-    destination: "https://t.me/+cFxwO53KTrY5MjYx",
-  },
-  "/discord": { status: 302, destination: "https://discord.gg/TETZs2KK4k" },
-  "/ignition-discord": {
-    status: 302,
-    destination: "https://discord.gg/7jBkZQXB25",
-  },
-  "/plugins": { status: 302, destination: "/docs/plugins" },
-  "/docs": { status: 302, destination: "/docs/getting-started" },
-  "/ignition": { status: 302, destination: "/ignition/docs" },
-  "/ignition/docs": {
-    status: 302,
-    destination: "/ignition/docs/getting-started",
-  },
-  "/privacy-policy.html": {
-    status: 302,
-    destination: "/static/privacy-policy.html",
-  },
-  "/reportbug": {
-    status: 302,
-    destination: "https://github.com/NomicFoundation/hardhat/issues/new",
-  },
-  "/report-bug": {
-    status: 302,
-    destination: "https://github.com/NomicFoundation/hardhat/issues/new",
-  },
-};
-
-export default redirects satisfies AstroConfig["redirects"];
+export default [
+  ["config", "/docs/reference/configuration"],
+  ["configuration", "/docs/reference/configuration"],
+  ["errors", "/docs/reference/errors"],
+  ["/hardhat3-beta-telegram-group", "https://t.me/+nx5My-pzR0piMjU5"],
+  ["/plugin-authors-group", "https://t.me/+cFxwO53KTrY5MjYx"],
+  ["/discord", "https://discord.gg/TETZs2KK4k"],
+  ["/ignition-discord", "https://discord.gg/7jBkZQXB25"],
+  ["/plugins", "/docs/plugins"],
+  ["/docs", "/docs/getting-started"],
+  ["/ignition", "/ignition/docs"],
+  ["/ignition/docs", "/ignition/docs/getting-started"],
+] satisfies Redirects;

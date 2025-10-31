@@ -1,25 +1,405 @@
-import type { AstroConfig } from "astro";
+import type { Redirects } from "./types";
 
-export default {
-  "/hardhat-chai-matchers": {
-    status: 302,
-    destination: "/docs/plugins/hardhat-ethers-chai-matchers",
-  },
-  "/hardhat-chai-matchers/docs": {
-    status: 302,
-    destination: "/docs/plugins/hardhat-ethers-chai-matchers",
-  },
-  "/hardhat-chai-matchers/docs/overview": {
-    status: 302,
-    destination: "/docs/plugins/hardhat-ethers-chai-matchers",
-  },
-  "/hardhat-chai-matchers/docs/reference": {
-    status: 302,
-    destination: "/docs/plugins/hardhat-ethers-chai-matchers#reference",
-  },
-  "/hardhat-chai-matchers/docs/migrate-from-waffle": {
-    status: 302,
-    destination:
-      "https://v2.hardhat.org/hardhat-chai-matchers/docs/migrate-from-waffle",
-  },
-} satisfies AstroConfig["redirects"];
+export default [
+  ["/chai-matchers", "https://v2.hardhat.org/chai-matchers"],
+  [
+    "/chai-matchers/migrate-from-waffle",
+    "https://v2.hardhat.org/chai-matchers/migrate-from-waffle",
+  ],
+  [
+    "/chai-matchers/reference",
+    "https://v2.hardhat.org/chai-matchers/reference",
+  ],
+  [
+    "/custom-hardfork-history",
+    "https://v2.hardhat.org/custom-hardfork-history",
+  ],
+  ["/docs-landing", "https://v2.hardhat.org/docs-landing"],
+  ["/getting-started", "https://v2.hardhat.org/getting-started"],
+  ["/guides/create-plugin", "https://v2.hardhat.org/guides/create-plugin"],
+  ["/guides/mainnet-forking", "https://v2.hardhat.org/guides/mainnet-forking"],
+  ["/hardhat-network", "https://v2.hardhat.org/hardhat-network"],
+  ["/hardhat-network/docs", "https://v2.hardhat.org/hardhat-network/docs"],
+  [
+    "/hardhat-network/docs/explanation/mining-modes",
+    "https://v2.hardhat.org/hardhat-network/docs/explanation/mining-modes",
+  ],
+  [
+    "/hardhat-network/docs/guides/forking-other-networks",
+    "https://v2.hardhat.org/hardhat-network/docs/guides/forking-other-networks",
+  ],
+  [
+    "/hardhat-network/docs/metamask-issue",
+    "https://v2.hardhat.org/hardhat-network/docs/metamask-issue",
+  ],
+  [
+    "/hardhat-network/docs/overview",
+    "https://v2.hardhat.org/hardhat-network/docs/overview",
+  ],
+  [
+    "/hardhat-network/docs/reference",
+    "https://v2.hardhat.org/hardhat-network/docs/reference",
+  ],
+  [
+    "/hardhat-network/explanation/mining-modes",
+    "https://v2.hardhat.org/hardhat-network/explanation/mining-modes",
+  ],
+  [
+    "/hardhat-network/guides/mainnet-forking",
+    "https://v2.hardhat.org/hardhat-network/guides/mainnet-forking",
+  ],
+  [
+    "/hardhat-network/reference",
+    "https://v2.hardhat.org/hardhat-network/reference",
+  ],
+  ["/hardhat-runner", "https://v2.hardhat.org/hardhat-runner"],
+  ["/hardhat-runner/docs", "https://v2.hardhat.org/hardhat-runner/docs"],
+  [
+    "/hardhat-runner/docs/advanced/artifacts",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/artifacts",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/building-plugins",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/building-plugins",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/create-task",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/create-task",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/flattening",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/flattening",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/hardhat-and-foundry",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/hardhat-and-foundry",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/hardhat-runtime-environment",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/hardhat-runtime-environment",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/migrating-from-hardhat-waffle",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/migrating-from-hardhat-waffle",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/multiple-solidity-versions",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/multiple-solidity-versions",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/scripts",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/scripts",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/using-esm",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/using-esm",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/using-viem",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/using-viem",
+  ],
+  [
+    "/hardhat-runner/docs/advanced/vscode-tests",
+    "https://v2.hardhat.org/hardhat-runner/docs/advanced/vscode-tests",
+  ],
+  [
+    "/hardhat-runner/docs/config",
+    "https://v2.hardhat.org/hardhat-runner/docs/config",
+  ],
+  [
+    "/hardhat-runner/docs/errors",
+    "https://v2.hardhat.org/hardhat-runner/docs/errors",
+  ],
+  [
+    "/hardhat-runner/docs/getting-started",
+    "https://v2.hardhat.org/hardhat-runner/docs/getting-started",
+  ],
+  [
+    "/hardhat-runner/docs/guides/command-line-completion",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/command-line-completion",
+  ],
+  [
+    "/hardhat-runner/docs/guides/compile-contracts",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/compile-contracts",
+  ],
+  [
+    "/hardhat-runner/docs/guides/configuration-variables",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/configuration-variables",
+  ],
+  [
+    "/hardhat-runner/docs/guides/deploying",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/deploying",
+  ],
+  [
+    "/hardhat-runner/docs/guides/getting-help",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/getting-help",
+  ],
+  [
+    "/hardhat-runner/docs/guides/hardhat-console",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/hardhat-console",
+  ],
+  [
+    "/hardhat-runner/docs/guides/migrating-from-hardhat-waffle",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/migrating-from-hardhat-waffle",
+  ],
+  [
+    "/hardhat-runner/docs/guides/project-setup",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/project-setup",
+  ],
+  [
+    "/hardhat-runner/docs/guides/shorthand",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/shorthand",
+  ],
+  [
+    "/hardhat-runner/docs/guides/tasks",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/tasks",
+  ],
+  [
+    "/hardhat-runner/docs/guides/tasks-and-scripts",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/tasks-and-scripts",
+  ],
+  [
+    "/hardhat-runner/docs/guides/test-contracts",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/test-contracts",
+  ],
+  [
+    "/hardhat-runner/docs/guides/typescript",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/typescript",
+  ],
+  [
+    "/hardhat-runner/docs/guides/verifying",
+    "https://v2.hardhat.org/hardhat-runner/docs/guides/verifying",
+  ],
+  [
+    "/hardhat-runner/docs/other-guides/ganache-tests",
+    "https://v2.hardhat.org/hardhat-runner/docs/other-guides/ganache-tests",
+  ],
+  [
+    "/hardhat-runner/docs/other-guides/truffle-migration",
+    "https://v2.hardhat.org/hardhat-runner/docs/other-guides/truffle-migration",
+  ],
+  [
+    "/hardhat-runner/docs/other-guides/truffle-testing",
+    "https://v2.hardhat.org/hardhat-runner/docs/other-guides/truffle-testing",
+  ],
+  [
+    "/hardhat-runner/docs/other-guides/using-custom-solc",
+    "https://v2.hardhat.org/hardhat-runner/docs/other-guides/using-custom-solc",
+  ],
+  [
+    "/hardhat-runner/docs/other-guides/waffle-testing",
+    "https://v2.hardhat.org/hardhat-runner/docs/other-guides/waffle-testing",
+  ],
+  [
+    "/hardhat-runner/docs/reference/environment-variables",
+    "https://v2.hardhat.org/hardhat-runner/docs/reference/environment-variables",
+  ],
+  [
+    "/hardhat-runner/docs/reference/solidity-support",
+    "https://v2.hardhat.org/hardhat-runner/docs/reference/solidity-support",
+  ],
+  [
+    "/hardhat-runner/docs/reference/stability-guarantees",
+    "https://v2.hardhat.org/hardhat-runner/docs/reference/stability-guarantees",
+  ],
+  [
+    "/hardhat-runner/docs/supporter-guides/oracles",
+    "https://v2.hardhat.org/hardhat-runner/docs/supporter-guides/oracles",
+  ],
+  [
+    "/hardhat-runner/docs/troubleshooting/common-problems",
+    "https://v2.hardhat.org/hardhat-runner/docs/troubleshooting/common-problems",
+  ],
+  [
+    "/hardhat-runner/docs/troubleshooting/verbose-logging",
+    "https://v2.hardhat.org/hardhat-runner/docs/troubleshooting/verbose-logging",
+  ],
+  ["/hardhat-runner/plugins", "https://v2.hardhat.org/hardhat-runner/plugins"],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-chai-matchers",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-chai-matchers",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-ethers",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-ethers",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-foundry",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-foundry",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-ledger",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-ledger",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox-viem",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-toolbox-viem",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-verify",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-viem",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-viem",
+  ],
+  [
+    "/hardhat-runner/plugins/nomicfoundation-hardhat-web3-v4",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-web3-v4",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-ethers",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-ethers",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-etherscan",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-etherscan",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-solhint",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-solhint",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-solpp",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-solpp",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-truffle4",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-truffle4",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-truffle5",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-truffle5",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-vyper",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-vyper",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-waffle",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-waffle",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-web3",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-web3",
+  ],
+  [
+    "/hardhat-runner/plugins/nomiclabs-hardhat-web3-legacy",
+    "https://v2.hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-web3-legacy",
+  ],
+  [
+    "/hardhat-vscode/docs/features",
+    "https://v2.hardhat.org/hardhat-vscode/docs/features",
+  ],
+  ["/hre", "https://v2.hardhat.org/hre"],
+  [
+    "/ignition/docs/advanced/deployment-artifacts",
+    "https://v2.hardhat.org/ignition/docs/advanced/deployment-artifacts",
+  ],
+  [
+    "/ignition/docs/advanced/execution",
+    "https://v2.hardhat.org/ignition/docs/advanced/execution",
+  ],
+  [
+    "/ignition/docs/advanced/migrating",
+    "https://v2.hardhat.org/ignition/docs/advanced/migrating",
+  ],
+  [
+    "/ignition/docs/advanced/reconciliation",
+    "https://v2.hardhat.org/ignition/docs/advanced/reconciliation",
+  ],
+  [
+    "/ignition/docs/advanced/versioning",
+    "https://v2.hardhat.org/ignition/docs/advanced/versioning",
+  ],
+  ["/ignition/docs/config", "https://v2.hardhat.org/ignition/docs/config"],
+  [
+    "/ignition/docs/guides/error-handling",
+    "https://v2.hardhat.org/ignition/docs/guides/error-handling",
+  ],
+  [
+    "/ignition/docs/guides/viem",
+    "https://v2.hardhat.org/ignition/docs/guides/viem",
+  ],
+  ["/metamask-issue", "https://v2.hardhat.org/metamask-issue"],
+  ["/migrate-from-waffle", "https://v2.hardhat.org/migrate-from-waffle"],
+  ["/network-helpers", "https://v2.hardhat.org/network-helpers"],
+  [
+    "/network-helpers/reference",
+    "https://v2.hardhat.org/network-helpers/reference",
+  ],
+  ["/nodejs-versions", "https://v2.hardhat.org/nodejs-versions"],
+  [
+    "/reference/solidity-support",
+    "https://v2.hardhat.org/reference/solidity-support",
+  ],
+  [
+    "/reference/stability-guarantees",
+    "https://v2.hardhat.org/reference/stability-guarantees",
+  ],
+  ["/reportbug", "https://v2.hardhat.org/reportbug"],
+  ["/solc-viair", "https://v2.hardhat.org/solc-viair"],
+  [
+    "/troubleshooting/common-problems",
+    "https://v2.hardhat.org/troubleshooting/common-problems",
+  ],
+  [
+    "/troubleshooting/verbose-logging",
+    "https://v2.hardhat.org/troubleshooting/verbose-logging",
+  ],
+  ["/tutorial", "https://v2.hardhat.org/tutorial"],
+  [
+    "/tutorial/boilerplate-project",
+    "https://v2.hardhat.org/tutorial/boilerplate-project",
+  ],
+  [
+    "/tutorial/creating-a-new-hardhat-project",
+    "https://v2.hardhat.org/tutorial/creating-a-new-hardhat-project",
+  ],
+  [
+    "/tutorial/debugging-with-hardhat-network",
+    "https://v2.hardhat.org/tutorial/debugging-with-hardhat-network",
+  ],
+  [
+    "/tutorial/deploying-to-a-live-network",
+    "https://v2.hardhat.org/tutorial/deploying-to-a-live-network",
+  ],
+  [
+    "/tutorial/final-thoughts",
+    "https://v2.hardhat.org/tutorial/final-thoughts",
+  ],
+  [
+    "/tutorial/setting-up-the-environment",
+    "https://v2.hardhat.org/tutorial/setting-up-the-environment",
+  ],
+  [
+    "/tutorial/testing-contracts",
+    "https://v2.hardhat.org/tutorial/testing-contracts",
+  ],
+  [
+    "/tutorial/writing-and-compiling-contracts",
+    "https://v2.hardhat.org/tutorial/writing-and-compiling-contracts",
+  ],
+  [
+    "/verify-multiple-networks",
+    "https://v2.hardhat.org/verify-multiple-networks",
+  ],
+  ["/hardhat-chai-matchers", "/docs/plugins/hardhat-ethers-chai-matchers"],
+  ["/hardhat-chai-matchers/docs", "/docs/plugins/hardhat-ethers-chai-matchers"],
+  [
+    "/hardhat-chai-matchers/docs/overview",
+    "/docs/plugins/hardhat-ethers-chai-matchers",
+  ],
+  [
+    "/hardhat-chai-matchers/docs/reference",
+    "/docs/plugins/hardhat-ethers-chai-matchers#reference",
+  ],
+  [
+    "/hardhat-chai-matchers/docs/migrate-from-waffle",
+    "https://v2.hardhat.org/hardhat-chai-matchers/docs/migrate-from-waffle",
+  ],
+] satisfies Redirects;

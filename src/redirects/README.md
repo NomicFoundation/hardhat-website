@@ -1,11 +1,13 @@
 # This folder is for redirects
 
-They are organized in different files, by category. In this order of priority:
+They are organized in different files, by category. In this order of priority (higher is better):
 
-1. Manually created short links
-2. Error code redirects
-3. Redirects from the old Hardhat 3 Next.js site to the new Starlight one (for URLs that changed during the migration)
-4. Redirects to the Hardhat 2 site for things that are no longer present in the Hardhat 3 site
+1. Redirects to the HH2 site
+2. Redirects needed to keep URLs of the Next.js version of the site alive
+3. Error code redirects
+4. Manually created short links
+5. In app shortlinks (i.e. printed by Hardhat)
+6. Moved pages
 
 ## Astro vs Vercel redirects
 
