@@ -50,6 +50,12 @@ export const officialPluginsList: OfficialPlugin[] = [
     tags: ["Network", "Simulation", "Helpers", "Testing"],
   },
   {
+    npmPackage: "@nomicfoundation/hardhat-ledger",
+    description:
+      "A plugin that allows to interact with Ledger hardware wallets.",
+    tags: ["Ledger", "Hardware-wallet"],
+  },
+  {
     npmPackage: "@nomicfoundation/hardhat-viem",
     description: "Integrates viem into a Hardhat project",
     tags: ["viem", "Testing", "Tasks", "Scripts"],
