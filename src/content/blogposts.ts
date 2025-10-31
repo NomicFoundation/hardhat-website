@@ -27,7 +27,7 @@ Make sure to define the GHOST_CMS_API_KEY and GHOST_CMS_CONTENT_URL env vars
       : CONTENT_URL;
     const endpoint = `${baseUrl}/ghost/api/content/posts?key=${API_KEY}&filter=tag:[hardhat,hardhat-ignition]`;
 
-    console.log("Fetching from Ghost CMS post from endpoint:", endpoint);
+    console.log("Fetching from Ghost CMS post from endpoint:", baseUrl);
 
     const response = await fetch(endpoint);
 

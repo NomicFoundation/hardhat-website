@@ -24,7 +24,8 @@ export const githubReleases = defineCollection({
   loader: async () => {
     if (
       import.meta.env.VERCEL === undefined &&
-      import.meta.env.FORCE_GITHUB_RELEASES === undefined
+      import.meta.env.FORCE_GITHUB_RELEASES === undefined &&
+      import.meta.env.CI === undefined
     ) {
       console.warn(`
 GitHub releases collection not fetched, as this isn't running on vercel nor the fetch being forced.
