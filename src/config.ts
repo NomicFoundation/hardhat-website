@@ -222,5 +222,5 @@ export const pluginsConfig: PluginsConfig = {
   officialPluginsNpmTag: "latest",
   officialPluginsAuthor: "Nomic Foundation",
   officialPluginsAuthorUrl: "https://x.com/NomicFoundation",
-  maliciousPluginReportingEmail: "security@nomicfoundation.com",
+  maliciousPluginReportingEmail: "security@nomic.foundation",
 };
