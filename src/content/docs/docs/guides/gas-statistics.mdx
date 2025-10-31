@@ -1,4 +1,9 @@
-## Overview
+---
+title: Gas statistics of your test runs
+description: How to get gas statistics from your test runs
+---
+
+import Run from "@hh/Run.astro";
 
 Hardhat can optionally show statistics on the gas consumed by your contracts' public functions during a test run. Use the `--gas-stats` flag when running your tests to display this information.
 
@@ -6,39 +11,13 @@ Hardhat can optionally show statistics on the gas consumed by your contracts' pu
 
 You can pass the `--gas-stats` flag to either the `test` task or to one of its subtasks (e.g., `test solidity`):
 
-::::tabsgroup{options=npm,pnpm,yarn}
-
-:::tab{value=npm}
-
-```bash
-npx hardhat test --gas-stats
-npx hardhat test solidity --gas-stats
-npx hardhat test nodejs --gas-stats
-```
-
-:::
-
-:::tab{value=pnpm}
-
-```bash
-pnpm hardhat test --gas-stats
-pnpm hardhat test solidity --gas-stats
-pnpm hardhat test nodejs --gas-stats
-```
-
-:::
-
-:::tab{value=yarn}
-
-```bash
-yarn hardhat test --gas-stats
-yarn hardhat test solidity --gas-stats
-yarn hardhat test nodejs --gas-stats
-```
-
-:::
-
-::::
+<Run
+  command={[
+    "hardhat test --gas-stats",
+    "hardhat test solidity --gas-stats",
+    "hardhat test nodejs --gas-stats",
+  ]}
+/>
 
 This prints a table like the following:
 
@@ -124,7 +103,6 @@ contract Counter {
     count = 0;
   }
 }
-
 ```
 
 And this test:
