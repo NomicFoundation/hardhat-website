@@ -11,30 +11,38 @@ const posts = await getCollection("blogpostsCollection");
     <h2 class="title">{landing.whatIsNew.title}</h2>
     <div class="cards-container">
       {
-        posts.map((post) => (
+        posts.length > 0 ? (
+          posts.map((post) => (
+            <article class="card">
+              {post.data.url && (
+                <a
+                  href={post.data.url}
+                  class="card-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              )}
+              <div class="image-container">
+                <img
+                  src={post.data.feature_image}
+                  alt={post.data.title}
+                  class="card-image"
+                  loading="lazy"
+                />
+              </div>
+              <div class="text-container">
+                <h3 class="card-title">{post.data.title}</h3>
+                <p class="card-text">{post.data.excerpt}</p>
+              </div>
+            </article>
+          ))
+        ) : (
           <article class="card">
-            {post.data.url && (
-              <a
-                href={post.data.url}
-                class="card-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            )}
-            <div class="image-container">
-              <img
-                src={post.data.feature_image}
-                alt={post.data.title}
-                class="card-image"
-                loading="lazy"
-              />
-            </div>
             <div class="text-container">
-              <h3 class="card-title">{post.data.title}</h3>
-              <p class="card-text">{post.data.excerpt}</p>
+              <h3 class="card-title">Posts not fetched in development mode</h3>
             </div>
           </article>
-        ))
+        )
       }
     </div>
   </Container>

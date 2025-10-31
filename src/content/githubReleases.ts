@@ -22,6 +22,17 @@ const githubReleaseCollectionSchema = z.object({
 
 export const githubReleases = defineCollection({
   loader: async () => {
+    if (
+      import.meta.env.VERCEL === undefined &&
+      import.meta.env.FORCE_GITHUB_RELEASES === undefined
+    ) {
+      console.warn(`
+GitHub releases collection not fetched, as this isn't running on vercel nor the fetch being forced.
+Rerun with the env variable FORCE_GITHUB_RELEASES=1
+`);
+      return [];
+    }
+
     const endpoint =
       "https://api.github.com/repos/NomicFoundation/hardhat/releases";
 
