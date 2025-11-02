@@ -17,7 +17,7 @@ Follow these steps to migrate your project to Hardhat Toolbox.
    :::tab{value="npm 7+"}
 
    ```
-   npm uninstall @nomiclabs/hardhat-waffle@hh2 ethereum-waffle @nomiclabs/hardhat-ethers@hh2 @nomiclabs/hardhat-etherscan@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v5 @ethersproject/abi @ethersproject/providers
+   npm uninstall @nomiclabs/hardhat-waffle ethereum-waffle @nomiclabs/hardhat-ethers @nomiclabs/hardhat-etherscan chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v5 @ethersproject/abi @ethersproject/providers
    ```
 
    :::
@@ -25,7 +25,7 @@ Follow these steps to migrate your project to Hardhat Toolbox.
    :::tab{value="npm 6"}
 
    ```
-   npm uninstall @nomiclabs/hardhat-waffle@hh2 ethereum-waffle @nomiclabs/hardhat-ethers@hh2 @nomiclabs/hardhat-etherscan@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v5 @ethersproject/abi @ethersproject/providers
+   npm uninstall @nomiclabs/hardhat-waffle ethereum-waffle @nomiclabs/hardhat-ethers @nomiclabs/hardhat-etherscan chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v5 @ethersproject/abi @ethersproject/providers
    ```
 
    :::
