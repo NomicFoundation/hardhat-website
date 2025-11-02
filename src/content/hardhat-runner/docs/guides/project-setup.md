@@ -53,7 +53,7 @@ Then you need to install Hardhat:
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev hardhat
+npm install --save-dev hardhat@hh2
 ```
 
 :::
@@ -61,7 +61,7 @@ npm install --save-dev hardhat
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev hardhat
+npm install --save-dev hardhat@hh2
 ```
 
 :::
@@ -69,7 +69,7 @@ npm install --save-dev hardhat
 :::tab{value="yarn"}
 
 ```
-yarn add --dev hardhat
+yarn add --dev hardhat@hh2
 ```
 
 :::
@@ -77,7 +77,7 @@ yarn add --dev hardhat
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D hardhat
+pnpm add -D hardhat@hh2
 ```
 
 :::

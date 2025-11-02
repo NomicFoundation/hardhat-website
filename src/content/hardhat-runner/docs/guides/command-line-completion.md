@@ -9,7 +9,7 @@ This package, `hardhat-shorthand`, installs a globally accessible binary called 
 To use the Hardhat shorthand you need to install it **globally**:
 
 ```
-npm install --global hardhat-shorthand
+npm install --global hardhat-shorthand@hh2
 ```
 
 After doing this running `hh` will be equivalent to running `npx hardhat`. For example, instead of running `npx hardhat compile` you can run `hh compile`.

@@ -18,7 +18,7 @@ This package provides convenience functions for quick and easy interaction with 
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-network-helpers
+npm install --save-dev @nomicfoundation/hardhat-network-helpers@hh2
 ```
 
 :::
@@ -26,7 +26,7 @@ npm install --save-dev @nomicfoundation/hardhat-network-helpers
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-network-helpers
+npm install --save-dev @nomicfoundation/hardhat-network-helpers@hh2
 ```
 
 :::
@@ -34,7 +34,7 @@ npm install --save-dev @nomicfoundation/hardhat-network-helpers
 :::tab{value=yarn}
 
 ```
-yarn add --dev @nomicfoundation/hardhat-network-helpers
+yarn add --dev @nomicfoundation/hardhat-network-helpers@hh2
 ```
 
 :::
@@ -42,7 +42,7 @@ yarn add --dev @nomicfoundation/hardhat-network-helpers
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D @nomicfoundation/hardhat-network-helpers
+pnpm add -D @nomicfoundation/hardhat-network-helpers@hh2
 ```
 
 :::

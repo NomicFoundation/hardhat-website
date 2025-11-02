@@ -43,7 +43,7 @@ To get started, we'll uninstall the `hardhat-deploy` plugin and install the Hard
    :::tab{value="npm"}
 
    ```sh
-   npm install --save-dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-network-helpers
+   npm install --save-dev @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-network-helpers@hh2
    ```
 
    :::
@@ -51,7 +51,7 @@ To get started, we'll uninstall the `hardhat-deploy` plugin and install the Hard
    :::tab{value=yarn}
 
    ```sh
-   yarn add --dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-network-helpers
+   yarn add --dev @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-network-helpers@hh2
    ```
 
    :::
@@ -59,7 +59,7 @@ To get started, we'll uninstall the `hardhat-deploy` plugin and install the Hard
    :::tab{value="pnpm"}
 
    ```sh
-   pnpm add -D @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-network-helpers
+   pnpm add -D @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-network-helpers@hh2
    ```
 
    :::

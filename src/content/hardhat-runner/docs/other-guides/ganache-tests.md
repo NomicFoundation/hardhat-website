@@ -27,7 +27,7 @@ This plugin creates a network called `ganache`, and automatically starts and sto
 To use it, you have to install it with npm
 
 ```
-npm install --save-dev @nomiclabs/hardhat-ganache
+npm install --save-dev @nomiclabs/hardhat-ganache@hh2
 ```
 
 and add this line at the beginning of your `hardhat.config.js`

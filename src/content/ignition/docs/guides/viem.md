@@ -20,7 +20,7 @@ From the root directory of your Hardhat project run:
 :::tab{value="npm 7+"}
 
 ```shell
-npm install --save-dev @nomicfoundation/hardhat-ignition-viem
+npm install --save-dev @nomicfoundation/hardhat-ignition-viem@hh2
 ```
 
 :::
@@ -28,7 +28,7 @@ npm install --save-dev @nomicfoundation/hardhat-ignition-viem
 :::tab{value="npm 6"}
 
 ```shell
-npm install --save-dev @nomicfoundation/hardhat-ignition-viem @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-verify @nomicfoundation/hardhat-viem @nomicfoundation/ignition-core typescript viem
+npm install --save-dev @nomicfoundation/hardhat-ignition-viem@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-verify@hh2 @nomicfoundation/hardhat-viem@hh2 @nomicfoundation/ignition-core@hh2 typescript viem
 ```
 
 :::
@@ -36,7 +36,7 @@ npm install --save-dev @nomicfoundation/hardhat-ignition-viem @nomicfoundation/h
 :::tab{value=yarn}
 
 ```shell
-yarn add --dev @nomicfoundation/hardhat-ignition-viem @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-verify @nomicfoundation/hardhat-viem @nomicfoundation/ignition-core typescript viem
+yarn add --dev @nomicfoundation/hardhat-ignition-viem@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-verify@hh2 @nomicfoundation/hardhat-viem@hh2 @nomicfoundation/ignition-core@hh2 typescript viem
 ```
 
 :::
@@ -44,7 +44,7 @@ yarn add --dev @nomicfoundation/hardhat-ignition-viem @nomicfoundation/hardhat-i
 :::tab{value="pnpm"}
 
 ```shell
-pnpm add -D @nomicfoundation/hardhat-ignition-viem viem typescript
+pnpm add -D @nomicfoundation/hardhat-ignition-viem@hh2 viem typescript
 ```
 
 :::

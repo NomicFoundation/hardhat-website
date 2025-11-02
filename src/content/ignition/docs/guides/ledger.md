@@ -9,7 +9,7 @@ The first step is to install the `hardhat-ledger` plugin:
 :::tab{value="npm"}
 
 ```sh
-npm install --save-dev @nomicfoundation/hardhat-ledger
+npm install --save-dev @nomicfoundation/hardhat-ledger@hh2
 ```
 
 :::
@@ -17,7 +17,7 @@ npm install --save-dev @nomicfoundation/hardhat-ledger
 :::tab{value=yarn}
 
 ```sh
-yarn add --dev @nomicfoundation/hardhat-ledger
+yarn add --dev @nomicfoundation/hardhat-ledger@hh2
 ```
 
 :::
@@ -25,7 +25,7 @@ yarn add --dev @nomicfoundation/hardhat-ledger
 :::tab{value="pnpm"}
 
 ```sh
-pnpm add -D @nomicfoundation/hardhat-ledger
+pnpm add -D @nomicfoundation/hardhat-ledger@hh2
 ```
 
 :::

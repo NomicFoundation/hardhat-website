@@ -15,7 +15,7 @@ The first thing you need to do is to install Hardhat and the proper plugin. This
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev hardhat @nomiclabs/hardhat-truffle5
+npm install --save-dev hardhat@hh2 @nomiclabs/hardhat-truffle5@hh2
 ```
 
 :::
@@ -23,7 +23,7 @@ npm install --save-dev hardhat @nomiclabs/hardhat-truffle5
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev hardhat @nomiclabs/hardhat-truffle5 @nomiclabs/hardhat-web3 'web3@^1.0.0-beta.36'
+npm install --save-dev hardhat@hh2 @nomiclabs/hardhat-truffle5@hh2 @nomiclabs/hardhat-web3@hh2 'web3@^1.0.0-beta.36'
 ```
 
 :::
@@ -31,7 +31,7 @@ npm install --save-dev hardhat @nomiclabs/hardhat-truffle5 @nomiclabs/hardhat-we
 :::tab{value=yarn}
 
 ```
-yarn add --dev hardhat @nomiclabs/hardhat-truffle5 @nomiclabs/hardhat-web3 'web3@^1.0.0-beta.36'
+yarn add --dev hardhat@hh2 @nomiclabs/hardhat-truffle5@hh2 @nomiclabs/hardhat-web3@hh2 'web3@^1.0.0-beta.36'
 ```
 
 :::

@@ -55,7 +55,7 @@ For our example, we will use the [`@nomicfoundation/hardhat-toolbox`](/hardhat-r
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-toolbox
+npm install --save-dev @nomicfoundation/hardhat-toolbox@hh2
 ```
 
 :::
@@ -63,7 +63,7 @@ npm install --save-dev @nomicfoundation/hardhat-toolbox
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-network-helpers @nomicfoundation/hardhat-chai-matchers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-verify chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
+npm install --save-dev @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-network-helpers@hh2 @nomicfoundation/hardhat-chai-matchers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-verify@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
 ```
 
 :::
@@ -71,7 +71,7 @@ npm install --save-dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat
 :::tab{value="yarn"}
 
 ```
-yarn add --dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-network-helpers @nomicfoundation/hardhat-chai-matchers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-verify chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
+yarn add --dev @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-network-helpers@hh2 @nomicfoundation/hardhat-chai-matchers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-verify@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
 ```
 
 :::
@@ -79,7 +79,7 @@ yarn add --dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-network
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-network-helpers chai@4 ethers
+pnpm add -D @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-network-helpers@hh2 chai@4 ethers
 ```
 
 :::

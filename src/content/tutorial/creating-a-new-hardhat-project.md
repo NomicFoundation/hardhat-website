@@ -62,7 +62,7 @@ Now we can install Hardhat:
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev hardhat
+npm install --save-dev hardhat@hh2
 ```
 
 :::
@@ -70,7 +70,7 @@ npm install --save-dev hardhat
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev hardhat
+npm install --save-dev hardhat@hh2
 ```
 
 :::
@@ -78,7 +78,7 @@ npm install --save-dev hardhat
 :::tab{value=yarn}
 
 ```
-yarn add --dev hardhat
+yarn add --dev hardhat@hh2
 ```
 
 :::
@@ -86,7 +86,7 @@ yarn add --dev hardhat
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D hardhat
+pnpm add -D hardhat@hh2
 ```
 
 :::
@@ -151,7 +151,7 @@ To install it, run this in your project directory:
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-toolbox
+npm install --save-dev @nomicfoundation/hardhat-toolbox@hh2
 ```
 
 :::
@@ -159,7 +159,7 @@ npm install --save-dev @nomicfoundation/hardhat-toolbox
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-network-helpers @nomicfoundation/hardhat-chai-matchers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-verify chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
+npm install --save-dev @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-network-helpers@hh2 @nomicfoundation/hardhat-chai-matchers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-verify@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
 ```
 
 :::
@@ -167,7 +167,7 @@ npm install --save-dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat
 :::tab{value=yarn}
 
 ```
-yarn add --dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-network-helpers @nomicfoundation/hardhat-chai-matchers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-verify chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
+yarn add --dev @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-network-helpers@hh2 @nomicfoundation/hardhat-chai-matchers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-verify@hh2 chai@4 ethers hardhat-gas-reporter solidity-coverage @typechain/hardhat typechain @typechain/ethers-v6
 ```
 
 :::
@@ -175,7 +175,7 @@ yarn add --dev @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-ignitio
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-network-helpers chai@4 ethers
+pnpm add -D @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-network-helpers@hh2 chai@4 ethers
 ```
 
 :::
