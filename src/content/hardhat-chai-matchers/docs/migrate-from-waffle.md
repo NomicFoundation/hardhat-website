@@ -51,7 +51,7 @@ The `@nomicfoundation/hardhat-chai-matchers` plugin is meant to be a drop-in rep
    :::tab{value="npm 7+"}
 
    ```
-   npm install --save-dev @nomicfoundation/hardhat-chai-matchers
+   npm install --save-dev @nomicfoundation/hardhat-chai-matchers@hh2
    ```
 
    :::
@@ -59,7 +59,7 @@ The `@nomicfoundation/hardhat-chai-matchers` plugin is meant to be a drop-in rep
    :::tab{value="npm 6"}
 
    ```
-   npm install --save-dev @nomicfoundation/hardhat-chai-matchers
+   npm install --save-dev @nomicfoundation/hardhat-chai-matchers@hh2
    ```
 
    :::
@@ -67,7 +67,7 @@ The `@nomicfoundation/hardhat-chai-matchers` plugin is meant to be a drop-in rep
    :::tab{value=yarn}
 
    ```
-   yarn add --dev @nomicfoundation/hardhat-chai-matchers
+   yarn add --dev @nomicfoundation/hardhat-chai-matchers@hh2
    ```
 
    :::
@@ -75,7 +75,7 @@ The `@nomicfoundation/hardhat-chai-matchers` plugin is meant to be a drop-in rep
    :::tab{value="pnpm"}
 
    ```
-   pnpm add -D @nomicfoundation/hardhat-chai-matchers
+   pnpm add -D @nomicfoundation/hardhat-chai-matchers@hh2
    ```
 
    :::

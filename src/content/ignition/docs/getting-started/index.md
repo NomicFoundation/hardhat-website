@@ -45,7 +45,7 @@ Once you have a Hardhat project ready, open a terminal in its root directory, an
 :::tab{value="npm 7+"}
 
 ```sh
-npm install --save-dev @nomicfoundation/hardhat-ignition-ethers
+npm install --save-dev @nomicfoundation/hardhat-ignition-ethers@hh2
 ```
 
 :::
@@ -53,7 +53,7 @@ npm install --save-dev @nomicfoundation/hardhat-ignition-ethers
 :::tab{value="npm 6"}
 
 ```sh
-npm install --save-dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-verify @nomicfoundation/ignition-core ethers
+npm install --save-dev @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-verify@hh2 @nomicfoundation/ignition-core@hh2 ethers
 ```
 
 :::
@@ -61,7 +61,7 @@ npm install --save-dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation
 :::tab{value=yarn}
 
 ```sh
-yarn add --dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-ignition @nomicfoundation/hardhat-verify @nomicfoundation/ignition-core ethers
+yarn add --dev @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-ethers@hh2 @nomicfoundation/hardhat-ignition@hh2 @nomicfoundation/hardhat-verify@hh2 @nomicfoundation/ignition-core@hh2 ethers
 ```
 
 :::
@@ -69,7 +69,7 @@ yarn add --dev @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat
 :::tab{value="pnpm"}
 
 ```sh
-pnpm add -D @nomicfoundation/hardhat-ignition-ethers @nomicfoundation/hardhat-ignition ethers
+pnpm add -D @nomicfoundation/hardhat-ignition-ethers@hh2 @nomicfoundation/hardhat-ignition@hh2 ethers
 ```
 
 :::

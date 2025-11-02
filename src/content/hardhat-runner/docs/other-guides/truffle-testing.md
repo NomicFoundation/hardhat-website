@@ -18,7 +18,7 @@ Run these to start:
 mkdir my-project
 cd my-project
 npm init --yes
-npm install --save-dev hardhat
+npm install --save-dev hardhat@hh2
 ```
 
 Now run `npx hardhat init` inside your project folder and select `Create an empty hardhat.config.js`.
@@ -26,7 +26,7 @@ Now run `npx hardhat init` inside your project folder and select `Create an empt
 Let's now install the `Truffle` and `Web3.js` plugins, as well as `web3.js` itself.
 
 ```
-npm install --save-dev @nomiclabs/hardhat-truffle5 @nomiclabs/hardhat-web3 'web3@^1.0.0-beta.36'
+npm install --save-dev @nomiclabs/hardhat-truffle5@hh2 @nomiclabs/hardhat-web3@hh2 'web3@^1.0.0-beta.36'
 ```
 
 Enable the Truffle 5 plugin on your Hardhat config file by requiring it:

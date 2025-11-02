@@ -22,7 +22,7 @@ The `hardhat-chai-matchers` plugin is designed to work with `hardhat-ethers`. At
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-chai-matchers
+npm install --save-dev @nomicfoundation/hardhat-chai-matchers@hh2
 ```
 
 :::
@@ -30,7 +30,7 @@ npm install --save-dev @nomicfoundation/hardhat-chai-matchers
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-chai-matchers
+npm install --save-dev @nomicfoundation/hardhat-chai-matchers@hh2
 ```
 
 :::
@@ -38,7 +38,7 @@ npm install --save-dev @nomicfoundation/hardhat-chai-matchers
 :::tab{value=yarn}
 
 ```
-yarn add --dev @nomicfoundation/hardhat-chai-matchers
+yarn add --dev @nomicfoundation/hardhat-chai-matchers@hh2
 ```
 
 :::
@@ -46,7 +46,7 @@ yarn add --dev @nomicfoundation/hardhat-chai-matchers
 :::tab{value="pnpm"}
 
 ```
-pnpm add -D @nomicfoundation/hardhat-chai-matchers
+pnpm add -D @nomicfoundation/hardhat-chai-matchers@hh2
 ```
 
 :::

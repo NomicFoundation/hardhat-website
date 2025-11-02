@@ -25,7 +25,7 @@ After that, install the [`@nomicfoundation/hardhat-foundry`](/hardhat-runner/plu
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-foundry
+npm install --save-dev @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -33,7 +33,7 @@ npm install --save-dev @nomicfoundation/hardhat-foundry
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev @nomicfoundation/hardhat-foundry
+npm install --save-dev @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -41,7 +41,7 @@ npm install --save-dev @nomicfoundation/hardhat-foundry
 :::tab{value=yarn}
 
 ```
-yarn add --dev @nomicfoundation/hardhat-foundry
+yarn add --dev @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -49,7 +49,7 @@ yarn add --dev @nomicfoundation/hardhat-foundry
 :::tab{value=pnpm}
 
 ```
-pnpm add --save-dev @nomicfoundation/hardhat-foundry
+pnpm add --save-dev @nomicfoundation/hardhat-foundry@hh2
 ```
 
 ::::
@@ -91,7 +91,7 @@ Then install Hardhat, the [Hardhat Toolbox](/hardhat-runner/plugins/nomicfoundat
 :::tab{value="npm 7+"}
 
 ```
-npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-foundry
+npm install --save-dev hardhat@hh2 @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -99,7 +99,7 @@ npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation
 :::tab{value="npm 6"}
 
 ```
-npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-foundry
+npm install --save-dev hardhat@hh2 @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -107,7 +107,7 @@ npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation
 :::tab{value=yarn}
 
 ```
-yarn add --dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-foundry
+yarn add --dev hardhat@hh2 @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
@@ -115,7 +115,7 @@ yarn add --dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat
 :::tab{value=pnpm}
 
 ```
-pnpm add --save-dev hardhat @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-foundry
+pnpm add --save-dev hardhat@hh2 @nomicfoundation/hardhat-toolbox@hh2 @nomicfoundation/hardhat-foundry@hh2
 ```
 
 :::
