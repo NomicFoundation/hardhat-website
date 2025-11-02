@@ -111,6 +111,7 @@ Follow these steps to migrate your project to Hardhat Toolbox.
    ::::
 
    Adding the Toolbox will make many other imports redundant, so you can remove any of these if you want:
+
    - `@nomicfoundation/hardhat-ethers`
    - `@nomicfoundation/hardhat-verify`
    - `@nomicfoundation/hardhat-ignition`
