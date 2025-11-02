@@ -41,7 +41,7 @@ Follow these steps to migrate your project to Hardhat Toolbox.
    :::tab{value="pnpm"}
 
    ```
-   pnpm remove @nomiclabs/hardhat-waffle@hh2 ethereum-waffle
+   pnpm remove @nomiclabs/hardhat-waffle ethereum-waffle
    ```
 
    :::
