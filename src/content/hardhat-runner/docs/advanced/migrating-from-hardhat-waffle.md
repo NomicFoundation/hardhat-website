@@ -33,7 +33,7 @@ Follow these steps to migrate your project to Hardhat Toolbox.
    :::tab{value=yarn}
 
    ```
-   yarn remove @nomiclabs/hardhat-waffle@hh2 ethereum-waffle
+   yarn remove @nomiclabs/hardhat-waffle ethereum-waffle
    ```
 
    :::
