@@ -1,0 +1,62 @@
+---
+title: Writing Hardhat tasks
+description: How to write custom Hardhat tasks with Hardhat v3
+sidebar:
+  label: Writing tasks
+---
+
+import Run from "@hh/Run.astro";
+
+At its core, Hardhat is a task runner that allows you to automate your development workflow. It comes with some built-in tasks, like `compile` and `test`, but you can add your own custom tasks as well.
+
+This guide will show you how to extend Hardhat's functionality using tasks. It assumes you have initialized a sample project. If you haven't done it, please read the [getting started guide](/docs/getting-started) first.
+
+## Writing a task
+
+Let's write a very simple task that prints the list of available accounts, and explore how it works.
+
+First, copy and paste the following code into your Hardhat config file:
+
+```ts
+import { defineConfig, task } from "hardhat/config";
+
+const printAccounts = task("accounts", "Print the accounts")
+  .setAction(async () => ({
+    default: async ({}, hre) => {
+      const { provider } = await hre.network.connect();
+      console.log(await provider.request({ method: "eth_accounts" }));
+    },
+  }))
+  .build();
+```
+
+Then, add the `printAccounts` task to the exported configuration object inside that same file:
+
+```ts
+export default defineConfig({
+  // ... rest of the config
+  tasks: [printAccounts],
+});
+```
+
+Now you should be able to run it:
+
+<Run command="hardhat accounts" />
+
+We are using the `task` function to define our new task. Its first argument is the name of the task, and it's what we use on the command line to run it. The second argument is the description of the task, which is printed when you use `hardhat help`.
+
+The `task` function returns a task builder object that allows you to further configure the task. In this case, we use the `setAction` method to define the behavior of the task.
+
+:::tip
+
+The `default` property inside the object returned by `setAction` is replicating the structure of ES module imports. If you define your task action function in another file and import it here, you can simply return that import from the function instead.
+
+:::
+
+You are free to do anything you want in this function. In this case, we send a request to the network provider to obtain all the configured accounts and print their addresses.
+
+You can add parameters to your tasks, and Hardhat will handle their parsing and validation for you.
+
+You can also override existing tasks, which allows you to change how different parts of Hardhat work.
+
+{/* To learn more about tasks, please read [this guide](../advanced/create-task). */}
