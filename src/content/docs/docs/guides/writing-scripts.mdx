@@ -36,23 +36,16 @@ You can get also access to all your tasks and plugins. To try this out, create a
 ```ts
 import hre from "hardhat";
 
-async function main() {
-  const { provider } = await hre.network.connect();
-  const accounts = await provider.request({ method: "eth_accounts" });
+const { provider } = await hre.network.connect();
+const accounts = await provider.request({ method: "eth_accounts" });
 
-  if (accounts !== null) {
-    for (const account of accounts) {
-      console.log(account);
-    }
-  } else {
-    console.log("No accounts found");
+if (accounts !== null) {
+  for (const account of accounts) {
+    console.log(account);
   }
+} else {
+  console.log("No accounts found");
 }
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
 ```
 
 Now run the script:
@@ -65,22 +58,12 @@ By accessing the Hardhat Runtime Environment at the top, you are allowed to run 
 
 ### Hardhat arguments
 
-You can still pass arguments to Hardhat when running a standalone script. This is done by setting environment variables. Some of these are:
+When running a standalone script, you can pass any Hardhat global option to the script by setting a `HARDHAT_<GLOBAL_OPTION>` environment variable:
 
 - `HARDHAT_NETWORK`: Sets the network to connect to.
 
-- `HARDHAT_SHOW_STACK_TRACES`: Enables JavaScript stack traces of expected errors.
+- `HARDHAT_BUILD_PROFILE`: Specifies which build profile to use.
 
-- `HARDHAT_VERBOSE`: Enables Hardhat verbose logging.
+To view the full list of global options available in Hardhat, run:
 
-- `HARDHAT_MAX_MEMORY`: Sets the maximum amount of memory that Hardhat can use.
-
-<Run command="hardhat --network localhost run scripts/accounts.ts" />
-
-You can also do this when running a standalone script with Node.js:
-
-```sh
-HARDHAT_NETWORK=localhost node scripts/accounts.ts
-```
-
-{/* Check our [Environment variables](/hardhat-runner/docs/reference/environment-variables) reference to learn more about this. */}
+<Run command="hardhat --help" />
