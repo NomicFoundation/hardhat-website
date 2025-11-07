@@ -163,3 +163,174 @@ Your verification might fail for a variety of reasons. Here are some common issu
 - **Wrong constructor arguments**. Double-check that your constructor arguments are correct.
 - **Using code that is different from the one used for deployment**. If you are trying to verify a contract that you have deployed weeks ago, then chances are that the code has changed in the meantime. Double-check that you are using the correct code.
 - **Using a different build profile**. If you are using a different build profile than the one used for deployment, then the bytecode will be different, causing the verification to fail. Try using `--build-profile` with other profiles to verify your contract, beginning with `default`. You may also need to run `hardhat build` with the same build profile to generate the correct artifacts.
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/*
+  MineableToken
+
+  - ERC20 token that allows addresses to "mine" tokens over time.
+  - Each address accrues tokens continuously at a fixed rate: 10,000 tokens per hour.
+  - Accrued tokens sit in an internal "withdrawal balance" until the user calls withdraw().
+  - withdraw() mints tokens to the caller up to their accrued amount.
+  - Owner can set a global maxSupply (0 = unlimited).
+  - Uses OpenZeppelin ERC20, Ownable and ReentrancyGuard.
+
+  Notes:
+  - Token has 18 decimals.
+  - Rate calculation uses integer math. Keep decimals in mind when selecting display amounts.
+*/
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract MineableToken is ERC20, Ownable, ReentrancyGuard {
+    uint8 private immutable _decimals;
+    uint256 public maxSupply; // 0 => unlimited
+
+    // mining parameters:
+    // 10000 tokens per hour => per second rate = 10000 / 3600 tokens/sec
+    // We'll store rate with token decimals applied
+    uint256 public immutable ratePerSecond; // amount (with decimals) accrued per second
+
+    mapping(address => uint256) public lastUpdate;   // timestamp of last accrual update
+    mapping(address => uint256) public accrued;      // accrued amount (with decimals) waiting to be withdrawn
+    bool public paused;
+
+    event MiningStarted(address indexed user, uint256 timestamp);
+    event MiningStopped(address indexed user, uint256 timestamp);
+    event Withdrawn(address indexed user, uint256 amount);
+    event MaxSupplyUpdated(uint256 newMaxSupply);
+    event Paused(bool paused);
+
+    constructor(
+        string memory name_,
+        string memory symbol_,
+        uint8 decimals_,
+        uint256 initialMaxSupply // set 0 for unlimited
+    ) ERC20(name_, symbol_) {
+        _decimals = decimals_;
+        maxSupply = initialMaxSupply;
+        // compute rate per second scaled by decimals
+        // ratePerSecond = 10000 * (10 ** decimals) / 3600
+        ratePerSecond = (10000 * (10 ** uint256(decimals_))) / 3600;
+    }
+
+    function decimals() public view override returns (uint8) {
+        return _decimals;
+    }
+
+    /// @notice Start mining for msg.sender (records timestamp). If already mining, does nothing (but accrues).
+    function startMining() external {
+        _updateAccrual(msg.sender);
+        if (lastUpdate[msg.sender] == 0) {
+            // mark start (if previously never started)
+            lastUpdate[msg.sender] = block.timestamp;
+            emit MiningStarted(msg.sender, block.timestamp);
+        }
+    }
+
+    /// @notice Stop mining: updates accrual and sets lastUpdate to 0 (so no further accrual).
+    function stopMining() external {
+        _updateAccrual(msg.sender);
+        lastUpdate[msg.sender] = 0;
+        emit MiningStopped(msg.sender, block.timestamp);
+    }
+
+    /// @notice Withdraw accrued tokens to caller's wallet (mints tokens).
+    function withdraw() external nonReentrant {
+        require(!paused, "contract paused");
+        _updateAccrual(msg.sender);
+
+        uint256 amount = accrued[msg.sender];
+        require(amount > 0, "nothing to withdraw");
+
+        // Check maxSupply
+        if (maxSupply != 0) {
+            uint256 supplyAfter = totalSupply() + amount;
+            require(supplyAfter <= maxSupply, "would exceed maxSupply");
+        }
+
+        // zero out accrued BEFORE mint to avoid reentrancy edgecases
+        accrued[msg.sender] = 0;
+
+        _mint(msg.sender, amount);
+        emit Withdrawn(msg.sender, amount);
+    }
+
+    /// @notice View current accrued balance (including accrual since last update)
+    function viewAccrued(address user) public view returns (uint256) {
+        uint256 last = lastUpdate[user];
+        uint256 currentAccrued = accrued[user];
+        if (last == 0) {
+            // not mining currently
+            return currentAccrued;
+        }
+        uint256 elapsed = block.timestamp - last;
+        uint256 newly = elapsed * ratePerSecond;
+        return currentAccrued + newly;
+    }
+
+    /// @dev Internal: update accrued[user] and lastUpdate timestamp
+    function _updateAccrual(address user) internal {
+        uint256 last = lastUpdate[user];
+        if (last == 0) {
+            // not mining (or never started). Initialize lastUpdate if needed.
+            lastUpdate[user] = block.timestamp;
+            return;
+        }
+        uint256 elapsed = block.timestamp - last;
+        if (elapsed == 0) return;
+
+        uint256 newly = elapsed * ratePerSecond;
+        // if maxSupply set, cap accrual so totalSupply + newly + accrued <= maxSupply
+        if (maxSupply != 0) {
+            uint256 available = 0;
+            uint256 currentSupply = totalSupply();
+            if (currentSupply < maxSupply) {
+                available = maxSupply - currentSupply;
+            } else {
+                available = 0;
+            }
+            // cap newly to available
+            if (newly > available) {
+                newly = available;
+            }
+        }
+
+        accrued[user] += newly;
+        lastUpdate[user] = block.timestamp;
+    }
+
+    // owner functions
+    function setMaxSupply(uint256 newMax) external onlyOwner {
+        maxSupply = newMax;
+        emit MaxSupplyUpdated(newMax);
+    }
+
+    function setPaused(bool _paused) external onlyOwner {
+        paused = _paused;
+        emit Paused(_paused);
+    }
+
+    /// @notice emergency mint for owner (use only for admin actions)
+    function ownerMint(address to, uint256 amount) external onlyOwner {
+        if (maxSupply != 0) {
+            require(totalSupply() + amount <= maxSupply, "would exceed maxSupply");
+        }
+        _mint(to, amount);
+    }
+}
+// scripts/deploy.js
+async function main() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying with", deployer.address);
+
+  const Mineable = await ethers.getContractFactory("MineableToken");
+  // Example args: name, symbol, decimals, maxSupply (0 = unlimited)
+  const token = await Mineable.deploy("MyMineToken", "MMT", 18, 0);
+  await token.deployed();
+  console.log("Token deployed to:", token.address);
+}
+main().catch(e => { console.error(e); process.exit(1); });
