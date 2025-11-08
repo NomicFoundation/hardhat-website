@@ -1,0 +1,60 @@
+---
+title: The Hardhat Runtime Environment
+description: An explanation about what the Hardhat Runtime Environment (HRE) is
+sidebar:
+  order: 2
+---
+
+The Hardhat Runtime Environment, or HRE for short, is an object containing all the functionality that Hardhat exposes when running a task, test, script, or executing a plugin. You can think of the HRE as being Hardhat itself.
+
+The HRE centralizes coordination across all Hardhat components. This architecture allows plugins to inject functionality that becomes available everywhere the HRE is accessible.
+
+## Using the Hardhat Runtime Environment
+
+You can use the HRE when you:
+
+- Run a Hardhat Task: it's received as a parameter
+
+- Run a TypeScript test: import it with
+  ```ts
+  import hre from "hardhat";
+  ```
+- Run a script: import it with
+
+  ```ts
+  import hre from "hardhat";
+  ```
+
+- Manually construct it using the functions exported in `"hardhat/hre"`
+
+## The Hardhat Runtime Environment's functionality
+
+The Hardhat Runtime Environment has the following properties:
+
+- `config`: The resolved config that Hardhat uses.
+- `userConfig`: The config as provided by the user.
+- `artifacts`: An object that lets you read the compilation artifacts of your project.
+- `network`: The [`NetworkManager`](/docs/explanations/network-manager), used to connect to live networks and create blockchain simulations.
+- `globalOptions`: The [Global Options](/docs/explanations/global-options) of the HRE.
+- `hooks`: The [`HookManager`](/docs/plugin-development/explanations/hooks) used by plugins to customize Hardhat's behavior.
+- `interruptions`: The `UserInterruptionsManager` used by plugins to safely handle I/O from Hook Handlers.
+- `solidity`: The Solidity build system.
+- `tasks`: The `TaskManager` used to run Hardhat Tasks.
+- `versions`: An object with the version of Hardhat and its key dependencies.
+
+You can also import each of them as named imports, like this:
+
+```ts
+import {
+  config,
+  userConfig,
+  artifacts,
+  network,
+  globalOptions,
+  hooks,
+  interruptions,
+  solidity,
+  tasks,
+  versions,
+} from "hardhat";
+```
