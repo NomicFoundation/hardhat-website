@@ -24,16 +24,7 @@ The most interesting ones are:
 - [`FileTree`](https://starlight.astro.build/components/file-tree/): To display the file system structure
 - [`Steps`](https://starlight.astro.build/components/steps/): For ordered steps that the user should follow
 
-`FileTree` and `Steps` should be used whenever it makes sense. `Code` only when the triple backticks aren't enough.
-
-Note that the triple backticks in Starlight are more powerful than usual, as they are backed by ExpressiveCode. See:
-
-- https://starlight.astro.build/guides/authoring-content/#code-blocks
-- https://expressive-code.com/key-features/syntax-highlighting/
-- https://expressive-code.com/key-features/frames/
-- https://expressive-code.com/key-features/text-markers/
-- https://expressive-code.com/key-features/word-wrap/
-- https://expressive-code.com/key-features/code-component/
+`FileTree` and `Steps` should be used whenever it makes sense. `Code` only when the triple backticks aren't enough (see below for more info).
 
 To use the `FileTree` component, you MUST add a `prettier-ignore` comment above, otherwise it will break when autoformatting the document. This is how it should look like:
 
@@ -45,6 +36,26 @@ To use the `FileTree` component, you MUST add a `prettier-ignore` comment above,
   - file2
 </FileTree>
 ```
+
+#### Code snippets
+
+Starlight uses [ExpressiveCode](https://expressive-code.com/) to render code snippets. It's compatible with the tripple backtick syntaxs of markdown, but signficantly more powerful.
+
+See:
+
+- https://starlight.astro.build/guides/authoring-content/#code-blocks
+- https://expressive-code.com/key-features/syntax-highlighting/
+- https://expressive-code.com/key-features/frames/
+- https://expressive-code.com/key-features/text-markers/
+- https://expressive-code.com/key-features/word-wrap/
+- https://expressive-code.com/key-features/code-component/
+
+We also use these plugins of ExpressiveCode:
+
+- [`@expressive-code/plugin-line-numbers`](https://expressive-code.com/plugins/line-numbers/): To optionally show the line numbers of a snippet. By default we don't show them.
+- [`@expressive-code/plugin-collapsible-sections`](https://expressive-code.com/plugins/collapsible-sections/): To be able to show complete and valid snippets (e.g. a valid config or task action file), while collapsing their unimportant parts by default. This is similar to how GitHub collapses unchanged parts of a diff.
+
+Using `@expressive-code/plugin-collapsible-sections` we should try to keep every snippet to be valid code/config whenever possible.
 
 #### Custom components
 
