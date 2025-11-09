@@ -1,6 +1,6 @@
 ---
 title: Managing config values and secrets safely
-description: How to to manage config variables and secrets safely
+description: How to manage config variables and secrets safely
 sidebar:
   label: Managing config values and secrets
   order: 6
@@ -10,54 +10,104 @@ import Run from "@hh/Run.astro";
 
 Hardhat projects often need values that shouldn’t be committed to shared repositories, like private keys or API keys.
 
-Hardhat 3 offers _Config Variables_ to handle this in a secure way, either encrypted (using `hardhat-keystore`) or not, depending on what you need.
+Hardhat 3 offers _Configuration Variables_ to handle this in a secure way, either encrypted (using `hardhat-keystore`) or not, depending on what you need.
 
-By default, config variables are read from environment variables, but plugins can define alternative ways to obtain their values.
+By default, Configuration Variables are read from environment variables, but plugins can define alternative ways to obtain their values.
 
-This guide covers how to use _Config Variables_ and the `hardhat-keystore` plugin to securely store sensitive values.
+This guide covers how to use _Configuration Variables_ and the `hardhat-keystore` plugin to securely store sensitive values.
 
-## Using config variables
+## Using Configuration Variables
 
 A common example of a value that you don’t want to hardcode is an RPC URL that includes an API key, such as one from [Alchemy](https://www.alchemy.com/) or [Infura](https://www.infura.io/):
 
-```ts
-const config = {
+```ts collapse={5-7}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
   networks: {
     sepolia: {
+      type: "http",
       url: "https://eth-sepolia.g.alchemy.com/v2/ABC123...",
-      // ...
     },
   },
-};
+});
 ```
 
 Instead of this, you can call the `configVariable` function to get the value at runtime:
 
-```ts
-import { configVariable } from "hardhat/config";
+```ts collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
 
-const config = {
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
   networks: {
     sepolia: {
+      type: "http",
       url: configVariable("SEPOLIA_RPC_URL"),
-      // ...
     },
   },
-};
+});
 ```
 
 In the snippet above, Hardhat will look for an environment variable named `SEPOLIA_RPC_URL` when it needs the value. You can define it inline when running a task:
 
 <Run
-  prefix="SEPOLIA_RPC_URL='<https://eth-sepolia.g.alchemy.com/v2/ABC123>...'"
+  prefix="SEPOLIA_RPC_URL='https://eth-sepolia.g.alchemy.com/v2/ABC123'"
   command="hardhat run ./my-script.ts --network sepolia"
 />
 
-_Config Variables_ are lazy, meaning that they're only resolved when actually needed. This allows you to use Hardhat without having to define all of them upfront if they're not going to be used for what you are doing.
+_Configuration Variables_ are lazy, meaning that they're only resolved when actually needed. This allows you to use Hardhat without having to define all of them upfront.
+
+### Formatting Configuration Variables
+
+You can provide a second argument to `configVariable` called `format`. This is a template string where all instances of `{variable}` get replaced with the actual config variable value.
+
+For example, instead of storing an entire URL, you can store just the API key part.
+
+```ts collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    mainnet: {
+      type: "http",
+      url: configVariable(
+        "ALCHEMY_API_KEY",
+        "https://eth-mainnet.g.alchemy.com/v2/{variable}",
+      ),
+    },
+    sepolia: {
+      type: "http",
+      url: configVariable(
+        "ALCHEMY_API_KEY",
+        "https://eth-sepolia.g.alchemy.com/v2/{variable}",
+      ),
+    },
+  },
+});
+```
+
+You can then run it like this:
+
+<Run
+  prefix="ALCHEMY_API_KEY=foo"
+  command="hardhat run ./my-script.ts --network sepolia"
+/>
 
 ## Managing secrets with the `hardhat-keystore` plugin
 
-Resolving _Config Variables_ from environment variables isn't safe (due to command history storage, among other things) nor convenient. The `hardhat-keystore` plugin lets you store sensitive values in an encrypted file and use them as config variables, without having to type them every time or commit them to disk in plain text, where they can be stolen.
+Resolving _Configuration Variables_ from environment variables isn't safe (due to command history storage, among other things) nor convenient. The `hardhat-keystore` plugin lets you store sensitive values in an encrypted file and use them as Configuration Variables. This way, you don't have to type them every time or commit them to disk in plain text, where they can be stolen.
 
 ### Setup
 
@@ -71,21 +121,25 @@ Use the `keystore set` task to store an encrypted secret:
 
 <Run command="hardhat keystore set SEPOLIA_RPC_URL" />
 
-When you run this task for the first time, you’ll be prompted to create a password for your keystore. After that you’ll need to enter that password to confirm the operation every time you add a new value. The secret is then stored encrypted in a file in your home directory.
+When you run this task for the first time, you'll be prompted to create a password for your keystore. After that, you'll need to enter that password to confirm the operation every time you add a new value. The secret is then stored encrypted in a file in your home directory.
 
 Once a value is stored in the keystore, you can use it in your configuration:
 
-```ts {6}
-import { configVariable } from "hardhat/config";
+```ts collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
 
-const config = {
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
   networks: {
     sepolia: {
+      type: "http",
       url: configVariable("SEPOLIA_RPC_URL"),
-      // ...
     },
   },
-};
+});
 ```
 
 Hardhat will prompt you to enter the password when the configuration variable is needed.
@@ -104,11 +158,16 @@ To manage your keystore, the plugin provides the following self-explanatory task
   ]}
 />
 
-### Improving UX when using keystore values during the dev process
+### Improving UX when using keystore values during development
 
-To avoid repeatedly writing the keystore password when working locally with values that aren't sensitive, you can use the _Development Keystore_, a separate keystore which doesn't ask for the password when the values are accessed. This allows you to keep the keystore setup when security isn't relevant during the development process.
-To use it just store the values adding the `--dev` flag:
+To avoid repeatedly writing the keystore password when working locally with values that aren't sensitive, you can use the _Development Keystore_. This is a separate keystore that doesn't require a password when accessing values, allowing you to keep the keystore workflow even when security isn't critical.
+
+To use it, just store the values with the `--dev` flag:
 
 <Run command="hardhat keystore set --dev <key>" />
 
 {/* A section called "Combining environment and encrypted variables" was removed. Look at the commit history to restore it. */}
+
+## Learn more
+
+To learn more about how Configuration Variables work, you can read their [explanation article](/docs/explanations/configuration-variables).
