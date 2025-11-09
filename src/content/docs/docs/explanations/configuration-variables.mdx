@@ -4,3 +4,141 @@ description: An explanation about Hardhat 3's Configuration Variables
 sidebar:
   order: 3
 ---
+
+import Run from "@hh/Run.astro";
+
+A Hardhat project often requires sensitive values as part of its configuration. For example, an API key or an Ethereum private key.
+
+While you could read these values directly from `process.env`, Hardhat 3's _Configuration Variables_ provide a more robust solution. They offer several advantages:
+
+- **Lazy loading**: Values are only read when actually needed, so you can run tasks that don't require certain Configuration Variables without having them defined
+- **Validation and type safety**: Values are validated and converted to the appropriate type (URL, `bigint`, etc.) with clear error messages
+- **Extensibility**: Plugins can customize where values are read from (like encrypted vaults) instead of just environment variables
+- **Format reuse**: A single stored value (like an API key) can be formatted differently for multiple uses
+- **Stored outside of the repo**: Values aren't defined inside of your repo, so you can't accidentally commit them, which is a common problem with `.env` files.
+
+This section explains how Configuration Variables work.
+
+## What is a Configuration Variable
+
+A Configuration Variable is a named value that can be used in your config and is read only when needed.
+
+Configuration Variables are represented in your config as `ConfigurationVariable` objects. Each object contains a name and an optional formatting parameter.
+
+## How Configuration Variables are used in your config
+
+To use a Configuration Variable, all you need to do is call the `configVariable` function to create a `ConfigurationVariable` object and include it in your config. Like this:
+
+```ts collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    sepolia: {
+      type: "http",
+      url: configVariable("SEPOLIA_URL"),
+    },
+  },
+});
+```
+
+Each field of the config that can have a sensitive value also accepts a Configuration Variable.
+
+### Using a Configuration Variable with a `format` parameter
+
+To reuse a value as part of different fields, you can provide a second argument to `configVariable`, called `format`. For example, you can use a single API key to build different URLs by calling `configVariable` multiple times with the same name but different format strings.
+
+For example, use the `ALCHEMY_API_KEY` name to define multiple Configuration Variables representing different URLs:
+
+```ts collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    mainnet: {
+      type: "http",
+      url: configVariable(
+        "ALCHEMY_API_KEY",
+        "https://eth-mainnet.g.alchemy.com/v2/{variable}",
+      ),
+    },
+    sepolia: {
+      type: "http",
+      url: configVariable(
+        "ALCHEMY_API_KEY",
+        "https://eth-sepolia.g.alchemy.com/v2/{variable}",
+      ),
+    },
+  },
+});
+```
+
+When each config variable with a format is read, Hardhat will first read the original value of the Configuration Variable (e.g. the value associated with `ALCHEMY_API_KEY`) and replace all the occurrences of `{variable}` in the `format` argument with it.
+
+## How Configuration Variables are read
+
+Configuration Variables use lazy loading. The value is read only when you explicitly access it during execution.
+
+When the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) is initialized, each `ConfigurationVariable` object in your config gets converted into a `ResolvedConfigurationVariable` object without reading its value.
+
+To read the value of a config variable, call one of the async getters on its `ResolvedConfigurationVariable` object. The `ResolvedConfigurationVariable` interface has multiple getters, which you can see in its type's inline docs.
+
+When you call a getter, Hardhat will read the value associated with the config variable's name. If none is present, it will throw an error. If the value can be successfully read, it gets cached and formatted as explained above. It's then validated and potentially parsed into a different type before being returned.
+
+Continuing with the example from the previous section, a script could access the URL of the `mainnet` network configuration like this:
+
+```ts {12}
+// scripts/print-mainnet-url.ts
+import { config } from "hardhat";
+import assert from "node:assert";
+
+const mainnetConfig = config.networks.mainnet;
+
+assert(
+  mainnetConfig?.type === "http",
+  "mainnet network not defined or not http",
+);
+
+console.log("The mainnet URL is:", await mainnetConfig.url.getUrl());
+```
+
+In this case, the `mainnetConfig.url` value is read when you call the `getUrl` getter in the highlighted line. It will fail if the formatted value is not a valid URL, or return the URL if it's valid.
+
+You can try running the script like this:
+
+<Run command="hardhat run scripts/print-mainnet-url.ts" />
+
+but you will get this error, because there's no value associated with the name `ALCHEMY_API_KEY` yet:
+
+```
+Error HHE7: Configuration Variable "ALCHEMY_API_KEY" not found.
+```
+
+## Setting the value of a Configuration Variable
+
+To use a Configuration Variable, you need to provide a value associated with its name.
+
+By default, you can do it using an environment variable with the same name as the config variable.
+
+For example, you can run this:
+
+<Run
+  prefix="ALCHEMY_API_KEY=foo"
+  command="hardhat run scripts/print-mainnet-url.ts"
+/>
+
+and get this result:
+
+```
+The mainnet URL is: https://eth-mainnet.g.alchemy.com/v2/foo
+```
+
+Plugins can extend the Configuration Variables system using [Hardhat's Hooks](/docs/plugin-development/explanations/hooks). For example, the official [`@nomicfoundation/hardhat-keystore`](/docs/plugins/hardhat-keystore) plugin reads values from an encrypted vault. To learn how to use it, please read [this guide](/docs/guides/configuration-variables).
