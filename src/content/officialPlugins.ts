@@ -75,7 +75,7 @@ function getOfficialPluginCachedReadmePath(officialPluginName: string) {
   const cachedResultPath = path.join(
     import.meta.dirname,
     "../../cache/",
-    `${officialPluginName.replace(/[@\/\\]/g, "")}-README.json`,
+    `${officialPluginName.replace(/[@/\\]/g, "")}-README.json`,
   );
 
   return cachedResultPath;
