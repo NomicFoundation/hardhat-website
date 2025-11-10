@@ -39,7 +39,7 @@ To use the `FileTree` component, you MUST add a `prettier-ignore` comment above,
 
 #### Code snippets
 
-Starlight uses [ExpressiveCode](https://expressive-code.com/) to render code snippets. It's compatible with the tripple backtick syntaxs of markdown, but signficantly more powerful.
+Starlight uses [ExpressiveCode](https://expressive-code.com/) to render code snippets. It's compatible with the triple backtick syntax of markdown, but significantly more powerful.
 
 See:
 
