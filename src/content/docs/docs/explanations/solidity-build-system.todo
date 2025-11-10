@@ -1,7 +1,8 @@
 ---
-title: Solidity build system
-description: An explanation about the Hardhat 3 Solidity Build System
+title: Understanding Hardhat's Solidity build system
+description: How Hardhat compiles and manages Solidity contracts and their artifacts
 sidebar:
   order: 5
 ---
 
+TODO
