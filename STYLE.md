@@ -294,6 +294,8 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Network Connection
 - Network Config
 
+Note: Hardhat can also be called Hardhat 3, but never Hardhat v3.
+
 ## cspell dictionary
 
 There's a cspell dictionary in cspell-dictionary.txt. These aren't necessarily proper nouns, and the casing in that file shouldn't necessarily be reflected in the docs.
