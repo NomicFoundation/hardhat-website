@@ -7,7 +7,10 @@ import shortlinks from "./shortlinks";
 import inAppShortlinks from "./in-app-shortlinks";
 import movedPagesRedirects from "./moved-pages";
 
-const redirects: AstroConfig["redirects"] = {};
+const redirects: Record<
+  string,
+  Exclude<AstroConfig["redirects"][string], string>
+> = {};
 
 // Sorted in increasing importance/presedence
 const redirectCategories = [
@@ -21,6 +24,19 @@ const redirectCategories = [
 
 for (const category of redirectCategories) {
   for (const [from, to] of category) {
+    if (redirects[from] !== undefined) {
+      throw new Error(`Duplicated redirect found!
+
+From: ${from}
+Lower priority redirection: ${redirects[from].destination}
+Higher priority redirection: ${to}
+
+How to resolve this error:
+
+- If you just added the lower priority redirect, you should add a different one.
+- If you just added the higher priority one, you can either add a different one, or decide that it has higher priority and remove the lower priority one`);
+    }
+
     redirects[from] = {
       destination: to,
       status: 302,
@@ -28,4 +44,4 @@ for (const category of redirectCategories) {
   }
 }
 
-export default redirects;
+export default redirects satisfies AstroConfig["redirects"];

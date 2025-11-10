@@ -13,7 +13,7 @@ export default [
   // TODO: They don't have a matching page yet
   // ["/hardhat-network-helpers/docs/reference#fixtures", ""],
   // ["/chaining-async-matchers", ""],
-  // ["/console-log", ""],
+  ["/console-log", "/docs/reference/console-log"],
   [
     "/verify-custom-networks",
     "/docs/guides/smart-contract-verification#verifying-on-a-block-explorer-of-a-different-network",
