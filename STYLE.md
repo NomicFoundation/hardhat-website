@@ -290,6 +290,9 @@ This are proper nouns that are used in Hardhat 3, which need to be capitalized i
 - Task Action
 - Mocha
 - Configuration Variable
+- Network Manager
+- Network Connection
+- Network Config
 
 ## cspell dictionary
 
