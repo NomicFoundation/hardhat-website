@@ -22,3 +22,4 @@ reentrancy
 Nomic
 frontmatter
 `prebuild`
+Diátaxis

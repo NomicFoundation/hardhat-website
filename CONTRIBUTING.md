@@ -4,6 +4,14 @@ Thanks for your interest in contributing to Hardhat's website!
 
 This website is built using [Astro](https://astro.build), and [Starlight](https://starlight.astro.build).
 
+## Structuring the documentation
+
+This website uses the [Diátaxis](https://diataxis.fr) documentation framework/approach.
+
+The terminology and sections “tutorial”, “guides”, “explanations”, and “reference” are taken from Diátaxis.
+
+We also include “cookbook”, which are smaller, more on-point guides, like an F.A.Q. These should also be considered guides in Diátaxis terms.
+
 ## Editing content
 
 The website's content is located in the [`src/content`](./src/content) directory, and written in GitHub Flavored Markdown in MDX files.
