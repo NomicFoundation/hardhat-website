@@ -1,0 +1,64 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { getCollection } from "astro:content";
+
+import Plugin from "../../../components/custom-pages/Plugin.astro";
+import { pluginsConfig } from "../../../config";
+
+const officialPlugins = await getCollection("officialPlugins");
+
+const headings = [
+  ...officialPlugins.map((plugin) => ({
+    depth: 2,
+    text: plugin.data.shortName,
+    slug: plugin.data.slug,
+  })),
+];
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "Hardhat 3 official plugins",
+    description: "A directory of Hardhat 3 official plugins",
+    lastUpdated: false,
+    editUrl: false,
+    next: false,
+    prev: false,
+  }}
+  headings={headings}
+>
+  <div class="description">
+    <p>Extend Hardhat's functionality with these official plugins.</p>
+    <p>
+      You can also find plugins built by the community
+      <a href="/docs/plugins/community-plugins">here</a>.
+    </p>
+  </div>
+
+  <h3>Official plugins</h3>
+
+  {
+    officialPlugins.map((plugin) => (
+      <div>
+        <Plugin
+          name={plugin.data.name}
+          href={plugin.data.website}
+          author={pluginsConfig.officialPluginsAuthor}
+          authorUrl={pluginsConfig.officialPluginsAuthorUrl}
+          description={plugin.data.description}
+          tags={plugin.data.tags}
+          anchorSlug={plugin.data.slug}
+        />
+      </div>
+    ))
+  }
+</StarlightPage>
+
+<style lang="sass">
+  h3
+    font-size: 1.5rem
+    margin-bottom: 2rem
+
+  .description
+    margin-bottom: 2rem
+</style>

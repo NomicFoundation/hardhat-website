@@ -86,7 +86,9 @@ Note that cspell doesn't autofix your typos.
 
 In most cases, if you place a new `.mdx` file in a folder within the [`src/content`](./src/content) directory, it will be automatically added to the website. You can validate if it does by running the website locally and checking if it appears in its section's sidebar.
 
-If it doesn't, you may need to edit the [`src/content.config.ts`](./src/content.config.ts) file to add it to the sidebar. We use [`starlight-sidebar-topics`](https://starlight-sidebar-topics.netlify.app/docs/getting-started/) to manage the different section's/topic's sidebars, so please refer to its documentation for more information.
+If it doesn't, you may need to edit the [`src/content.config.ts`](./src/content.config.ts) file to add it to the sidebar. Top-level `/docs/guides/<foo>` documents are an example of that.
+
+We use [`starlight-sidebar-topics`](https://starlight-sidebar-topics.netlify.app/docs/getting-started/) to manage the different section's/topic's sidebars, so please refer to its documentation for more information.
 
 ### Moving a page
 
