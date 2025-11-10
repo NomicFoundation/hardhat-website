@@ -5,21 +5,21 @@ description: How to write and run Hardhat scripts
 
 import Run from "@hh/Run.astro";
 
-In this guide we will go through the steps of creating a script with Hardhat. For a general overview of using Hardhat refer to the [Getting started guide](/docs/getting-started).
+In this guide, we'll walk through creating a script with Hardhat. For a general overview of using Hardhat, refer to the [getting started guide](/docs/getting-started).
 
-You can write your own custom scripts that can use all of Hardhat's functionality. For example, in this guide, we will work through scripts that print the list of available accounts.
+You can write your own custom scripts that use all of Hardhat's functionality. For example, in this guide, we'll create a script that prints the list of available accounts.
 
 ## Writing a script
 
-Hardhat has been designed as a library, allowing you to use it in any TypeScript or JavaScript file. All you need to do it importing the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) like this:
+Hardhat is designed as a library, so you can use it in any TypeScript or JavaScript file. All you need to do is import the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) like this:
 
 ```ts
 import hre from "hardhat";
 ```
 
-That way, you get access to all of Hardhat's functionality.
+This gives you access to all of Hardhat's functionality.
 
-To try this out, create a new directory called `scripts` in your project's root directory. Then, inside that directory, create a file called `accounts.ts` with the following content:
+Let's try this out. Create a new directory called `scripts` in your project's root directory, and inside it, create a file called `accounts.ts` with the following content:
 
 ```ts
 // scripts/accounts.ts
@@ -43,22 +43,22 @@ And you can run it like this:
 
 ## Running a Hardhat script without the Hardhat CLI
 
-You can also run your sripts as standalone TypeScript files, like this:
+You can also run your scripts as standalone TypeScript files with Node.js, like this:
 
 ```sh
 node scripts/accounts.ts
 ```
 
-This allows you to skip the Hardhat CLI if you want, and to use Hardhat from other Node.js tools, like [`vitest`](https://vitest.dev).
+This lets you skip the Hardhat CLI if you want, and use Hardhat from other Node.js tools, like [`vitest`](https://vitest.dev).
 
-### Passing global option values to standalone scripts
+### Passing Global Option values to standalone scripts
 
-When running a standalone script, you can pass any Hardhat global option to the script by setting a `HARDHAT_<GLOBAL_OPTION>` environment variable:
+When running a standalone script, you can pass any Hardhat Global Option to the script by setting a `HARDHAT_<GLOBAL_OPTION>` environment variable:
 
-- `HARDHAT_NETWORK`: Sets the network to connect to.
+- `HARDHAT_NETWORK`: Sets the network to connect to
 
-- `HARDHAT_BUILD_PROFILE`: Specifies which build profile to use.
+- `HARDHAT_BUILD_PROFILE`: Specifies which build profile to use
 
-To view the full list of global options available in Hardhat, run:
+To view the full list of Global Options available in Hardhat, run:
 
 <Run command="hardhat --help" />
