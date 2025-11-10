@@ -14,5 +14,5 @@ export default [
   ],
   ["/docs/guides/gas-statistics", "/docs/guides/testing/gas-statistics"],
   ["/docs/guides/cookbook", "/docs/cookbook"],
-  ["/plugins", "/plugins/official-plugins"],
+  ["/docs/plugins", "/docs/plugins/official-plugins"],
 ] satisfies Redirects;
