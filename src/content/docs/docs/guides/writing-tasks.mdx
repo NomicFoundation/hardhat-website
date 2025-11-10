@@ -5,13 +5,13 @@ description: How to write custom Hardhat tasks with Hardhat 3
 
 import Run from "@hh/Run.astro";
 
-At its core, Hardhat is a task runner that allows you to automate your development workflow. It comes with some built-in tasks, like `compile` and `test`, but you can add your own custom tasks as well.
+At its core, Hardhat is a task runner that lets you automate your development workflow. It comes with built-in tasks like `compile` and `test`, but you can also add your own custom tasks.
 
-This guide will show you how to extend Hardhat's functionality using tasks. It assumes you have initialized a sample project. If you haven't done it, please read the [getting started guide](/docs/getting-started) first.
+This guide will show you how to extend Hardhat's functionality using tasks. It assumes you've initialized a sample project. If you haven't, please read the [getting started guide](/docs/getting-started) first.
 
 ## Writing a task
 
-Let's write a very simple task that prints the list of available accounts, and explore how it works.
+Let's write a simple task that prints the list of available accounts. This will help you understand how tasks work and how to create your own.
 
 First, copy and paste the following code into your Hardhat config file:
 
@@ -24,7 +24,7 @@ const printAccounts = task("accounts", "Print the accounts")
   .build();
 ```
 
-Then let's create a `tasks/accounts.ts` file with the Task Action, which contains the logic that the task should run:
+Now let's create a `tasks/accounts.ts` file with the task action, which contains the logic that the task will run:
 
 ```ts
 // tasks/accounts.ts
@@ -43,7 +43,7 @@ export default async function (
 }
 ```
 
-Then, add the `printAccounts` task to the exported configuration object inside that same file:
+Next, add the `printAccounts` task to the exported configuration object in your Hardhat config file:
 
 ```ts
 // hardhat.config.ts
@@ -57,14 +57,12 @@ Now you should be able to run it:
 
 <Run command="hardhat accounts" />
 
-We are using the `task` function to define our new task. Its first argument is the name of the task, and it's what we use on the command line to run it. The second argument is the description of the task, which is printed when you use `hardhat help`.
+We're using the `task` function to define our new task. Its first argument is the name of the task, which is what we use on the command line to run it. The second argument is the description, which appears when you run `hardhat help`.
 
-The `task` function returns a task builder object that allows you to further configure the task. In this case, we use the `setAction` method to define the behavior of the task, by providing a function that lazy loads another module.
+The `task` function returns a task builder object that lets you further configure the task. In this case, we use the `setAction` method to define the task's behavior by providing a function that lazy loads another module.
 
-That module exports the action function itself. You are free to do anything you want in this function. In this case, we send a request to the network provider to obtain all the configured accounts and print their addresses.
+That module exports the action function itself. You can do anything you want in this function. In this case, we send a request to the network provider to get all the configured accounts and print their addresses.
 
-You can add parameters to your tasks, and Hardhat will handle their parsing and validation for you.
-
-You can also override existing tasks, which allows you to change how different parts of Hardhat work.
+You can add parameters to your tasks, and Hardhat will handle their parsing and validation for you. You can also override existing tasks, which lets you customize how different parts of Hardhat work.
 
 {/* To learn more about tasks, please read [this guide](../advanced/create-task). */}
