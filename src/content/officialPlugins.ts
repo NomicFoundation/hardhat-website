@@ -22,10 +22,10 @@ const officialPluginsCollectionSchema = z.object({
   readmeMd: z.string(),
 });
 
-// We cache it for 3 hours. This may lead to some readmes being out synch with
+// We cache it for 24 hours. This may lead to some readmes being out synch with
 // `latest` from the npm registry, but only during development and the CI, and
 // not in vercel (neither production nor previews)
-const MAX_MS_OFFICIAL_PLUGIN_README = 3 * 60 * 60 * 1000;
+const MAX_MS_OFFICIAL_PLUGIN_README = 24 * 60 * 60 * 1000;
 
 async function getCachedDownloadsIfValid(
   cachedResultPath: string,
