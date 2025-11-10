@@ -112,7 +112,7 @@ Hardhat will automatically detect it, and compile it with the correct version of
 
 <Run command="hardhat build" />
 
-You can learn more about how to customize your Solidity version and settings in [this guide](/docs/guides/configuring-the-compiler).
+You can learn more about how to customize your Solidity version and settings in [this guide](/docs/guides/writing-contracts/configuring-the-compiler).
 
 ## Testing your contracts
 
@@ -193,7 +193,7 @@ Reason: revert: incBy: increment should be positive
 
 This lets you quickly pinpoint the issue, even across deeply nested calls.
 
-Learn more at [writing Solidity tests here](/docs/guides/writing-solidity-tests).
+Learn more at [writing Solidity tests here](/docs/guides/testing/using-solidity).
 
 ### TypeScript tests
 
@@ -242,7 +242,7 @@ To run your TypeScript tests, use the `test nodejs` task:
 
 <Run command="hardhat test nodejs" />
 
-You can write any TypeScript code you want in your tests, as they are normal TypeScript files with access to Hardhat. In this example, we use `viem` to interact with the contracts and test the expected behavior. To learn more about how to use `viem` with Hardhat, read [this guide](/docs/guides/using-viem).
+You can write any TypeScript code you want in your tests, as they are normal TypeScript files with access to Hardhat. In this example, we use `viem` to interact with the contracts and test the expected behavior. To learn more about how to use `viem` with Hardhat, read [this guide](/docs/guides/testing/using-viem).
 
 ### Solidity vs TypeScript tests
 
@@ -292,16 +292,16 @@ Modules are deployed with the `ignition deploy` task. To check that the deployme
 
 <Run command="hardhat ignition deploy ignition/modules/Counter.ts" />
 
-Your deployment was successfully executed in a network simulated by Hardhat! To learn more about how to deploy contracts with Ignition, including how to connect to a real network and how to manage your private keys, please read [this guide](/docs/guides/deploying-contracts).
+Your deployment was successfully executed in a network simulated by Hardhat! To learn more about how to deploy contracts with Ignition, including how to connect to a real network and how to manage your private keys, please read [this guide](/docs/guides/deployment).
 
 ## Learn more
 
 To learn more about Hardhat, check out these other guides:
 
 - [What's new in Hardhat 3](/docs/hardhat3/whats-new)
-- [Writing Solidity tests](/docs/guides/writing-solidity-tests)
-- [Using Viem with Hardhat](/docs/guides/using-viem)
-- [Deploying contracts](/docs/guides/deploying-contracts)
-- [Configuring the compiler](/docs/guides/configuring-the-compiler)
+- [Writing Solidity tests](/docs/guides/testing/using-solidity)
+- [Using Viem with Hardhat](/docs/guides/testing/using-viem)
+- [Deploying contracts](/docs/guides/deployment)
+- [Configuring the compiler](/docs/guides/writing-contracts/configuring-the-compiler)
 
 and join our [Hardhat 3](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group to share feedback and stay updated on new releases.
