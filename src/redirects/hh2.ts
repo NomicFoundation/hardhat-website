@@ -297,29 +297,8 @@ export default [
   ],
   ["/hre", "https://v2.hardhat.org/hre"],
   [
-    "/ignition/docs/advanced/deployment-artifacts",
-    "https://v2.hardhat.org/ignition/docs/advanced/deployment-artifacts",
-  ],
-  [
-    "/ignition/docs/advanced/execution",
-    "https://v2.hardhat.org/ignition/docs/advanced/execution",
-  ],
-  [
     "/ignition/docs/advanced/migrating",
     "https://v2.hardhat.org/ignition/docs/advanced/migrating",
-  ],
-  [
-    "/ignition/docs/advanced/reconciliation",
-    "https://v2.hardhat.org/ignition/docs/advanced/reconciliation",
-  ],
-  [
-    "/ignition/docs/advanced/versioning",
-    "https://v2.hardhat.org/ignition/docs/advanced/versioning",
-  ],
-  ["/ignition/docs/config", "https://v2.hardhat.org/ignition/docs/config"],
-  [
-    "/ignition/docs/guides/error-handling",
-    "https://v2.hardhat.org/ignition/docs/guides/error-handling",
   ],
   [
     "/ignition/docs/guides/viem",
