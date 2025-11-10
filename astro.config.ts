@@ -155,7 +155,7 @@ export default defineConfig({
                       //  1. If we use #official-plugins we take the user to
                       //     below the pagefold, missing some content.
                       //  2. If we don't add any #hash this item will be
-                      //     highlighted, even whenm community plugins is clicked
+                      //     highlighted, even when community plugins is clicked
                       link: "/docs/plugins#_top",
                     },
                     {
