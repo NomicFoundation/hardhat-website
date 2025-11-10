@@ -20,3 +20,5 @@ automine
 dontOverrideCompile
 reentrancy
 Nomic
+frontmatter
+`prebuild`

@@ -15,7 +15,7 @@
     "astro": "astro",
     "lint": "prettier --check '{src/**,.,.github/**}/*.{js,ts,md,json,mdx,astro,yml}' --ignore-path .prettierignore --ignore-path .prettierignore-ci && astro check && pnpm spellcheck",
     "lint:fix": "prettier --write '{src/**,.,.github/**}/*.{js,ts,md,json,mdx,astro,yml}' && astro check",
-    "spellcheck": "cspell lint --show-suggestions 'src/content/docs/**/*.mdx' src/config.ts || (echo && echo && echo 'Check CONTRIBUTING.md for more info about our cspell custom dictionary')"
+    "spellcheck": "cspell lint --show-suggestions CONTRIBUTING.md STYLE.md 'src/content/docs/**/*.mdx' src/config.ts || (echo && echo && echo 'Check CONTRIBUTING.md for more info about our cspell custom dictionary')"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

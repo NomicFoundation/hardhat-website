@@ -213,7 +213,7 @@ Some formatting rules:
 - Use simple backticks for file references. e.g. `src/foo.ts`.
 - When referring to a technical term, only use backticks if the term is used exactly like that in code, and not every time you refer to a concept. e.g. Hook Handlers, not `Hook Handlers` to talk about the concept, but `hookHandlers` to refer to the way to defined them in code.
 - Use triple backticks for code blocks. Always include the language name. Prefer `ts` over `js`.
-- Tripple backticks can have lines highlighted with brackets.
+- Triple backticks can have lines highlighted with brackets, collapsed sections, file names, languages, and more. See CONTRIBUTING.md for more info.
 - Don't use word wrapping. One line per paragraph.
 - Leave a blank line between paragraphs.
 - Everything is autoformatted by prettier.

@@ -92,7 +92,7 @@ Internal links, including `#hashes`, are validated when you run `pnpm build`.
 
 ### Style guide
 
-There's a STYLE.md guide explaning the style that the documentation should follow. It's based on Microsoft's, with tweaks to adapt it to our style, and to force Claude Code to not overindex on the some parts of it.
+There's a STYLE.md guide explaining the style that the documentation should follow. It's based on Microsoft's, with tweaks to adapt it to our style, and to force Claude Code to not overindex on the some parts of it.
 
 You can use Claude Code to help you follow the style guide. Read a few sections below to learn how.
 
@@ -128,7 +128,7 @@ We use `prettier`, `astro check`, `cspell`, and `starlight-links-validator` to l
 
 The first two can be run with `pnpm run lint` and `pnpm run lint:fix`. `cspell` only with `pnpm lint` and `pnpm spellcheck`, as it doesn't fix typos automatically. The latter only runs on `pnpm build`.
 
-Note that `pnpm lint` ignores the community plugins list json, so that we don't get PRs adding plugins unecessarily blocked by the CI.
+Note that `pnpm lint` ignores the community plugins list json, so that we don't get PRs adding plugins unnecessarily blocked by the CI.
 
 ### Prettier and MDX limitations
 
@@ -152,6 +152,6 @@ See:
 
 ## Using Claude Code as a copy editor
 
-This repository has a shared setup of Claude Code that let's you use it as a [copy editor](https://en.wikipedia.org/wiki/Copy_editing), to improve the writing, and make apply the styleguide to the text.
+This repository has a shared setup of Claude Code that let's you use it as a [copy editor](https://en.wikipedia.org/wiki/Copy_editing), to improve the writing, and make apply the style guide to the text.
 
 Take a look at `.claude/README.md` to learn how to use it.
