@@ -23,4 +23,36 @@ export default [
     "/report-bug",
     "https://github.com/NomicFoundation/hardhat/issues/new/choose",
   ],
+  [
+    "/libraries-with-undetectable-addresses",
+    "/docs/plugins/hardhat-verify" //#libraries-with-undetectable-addresses TODO: missing section
+  ],
+  [
+    "/verifying-on-sourcify",
+    "/docs/plugins/hardhat-verify" //#verifying-on-sourcify TODO: missing section
+  ],
+  [
+    "/vyper-test-directives",
+    "/docs/plugins" ///hardhat-vyper#test-directives TODO missing plugin
+  ],
+  [
+    "/chaining-async-matchers",
+    "/docs/plugins/hardhat-ethers-chai-matchers" //#chaining-async-matchers TODO: missing section
+  ],
+  [
+    "/hardhat-network-helpers-fixtures",
+    "/docs/plugins/hardhat-network-helpers" //#fixtures TODO: missing section
+  ],
+  [
+    "/ethers-library-linking",
+    "/docs/plugins/hardhat-ethers#library-linking"
+  ],
+  [
+    "/hd-wallet-config",
+    "/docs/reference/configuration#hd-wallet-config"
+  ],
+  [
+    "/getting-started",
+    "/docs/getting-started"
+  ]
 ] satisfies Redirects;
