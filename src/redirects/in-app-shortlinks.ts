@@ -52,7 +52,7 @@ export default [
     "/docs/reference/configuration#hd-wallet-config"
   ],
   [
-    "/getting-started",
+    "/getting-started-v3",
     "/docs/getting-started"
   ]
 ] satisfies Redirects;
