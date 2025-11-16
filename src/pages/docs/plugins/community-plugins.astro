@@ -1,29 +1,25 @@
 ---
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
-import AnchorHeading from "@astrojs/starlight/components/AnchorHeading.astro";
 import { getCollection } from "astro:content";
 
 import Plugin from "../../../components/custom-pages/Plugin.astro";
 import { pluginsConfig } from "../../../config";
 
-const officialPlugins = await getCollection("officialPlugins");
 const communityPlugins = await getCollection("communityPlugins");
 
 const headings = [
-  { depth: 2, text: "Official Plugins", slug: "official-plugins" },
-  ...officialPlugins.map((plugin) => ({
-    depth: 3,
-    text: plugin.data.shortName,
+  ...communityPlugins.map((plugin) => ({
+    depth: 2,
+    text: plugin.data.name,
     slug: plugin.data.slug,
   })),
-  { depth: 2, text: "Community Plugins", slug: "community-plugins" },
 ];
 ---
 
 <StarlightPage
   frontmatter={{
-    title: "Hardhat Plugins",
-    description: "A directory of Hardhat 3 plugins",
+    title: "Hardhat 3 community plugins",
+    description: "A directory of Hardhat 3 community plugins",
     lastUpdated: false,
     editUrl: false,
     next: false,
@@ -31,38 +27,6 @@ const headings = [
   }}
   headings={headings}
 >
-  <div class="description">
-    <p></p>
-    Extend Hardhat's functionality with the plugins below.
-
-    <p>
-      To learn how to create your own, check out our{" "}
-      <a href="/plugin-development"> plugin development documentation</a>.
-    </p>
-  </div>
-
-  <AnchorHeading level={2} id="official-plugins">
-    Official Plugins
-  </AnchorHeading>
-  {
-    officialPlugins.map((plugin) => (
-      <div>
-        <Plugin
-          name={plugin.data.name}
-          href={plugin.data.website}
-          author={pluginsConfig.officialPluginsAuthor}
-          authorUrl={pluginsConfig.officialPluginsAuthorUrl}
-          description={plugin.data.description}
-          tags={plugin.data.tags}
-          anchorSlug={plugin.data.slug}
-        />
-      </div>
-    ))
-  }
-
-  <AnchorHeading level={2} id="community-plugins">
-    Community Plugins
-  </AnchorHeading>
   <div class="community-plugins">
     <div>
       Community Plugins are developed and maintained by the Hardhat community.
@@ -92,6 +56,7 @@ const headings = [
           authorUrl={plugin.data.authorUrl}
           description={plugin.data.description}
           tags={plugin.data.tags}
+          anchorSlug={plugin.data.slug}
         />
       </div>
     ))

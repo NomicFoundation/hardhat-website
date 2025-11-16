@@ -1,0 +1,101 @@
+---
+title: Using multiple versions of Solidity in a single project
+description: How to use multiple versions of Solidity in a single project
+sidebar:
+  label: Using multiple Solidity versions
+  order: 3
+---
+
+Some projects need to compile different files with different Solidity versions. Hardhat lets you define multiple compiler configurations using an extended format of the `solidity` property, which has a `compilers` array with different compiler configurations.
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  // ...
+  solidity: {
+    compilers: [
+      {
+        version: "0.7.6",
+      },
+      {
+        version: "0.8.11",
+      },
+      {
+        version: "0.8.29",
+        settings: {
+          optimizer: { enabled: true },
+        },
+      },
+    ],
+  },
+});
+```
+
+Hardhat compiles each Solidity file in your project using the **highest configured Solidity version** that's compatible with the version pragma of the file and its dependencies.
+
+For example, given the configuration above:
+
+- A file with `pragma solidity ^0.8.0` will be compiled with Solidity `0.8.29`, even though `0.8.11` is also compatible.
+- A file with `pragma solidity ^0.7.0` will use Solidity `0.7.6`, which is the only valid matching version.
+- A file with `pragma solidity ^0.8.0` that imports another file with `pragma solidity <0.8.20` will be compiled with `0.8.11`, because the combination of both restrictions makes it the highest compatible version.
+
+## Overriding version selection for a file
+
+If you need to compile specific files using a different compiler version than Hardhat's default choice, you can handle this with the `overrides` property:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    compilers: [
+      /* configured compilers */
+    ],
+    overrides: {
+      "contracts/Foo.sol": {
+        version: "0.8.11",
+      },
+    },
+  },
+});
+```
+
+In this case, `contracts/Foo.sol` will always be compiled with Solidity 0.8.11, regardless of the versions defined in `solidity.compilers`, its `pragma`, and those of its dependencies.
+
+Each entry in the `overrides` object maps a file to a custom compiler configuration. Just like the main configuration, only the `version` field is mandatory.
+
+### Using overrides without multiple versions of Solidity
+
+You can use overrides even if you're using a single Solidity version. You'll need to use the extended format of the `solidity` property, with an array of `compilers` and an `overrides` object.
+
+For example, you can enable the optimizer only for a single file:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.29",
+      },
+    ],
+    overrides: {
+      "contracts/Foo.sol": {
+        version: "0.8.29",
+        settings: {
+          optimizer: {
+            enabled: true,
+          },
+        },
+      },
+    },
+  },
+});
+```

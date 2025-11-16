@@ -2,9 +2,14 @@
 title: Node.js support
 description: Hardhat 3 Node.js support policy
 sidebar:
-  order: 3
+  order: 8
 ---
 
-Hardhat 3 launches with the support of [Node.js](https://nodejs.org/) `node --version` ≥ `v22.10.0` and `node --version` ≥ `v24.0.0`.
+Hardhat 3 launched with support for [Node.js](https://nodejs.org/) `v22.10.0` or greater.
 
-After launch, Hardhat 3 will support all subsequent even major versions of Node.js, while they are labeled as `Current`, `Active LTS` and `Maintenance`. This support activates with the launch of Node.js `v26` and will continue thereafter.
+Hardhat 3 will support all subsequent even major versions of Node.js as long as they're maintained by the Node.js team.
+
+Once an even major version is no longer maintained, we'll stop supporting it. This means:
+
+- We won't test Hardhat using it
+- We may start using features of Node.js that aren't available in that version

@@ -1,0 +1,60 @@
+---
+title: Hardhat 3 projects
+description: An explanation about what a Hardhat project is
+sidebar:
+  order: 1
+---
+
+import { FileTree } from "@astrojs/starlight/components";
+
+A Hardhat Project is an npm package that uses Hardhat. In other words, it's a directory with a `package.json` file, and a Hardhat config file either in the same directory or one of its subdirectories.
+
+## Hardhat project root
+
+The Hardhat project root directory is the directory containing the `package.json` file, matching the behavior of npm.
+
+For example, in this case:
+
+{/* prettier-ignore */}
+<FileTree>
+- **directory**
+  - package.json
+  - config/
+    - hardhat.config.ts
+</FileTree>
+
+`directory` is the project root, not `config`.
+
+### Recommended structure
+
+We recommend keeping both the `package.json` and the `hardhat.config.ts` in the root of the project, and installing `hardhat` there.
+
+{/* prettier-ignore */}
+<FileTree>
+- root
+  - package.json Has `hardhat` installed
+  - hardhat.config.ts
+</FileTree>
+
+## Nested projects and Hardhat installation
+
+The `package.json` of the Hardhat project doesn't need to install Hardhat directly. The only requirement is that your config needs to be able to import it. This can be helpful for [integration tests of plugins](/docs/plugin-development/guides/integration-tests#testing-with-fixture-projects) and custom setups.
+
+For example, in this case:
+
+{/* prettier-ignore */}
+<FileTree>
+- **directory**
+  - package.json Has `hardhat` installed
+  - hardhat.config.ts
+  - tests
+    - **example-project**
+      - package.json Doesn't have `hardhat` installed
+      - hardhat.config.ts
+</FileTree>
+
+Both `directory` and `example-project` will be Hardhat projects, despite `hardhat` only being installed in `directory`.
+
+## Usage with monorepos
+
+If you're using a monorepo, each package can have multiple projects, as explained above. However, we recommend using the [Recommended structure](#recommended-structure) in each of your packages.

@@ -1,0 +1,42 @@
+---
+title: Using a custom Solidity compiler
+description: How to configure Hardhat to use a custom Solidity compiler
+sidebar:
+  order: 6
+---
+
+Hardhat supports custom compilers like [solx](https://solx.zksync.io). You'll need to manually download the compiler binary (for example, from the [solx releases page](https://github.com/matter-labs/solx/releases)) and reference it in the Solidity settings of your `hardhat.config.ts` file.
+
+Configure the path to the custom compiler binary using the `path` property. You can use this property in both the simple and extended formats of the `solidity` property. For example, using the simple format:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    version: "0.8.29",
+    path: "/path/to/solx", // Replace with the actual path to the solx binary
+  },
+});
+```
+
+Or using the extended format:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.29",
+        path: "/path/to/solx",
+      },
+    ],
+  },
+});
+```

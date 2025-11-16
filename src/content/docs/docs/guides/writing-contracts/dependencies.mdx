@@ -1,0 +1,77 @@
+---
+title: Managing smart contract dependencies
+description: How to use npm and git submodule dependencies
+sidebar:
+  label: Managing dependencies
+  order: 2
+---
+
+import { Badge } from "@astrojs/starlight/components";
+import Install from "@hh/Install.astro";
+
+Hardhat 3 supports dependencies installed with npm and via git submodules. This guide explains how to use each of them.
+
+## Using npm dependencies
+
+To use an npm dependency in Hardhat you first need to install it. For example, you can install [Open Zeppelin Contracts](https://www.npmjs.com/package/@openzeppelin/contracts) like this:
+
+<Install packages="@openzeppelin/contracts" />
+
+To use it, you have to import their files just like you would do in Node.js. For example, this file imports a file from `@openzeppelin/contracts`:
+
+```solidity
+// contracts/ExampleToken.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.20;
+
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract ExampleToken is ERC20 {
+  constructor() ERC20("ExampleToken", "ETK") {}
+}
+```
+
+Hardhat treats files coming from npm differently than your local ones. They're considered dependencies, not part of your project, so they don't emit artifacts by default. To learn how to do it, read the [npm artifacts recipe](/docs/cookbook/npm-artifacts).
+
+## Why you should use npm dependencies
+
+Hardhat 3 offers full support for npm, including many new features. We recommend using them whenever possible, as they have multiple advantages:
+
+1. They are lighter on your file system and faster to install when compared to git submodules.
+
+2. They are more secure:
+   1. Once published to npm, dependencies are immutable, preventing authors from potentially attacking their users by replacing the code of a version.
+
+   2. They can have provenance certificates, so you can know precisely how a version was built and published.
+
+   3. They allow library authors to have stricter security practices (read more about [npm's security improvements](https://github.blog/security/supply-chain-security/our-plan-for-a-more-secure-npm-supply-chain/)).
+
+   4. You can replicate your setup exactly by keeping track of your lockfile using git.
+
+3. They have native support for transitive dependencies, even with different versions.
+
+   Two dependencies can use incompatible versions of the same library and Hardhat will handle it automatically. <Badge text="New in Hardhat 3" variant="success" />
+
+4. They have native support for monorepos. <Badge text="New in Hardhat 3" variant="success" />
+
+5. They don't require adding remappings after installation. Hardhat handles them automatically.
+
+   On top of that, library authors can customize which files they export and how using [`package.json#exports`](https://nodejs.org/api/packages.html#subpath-exports). For example, making an import to `lib/Foo.sol` resolve to `lib/src/Foo.sol`. <Badge text="New in Hardhat 3" variant="success" />
+
+## Using git submodules
+
+If you need to install a dependency using a git submodule, use this command:
+
+```sh
+git submodule add -b <branch> <repository> <installation-path>
+```
+
+For example, this installs [`PaulRBerg/prb-math@release-v4`](https://github.com/PaulRBerg/prb-math/tree/release-v4) in the `lib/prb-math` folder of your project:
+
+```sh
+git submodule add -b release-v4 https://github.com/PaulRBerg/prb-math.git lib/prb-math
+```
+
+Hardhat doesn't treat files from git submodules differently, as it does with npm ones. They're considered local to your project, but since they aren't placed in your `contracts/` folder, Hardhat doesn't emit artifacts for them either.
+
+To import them, you need to use a relative path, or [use a remapping](/docs/guides/writing-contracts/remappings#remappings-to-git-submodules).

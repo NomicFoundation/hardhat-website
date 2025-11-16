@@ -1,0 +1,309 @@
+---
+title: Testing your smart contracts with Ethers and Mocha
+description: Learn how to test your smart contracts using Ethers.js and Mocha.
+sidebar:
+  label: Using ethers.js
+  order: 4
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+This guide shows you how to test contracts in Hardhat using [Ethers](https://docs.ethers.org/v6/) and [Mocha](https://mochajs.org/).
+
+You'll also learn how to use our [Chai matchers](/docs/plugins/hardhat-ethers-chai-matchers) and [`hardhat-network-helpers`](/docs/plugins/hardhat-network-helpers) plugins to write clean test code.
+
+:::note
+You can also find a similar guide for `node:test` and viem [here](/docs/guides/testing/using-viem), our recommended setup.
+:::
+
+## Setup
+
+If you have already initialized an ethers-based project using `hardhat --init`, you don't need to do anything else.
+
+If you want to add the required plugins manually, follow these steps:
+
+<Steps>
+
+1. Install the packages:
+
+   <Install packages="@nomicfoundation/hardhat-ethers @nomicfoundation/hardhat-typechain @nomicfoundation/hardhat-mocha @nomicfoundation/hardhat-ethers-chai-matchers @nomicfoundation/hardhat-network-helpers ethers mocha @types/mocha chai @types/chai" />
+
+2. Add them to the list of plugins in your Hardhat configuration:
+
+   ```ts
+   // hardhat.config.ts
+   // ... other imports...
+   import hardhatEthers from "@nomicfoundation/hardhat-ethers";
+   import hardhatTypechain from "@nomicfoundation/hardhat-typechain";
+   import hardhatMocha from "@nomicfoundation/hardhat-mocha";
+   import hardhatEthersChaiMatchers from "@nomicfoundation/hardhat-ethers-chai-matchers";
+   import hardhatNetworkHelpers from "@nomicfoundation/hardhat-network-helpers";
+
+   export default defineConfig({
+     plugins: [
+       hardhatEthers,
+       hardhatTypechain,
+       hardhatMocha,
+       hardhatEthersChaiMatchers,
+       hardhatNetworkHelpers,
+       // ...other plugins...
+     ],
+     // ...other config...
+   });
+   ```
+
+</Steps>
+
+## Type-safe contract interactions
+
+Hardhat integrates with [Typechain](https://github.com/dethcrypto/TypeChain) to provide type-safe contract interactions:
+
+```ts
+// doesn't compile if incBy expects a number but receives a boolean:
+await counter.incBy(true);
+```
+
+The `hardhat-typechain` plugin handles this automatically when you use its helpers like the helpers exposed by `hardhat-ethers`, as we'll see below.
+
+### Troubleshooting contract type errors
+
+Contract types are updated when the project is compiled. If you're getting a compilation error that you don't expect, make sure you've run
+
+<Run command="hardhat build" />
+
+Note that VSCode may not always pick up the type updates automatically. If you're still getting unexpected TypeScript errors after compiling the project, open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) and run `TypeScript: Reload Project`.
+
+## A simple test
+
+Let's write some tests for the `Counter` contract that comes with the sample project. If you haven't read it yet, take a look at the `contracts/Counter.sol` file.
+
+For our first test, we'll deploy the `Counter` contract and assert that the `Increment` event is emitted when we call the `inc()` function.
+
+Make sure your `test/Counter.ts` file looks like this:
+
+```ts
+// test/Counter.ts
+import { expect } from "chai";
+import hre from "hardhat";
+
+const { ethers, networkHelpers } = await hre.network.connect();
+
+describe("Counter", function () {
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const counter = await ethers.deployContract("Counter");
+
+    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
+  });
+});
+```
+
+First, we import the things we're going to use:
+
+- The [`expect`](https://www.chaijs.com/api/bdd/) function from `chai` to write our assertions
+- The [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment), or `hre`, which exposes all of Hardhat's functionality
+
+Then, we call `hre.network.connect()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with an instance of `ethers` and `networkHelpers` already connected to that simulation.
+
+After that, we use the `describe` and `it` functions, which are global Mocha functions used to define and group your tests. You can read more about Mocha [here](https://mochajs.org/#getting-started).
+
+The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `ethers` instance returned by our `hre.network.connect()` call.
+
+Finally, we call the `inc()` function of the contract and assert that the `Increment` event is emitted with the correct argument. The `.to.emit` matcher is provided by the [`hardhat-ethers-chai-matchers`](/docs/plugins/hardhat-ethers-chai-matchers) plugin.
+
+## Running your test
+
+To run all the tests in a Hardhat project, you can run:
+
+<Run command="hardhat test" />
+
+You can also run only the Mocha test with:
+
+<Run command="hardhat test mocha" />
+
+Or a single file with:
+
+<Run command="hardhat test test/Counter.ts" />
+
+## Testing a function that reverts
+
+In the previous test, we checked that a function emitted an event with the correct value. For that example, we know there's no way the `inc()` function could possibly revert on chain since it's merely incrementing a number and emitting an event with the result.
+
+However, smart contracts are rarely that simple, and functions often have preconditions that must be met before they can be executed successfully.
+
+For example, consider the following modifications to our `Counter` contract:
+
+```solidity ins={7,9-11,16}
+// contracts/Counter.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+contract Counter {
+  uint public x;
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  event Increment(uint by);
+
+  function inc() public {
+    require(msg.sender == owner, "only the owner can increment the counter");
+    x++;
+    emit Increment(1);
+  }
+
+  function incBy(uint by) public {
+    require(by > 0, "incBy: increment should be positive");
+    x += by;
+    emit Increment(by);
+  }
+}
+```
+
+Now the `inc()` function can only be called by the address that deployed the contract (the owner). If any other address tries to call it, the function will revert.
+
+With these changes, our previous test will still pass because by default the contract is deployed and called by the same address (the first account configured in Hardhat). However, we should also add a test to check that calling `inc()` from a non-owner address causes the transaction to revert. Here's how:
+
+```ts collapse={1-13,36-37}
+// test/Counter.ts
+import { expect } from "chai";
+import hre from "hardhat";
+
+const { ethers, networkHelpers } = await hre.network.connect();
+
+describe("Counter", function () {
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const counter = await ethers.deployContract("Counter");
+
+    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
+  });
+
+  it("Should allow the owner to increment and revert for non-owners", async function () {
+    const counter = await ethers.deployContract("Counter");
+
+    const nonOwnerAddress = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    // Impersonate the non-owner account
+    await networkHelpers.impersonateAccount(nonOwnerAddress);
+
+    // Fund the non-owner account with some ETH to pay for gas
+    await networkHelpers.setBalance(nonOwnerAddress, ethers.parseEther("1.0"));
+
+    // Get a signer for the non-owner account
+    const nonOwnerSigner = await ethers.getSigner(nonOwnerAddress);
+
+    // Call inc() as the owner - should succeed
+    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
+
+    // Call inc() as a non-owner - should revert
+    await expect(counter.connect(nonOwnerSigner).inc()).to.be.revertedWith(
+      "only the owner can increment the counter",
+    );
+  });
+});
+```
+
+Here we're using `.to.be.revertedWith`, which asserts that a transaction reverts and that the revert reason matches the given string. The `.to.be.revertedWith` matcher is not part of Chai itself; instead, like `.to.emit`, it's added by the [`hardhat-ethers-chai-matchers`](/docs/plugins/hardhat-ethers-chai-matchers) plugin.
+
+Additionally, we're using some [`hardhat-network-helpers`](/docs/plugins/hardhat-network-helpers) features to test our function with a non-default account. We use `impersonateAccount` to tell Hardhat to allow us to send transactions from that address, and `setBalance` to give it some ETH so it can pay for gas.
+
+Finally, we use `ethers.getSigner` to get a signer object for that address, which we use to connect to the contract and call the `inc()` function.
+
+:::note
+
+You can get other default accounts of the simulated blockchain that already have ETH.
+
+Here's how:
+
+```ts
+const [defaultSigner, nonOwnerSigner] = await ethers.getSigners();
+```
+
+:::
+
+## Using fixtures
+
+So far, we've deployed the `Counter` contract in each test. This might be fine for a single contract, but if you have a more complicated setup, each test will need several lines at the beginning to set up the desired state, and most of the time these lines will be the same.
+
+In a typical Mocha test, this duplication of code is handled with a `beforeEach` hook:
+
+```ts
+describe("Counter", function () {
+  let counter: any;
+
+  beforeEach(async function () {
+    counter = await ethers.deployContract("Counter");
+  });
+
+  it("some test", async function () {
+    // use the deployed contract
+  });
+});
+```
+
+However, there are two problems with this approach:
+
+- If you have to deploy many contracts, your tests will be slower because each one has to send multiple transactions as part of its setup.
+- Sharing the variables like this between the `beforeEach` hook and your tests is awkward and error-prone.
+
+The `loadFixture` helper in the `hardhat-network-helpers` plugin fixes both of these problems. It receives a _fixture_, a function that sets up the chain to some desired state.
+
+The first time `loadFixture` is called, the fixture is executed. But the second time, instead of executing the fixture again, `loadFixture` will reset the state of the blockchain to the point where it was right after the fixture was executed. This is faster, and it undoes any state changes done by the previous test.
+
+This is what our tests look like when a fixture is used:
+
+```ts {8-11,14,20}
+// test/Counter.ts
+import { expect } from "chai";
+import { network } from "hardhat";
+
+const { ethers, networkHelpers } = await network.connect();
+
+describe("Counter", function () {
+  async function deployCounterFixture() {
+    const counter = await ethers.deployContract("Counter");
+    return { counter };
+  }
+
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const { counter } = await networkHelpers.loadFixture(deployCounterFixture);
+
+    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
+  });
+
+  it("Should allow the owner to increment and revert for non-owners", async function () {
+    const { counter } = await networkHelpers.loadFixture(deployCounterFixture);
+
+    const nonOwnerAddress = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    // Impersonate the non-owner account
+    await networkHelpers.impersonateAccount(nonOwnerAddress);
+
+    // Fund the non-owner account with some ETH to pay for gas
+    await networkHelpers.setBalance(nonOwnerAddress, ethers.parseEther("1.0"));
+    const nonOwnerSigner = await ethers.getSigner(nonOwnerAddress);
+
+    // Call inc() as the owner - should succeed
+    await expect(counter.inc()).to.emit(counter, "Increment").withArgs(1n);
+
+    // Call inc() as a non-owner - should revert
+    await expect(counter.connect(nonOwnerSigner).inc()).to.be.revertedWith(
+      "only the owner can increment the counter",
+    );
+  });
+});
+```
+
+The fixture function can return anything you want, and `loadFixture` will return it. We recommend returning an object like we did here so you can extract only the values you need for each test. To learn more about fixtures, you can read their reference documentation [here](/network-helpers-fixtures-reference).
+
+## Learn more
+
+We just covered the basics of testing with ethers.js, Mocha, and our plugins. To learn more about this and other topics, you can read these guides:
+
+- To learn more about how to use ethers in Hardhat, read the [`hardhat-ethers` documentation](/docs/plugins/hardhat-ethers).
+- To learn how to use contracts from an npm dependency with ethers, read [this guide](/docs/cookbook/npm-artifacts).
+- To learn more about the `hardhat-ethers-chai-matchers` plugin and the methods it offers, read [its documentation](/docs/plugins/hardhat-ethers-chai-matchers).
+- To learn more about `hardhat-network-helpers`, read [its documentation](/docs/plugins/hardhat-network-helpers).

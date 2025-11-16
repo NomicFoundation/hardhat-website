@@ -4,6 +4,14 @@ Thanks for your interest in contributing to Hardhat's website!
 
 This website is built using [Astro](https://astro.build), and [Starlight](https://starlight.astro.build).
 
+## Structuring the documentation
+
+This website uses the [Diátaxis](https://diataxis.fr) documentation framework/approach.
+
+The terminology and sections “tutorial”, “guides”, “explanations”, and “reference” are taken from Diátaxis.
+
+We also include “cookbook”, which are smaller, more on-point guides, like an F.A.Q. These should also be considered guides in Diátaxis terms.
+
 ## Editing content
 
 The website's content is located in the [`src/content`](./src/content) directory, and written in GitHub Flavored Markdown in MDX files.
@@ -24,16 +32,7 @@ The most interesting ones are:
 - [`FileTree`](https://starlight.astro.build/components/file-tree/): To display the file system structure
 - [`Steps`](https://starlight.astro.build/components/steps/): For ordered steps that the user should follow
 
-`FileTree` and `Steps` should be used whenever it makes sense. `Code` only when the triple backticks aren't enough.
-
-Note that the triple backticks in Starlight are more powerful than usual, as they are backed by ExpressiveCode. See:
-
-- https://starlight.astro.build/guides/authoring-content/#code-blocks
-- https://expressive-code.com/key-features/syntax-highlighting/
-- https://expressive-code.com/key-features/frames/
-- https://expressive-code.com/key-features/text-markers/
-- https://expressive-code.com/key-features/word-wrap/
-- https://expressive-code.com/key-features/code-component/
+`FileTree` and `Steps` should be used whenever it makes sense. `Code` only when the triple backticks aren't enough (see below for more info).
 
 To use the `FileTree` component, you MUST add a `prettier-ignore` comment above, otherwise it will break when autoformatting the document. This is how it should look like:
 
@@ -45,6 +44,26 @@ To use the `FileTree` component, you MUST add a `prettier-ignore` comment above,
   - file2
 </FileTree>
 ```
+
+#### Code snippets
+
+Starlight uses [ExpressiveCode](https://expressive-code.com/) to render code snippets. It's compatible with the triple backtick syntax of markdown, but significantly more powerful.
+
+See:
+
+- https://starlight.astro.build/guides/authoring-content/#code-blocks
+- https://expressive-code.com/key-features/syntax-highlighting/
+- https://expressive-code.com/key-features/frames/
+- https://expressive-code.com/key-features/text-markers/
+- https://expressive-code.com/key-features/word-wrap/
+- https://expressive-code.com/key-features/code-component/
+
+We also use these plugins of ExpressiveCode:
+
+- [`@expressive-code/plugin-line-numbers`](https://expressive-code.com/plugins/line-numbers/): To optionally show the line numbers of a snippet. By default we don't show them.
+- [`@expressive-code/plugin-collapsible-sections`](https://expressive-code.com/plugins/collapsible-sections/): To be able to show complete and valid snippets (e.g. a valid config or task action file), while collapsing their unimportant parts by default. This is similar to how GitHub collapses unchanged parts of a diff.
+
+Using `@expressive-code/plugin-collapsible-sections` we should try to keep every snippet to be valid code/config whenever possible.
 
 #### Custom components
 
@@ -75,7 +94,9 @@ Note that cspell doesn't autofix your typos.
 
 In most cases, if you place a new `.mdx` file in a folder within the [`src/content`](./src/content) directory, it will be automatically added to the website. You can validate if it does by running the website locally and checking if it appears in its section's sidebar.
 
-If it doesn't, you may need to edit the [`src/content.config.ts`](./src/content.config.ts) file to add it to the sidebar. We use [`starlight-sidebar-topics`](https://starlight-sidebar-topics.netlify.app/docs/getting-started/) to manage the different section's/topic's sidebars, so please refer to its documentation for more information.
+If it doesn't, you may need to edit the [`src/content.config.ts`](./src/content.config.ts) file to add it to the sidebar. Top-level `/docs/guides/<foo>` documents are an example of that.
+
+We use [`starlight-sidebar-topics`](https://starlight-sidebar-topics.netlify.app/docs/getting-started/) to manage the different section's/topic's sidebars, so please refer to its documentation for more information.
 
 ### Moving a page
 
@@ -92,7 +113,7 @@ Internal links, including `#hashes`, are validated when you run `pnpm build`.
 
 ### Style guide
 
-There's a STYLE.md guide explaning the style that the documentation should follow. It's based on Microsoft's, with tweaks to adapt it to our style, and to force Claude Code to not overindex on the some parts of it.
+There's a STYLE.md guide explaining the style that the documentation should follow. It's based on Microsoft's, with tweaks to adapt it to our style, and to force Claude Code to not overindex on the some parts of it.
 
 You can use Claude Code to help you follow the style guide. Read a few sections below to learn how.
 
@@ -128,7 +149,7 @@ We use `prettier`, `astro check`, `cspell`, and `starlight-links-validator` to l
 
 The first two can be run with `pnpm run lint` and `pnpm run lint:fix`. `cspell` only with `pnpm lint` and `pnpm spellcheck`, as it doesn't fix typos automatically. The latter only runs on `pnpm build`.
 
-Note that `pnpm lint` ignores the community plugins list json, so that we don't get PRs adding plugins unecessarily blocked by the CI.
+Note that `pnpm lint` ignores the community plugins list json, so that we don't get PRs adding plugins unnecessarily blocked by the CI.
 
 ### Prettier and MDX limitations
 
@@ -152,6 +173,6 @@ See:
 
 ## Using Claude Code as a copy editor
 
-This repository has a shared setup of Claude Code that let's you use it as a [copy editor](https://en.wikipedia.org/wiki/Copy_editing), to improve the writing, and make apply the styleguide to the text.
+This repository has a shared setup of Claude Code that let's you use it as a [copy editor](https://en.wikipedia.org/wiki/Copy_editing), to improve the writing, and make apply the style guide to the text.
 
 Take a look at `.claude/README.md` to learn how to use it.

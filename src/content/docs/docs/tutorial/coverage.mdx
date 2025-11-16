@@ -1,0 +1,34 @@
+---
+title: Measuring test coverage
+description: Hardhat 3 Tutorial - Measuring test coverage
+sidebar:
+  order: 7.5
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat 3 has built-in test coverage functionality to help you identify untested code. It works with Solidity tests by default, and with the `hardhat-toolbox-viem` plugin, it also works with [`node:test`](https://nodejs.org/api/test.html) tests.
+
+## Getting code coverage for Solidity tests
+
+Generate a coverage report for your Solidity tests:
+
+<Run command="hardhat test solidity --coverage" />
+
+The output shows a coverage summary at the end.
+
+## Getting code coverage for TypeScript tests
+
+Generate a coverage report for your TypeScript tests:
+
+<Run command="hardhat test nodejs --coverage" />
+
+## Getting combined code coverage
+
+Get combined coverage for both Solidity and TypeScript tests:
+
+<Run command="hardhat test --coverage" />
+
+:::tip
+Learn more about test coverage in [our coverage guide](/docs/guides/testing/code-coverage).
+:::

@@ -3,9 +3,9 @@ title: Verifying smart contracts
 description: How to verify a smart contract
 sidebar:
   label: Verifying contracts
-  order: 4
 ---
 
+import { Steps } from "@astrojs/starlight/components";
 import Install from "@hh/Install.astro";
 import Run from "@hh/Run.astro";
 
@@ -15,9 +15,11 @@ In this guide, you'll learn how to verify your contracts using the `hardhat-veri
 
 ## Setup
 
-If you initialized your project using `hardhat --init`, you don’t need to do anything: `hardhat-verify` is already included as part of the template project.
+If you initialized your project using `hardhat --init` and chose anything but the minimal project, you don't need to do anything: `hardhat-verify` is already included as part of the template project.
 
 If you want to add the plugin manually:
+
+<Steps>
 
 1. Install the plugin:
 
@@ -39,6 +41,8 @@ If you want to add the plugin manually:
    });
    ```
 
+</Steps>
+
 ## Configuration
 
 The `hardhat-verify` plugin adds a `verify` object to the Hardhat configuration. With it, you can configure the different block explorers to verify your contracts on.
@@ -59,13 +63,15 @@ export default defineConfig({
 });
 ```
 
-You can get an Etherscan API key by following [this guide](https://docs.etherscan.io/etherscan-v2/getting-an-api-key).
+:::danger
 
-:::tip
+In the example above we wrote the API key in a config file for learning purposes. This is a security risk, and you should avoid it.
 
-In the previous version of the Etherscan API, you needed a different API key for each chain. With Etherscan V2, a single API key works across all networks.
+Take a look at [this guide](/docs/guides/configuration-variables) to handle sensitive information in your config safely.
 
 :::
+
+You can get an Etherscan API key by following [this guide](https://docs.etherscan.io/etherscan-v2/getting-an-api-key). This plugin uses Etherscan's API v2, so it only requires a single API key, which works with every supported chain.
 
 To verify contracts on Blockscout and Sourcify, you don't need to set an API key, nor any config.
 
@@ -95,7 +101,7 @@ If your contract has constructor arguments, you have to also pass the values tha
 
 <Run command='hardhat verify --network sepolia 0x1234567890... "Hello" 1000' />
 
-If the arguments are too complex to pass directly in the shell—for example, an array of numbers—you can define them in a TypeScript or JavaScript file:
+If the arguments are too complex to pass directly in the shell, for example an array of numbers, you can define them in a TypeScript or JavaScript file:
 
 ```ts
 // constructor-args.ts
@@ -159,7 +165,7 @@ export default defineConfig({
 
 Your verification might fail for a variety of reasons. Here are some common issues and how to fix them:
 
-- **Verifying immediately after deploying**. Your contracts may not have been indexed by the block explorer yet, causing the verification to fail. Normally, waiting a minute is enough for it to work.
-- **Wrong constructor arguments**. Double-check that your constructor arguments are correct.
-- **Using code that is different from the one used for deployment**. If you are trying to verify a contract that you have deployed weeks ago, then chances are that the code has changed in the meantime. Double-check that you are using the correct code.
-- **Using a different build profile**. If you are using a different build profile than the one used for deployment, then the bytecode will be different, causing the verification to fail. Try using `--build-profile` with other profiles to verify your contract, beginning with `default`. You may also need to run `hardhat build` with the same build profile to generate the correct artifacts.
+- **Verifying immediately after deploying**: Your contracts may not have been indexed by the block explorer yet, causing the verification to fail. Normally, waiting a minute is enough for it to work
+- **Wrong constructor arguments**: Double-check that your constructor arguments are correct
+- **Using code that is different from the one used for deployment**: If you are trying to verify a contract that you have deployed weeks ago, then chances are that the code has changed in the meantime. Double-check that you are using the correct code
+- **Using a different build profile**: If you are using a different build profile than the one used for deployment, then the bytecode will be different, causing the verification to fail. Try using `--build-profile` with other profiles to verify your contract, beginning with `default`. You may also need to run `hardhat build` with the same build profile to generate the correct artifacts

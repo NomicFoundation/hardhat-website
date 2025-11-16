@@ -1,0 +1,25 @@
+---
+title: Stability guarantees
+description: Hardhat 3 stability guarantees
+sidebar:
+  order: 7
+---
+
+Hardhat doesn't follow semver strictly, but it still aims to be a stable and easy-to-use platform. We won't introduce breaking changes without notice, though we may introduce them in some minor versions.
+
+These breaking changes fall into the following categories:
+
+- Changing the default config (e.g. networks and solidity config)
+- Dropping support for unmaintained Node.js versions (learn more about our [Node.js support policy](/docs/reference/nodejs-support))
+
+## Simulated networks default config
+
+Local simulated networks should closely resemble the chain they're simulating (e.g. Ethereum Mainnet) by default. Since Ethereum and Layer 2 chains introduce breaking changes through hardforks or network upgrades, we need to update their default config accordingly. For example, we'd eventually change the default value of the `hardfork` config for a certain Chain Type.
+
+We'll only introduce these changes when a hardfork activates on the chain the Chain Type simulates, and we'll release them in a minor version. When we do this, we'll also modify other fields, like `blockGasLimit`, to match those of the simulated network.
+
+## Avoid breaking changes introduced by Hardhat
+
+Ethereum and Layer 2s are constantly evolving, so avoiding every breaking change can mean that your software may eventually stop working on the chain it was built for.
+
+If you want to play it extra safe and ensure your project never changes, always use the same version of Node.js and install Hardhat using a [tilde range](https://docs.npmjs.com/cli/v6/using-npm/semver#tilde-ranges-123-12-1) or by pinning it. We don't recommend this approach, but rather recommend committing your lockfile instead.

@@ -1,0 +1,144 @@
+---
+title: Using Solidity remappings
+description: How to use remappings
+sidebar:
+  label: Using remappings
+  order: 3
+---
+
+import { FileTree } from "@astrojs/starlight/components";
+
+Hardhat 3 comes with built-in support for user-defined [Solidity remappings](https://docs.soliditylang.org/en/latest/path-resolution.html#import-remapping). They allow you to customize how absolute imports in Solidity files are resolved. For example, making an import from `"foo/Example.sol"` resolve to `"lib/foo/src/Example.sol"`.
+
+## Remappings loading
+
+Hardhat loads the remappings from every `remappings.txt` it finds. They can be either:
+
+- In your project: for example, at the root of your project, in your `test/` folder, or within a git submodule. The only exceptions are `node_modules` folders.
+- In an npm package: when an npm package is imported for the first time, all of its `remappings.txt` files are loaded.
+
+## `remappings.txt` format
+
+The `remappings.txt` files have one remapping per line. Each of them looks like this:
+
+```txt "context/:" ins="prefix/=" "target/"
+// remappings.txt
+context/:prefix/=target/
+```
+
+### Prefix
+
+The `prefix/=` section of a remapping defines a string (i.e. `prefix/`) that an import must start with to be affected by a remapping.
+
+For example, an import to `"prefix/Foo.sol"` is affected by the example remapping above, but imports to `"prefix"` and `"Foo.sol"` aren't.
+
+This part of the remapping is required, and must end in `/`. If it doesn't, Hardhat will append an `/` automatically.
+
+### Target
+
+The `target/` section defines a string which will replace the prefix in the imports affected by a remapping during the import resolution. This doesn't mean that your source code will be modified, but rather that `solc` will look for the replaced string when evaluating an import.
+
+For example, an import to `prefix/Foo.sol` will resolve to `target/Foo.sol`, using the example remapping above.
+
+This part of the remapping is optional. If absent, it will be resolved to `"/"`. If present, it must end in `/`. If it doesn't, Hardhat will append an `/` automatically.
+
+### Context
+
+The `context/:` section controls which files get affected by a remapping. The source name of a file must start with `context/` for a remapping to work.
+
+For example, using the example remapping above, an import to `"prefix/Foo.sol"` in the file `context/A.sol` is affected by this remapping, but the same import in `contracts/A.sol` isn't.
+
+This part of the remapping is optional, and we recommend not using it unless strictly required, as Hardhat automatically generates it for you, based on where your `remappings.txt` is located. Continue reading to learn more about this.
+
+## Scope of each `remappings.txt` file
+
+Each `remapping.txt` file in Hardhat 3 only affects the files in the directory where it is, and all of its subdirectories. This means that you don't need to worry about remappings clashing with each other, as Hardhat will fix their `context` for you.
+
+For example, in this project:
+
+{/* prettier-ignore */}
+<FileTree>
+- my-project/
+  - package.json
+  - hardhat.config.ts
+  - **remappings.txt**
+  - contracts/
+    - Foo.sol
+  - test/
+    - **remappings.txt**
+    - Foo.t.sol
+  - lib/
+    - submodule/
+      - **remappings.txt**
+      - src/
+        - `Bar.sol`
+        - `Bar.t.sol` 
+  
+</FileTree>
+
+The remappings in `my-project/remappings.txt` can affect:
+
+- `contracts/Foo.sol`
+- `test/Foo.t.sol`
+- `lib/submodule/src/Bar.sol`
+- `lib/submodule/src/Bar.t.sol`
+
+The remappings in `my-project/test/remappings.txt` can only affect `my-project/test/Foo.t.sol`.
+
+The remappings in `lib/submodule/remappings.txt` can affect:
+
+- `lib/submodule/src/Bar.sol`
+- `lib/submodule/src/Bar.t.sol`
+
+If two remappings seemingly clash, Hardhat will choose the more specific one (i.e. the one defined closest to the file using the import that's being remapped).
+
+## Remappings to git submodules
+
+If you installed a dependency (e.g. `foo`) using a git submodule, as explained in the [dependencies guide](/docs/guides/writing-contracts/dependencies#using-git-submodules), you may want to add a remapping for it.
+
+We recommend you install your git submodules in `lib/` and use the top-level `remappings.txt` to add one of these remappings:
+
+```
+// remappings.txt
+foo/=lib/foo/
+```
+
+```
+// remappings.txt
+foo/=lib/foo/src/
+```
+
+## Remappings to npm modules
+
+You can also create remappings whose targets are npm modules. To do it, make sure that their `target` starts with `node_modules/<package-name>`.
+
+For example, this remapping:
+
+```
+// remappings.txt
+ozc/=node_modules/@openzeppelin/contracts/
+```
+
+will allow you to import Open Zeppelin Contracts using `ozc/`. For example, by writing `"ozc/token/ERC20/ERC20.sol"` instead of `"@openzeppelin/contracts/token/ERC20/ERC20.sol"`.
+
+Adding a remapping to an npm module doesn't prevent you from importing it using its full package name. For example, this works with the above remapping:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.20;
+
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import { IERC20 } from "ozc/token/ERC20/IERC20.sol";
+
+contract ExampleToken is IERC20, ERC20 {
+  constructor() ERC20("ExampleToken", "ETK") {}
+}
+```
+
+### Resolution of a `node_modules/` remapping
+
+When you write a remapping with a target starting with `node_modules/`, you're letting Hardhat know that it has to follow the Node.js resolution rules. It's not a normal file-system-based remapping.
+
+Instead, it will work with all the features of npm, pnpm, and other package managers. For example, supporting hoisting, monorepos, multiple versions of the same dependency.
+
+The only exception is that `node_modules/` remappings don't support [`package.json#exports`](https://nodejs.org/api/packages.html#subpath-exports), so you may have to resolve them in your remapping.

@@ -1,0 +1,40 @@
+---
+title: Using absolute imports in Solidity
+description: How to configure and use absolute import paths in your Solidity contracts
+sidebar:
+  order: 5
+---
+
+import { FileTree } from "@astrojs/starlight/components";
+
+By default, Hardhat 3 supports relative imports to local files. For example, if you have this project:
+
+{/* prettier-ignore */}
+<FileTree>
+- my-project/
+  - package.json
+  - hardhat.config.ts
+  - contracts/
+    - Foo.sol
+  - test/
+    - Foo.t.sol
+</FileTree>
+
+The test `test/Foo.t.sol` would import `Foo.sol` using `"../contracts/Foo.sol"`. We recommend using this style of imports because it's compatible with every tool.
+
+## Using remappings for absolute imports
+
+If you want to use absolute imports and write `"contracts/Foo.sol"` instead, you can use a remapping.
+
+To do this, add a `remappings.txt` file to the directory where you want to use absolute imports. For example, if you only want them for test files, add this:
+
+```txt
+// test/remappings.txt
+contracts/=../contracts/
+```
+
+By adding the `remappings.txt` to the directory where it's needed, you avoid polluting other source files and keep your project compatible with more tools.
+
+## Learn more
+
+To learn more about remappings in Hardhat 3, read the [remappings guide](/docs/guides/writing-contracts/remappings).

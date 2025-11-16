@@ -1,0 +1,65 @@
+---
+title: Solidity `console.log()` reference
+description: Reference documentation of Hardhat's Solidity console.log() functionality
+sidebar:
+  label: Solidity console.log
+  order: 4
+---
+
+Hardhat allows you to print logging messages and contract variables by calling `console.log()` when running your Solidity code in a simulated network or a Solidity test.
+
+To use it, simply import `hardhat/console.sol` and call it as if it were Node.js' [`console.log`](https://nodejs.org/api/console.html#consolelogdata-args). It implements the same formatting options, which in turn uses [`util.format`](https://nodejs.org/dist/latest-v12.x/docs/api/util.html#util_util_format_format_args).
+
+For example, this contract prints a formatted string when it's deployed:
+
+```solidity
+// contracts/ConsoleLogExample.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
+
+import "hardhat/console.sol";
+
+contract ConsoleLogExample {
+  constructor() {
+    console.log(
+      "msg.sender is %s and block number is %d",
+      msg.sender,
+      block.number
+    );
+  }
+}
+```
+
+## Supported functions
+
+You can use `console.log` in any Solidity function, including `view` and `pure`.
+
+## Supported `console.log` overloads
+
+You can call `console.log` with up to 4 parameters in any order of the following types:
+
+- `uint256`
+- `string`
+- `bool`
+- `address`
+
+There are also single parameter functions for the types above, and additionally `bytes`, `bytes1`... up to `bytes32`:
+
+- `console.logInt(int i)`
+- `console.logUint(uint i)`
+- `console.logString(string memory s)`
+- `console.logBool(bool b)`
+- `console.logAddress(address a)`
+- `console.logBytes(bytes memory b)`
+- `console.logBytes1(bytes1 b)`
+- `console.logBytes2(bytes2 b)`
+- ...
+- `console.logBytes32(bytes32 b)`
+
+To check the most up-to-date version, refer to `hardhat/console.sol` in the version you have installed.
+
+## `console.log` in other tools and networks
+
+If you accidentally deploy a contract with a `console.log` or use it in a tool that doesn't support it, it won't have any side effects when run, except for an increased gas cost.
+
+This is because `console.log` works by sending static calls to a well-known contract address that has no code. At runtime, Hardhat detects calls to that address, decodes their input data, and writes it to the terminal.

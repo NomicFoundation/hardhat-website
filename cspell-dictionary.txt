@@ -1,6 +1,7 @@
 viem
 Cuenta
 hardfork
+hardforks
 autoinstall
 X
 Typechain
@@ -20,3 +21,12 @@ automine
 dontOverrideCompile
 reentrancy
 Nomic
+frontmatter
+`prebuild`
+Diátaxis
+Sourcify
+offchain
+onchain
+IERC
+ERC
+EIP

@@ -1,0 +1,66 @@
+---
+title: Writing scripts with Hardhat
+description: How to write and run Hardhat scripts
+---
+
+import Run from "@hh/Run.astro";
+
+In this guide, we'll walk through creating a script with Hardhat. For a general overview of using Hardhat, refer to the [getting started guide](/docs/getting-started).
+
+You can write your own custom scripts that use all of Hardhat's functionality. For example, in this guide, we'll create a script that prints the list of available accounts.
+
+## Writing a script
+
+Hardhat is designed as a library, so you can use it in any TypeScript or JavaScript file. All you need to do is import the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) like this:
+
+```ts
+import hre from "hardhat";
+```
+
+This gives you access to all of Hardhat's functionality.
+
+Let's try this out. Create a new directory called `scripts` in your project's root directory, and inside it, create a file called `accounts.ts` with the following content:
+
+```ts
+// scripts/accounts.ts
+import hre from "hardhat";
+
+const { provider } = await hre.network.connect();
+const accounts = await provider.request({ method: "eth_accounts" });
+
+if (accounts !== null) {
+  for (const account of accounts) {
+    console.log(account);
+  }
+} else {
+  console.log("No accounts found");
+}
+```
+
+And you can run it like this:
+
+<Run command="hardhat run scripts/accounts.ts" />
+
+When you do this, Hardhat will compile your contracts before running the script.
+
+## Running a Hardhat script without the Hardhat CLI
+
+You can also run your scripts as standalone TypeScript files with Node.js, like this:
+
+```sh
+node scripts/accounts.ts
+```
+
+This lets you skip the Hardhat CLI if you want, and use Hardhat from other Node.js tools, like [`vitest`](https://vitest.dev).
+
+### Passing Global Option values to standalone scripts
+
+When running a standalone script, you can pass any Hardhat Global Option to the script by setting a `HARDHAT_<GLOBAL_OPTION>` environment variable:
+
+- `HARDHAT_NETWORK`: Sets the network to connect to
+
+- `HARDHAT_BUILD_PROFILE`: Specifies which build profile to use
+
+To view the full list of Global Options available in Hardhat, run:
+
+<Run command="hardhat --help" />

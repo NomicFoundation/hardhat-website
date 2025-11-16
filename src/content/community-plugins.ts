@@ -4,6 +4,7 @@ import { z } from "astro:schema";
 import { styleText } from "node:util";
 import path from "node:path";
 import fs from "node:fs/promises";
+import { slug as generateSlug } from "github-slugger";
 
 import communityPluginsJson from "./community-plugins.json";
 
@@ -23,6 +24,7 @@ const communityPluginsJsonSchema = z.object({
 
 const communityPluginsCollectionSchema = z.object({
   id: z.string(),
+  slug: z.string(),
   name: z.string(),
   website: z.string(),
   author: z.string(),
@@ -149,6 +151,7 @@ export const communityPlugins = defineCollection({
 
       resolvedPlugins.push({
         id: plugin.name,
+        slug: generateSlug(plugin.name.replace(/@\//, "")),
         name: plugin.name,
         npmPackage,
         website:

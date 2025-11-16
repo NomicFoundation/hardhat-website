@@ -1,0 +1,58 @@
+---
+title: Build Profiles
+description: How to use Build Profiles in Hardhat 3
+sidebar:
+  label: Build profiles
+  order: 6
+---
+
+import Run from "@hh/Run.astro";
+
+Build Profiles let you use different Solidity compiler configurations for different use cases. For example, you might use one Build Profile for running tests and another for deployment, each with settings optimized for that workflow.
+
+## Configuring a Build Profile
+
+To configure a Build Profile, use this extended version of the `solidity` settings in your config:
+
+```ts {"Optional setting outside of 'profiles':": 12-15}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    profiles: {
+      myProfile: {
+        // This is a normal Solidity config, as explained in the previous guide
+      }
+    }
+
+    npmFilesToBuild: [
+      // ... npm files to build and emit artifacts
+    ]
+  },
+});
+```
+
+Each Build Profile can use the full [compiler configuration](/docs/reference/configuration#solidity-configuration).
+
+## Built-in Build Profiles
+
+Hardhat 3 always defines two Build Profiles:
+
+- `default`: used by most tasks when you don't specify a profile, with settings optimized for development speed and experience
+- `production`: recommended for deployments, with the optimizer and [Isolated Builds](/docs/guides/writing-contracts/isolated-builds) enabled by default
+
+## Using a `solidity` config without defining Build Profiles
+
+If you define your Solidity config without explicitly defining Build Profiles, you're actually configuring the `default` profile. This means the configuration shown in the [previous guide](/docs/guides/writing-contracts/configuring-the-compiler) applies to the `default` profile.
+
+## Choosing a Build Profile
+
+You can use the `--build-profile` argument to choose which Build Profile to use when running Hardhat.
+
+For example, to run your tests with the production profile:
+
+<Run command="hardhat test --build-profile production" />
+
+If you don't specify a profile, most tasks will use `default`, but each task can choose the profile that works best for its workflow. For example, when you deploy with [Hardhat Ignition](/ignition), it uses `production` by default.

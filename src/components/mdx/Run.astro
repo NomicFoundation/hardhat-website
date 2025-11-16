@@ -4,6 +4,11 @@ import { Code } from "@astrojs/starlight/components";
 
 interface Props {
   /**
+   * Any command that needs to be run before the one using the package manager.
+   * This is not affected by the prefix.
+   */
+  preCommand?: string | string[];
+  /**
    * The command to run with the package manager.
    * If an array is provided, each of them will be run in a new line.
    */
@@ -15,32 +20,33 @@ interface Props {
   prefix?: string;
 }
 
-const { command } = Astro.props;
-const prefix = Astro.props.prefix ? `${Astro.props.prefix} ` : "";
+const { preCommand, command } = Astro.props;
+const prefix = Astro.props.prefix ? `${Astro.props.prefix.trimEnd()} ` : "";
 const commands = Array.isArray(command) ? command : [command];
+const preCommands =
+  preCommand === undefined
+    ? []
+    : Array.isArray(preCommand)
+      ? preCommand
+      : [preCommand];
+
+function getCode(packageManagerName: string): string {
+  return [
+    ...preCommands,
+    ...commands.map((c) => `${prefix}${packageManagerName} ${c}`),
+  ].join("\n");
+}
 ---
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="npm">
-    <Code
-      code={commands.map((c) => `${prefix}npx ${c}`).join("\n")}
-      lang="sh"
-      frame="terminal"
-    />
+    <Code code={getCode("npx")} lang="sh" frame="terminal" />
   </TabItem>
 
   <TabItem label="pnpm" icon="pnpm">
-    <Code
-      code={commands.map((c) => `${prefix}pnpm ${c}`).join("\n")}
-      lang="sh"
-      frame="terminal"
-    />
+    <Code code={getCode("pnpm")} lang="sh" frame="terminal" />
   </TabItem>
   <TabItem label="Yarn" icon="seti:yarn">
-    <Code
-      code={commands.map((c) => `${prefix}yarn ${c}`).join("\n")}
-      lang="sh"
-      frame="terminal"
-    />
+    <Code code={getCode("yarn")} lang="sh" frame="terminal" />
   </TabItem>
 </Tabs>

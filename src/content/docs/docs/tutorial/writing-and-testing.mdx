@@ -1,0 +1,149 @@
+---
+title: Writing and testing a Solidity contract
+description: Hardhat 3 Tutorial - Writing and testing a Solidity contract
+sidebar:
+  order: 3
+---
+
+import CodeWithClientSideRandomNumber from "@hh/CodeWithClientSideRandomNumber.astro";
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+Now that your project is set up, you'll write, compile, and test a contract.
+
+## Writing a smart contract
+
+Create a new file at `contracts/Counter.sol` and add the following code:
+
+{/* prettier-ignore-start */}
+
+export const counterContractCode = `
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+contract Counter {
+  uint public x;
+
+  event Increment(uint by);
+
+  function inc() public {
+    x += 2; // 🐞 bug!
+    emit Increment(1);
+  }
+
+  function incBy(uint by) public {
+    require(by > 0, "incBy: increment should be positive");
+    x += by;
+    emit Increment(by);
+  }
+}
+
+// Random number to make this contract file unique: 000000000
+`;
+
+{/* prettier-ignore-end */}
+
+<CodeWithClientSideRandomNumber
+  title="contracts/Counter.sol"
+  placeholder="000000000"
+  lang="solidity"
+  code={counterContractCode}
+/>
+
+This contract has an intentional bug that you'll fix in the next section when you test it. You can ignore the comment at the end for now, just don't delete it. You'll learn about it when you get to contract verification.
+
+Now compile the contract:
+
+<Run command="hardhat build" />
+
+If everything went well, you should see an output saying that one Solidity file was compiled.
+
+## Writing unit tests in Solidity
+
+With your contract compiled, you'll add some tests. In Hardhat 3, you can run Solidity-based tests without any dependency.
+
+Create a new file at `contracts/Counter.t.sol` with the following content:
+
+```solidity
+// contracts/Counter.t.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+import { Counter } from "./Counter.sol";
+
+contract CounterTest {
+  Counter counter;
+
+  function setUp() public {
+    counter = new Counter();
+  }
+
+  function test_InitialValueIsZero() public view {
+    require(counter.x() == 0, "x should start at 0");
+  }
+
+  function test_IncIncreasesByOne() public {
+    counter.inc();
+    require(counter.x() == 1, "inc should increase x by 1");
+  }
+
+  function test_IncByIncreasesByGivenAmount() public {
+    counter.incBy(3);
+    require(counter.x() == 3, "incBy should increase x by the given amount");
+  }
+}
+```
+
+Solidity tests are regular Solidity files. Hardhat treats any file ending with `.t.sol`, or any Solidity file inside the test directory, as a test file. Each public function starting with `test` runs as a test. If it completes without reverting, the test passes. If it reverts, it fails.
+
+Run all the tests in your project:
+
+<Run command="hardhat test" />
+
+One of your tests fails, as expected.
+
+:::tip
+
+The stack trace shows which line reverted. In this simple test it's obvious what happened, but in more complex tests the stack trace helps you identify which assertion failed.
+
+:::
+
+## Fixing the bug we just found
+
+Fix the problem in `contracts/Counter.sol`:
+
+```diff lang=solidity collapse={1-7,15-20}
+// contracts/Counter.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+contract Counter {
+  uint public x;
+
+  event Increment(uint by);
+
+  function inc() public {
+-    x += 2; // 🐞 bug!
++    x += 1;
+    emit Increment(1);
+  }
+
+  function incBy(uint by) public {
+    require(by > 0, "incBy: increment should be positive");
+    x += by;
+    emit Increment(by);
+  }
+}
+```
+
+Run the tests again. This time, you'll use a different command that only runs Solidity tests:
+
+<Run command="hardhat test solidity" />
+
+All tests should pass this time.
+
+:::tip
+Check the [Solidity tests guide](/docs/guides/testing/using-solidity) to learn more about writing tests in Solidity with Hardhat 3.
+:::
+
+Great! You've successfully written, compiled, and tested your first smart contract with Hardhat 3.

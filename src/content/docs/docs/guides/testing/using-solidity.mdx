@@ -2,22 +2,23 @@
 title: Writing unit tests in Solidity
 description: How to write unit tests in Solidity
 sidebar:
-  order: 1
+  label: Using Solidity tests
+  order: 2
 ---
 
 import Install from "@hh/Install.astro";
 import Run from "@hh/Run.astro";
 
-Hardhat supports writing tests in both TypeScript and Solidity. TypeScript is typically used for higher-level integration tests, whereas Solidity is better suited for unit tests. This guide explains how to add Solidity tests to a Hardhat project, run them, and configure their execution. This isn't meant to serve as an introduction to Solidity tests and assumes familiarity with them.
+Hardhat has built-in support for Solidity tests. You don't need to install any plugin to use them.
 
 ## Writing Solidity tests
 
 A Solidity file is considered a **test file** if:
 
 - It's inside the `test/` directory
-- It's inside the `contracts/` directory and ends with `.t.sol`.
+- It's inside the `contracts/` directory and ends with `.t.sol`
 
-Both of these directories can be changed in your Hardhat configuration, but these are the default ones.
+Both of these directories can be changed in your Hardhat [configuration](/docs/reference/configuration), but these are the default ones.
 
 If a contract in a test file has at least one function that starts with `test`, it's considered a **test contract**. When the tests are run, Hardhat deploys every test contract and calls each of its test functions.
 
@@ -35,6 +36,8 @@ contract CounterTest {
 
 the test runner will deploy the `CounterTest` contract and call its `testInc` function. If the function execution reverts, the test is considered failed.
 
+### Fuzz tests
+
 Hardhat also supports **fuzz tests**, which are similar to regular tests but accept parameters. When the tests are executed, fuzz test functions are called multiple times with random values as arguments:
 
 ```solidity
@@ -47,7 +50,7 @@ contract CounterTest {
 }
 ```
 
-### Assertion libraries
+### Using assertion libraries
 
 In the previous example, the error message doesn't show the actual value of `by` that made the test fail. That's because interpolating the value into the string isn't straightforward in Solidity. To get better error messages, plus other useful functionality, you can use an assertion library like [forge-std](https://github.com/foundry-rs/forge-std).
 
@@ -116,11 +119,17 @@ You can configure how Solidity tests are executed in your Hardhat configuration.
 By default, Hardhat treats every Solidity file in the `test/` directory as a test file. To use a different location, set the `paths.tests.solidity` field:
 
 ```ts
-paths: {
-  tests: {
-    solidity: "./solidity-tests"
-  }
-},
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  paths: {
+    tests: {
+      solidity: "./solidity-tests",
+    },
+  },
+});
 ```
 
 ### Configuring the tests execution
@@ -130,19 +139,33 @@ To configure how Solidity tests are executed, use the `test.solidity` object in 
 For example, the `ffi` cheatcode is disabled by default for security reasons, but you can enable it:
 
 ```ts
-test: {
-  solidity: {
-    ffi: true,
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      ffi: true,
+    },
   },
-},
+});
 ```
 
 It's also possible to modify the execution environment of the tests. For example, you can modify the address that is returned by `msg.sender`:
 
 ```ts
-test: {
-  solidity: {
-    sender: "0x1234567890123456789012345678901234567890",
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      sender: "0x1234567890123456789012345678901234567890",
+    },
   },
-},
+});
 ```
+
+To learn more about how to configure your Solidity tests, read [the Solidity tests Configuration reference](/docs/reference/configuration#solidity-tests-configuration).

@@ -1,0 +1,87 @@
+---
+title: Testing overview
+description: How to test your smart contracts
+sidebar:
+  order: 1
+---
+
+Testing is central to Ethereum smart contract development, as bugs and vulnerabilities can lead to catastrophic losses.
+
+Hardhat 3 supports building your tests in Solidity and TypeScript. Both are first-class options, they can be combined, and each brings their unique strengths.
+
+## Differences between testing approaches
+
+### Solidity Tests
+
+Writing tests directly in Solidity lets you run your contracts and tests directly on the Ethereum Virtual Machine (EVM). This approach has some clear advantages:
+
+- **Testing in the same language**: Using the same language for contracts and tests prevents constant context switching between Solidity and TypeScript. You can express your logic and tests using the same language, instead of thinking in two of them at the same time, and how things translate to each other.
+
+- **Simpler unit tests**: Solidity tests are great for small, focused pieces of logic. Everything stays in Solidity, so you don’t need wrappers or RPC calls. Re-exporting internal or private functions for testing (e.g. via inheritance) is also straightforward when staying in the same language.
+
+- **Faster test runs**: Solidity tests have less overhead by running directly on the EVM instead of simulating an entire blockchain. This leads to faster test runs.
+
+- **Simpler mocking experience**: Solidity tests offer direct access to mocking contract interactions and parts of the execution environment, making some tests simpler to write.
+
+- **Invariants and Fuzzing**: Solidity tests, being faster, are the only place where you can use built-in fuzzing and invariant testing. These are powerful tools to automatically explore unexpected states and catch edge cases.
+
+Solidity testing is strongest when you want simple, fast, low-level tests that stay entirely inside the contract world.
+
+#### Limitations of Solidity Tests
+
+Like every tool, Solidity tests have their limitations. Some of them are:
+
+- They can become cumbersome for complex interactions.
+- Expressing higher-level scenarios is harder and often requires heavy mocking, which can diverge from real-world usage.
+- Cheatcodes make some things easier but also introduce “magical” helpers that don’t exist on-chain.
+
+### TypeScript Tests
+
+TypeScript tests run your contracts in a complete simulation of a blockchain and your tests in Node.js. This brings the test environment much closer to how your contracts will be used in practice. The advantages of this approach are:
+
+- **More expressive test language**: Complex scenarios are often easier to express in a general-purpose language. Smaller tests may feel more verbose than Solidity, but for end-to-end coverage, TypeScript scales better.
+
+- **Customizable setup**: You can use any Node.js test framework, Ethereum connector library (e.g. [ethers.js](https://github.com/ethers-io/ethers.js) and [viem](https://viem.sh)), and assertions library. You have access to the entire TypeScript ecosystem.
+
+- **Multi-step tests without excessive mocking**: By simulating an entire blockchain, you can test things in multiple transactions, sent from different accounts, in different orders, or across multiple blocks. While some of this is possible in Solidity with mocking, it's more natural and precise in TypeScript, with a blockchain-level simulation.
+
+- **Easier interaction with offchain components**: TypeScript helps when your contracts depend on offchain systems like oracles, bots, bridges, or other services. You can simulate these interactions alongside your contracts.
+
+- **Realistic blockchain-level tests**: TypeScript tests let you easily inspect data at the chain level (blocks, transactions, events, gas spent) and manipulate the chain (e.g. advancing time, mining blocks, forking), instead of mocking it. This is especially useful for integration tests.
+
+- **Tests that mirror consumers**: You write tests the same way your frontend, scripts, or other contracts will interact with your system. This not only serves as validation and documentation for consumers, especially in end-to-end scenarios, but also helps you, the developer, confirm your assumptions. Writing tests from the consumer's perspective forces you to see whether your contract's API and usage actually match your intention.
+
+TypeScript tests are strongest when you want to test realistic or complex end-to-end scenarios.
+
+:::tip
+
+You can also write your tests in JavaScript, just use `.js` extensions instead of `.ts`
+
+:::
+
+#### Limitations of TypeScript tests
+
+Some of their limitations are:
+
+- The additional stack (EVM + RPC + client library + test) adds complexity and boilerplate.
+- Tests tend to run slower compared to Solidity because of the extra overhead of simulating a more realistic environment.
+- Some tests can be harder to express compared to writing them directly in Solidity.
+
+## Combining both approaches
+
+With Hardhat 3, you can combine both approaches seamlessly:
+
+- Solidity tests for unit-level checks, invariants, and fuzzing
+- TypeScript tests for end-to-end flows, blockchain-level tests, integrations, and consumer-facing examples
+
+By combining them, you get confidence both in the internal correctness of your contracts and in their external behavior in realistic scenarios.
+
+## Shared functionality
+
+Hardhat 3 includes built-in support for code coverage and gas statistics. These features are available to both Solidity and TypeScript tests.
+
+## Learn more
+
+- To learn how to write tests in Solidity, read [this guide](/docs/guides/testing/using-solidity)
+- To learn how to write tests in TypeScript using [`node:test`](https://nodejs.org/api/test.html) and [viem](https://viem.sh), read [this guide](/docs/guides/testing/using-viem)
+- To learn how to write tests in TypeScript using [Mocha](https://mochajs.org) runner and [ethers.js](https://github.com/ethers-io/ethers.js), read [this guide](/docs/guides/testing/using-ethers)

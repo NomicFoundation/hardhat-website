@@ -20,9 +20,15 @@ importers:
       '@astrojs/vercel':
         specifier: ^8.2.8
         version: 8.2.9(astro@5.14.4(@types/node@24.7.1)(@vercel/functions@2.2.13)(rollup@4.52.4)(sass@1.93.2)(typescript@5.9.3)(yaml@2.8.1))(rollup@4.52.4)
+      '@expressive-code/plugin-collapsible-sections':
+        specifier: ^0.41.3
+        version: 0.41.3
+      '@expressive-code/plugin-line-numbers':
+        specifier: ^0.41.3
+        version: 0.41.3
       '@nomicfoundation/hardhat-errors':
-        specifier: ^3.0.3
-        version: 3.0.3
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/tar-stream':
         specifier: ^3.1.4
         version: 3.1.4
@@ -571,8 +577,14 @@ packages:
   '@expressive-code/core@0.41.3':
     resolution: {integrity: sha512-9qzohqU7O0+JwMEEgQhnBPOw5DtsQRBXhW++5fvEywsuX44vCGGof1SL5OvPElvNgaWZ4pFZAFSlkNOkGyLwSQ==}
 
+  '@expressive-code/plugin-collapsible-sections@0.41.3':
+    resolution: {integrity: sha512-cuHIN7Ipl7gUcaWFfsgy6G3wn0Svk8dQ6WKXNQha63BURbm7CSBhD6y9qFGeIOrxaJtvH4Pj3Xb4C2Ni0OVwYA==}
+
   '@expressive-code/plugin-frames@0.41.3':
     resolution: {integrity: sha512-rFQtmf/3N2CK3Cq/uERweMTYZnBu+CwxBdHuOftEmfA9iBE7gTVvwpbh82P9ZxkPLvc40UMhYt7uNuAZexycRQ==}
+
+  '@expressive-code/plugin-line-numbers@0.41.3':
+    resolution: {integrity: sha512-eig82a4CRC3XgVPQ2S/TMDcLiHJokOCD/mAdNVImpD3segVewxfjGgtj5DXQRo0E0q6f0R0EH34YzTFl5CEPqg==}
 
   '@expressive-code/plugin-shiki@0.41.3':
     resolution: {integrity: sha512-RlTARoopzhFJIOVHLGvuXJ8DCEme/hjV+ZnRJBIxzxsKVpGPW4Oshqg9xGhWTYdHstTsxO663s0cdBLzZj9TQA==}
@@ -758,8 +770,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nomicfoundation/hardhat-errors@3.0.3':
-    resolution: {integrity: sha512-qvVIyNE5yXFdwCD7G74fb3j+p5PjYSej/K2mhOuJBhxdGwzARpyoJbcDZrjkNyabytlt95iniZLHHWM9jvVXEA==}
+  '@nomicfoundation/hardhat-errors@3.0.5':
+    resolution: {integrity: sha512-8Ayqf6hFM1glmrSxrXgX6n2pn5uTlHNxEB8N5Me0DOeOGB67PRIrQdiO+RzUhrNW5YgWUNWBevOLQbW06uQ79g==}
 
   '@nomicfoundation/hardhat-utils@3.0.3':
     resolution: {integrity: sha512-XNoDJshvGR3l8/oQdNoLPLlcv+P+mGZBLixCyuO8Q0wTIyH/1+KYI77E+yvgTyw+GG4UmldFw9R3Hmnemk3KCA==}
@@ -3591,7 +3603,15 @@ snapshots:
       unist-util-visit: 5.0.0
       unist-util-visit-parents: 6.0.1
 
+  '@expressive-code/plugin-collapsible-sections@0.41.3':
+    dependencies:
+      '@expressive-code/core': 0.41.3
+
   '@expressive-code/plugin-frames@0.41.3':
+    dependencies:
+      '@expressive-code/core': 0.41.3
+
+  '@expressive-code/plugin-line-numbers@0.41.3':
     dependencies:
       '@expressive-code/core': 0.41.3
 
@@ -3768,7 +3788,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nomicfoundation/hardhat-errors@3.0.3':
+  '@nomicfoundation/hardhat-errors@3.0.5':
     dependencies:
       '@nomicfoundation/hardhat-utils': 3.0.3
     transitivePeerDependencies:

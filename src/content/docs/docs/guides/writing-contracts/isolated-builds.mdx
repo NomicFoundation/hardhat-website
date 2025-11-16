@@ -1,0 +1,80 @@
+---
+title: Isolated Builds
+description: How to use isolated builds in Hardhat 3 for better reproducibility
+sidebar:
+  label: Isolated builds
+  order: 5
+---
+
+import { FileTree } from "@astrojs/starlight/components";
+import Run from "@hh/Run.astro";
+
+Isolated Builds mode makes it easier to reproduce builds and verify your contracts on block explorers.
+
+## Understanding Hardhat compilation jobs
+
+When you run
+
+<Run hardhat="hardhat build" />
+
+Hardhat will compile your contracts and your tests as two separate processes.
+
+When compiling your contracts, it will select every `.sol` file (not `.t.sol`) in `contracts/` and create a compilation job based on the highest version of Solidity from your config that it can use. To learn more about this, read the [Using multiple versions of Solidity in a single project](/docs/cookbook/multiple-solidity-versions) guide.
+
+The same process is done for your Solidity tests, compiling every `.sol` file in `test/` and every `.t.sol` file in `contracts/`.
+
+By default, Hardhat may decide to merge some compilation jobs if they use the same Solidity version and settings. This can lead to faster compilation times and smaller artifacts.
+
+For example, in this project:
+
+{/* prettier-ignore */}
+<FileTree>
+- my-project/
+  - package.json
+  - hardhat.config.ts
+  - contracts/
+    - **MyContract.sol**
+    - AnotherContract.sol
+</FileTree>
+
+The files `contracts/MyContract.sol` and `contracts/AnotherContract.sol` might be built in the same compilation job, depending on your existing compilation cache and settings.
+
+### Drawbacks of merging compilation jobs
+
+Merging compilation jobs isn't ideal when building contracts with the intention of deploying them:
+
+- The dependence on the compilation cache can make reproducing builds complex
+- You may need to submit unrelated files during verification. For example, when verifying `contracts/MyContract.sol`, you might also need to submit `contracts/AnotherContract.sol`.
+
+:::tip
+This never happens if you use [Hardhat Ignition](/ignition).
+:::
+
+## Isolated Builds
+
+To avoid the drawbacks explained above, Hardhat 3 introduced the concept of Isolated Builds.
+
+When Isolated Builds are used, each of the files in `contracts/` is built independently, only including its dependencies.
+
+To enable this mode, modify your `solidity` config like this:
+
+```ts ins={8}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    version: "0.8.29",
+    isolated: true,
+  },
+});
+```
+
+The `isolated` flag is also available when using [multiple versions of Solidity](/docs/cookbook/multiple-solidity-versions) and [Build Profiles](/docs/guides/writing-contracts/build-profiles).
+
+:::tip
+
+Isolated Builds also affect your Solidity tests' builds, so you can use them to customize how they are built and cached.
+
+:::

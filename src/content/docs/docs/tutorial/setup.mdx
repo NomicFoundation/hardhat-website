@@ -1,0 +1,44 @@
+---
+title: Setting up a Hardhat project
+description: Hardhat 3 Tutorial - Setting up a project
+sidebar:
+  order: 2
+---
+
+import { Badge } from "@astrojs/starlight/components";
+import Run from "@hh/Run.astro";
+import RunRemote from "@hh/RunRemote.astro";
+
+Before you start, make sure you have [Node.js](https://nodejs.org/) 22+ and a package manager (such as `npm` or `pnpm`) installed:
+
+<Run preCommand="node --version" command="--version" />
+
+If you don't have Node.js installed, or you have an older version, you can learn how to install or update it using `nvm` or `volta` in [this guide](https://nodejs.org/en/download).
+
+## Creating your project
+
+You'll create an empty directory and initialize a Hardhat project inside it:
+
+<RunRemote
+  preCommand={["mkdir hardhat-tutorial", "cd hardhat-tutorial"]}
+  command="hardhat --init"
+/>
+
+You'll be prompted to select a few options. Accept the defaults for everything **except the project type** (we'll use a minimal project):
+
+1. Version: "Hardhat 3 Beta"
+2. Directory: current directory (`"."`)
+3. **Project type: "A minimal Hardhat project"** <Badge text="not default" variant="caution" />
+4. Install dependencies: yes
+
+Once the setup is complete, let's verify that everything is working:
+
+<Run command="hardhat --help" />
+
+If you see Hardhat's help output in your terminal, you're all set!
+
+:::tip
+Read our [Hardhat projects explanation](/docs/explanations/hardhat-projects) to learn more about the structure of a Hardhat project.
+:::
+
+Now that your project is set up, you're ready to start building!

@@ -1,0 +1,44 @@
+---
+title: Using a Hardhat plugin
+description: Hardhat 3 Tutorial - Using a Hardhat plugin
+sidebar:
+  order: 6
+---
+
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+So far, you've been using Hardhat's built-in features. Now you'll extend Hardhat's functionality with plugins.
+
+Plugins let you add new tasks, features, and integrations to Hardhat. You'll install the `hardhat-toolbox-viem` plugin, which you'll need for the rest of the tutorial.
+
+Run this command to install the plugin:
+
+<Install packages="@nomicfoundation/hardhat-toolbox-viem @nomicfoundation/hardhat-ignition viem" />
+
+This installs three packages. The `hardhat-toolbox-viem` plugin bundles several tools together, but you'll import `@nomicfoundation/hardhat-ignition` and `viem` directly in your code later, so they need to be installed separately.
+
+Import `@nomicfoundation/hardhat-toolbox-viem` in your `hardhat.config.ts` file and add it to the `plugins` array. This loads the plugin and its dependencies into Hardhat, including `hardhat-ignition`:
+
+```ts ins={2,6}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: {
+    version: "0.8.28",
+  },
+});
+```
+
+Run the help command to verify the plugin is loaded:
+
+<Run command="hardhat -h" />
+
+You'll see new tasks added by the plugin in the task list, like `test nodejs`.
+
+:::tip
+Check our [official](/docs/plugins/official-plugins) and [community](/docs/plugins/community-plugins) plugins lists to discover more plugins.
+:::

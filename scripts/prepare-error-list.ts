@@ -63,7 +63,6 @@ using Hardhat and an explanation of each of them.`;
 `;
 
       for (const error of category.errors) {
-        console.log(`hhe${error.code} -> /docs/reference/errors#${error.slug}`);
         content += `
 #### ${error.title}
 ${error.description}

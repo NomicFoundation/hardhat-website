@@ -1,0 +1,80 @@
+---
+title: Deployment overview
+description: How to deploy a smart contract using Hardhat
+sidebar:
+  order: 1
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat's flexibility allows you to deploy your smart contracts in multiple ways. We also provide an official deployment solution: [**Hardhat Ignition**](/ignition), which we strongly recommend.
+
+In this section we'll prepare the common setup and config to deploy and initialize a contract to Sepolia in the next two guides:
+
+- First, [using Hardhat Ignition](/docs/guides/deployment/using-ignition)
+- Then, [using a script](/docs/guides/deployment/using-scripts)
+
+## Required setup
+
+Both guides assume you initialized a project based on viem or ethers using `hardhat --init`. If you didn't, follow the [Getting started](/getting-started) guide first.
+
+You'll need access to a Sepolia RPC URL and an account with Sepolia ETH. We'll set them up next.
+
+:::tip
+
+You can use a service like [Alchemy](https://www.alchemy.com/) to get a Sepolia RPC URL and [their faucet](https://www.alchemy.com/faucets/ethereum-sepolia) to get some Sepolia ETH.
+
+:::
+
+### Sepolia Network Config
+
+If you followed the [Getting started](/getting-started) guide, your config should look something like this:
+
+```ts {7-12}
+// ... some imports ...
+
+export default defineConfig({
+  // ... other config ...
+  networks: {
+    // ... other network config ...
+    sepolia: {
+      type: "http",
+      chainType: "l1",
+      url: configVariable("SEPOLIA_RPC_URL"),
+      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+    },
+  },
+});
+```
+
+Make sure you have the `sepolia` section, highlighted above.
+
+### Storing the required secrets in the Hardhat Keystore
+
+If you haven't done this while following another guide, store the values for `SEPOLIA_RPC_URL` and `SEPOLIA_PRIVATE_KEY` using the `hardhat-keystore` plugin to save them in an encrypted vault.
+
+To do it, run:
+
+<Run command="hardhat keystore set SEPOLIA_RPC_URL" />
+
+After entering your keystore password, you'll be able to set the RPC URL.
+
+Then run:
+
+<Run command="hardhat keystore set SEPOLIA_PRIVATE_KEY" />
+
+to set a private key.
+
+:::caution
+
+Make sure you only use this private key for testnets and don't store any valuable assets with it.
+
+:::
+
+## Next steps
+
+With the setup in place, you can now:
+
+- Read [Using Hardhat Ignition](/docs/guides/deployment/using-ignition) for a brief introduction to Ignition.
+
+- Read [Using scripts](/docs/guides/deployment/using-scripts) to learn how to deploy using a script.

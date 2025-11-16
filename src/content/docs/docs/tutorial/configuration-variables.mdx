@@ -1,0 +1,63 @@
+---
+title: Using Configuration Variables
+description: Hardhat 3 Tutorial - Using Configuration Variables
+sidebar:
+  order: 9
+---
+
+import Run from "@hh/Run.astro";
+
+In the previous section, you added your private key and RPC URL (which contains an API key) directly to the config file. This isn't a good practice because it can expose sensitive information. To avoid this, Hardhat supports Configuration Variables.
+
+Update the `sepolia` network configuration in your `hardhat.config.ts` like this:
+
+```ts del={3,14-15} ins={4,16-17}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    sepolia: {
+      type: "http",
+      url: "<SEPOLIA_RPC_URL>",
+      accounts: ["<SEPOLIA_PRIVATE_KEY>"],
+      url: configVariable("SEPOLIA_RPC_URL"),
+      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+    },
+  },
+});
+```
+
+This uses `configVariable` to create Configuration Variables named `SEPOLIA_RPC_URL` and `SEPOLIA_PRIVATE_KEY` and use them in your config. Hardhat includes a plugin to securely store and retrieve these values in a local keystore.
+
+## Using `hardhat-keystore`
+
+Add these variables to the keystore by running the following command:
+
+<Run command="hardhat keystore set SEPOLIA_RPC_URL" />
+
+You'll be prompted to enter the keystore password (or set one if this is your first time) and then enter the variable value. Paste your Sepolia RPC URL as the value.
+
+Run the command again to add the private key:
+
+<Run command="hardhat keystore set SEPOLIA_PRIVATE_KEY" />
+
+After adding both variables, run the deployment command again:
+
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts --network sepolia" />
+
+This time, you'll need to enter the keystore password to retrieve the Configuration Variable values, but you won't need to put any sensitive information in your config file.
+
+Since you've already deployed the contract, you'll see that nothing new needs to be deployed.
+
+:::tip
+Learn more about Configuration Variables and how to use them effectively in [our guide](/docs/guides/configuration-variables).
+
+For a deeper understanding, read the [Configuration Variables explanation](/docs/explanations/configuration-variables).
+:::

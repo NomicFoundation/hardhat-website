@@ -1,0 +1,111 @@
+---
+title: Using an assertions library
+description: Hardhat 3 Tutorial - Using an assertions library
+sidebar:
+  order: 4
+---
+
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+The tests you've written so far are simple. They call functions and check that the contract's state is what you expect. For more complex testing, like checking that the correct event was emitted, you'll need an assertions library. Solidity doesn't have a built-in way to do that.
+
+Install the `forge-std` library, which provides useful testing utilities:
+
+<Install packages={`"foundry-rs/forge-std#v1.11.0"`} />
+
+Now that it's installed, modify `Counter.t.sol` to use `forge-std`:
+
+```solidity ins={6,9} del={8} collapse={12-28}
+// contracts/Counter.t.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+import { Counter } from "./Counter.sol";
+import { Test } from "forge-std/Test.sol";
+
+contract CounterTest {
+contract CounterTest is Test {
+  Counter counter;
+
+  function setUp() public {
+    counter = new Counter();
+  }
+
+  function test_InitialValueIsZero() public view {
+    require(counter.x() == 0, "x should start at 0");
+  }
+
+  function test_IncIncreasesByOne() public {
+    counter.inc();
+    require(counter.x() == 1, "inc should increase x by 1");
+  }
+
+  function test_IncByIncreasesByGivenAmount() public {
+    counter.incBy(3);
+    require(counter.x() == 3, "incBy should increase x by the given amount");
+  }
+}
+```
+
+By extending the `Test` contract, you get access to the assertion library's functions.
+
+## Adding a more complex test
+
+Add a new test that checks the correct event is emitted when you call `inc`:
+
+```solidity collapse={1-5,10-26} ins={29-34}
+// contracts/Counter.t.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+import { Counter } from "./Counter.sol";
+import { Test } from "forge-std/Test.sol";
+
+contract CounterTest is Test {
+  Counter counter;
+
+  function setUp() public {
+    counter = new Counter();
+  }
+
+  function test_InitialValueIsZero() public view {
+    require(counter.x() == 0, "x should start at 0");
+  }
+
+  function test_IncIncreasesByOne() public {
+    counter.inc();
+    require(counter.x() == 1, "inc should increase x by 1");
+  }
+
+  function test_IncByIncreasesByGivenAmount() public {
+    counter.incBy(3);
+    require(counter.x() == 3, "incBy should increase x by the given amount");
+  }
+
+  function test_IncEmitsIncrementEvent() public {
+    vm.expectEmit();
+    emit Counter.Increment(1);
+
+    counter.inc();
+  }
+}
+```
+
+The combination of `vm.expectEmit()` and `emit Increment(1);` tells the test framework that the next call (`counter.inc()`) should emit an `Increment` event with the argument `1`. The test will fail if the event isn't emitted or is emitted with different arguments.
+
+:::note
+`vm.expectEmit()` is a **cheatcode**, a special function that manipulates the runtime environment of your tests. Cheatcodes are only available in tests and aren't part of the Solidity language itself.
+
+See the <a href="https://getfoundry.sh/reference/cheatcodes/overview" target="_blank" rel="noopener noreferrer">full list of cheatcodes supported by `forge-std`</a>.
+:::
+
+Run the tests again to verify everything works:
+
+<Run command="hardhat test solidity" />
+
+All tests should pass, including your new event emission test.
+
+:::tip
+To learn more about Solidity dependencies in Hardhat, check out [the dependencies guide](/docs/guides/writing-contracts/dependencies).
+:::

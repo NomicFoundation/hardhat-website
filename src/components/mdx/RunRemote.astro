@@ -4,23 +4,49 @@ import { Code } from "@astrojs/starlight/components";
 
 interface Props {
   /**
-   * The remote/uninstalled command to run with the package manager
+   * Any command that needs to be run before the one using the package manager.
+   * This is not affected by the prefix.
    */
-  command: string;
+  preCommand?: string | string[];
+  /**
+   * The command to run with the package manager.
+   * If an array is provided, each of them will be run in a new line.
+   */
+  command: string | string[];
+  /**
+   * A prefix to be added to each command.
+   * This is helpful to define env variables.
+   */
+  prefix?: string;
 }
 
-const { command } = Astro.props;
+const { preCommand, command } = Astro.props;
+const prefix = Astro.props.prefix ? `${Astro.props.prefix.trimEnd()} ` : "";
+const commands = Array.isArray(command) ? command : [command];
+const preCommands =
+  preCommand === undefined
+    ? []
+    : Array.isArray(preCommand)
+      ? preCommand
+      : [preCommand];
+
+function getCode(packageManagerName: string): string {
+  return [
+    ...preCommands,
+    ...commands.map((c) => `${prefix}${packageManagerName} ${c}`),
+  ].join("\n");
+}
 ---
 
 <Tabs syncKey="package-manager">
   <TabItem label="npm" icon="npm">
-    <Code code={`npx ${command}`} lang="sh" frame="terminal" />
+    <Code code={getCode("npx")} lang="sh" frame="terminal" />
   </TabItem>
 
   <TabItem label="pnpm" icon="pnpm">
-    <Code code={`pnpm dlx ${command}`} lang="sh" frame="terminal" />
+    <Code code={getCode("pnpm dlx")} lang="sh" frame="terminal" />
   </TabItem>
   <TabItem label="Yarn" icon="seti:yarn">
-    <Code code={`yarn dlx ${command}`} lang="sh" frame="terminal" />
+    <Code code={getCode("yarn dlx")} lang="sh" frame="terminal" />
   </TabItem>
 </Tabs>

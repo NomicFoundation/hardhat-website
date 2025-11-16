@@ -1,0 +1,29 @@
+---
+title: Global Options
+description: An explanation about Hardhat's global options
+sidebar:
+  order: 9
+---
+
+import Run from "@hh/Run.astro";
+
+Global Options are options that Hardhat can receive and are available across all of its functionality.
+
+They are different from Hardhat Task options and arguments in that they are meant to control the functionality of Hardhat itself, and not that of a single task.
+
+For example, `--network` is a global option that controls the default value that `network.connect()` uses when no network config name is provided.
+
+Plugins can define their own Global Options, so the complete list depends on your setup. To see all available options, run:
+
+<Run command="hardhat --help" />
+
+## Global Options and environment variables
+
+Global Options can also be provided using environment variables formatted like `HARDHAT_<SCREAMING_SNAKE_CASE>`. For example, you can run:
+
+<Run
+  prefix="HARDHAT_NETWORK=localhost"
+  command="hardhat run script/my-script.ts"
+/>
+
+If both the environment variable and the command line argument are provided, the latter takes precedence.

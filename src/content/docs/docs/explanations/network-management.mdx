@@ -1,0 +1,141 @@
+---
+title: Network Management
+description: An explanation about Hardhat 3's Network Management
+sidebar:
+  order: 4
+tableOfContents:
+  minHeadingLevel: 2
+  maxHeadingLevel: 4
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat 3 gives the user control over how to connect to different blockchains (AKA networks), including simulated ones.
+
+This document explains how the `NetworkManager` object lets you do this, and how it interacts with the config and global options of Hardhat.
+
+## Understanding the `networks` in your config
+
+Most Hardhat configuration files will include a `networks` field, that could look something like this:
+
+```ts {8-16} collapse={5-7}
+// hardhat.config.ts
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    simulatedNetwork: {
+      type: "edr-simulated",
+    },
+    mainnet: {
+      type: "http",
+      url: configVariable("MAINNET_URL"),
+    },
+  },
+});
+```
+
+Each of the entries of the `networks` field is a Network Config object. You should think about it as part of the config that controls how to connect to an actual blockchain or simulate one, and not as the definition of the network itself.
+
+For example, the name of each field in `networks` doesn't necessarily match the blockchain to which its Network Config ends up being used to connect to. In the example above, the `MAINNET_URL` [Configuration Variable](/docs/explanations/configuration-variables) could point to another blockchain, like Sepolia.
+
+### Different types of Network Configs
+
+Each Network Config object must define which type of config it is. There are two of them: `http` and `edr-simulated`.
+
+#### `http` network configs
+
+This type of Network Config is used to connect to a blockchain through a client or service that exposes the [Ethereum JSON-RPC API](https://ethereum.org/developers/docs/apis/json-rpc/). You can use it to connect to an actual client running on your computer or network, to a development client like `hardhat node`, or to a remote service like Infura or Alchemy.
+
+These Network Config objects control how you interact with the blockchain (e.g. which accounts to use), but not the blockchain itself.
+
+#### `edr-simulated` network configs
+
+This type of Network Config is used to create in-process simulations of a blockchain, powered by our [Ethereum Development Runtime](https://github.com/nomicfoundation/edr/), or EDR for short.
+
+The simulated blockchains also implement the same JSON-RPC API to plugins and libraries, so the entire Ethereum TypeScript ecosystem can interact with them as if they were normal Ethereum-compatible blockchains. They do not expose the JSON-RPC API through HTTP though.
+
+The Network Config object of a simulated network doesn't just control how you interact with it, but also defines how the simulation is run (e.g. if it forks another network, or its `chainId`).
+
+## Creating a Network Connection
+
+The [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) includes a `NetworkManager` object exposed as its `network` field.
+
+This object allows you to create network connections. You can do it like this:
+
+```ts
+import { network } from "hardhat";
+
+const networkConnection = await network.connect();
+```
+
+By default, it creates a `NetworkConnection` using the Network Config called `default`, which is always present. You can choose a different fallback Network Config name by using the `network` [Global Option](/docs/explanations/global-options), like this:
+
+<Run command="hardhat --network mainnet" />
+
+Every time you call `network.connect()` a new independent `NetworkConnection` object is created:
+
+- If the Network Config is of type `"http"`, the JSON-RPC server in the `url` setting will be used. No synchronization between two HTTP Network Connections is performed by Hardhat, either at the HTTP layer or at the protocol layer (e.g. when handling account nonces).
+
+- If the Network Config is of type `"edr-simulated"`, a new blockchain simulation will be started, based on the Network Config parameters. You can create as many as you want, and all of them will be completely independent from each other.
+
+:::tip
+This document makes a distinction between blockchain and Network Config, their names, Network Connection, and creating a Network Connection, to be precise in its explanations.
+
+In practice, most people will simplify this vocabulary and just say that, for example, running the command above connected to the network mainnet. Using "connect" interchangeably with creating a Network Connection, and the network name with the blockchain they intend to connect to.
+:::
+
+### Using an explicit Network Config
+
+You can also create a connection using an explicit Network Config, and not just relying on `--network`. This is done by providing parameters to `network.connect()`:
+
+```ts
+const mainnetConnection = await network.connect("mainnet");
+
+const simulatedConnection = await network.connect("simulatedNetwork");
+
+// Creating a second simulated blockchain
+const anotherSimulated = await network.connect("simulatedNetwork");
+```
+
+### Cleaning up your Network Connections
+
+Hardhat's `NetworkConnection` objects are designed to be garbage collected by the runtime, but if you are planning to create a large number of them, you can also clean them up manually to free up resources. You can do this by calling
+
+```ts
+await networkConnection.close();
+```
+
+## The `NetworkConnection` object
+
+The result of calling `await network.connect()` is a `NetworkConnection` object.
+
+By default, they have the basics to interact with a blockchain:
+
+- `id`: A unique id of the connection
+- `networkName`: The name of the Network Config used to create this connection
+- `networkConfig`: The Network Config used to create this connection
+- `provider`: An [EIP-1193 provider](https://eips.ethereum.org/EIPS/eip-1193) that exposes the Ethereum JSON-RPC interface
+- `chainType`: The type of blockchain this connection is using
+
+Many of the Hardhat plugins extend the Network Connection objects, adding new functionality. In general, if a plugin needs to interact with a blockchain, it exposes its functionality by extending the Network Connection object.
+
+For example, if you use the [`@nomicfoundation/hardhat-toolbox-viem`](/docs/plugins/hardhat-toolbox-viem) plugin, which comes with one of the sample projects, your network connections will also have these fields:
+
+- `networkHelpers`: A set of helper methods to work with simulated networks
+- `viem`: An object with helpers to create Viem clients, deploy contracts, or access your accounts. These are already set up to work with the `NetworkConnection` they belong to automatically
+- `viem.assertions`: The assertions added by the [`@nomicfoundation/hardhat-viem-assertions`](/docs/plugins/hardhat-viem-assertions) plugin, already connected to its `NetworkConnection`
+- `ignition`: An instance of the [Hardhat Ignition](/ignition/docs) that works with this connection
+
+:::tip
+
+The idiomatic way to use the Network Connection fields is by creating them like this:
+
+```ts
+const { viem, networkHelpers, ignition } = await network.connect();
+```
+
+:::

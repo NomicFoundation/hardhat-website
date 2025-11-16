@@ -7,3 +7,11 @@ import TopicsDropdown from "./TopicsDropdown.astro";
 <TopicsDropdown />
 {/* Render the default sidebar. */}
 <Default><slot /></Default>
+
+{/* Make the the nested group labels have the same size as links */}
+{/* Based on SidebarSublist.astro of @astrojs/starlight@0.36.0 */}
+<style is:global>
+  .sidebar-content details details .group-label > .large {
+    font-size: var(--sl-text-sm);
+  }
+</style>

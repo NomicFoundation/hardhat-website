@@ -1,0 +1,83 @@
+---
+/**
+ * This component is like <Code />, except it replaces a placeholder with a random number
+ * on the client side. This is useful for code snippets that need to include a unique
+ * value (e.g., a contract that will be verified and thus needs a unique bytecode).
+ *
+ * IMPORTANT: Prettier won't format the code you pass in. Make sure it's formatted correctly.
+ *
+ * The implementation uses a custom element (https://docs.astro.build/en/guides/client-side-scripts/#web-components-with-custom-elements)
+ * because this is the easiest way to do this without adding a framework dependency.
+ *
+ * When selecting the placeholder, make sure it's something that will have the
+ * correct syntax highlighting (e.g., a number for Solidity uints), because the
+ * highlighting happens at build time.
+ */
+
+import { Code } from "@astrojs/starlight/components";
+
+interface Props {
+  placeholder: string;
+  lang: string;
+  code: string;
+  title: string;
+}
+
+const { lang, code, placeholder, title } = Astro.props;
+---
+
+<astro-code-with-client-side-random-number data-placeholder={placeholder}>
+  <Code lang={lang} code={code} title={title} />
+</astro-code-with-client-side-random-number>
+
+<script>
+  class AstroCodeWithClientSideRandomNumber extends HTMLElement {
+    connectedCallback() {
+      const placeholder = this.getAttribute("data-placeholder");
+      if (placeholder === null) {
+        console.error("Placeholder attribute not found");
+        return;
+      }
+
+      const randomValue = Math.floor(Math.random() * 1_000_000_000);
+
+      // update the code block content
+      const code = this.querySelector("code");
+      if (code === null) {
+        console.error("Code element not found");
+        return;
+      }
+      code.innerHTML = code.innerHTML.replace(
+        placeholder,
+        randomValue.toString(),
+      );
+
+      // update the button data-code attribute, which is used for copy functionality
+      const button = this.querySelector("[data-code]");
+
+      if (button === null) {
+        console.error("Button element not found");
+        return;
+      }
+
+      const buttonDataCode = button.getAttribute("data-code");
+      if (buttonDataCode === null) {
+        console.error("Button data-code attribute not found");
+        return;
+      }
+      button.setAttribute(
+        "data-code",
+        buttonDataCode.replace(placeholder, randomValue.toString()),
+      );
+
+      // replace the container with its content to get proper styling
+      const container = this;
+      container.replaceWith(...container.childNodes);
+    }
+  }
+
+  customElements.define(
+    "astro-code-with-client-side-random-number",
+    AstroCodeWithClientSideRandomNumber,
+  );
+</script>

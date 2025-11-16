@@ -1,5 +1,8 @@
 import { slug as generateSlug } from "github-slugger";
-import * as descriptors from "../../node_modules/@nomicfoundation/hardhat-errors/dist/src/descriptors.js";
+import {
+  ERROR_CATEGORIES,
+  ERRORS,
+} from "@nomicfoundation/hardhat-errors/descriptors";
 
 interface ErrorDescriptor {
   number: number;
@@ -35,7 +38,7 @@ async function loadErrorDescriptors(): Promise<{
   ERROR_CATEGORIES: ErrorCategories;
   ERRORS: ErrorsDescriptors;
 }> {
-  return descriptors;
+  return { ERROR_CATEGORIES, ERRORS };
 }
 
 export interface HardhatError {

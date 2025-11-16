@@ -1,0 +1,62 @@
+---
+title: Verifying a contract
+description: Hardhat 3 Tutorial - Verifying a contract on Etherscan
+sidebar:
+  order: 10
+---
+
+import Run from "@hh/Run.astro";
+
+When you deployed the `Counter` contract to the Sepolia network, Etherscan only showed you the raw bytecode of the contract. To see its source code, you need to verify it.
+
+:::note
+If you deploy a contract with a source that has already been verified on Etherscan, it will be automatically verified upon deployment. That's why you added a comment with a random number at the end of the `Counter.sol` file: to make the source code unique and avoid that automatic verification.
+:::
+
+## Getting an Etherscan API key
+
+Before you can verify the contract, add an Etherscan API key to your configuration. If you don't have one, learn how to obtain it [here](https://docs.etherscan.io/getting-an-api-key).
+
+You need to add the API key to your config using a Configuration Variable:
+
+```ts ins={18-22}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { configVariable, defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: {
+    version: "0.8.28",
+  },
+  networks: {
+    sepolia: {
+      type: "http",
+      chainType: "l1",
+      url: configVariable("SEPOLIA_RPC_URL"),
+      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+    },
+  },
+  verify: {
+    etherscan: {
+      apiKey: configVariable("ETHERSCAN_API_KEY"),
+    },
+  },
+});
+```
+
+As you did before, add the `ETHERSCAN_API_KEY` variable to your keystore:
+
+<Run command="hardhat keystore set ETHERSCAN_API_KEY" />
+
+## Verifying your contract with Hardhat Ignition
+
+Execute the Ignition module again with the `--verify` flag. Since you've already deployed the contracts, this won't re-deploy them, but it will submit the source code to Etherscan for verification:
+
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts --network sepolia --verify" />
+
+If everything goes well, you'll see output indicating successful verification and a link to the verified contract on Sepolia Etherscan.
+
+:::tip
+Learn more about contract verification in [our guide](/docs/guides/smart-contract-verification) and the [`hardhat-verify` plugin docs](/docs/plugins/hardhat-verify), which also supports Blockscout, Sourcify, and contracts that haven't been deployed with Hardhat Ignition.
+:::

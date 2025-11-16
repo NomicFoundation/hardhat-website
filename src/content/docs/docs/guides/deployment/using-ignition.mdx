@@ -1,0 +1,106 @@
+---
+title: Deploying smart contracts using Hardhat Ignition
+description: How to deploy a smart contract using Hardhat Ignition
+sidebar:
+  label: Using Hardhat Ignition
+  order: 2
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat Ignition is a declarative system for deploying smart contracts. It's already available in Hardhat 2, and has been adopted by many projects. The API hasn't changed in Hardhat 3: if you're familiar with it, you won't encounter any surprises.
+
+With Hardhat Ignition, you define the smart contract instances you want to deploy, along with any operations you want to perform on them. These definitions are grouped into Ignition Modules, which are then analyzed and executed in the most efficient way. This includes sending independent transactions in parallel, recovering from errors, and resuming interrupted deployments.
+
+## Your first Ignition Module
+
+If you followed the [previous guide](/docs/guides/deployment), you already have an Ignition Module to deploy and initialize the `Counter` contract. It looks like this:
+
+```ts
+// ignition/modules/Counter.ts
+import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+
+export default buildModule("CounterModule", (m) => {
+  const counter = m.contract("Counter");
+
+  m.call(counter, "incBy", [5n]);
+
+  return { counter };
+});
+```
+
+Here we use the `buildModule` function to build an Ignition Module that declares the `Counter` contract should be deployed, and then its `incBy()` function called with `5` as the parameter.
+
+Defining a module doesn't run the deployment, it only declares how your deployment should look. Ignition analyzes it and creates a plan to execute every action in the right order.
+
+## Deploying your module
+
+:::note
+
+Before running any deployment, Ignition will build your contracts using the `production` [Build Profile](/docs/guides/writing-contracts/build-profiles).
+
+:::
+
+To deploy the example module in a simulated network, run the following command:
+
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts" />
+
+This is helpful to make sure your deployment definition works correctly. This will finish instantly, as the network is simulated.
+
+### Deploying your contract to Sepolia
+
+To deploy your contract to Sepolia, all you need to do is run:
+
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts --network sepolia" />
+
+You'll have to input the password to your keystore and confirm the deployment first.
+
+Then Ignition will execute your deployment, showing you the progress and exiting when ready.
+
+It will also store your deployment results in `ignition/deployments/chain-11155111`. We recommend committing the `ignition/deployments/<deployment-id>` directories to version your deployments and make sure you can always reproduce and verify them.
+
+## Modifying your module
+
+One of the advantages of using Ignition is that you can evolve your deployment system by adding new modules and modifying existing ones.
+
+For example, let's add a call to `inc()` to the module above:
+
+```ts ins={9}
+// ignition/modules/Counter.ts
+import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+
+export default buildModule("CounterModule", (m) => {
+  const counter = m.contract("Counter");
+
+  m.call(counter, "incBy", [5n]);
+
+  m.call(counter, "inc");
+
+  return { counter };
+});
+```
+
+If we run the exact same command again, Ignition will understand that it doesn't need to redeploy everything, but only execute the call to `inc()`.
+
+Try it out by running this again:
+
+<Run command="hardhat ignition deploy ignition/modules/Counter.ts --network sepolia" />
+
+You should notice that Ignition knows that it's working with an existing deployment and only ran a single transaction.
+
+You can use this functionality to evolve your smart contract systems (e.g. by deploying new contracts) or run operations on them (e.g. by adding calls like `inc()` from this example).
+
+## Learn more
+
+This was only a brief introduction to Ignition. It has many more features:
+
+- It can recover from multiple types of network errors
+  - Bumps the gas automatically for stuck transactions
+  - Detects and recovers from transactions being dropped from the network
+  - Recovers from nonce management issues
+- It allows you to organize large deployments into multiple modules
+- It automatically verifies your contracts on Etherscan
+- It lets you view a graphical representation of your modules to understand exactly what's going to be deployed
+- You can use it in your TypeScript tests to test integrations and your deployment modules themselves
+
+To learn more, check out the [Hardhat Ignition documentation](/ignition/docs).

@@ -1,0 +1,55 @@
+---
+title: Writing contracts overview
+description: How to write smart contracts using Hardhat 3
+sidebar:
+  order: 1
+---
+
+import Run from "@hh/Run.astro";
+
+Writing Solidity smart contracts in Hardhat is as simple as writing a `.sol` file in your `contracts/` folder.
+
+For example, you could create the file `contracts/HelloWorld.sol`:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+// contracts/HelloWorld.sol
+pragma solidity ^0.8.0;
+
+contract HelloWorld {
+  string public greet = "Hello World!";
+}
+```
+
+To build it, run:
+
+<Run command="hardhat build" />
+
+Hardhat will analyze all your files in your contracts directory, including their dependencies, and compile them with the highest Solidity version that's compatible with each of them.
+
+Once the build process is successful, Hardhat will emit the [build artifacts](/docs/reference/artifacts) generated as a result. These can be used to interact with your contracts from TypeScript tests, your deployments, and advanced Solidity tests.
+
+## Importing other Solidity files
+
+You can import files in Hardhat 3 using relative import paths. For example, we can modify our example above to import another file:
+
+```solidity ins={5, 7}
+// SPDX-License-Identifier: UNLICENSED
+// contracts/HelloWorld.sol
+pragma solidity ^0.8.0;
+
+import { BaseContract } from "./BaseContract.sol";
+
+contract HelloWorld is BaseContract {
+  string public greet = "Hello World!";
+}
+```
+
+This default behavior is intentional, as it ensures that your modules are better supported by different tools, prevents accidental clashes with unscoped remappings, and ensures that your code behaves correctly when distributed through npm and/or git submodules. To learn how to customize this behavior, check the guides in the next section.
+
+## Learn more
+
+- To learn how to use a folder other than `contracts/` for your sources, check the [Configuration reference](/docs/reference/configuration#path-configuration)
+- To learn how to use files from dependencies in your Hardhat 3 project, read the [Dependencies guide](/docs/guides/writing-contracts/dependencies)
+- To learn how to use remappings, read the [Remappings guide](/docs/guides/writing-contracts/remappings)
+- To learn how to use absolute imports for your local files, read the [Absolute imports recipe](/docs/cookbook/absolute-imports)

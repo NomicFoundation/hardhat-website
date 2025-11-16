@@ -1,0 +1,84 @@
+---
+title: Configuring the compiler
+description: How to configure the compiler
+sidebar:
+  order: 4
+---
+
+Solidity compilation in Hardhat is fully customizable. This guide covers the main ways you can configure the compiler to suit your project's needs.
+
+## Configuring the compiler version and settings
+
+The simplest way to configure compilation is to set the Solidity compiler version and, optionally, its settings:
+
+```ts {"Optional settings:": 8-11}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    version: "0.8.29",
+
+    settings: {
+      /* solc settings, as expected by solc */
+    },
+  },
+});
+```
+
+### Enabling the optimizer
+
+One common use of settings is enabling the optimizer. When you enable it, you can also define the number of runs, which affects how the compiler balances between deployment cost and execution cost:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    version: "0.8.29",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
+});
+```
+
+### Enabling `viaIR`
+
+You can also enable the [IR-based code generator](https://docs.soliditylang.org/en/latest/ir-breaking-changes.html). While this compilation mode is slower, it enables more powerful optimizations:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  solidity: {
+    version: "0.8.29",
+    settings: {
+      viaIR: true,
+    },
+  },
+});
+```
+
+### Other settings
+
+The `settings` property accepts the same options supported by the chosen compiler version. For the full details, see the [Solidity compiler documentation](https://docs.soliditylang.org/en/latest/).
+
+## Next steps
+
+You now know how to configure the Solidity compiler version, enable the optimizer, and adjust compiler settings. For more advanced configuration options, see the [Solidity Configuration reference](/docs/reference/configuration#solidity-configuration) or these guides:
+
+- [Using Isolated Builds for deployments](/docs/guides/writing-contracts/isolated-builds)
+- [Using Build Profiles to configure Solidity differently for each use case](/docs/guides/writing-contracts/build-profiles)
+- [Using multiple versions of Solidity in a single project](/docs/cookbook/multiple-solidity-versions)
+- [Customizing the settings for a subset of your files](/docs/cookbook/multiple-solidity-versions#using-overrides-without-multiple-versions-of-solidity)
+- [Generating artifacts from npm dependencies](/docs/cookbook/npm-artifacts)
+- [Using a custom Solidity compiler](/docs/cookbook/custom-solidity-compiler)

@@ -1,0 +1,379 @@
+---
+title: Testing your smart contracts with viem and node:test
+description: Learn how to test your smart contracts using viem and Node.js test runner.
+sidebar:
+  label: Using viem
+  order: 3
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+This guide shows you how to test contracts in Hardhat using [viem](https://viem.sh/) and the [Node.js test runner](https://nodejs.org/api/test.html), also known as `node:test`.
+
+You'll also learn how to use our [viem assertions](/docs/plugins/hardhat-viem-assertions) and [`hardhat-network-helpers`](/docs/plugins/hardhat-network-helpers) plugins to write clean test code.
+
+:::note
+
+This guide is an introduction to writing TypeScript tests with `node:test` and viem, our recommended setup.
+
+You can also find a similar guide for Mocha and ethers.js [here](/docs/guides/testing/using-ethers), if you prefer using them.
+:::
+
+## Setup
+
+If you have already initialized a viem-based project using `hardhat --init`, you don't need to do anything else.
+
+If you want to add the required plugins manually, follow these steps:
+
+<Steps>
+
+1. Install the packages:
+
+   <Install packages="@nomicfoundation/hardhat-viem @nomicfoundation/hardhat-viem-assertions @nomicfoundation/hardhat-node-test-runner @nomicfoundation/hardhat-network-helpers viem" />
+
+2. Add them to the list of plugins in your Hardhat configuration:
+
+   ```ts
+   // hardhat.config.ts
+   // ... other imports...
+   import hardhatViem from "@nomicfoundation/hardhat-viem";
+   import hardhatViemAssertions from "@nomicfoundation/hardhat-viem-assertions";
+   import hardhatNodeTestRunner from "@nomicfoundation/hardhat-node-test-runner";
+   import hardhatNetworkHelpers from "@nomicfoundation/hardhat-network-helpers";
+
+   export default defineConfig({
+     plugins: [
+       hardhatViem,
+       hardhatViemAssertions,
+       hardhatNodeTestRunner,
+       hardhatNetworkHelpers,
+       // ...other plugins...
+     ],
+     // ...other config...
+   });
+   ```
+
+</Steps>
+
+## Type-safe contract interactions
+
+Viem has powerful typing capabilities that catch mistakes at compile time, like using the wrong type in a function argument or sending value to a non-payable function:
+
+```ts
+// doesn't compile if getItem expects a number but receives a string:
+await contract.read.getItem(["3"]);
+
+// doesn't compile if setItem is not payable:
+await contract.write.setItem([3, "three"], {
+  value: 1000n,
+});
+```
+
+The `hardhat-viem` plugin handles this automatically when you use its helpers like `deployContract` or `getContractAt`.
+
+### Troubleshooting contract type errors
+
+Contract types are updated when the project is compiled. If you're getting a compilation error that you don't expect, make sure you've run
+
+<Run command="hardhat build" />
+
+Note that VSCode may not always pick up the type updates automatically. If you're still getting unexpected TypeScript errors after compiling the project, open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) and run `TypeScript: Reload Project`.
+
+## A simple test
+
+Let's write some tests for the `Counter` contract that comes with the sample project. If you haven't read it yet, take a look at the `contracts/Counter.sol` file.
+
+For our first test, we'll deploy the `Counter` contract and assert that the `Increment` event is emitted when we call the `inc()` function.
+
+Make sure your `test/Counter.ts` file looks like this:
+
+```ts
+// test/Counter.ts
+import { describe, it } from "node:test";
+import hre from "hardhat";
+
+const { viem, networkHelpers } = await hre.network.connect();
+
+describe("Counter", function () {
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const counter = await viem.deployContract("Counter");
+
+    await viem.assertions.emitWithArgs(
+      counter.write.inc(),
+      counter,
+      "Increment",
+      [1n],
+    );
+  });
+});
+```
+
+First, we import the things we're going to use:
+
+- The `describe` and `it` functions from `node:test` to define and group your tests
+- The [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment), or `hre`, which exposes all of Hardhat's functionality
+
+Then, we call `hre.network.connect()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with instances of `viem` and `networkHelpers` already connected to that simulation.
+
+After that, we use the `describe` and `it` functions to build your tests. You can read more about the Node.js test runner [here](https://nodejs.org/api/test.html). If you're used to Mocha, it's mostly backwards compatible, but faster and with no dependencies.
+
+The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `viem` instance returned by our `hre.network.connect()` call.
+
+Finally, we call the `inc()` function of the contract and assert that the `Increment` event is emitted with the correct argument. The `viem.assertions.emitWithArgs` helper is provided by the [`hardhat-viem-assertions`](/docs/plugins/hardhat-viem-assertions) plugin.
+
+## Running your test
+
+To run all the tests in a Hardhat project, you can run:
+
+<Run command="hardhat test" />
+
+You can also run only the `node:test` test with:
+
+<Run command="hardhat test nodejs" />
+
+Or a single file with:
+
+<Run command="hardhat test test/Counter.ts" />
+
+## Testing a function that reverts
+
+In the previous test, we checked that a function emitted an event with the correct value. For that example, we know there's no way the `inc()` function could possibly revert on chain since it's merely incrementing a number and emitting an event with the result. However, smart contracts are rarely that simple, and functions often have preconditions that must be met before they can be executed successfully.
+
+For example, consider the following modifications to our `Counter` contract:
+
+```solidity ins={7,9-11,16}
+// contracts/Counter.sol
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+contract Counter {
+  uint public x;
+  address public owner;
+
+  constructor() {
+    owner = msg.sender;
+  }
+
+  event Increment(uint by);
+
+  function inc() public {
+    require(msg.sender == owner, "only the owner can increment the counter");
+    x++;
+    emit Increment(1);
+  }
+
+  function incBy(uint by) public {
+    require(by > 0, "incBy: increment should be positive");
+    x += by;
+    emit Increment(by);
+  }
+}
+```
+
+Now the `inc()` function can only be called by the address that deployed the contract (the owner). If any other address tries to call it, the function will revert.
+
+With these changes, our previous test will still pass because by default the contract is deployed and called by the same address (the first account configured in Hardhat).
+
+However, we should also add a test to check that calling `inc()` from a non-owner address causes the transaction to revert. Here's how:
+
+```ts collapse={1-18,44-45}
+// test/Counter.ts
+import { describe, it } from "node:test";
+import hre from "hardhat";
+
+const { viem, networkHelpers } = await hre.network.connect();
+
+describe("Counter", function () {
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const counter = await viem.deployContract("Counter");
+
+    await viem.assertions.emitWithArgs(
+      counter.write.inc(),
+      counter,
+      "Increment",
+      [1n],
+    );
+  });
+
+  it("Should allow the owner to increment and revert for non-owners", async function () {
+    const counter = await viem.deployContract("Counter");
+
+    const nonOwnerAddress = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    // Impersonate the non-owner account
+    await networkHelpers.impersonateAccount(nonOwnerAddress);
+
+    // Fund the non-owner account with some ETH to pay for gas
+    await networkHelpers.setBalance(nonOwnerAddress, 10n ** 18n);
+
+    // Call inc() as the owner - should succeed
+    await viem.assertions.emitWithArgs(
+      counter.write.inc(),
+      counter,
+      "Increment",
+      [1n],
+    );
+
+    // Call inc() as a non-owner - should revert
+    await viem.assertions.revertWith(
+      counter.write.inc({ account: nonOwnerAddress }),
+      "only the owner can increment the counter",
+    );
+  });
+});
+```
+
+Here we're using `viem.assertions.revertWith`, which asserts that a transaction reverts and that the revert reason matches the given string. This helper is provided by the [`hardhat-viem-assertions`](/docs/plugins/hardhat-viem-assertions) plugin.
+
+Additionally, we're using some [`hardhat-network-helpers`](/docs/plugins/hardhat-network-helpers) features to test our function with a non-default account. We use `impersonateAccount` to tell Hardhat to allow us to send transactions from that address, and `setBalance` to give it some ETH so it can pay for gas.
+
+Finally, we use the `nonOwnerAddress` as the `account` to call the `inc()` function with.
+
+:::note
+
+You can get other default accounts of the simulated blockchain that already have ETH.
+
+Here's how:
+
+```ts
+const [defaultWallet, nonOwnerWallet] = await viem.getWalletClients();
+```
+
+and use them with:
+
+```ts
+await counter.write.inc({ account: nonOwnerWallet.account });
+```
+
+:::
+
+## Using fixtures
+
+So far, we've deployed the `Counter` contract in each test. This might be fine for a single contract, but if you have a more complicated setup, each test will need several lines at the beginning to set up the desired state, and most of the time these lines will be the same.
+
+In a typical `node:test` test, you could avoid this duplication with a `beforeEach` hook, or using an async describe:
+
+```ts
+describe("Counter", async function () {
+  const counter = await viem.deployContract("Counter");
+
+  it("some test", async function () {
+    // use the deployed contract
+  });
+});
+```
+
+However, there are some problems with these approaches:
+
+- Using async describes
+  - Your contracts get deployed when your tests are defined, not when executed, which complicates their lifetime
+  - You always share the same contract between tests, so they can interfere with one another
+- Using a `beforeEach`: Sharing the variables between the `beforeEach` hook and your tests is awkward and error-prone.
+
+The `loadFixture` helper in the `hardhat-network-helpers` plugin fixes both of these problems. It receives a _fixture_, a function that sets up the chain to some desired state.
+
+The first time `loadFixture` is called, the fixture is executed. But the second time, instead of executing the fixture again, `loadFixture` will reset the state of the blockchain to the point where it was right after the fixture was executed. This is faster, and it undoes any state changes done by the previous test.
+
+This is what our tests look like when a fixture is used:
+
+```ts {8-11,14,25}
+// test/Counter.ts
+import { describe, it } from "node:test";
+import { network } from "hardhat";
+
+const { viem, networkHelpers } = await network.connect();
+
+describe("Counter", function () {
+  async function deployCounterFixture() {
+    const counter = await viem.deployContract("Counter");
+    return { counter };
+  }
+
+  it("Should emit the Increment event when calling the inc() function", async function () {
+    const { counter } = await networkHelpers.loadFixture(deployCounterFixture);
+
+    await viem.assertions.emitWithArgs(
+      counter.write.inc(),
+      counter,
+      "Increment",
+      [1n],
+    );
+  });
+
+  it("Should allow the owner to increment and revert for non-owners", async function () {
+    const { counter } = await networkHelpers.loadFixture(deployCounterFixture);
+
+    const nonOwnerAddress = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    // Impersonate the non-owner account
+    await networkHelpers.impersonateAccount(nonOwnerAddress);
+
+    // Fund the non-owner account with some ETH to pay for gas
+    await networkHelpers.setBalance(nonOwnerAddress, 10n ** 18n);
+
+    // Call inc() as the owner - should succeed
+    await viem.assertions.emitWithArgs(
+      counter.write.inc(),
+      counter,
+      "Increment",
+      [1n],
+    );
+
+    // Call inc() as a non-owner - should revert
+    await viem.assertions.revertWith(
+      counter.write.inc({ account: nonOwnerAddress }),
+      "only the owner can increment the counter",
+    );
+  });
+});
+```
+
+The fixture function can return anything you want, and `loadFixture` will return it. We recommend returning an object like we did here so you can extract only the values you need for each test. To learn more about fixtures, read [their documentation](/network-helpers-fixtures-reference).
+
+## Using `viem` and `hardhat-viem` in the same file
+
+The `viem` object that you get from calling `network.connect()` only includes the functionality added by `hardhat-viem`. To use viem's own functionality, import it from the `viem` module:
+
+```ts
+import { keccak256 } from "viem";
+import { network } from "hardhat";
+
+const { viem } = await network.connect();
+```
+
+Keep in mind that you can get a name clash if you use a namespace import:
+
+```ts
+import * as viem from "viem";
+import { network } from "hardhat";
+
+// this is an error because viem is already declared
+const { viem } = await network.connect();
+```
+
+One way to work around this problem is to use a different name for the Hardhat viem object:
+
+```ts
+const { viem: hhViem } = await network.connect();
+
+const publicClient = await hhViem.getPublicClient();
+```
+
+## Other assertion libraries
+
+In this guide, we saw how to use [`hardhat-viem-assertions`](/docs/plugins/hardhat-viem-assertions) to assert Ethereum-specific conditions, which you can access as `viem.assertions`.
+
+The `hardhat-viem-assertions` plugin doesn't include general TypeScript assertions like checking for equality, deep equality, or the length of an array. You can use any other library for those.
+
+We recommend sticking with `node:assert/strict`, as it requires no dependencies, but you can choose whichever you prefer.
+
+## Learn more
+
+We just covered the basics of testing with viem, `node:test`, and our plugins. To learn more about this and other topics, you can read these guides:
+
+- To learn more about how to use viem in Hardhat, read the [`hardhat-viem` documentation](/docs/plugins/hardhat-viem).
+- To learn how to use contracts from an npm dependency with viem, read [this guide](/docs/cookbook/npm-artifacts).
+- To learn more about the `hardhat-viem-assertions` plugin and the methods it offers, read [its documentation](/docs/plugins/hardhat-viem-assertions).
+- To learn more about `hardhat-network-helpers`, read [its documentation](/docs/plugins/hardhat-network-helpers).

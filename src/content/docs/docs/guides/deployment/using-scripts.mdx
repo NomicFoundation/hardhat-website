@@ -1,0 +1,90 @@
+---
+title: Deploying smart contracts using scripts
+description: How to deploy a smart contract using scripts
+sidebar:
+  label: Using scripts
+  order: 3
+---
+
+import Run from "@hh/Run.astro";
+
+You can write scripts that use Hardhat and use them for basic smart contract deployments.
+
+In this guide we'll show you how to run the same deployment as the Ignition Module included in the sample projects, but using viem and ethers.js.
+
+We assume you followed the instructions [in this section](/docs/guides/deployment) first.
+
+## Writing a deployment script with viem
+
+To build a deployment script using viem, create the `scripts/deploy-counter.ts` file with this content:
+
+```ts
+// scripts/deploy-counter.ts
+import { network } from "hardhat";
+
+const { viem, networkName } = await network.connect();
+const client = await viem.getPublicClient();
+
+console.log(`Deploying Counter to ${networkName}...`);
+
+const counter = await viem.deployContract("Counter");
+
+console.log("Counter address:", counter.address);
+
+console.log("Calling counter.incBy(5)");
+const tx = await counter.write.incBy([5n]);
+
+console.log("Waiting for the counter.incBy(5) tx to confirm");
+await client.waitForTransactionReceipt({ hash: tx, confirmations: 1 });
+
+console.log("Deployment successful!");
+```
+
+## Writing a deployment script with ethers.js
+
+To build a deployment script using ethers, create the `scripts/deploy-counter.ts` file with this content:
+
+```ts
+// scripts/deploy-counter.ts
+import { network } from "hardhat";
+
+const { ethers, networkName } = await network.connect();
+
+console.log(`Deploying Counter to ${networkName}...`);
+
+const counter = await ethers.deployContract("Counter");
+
+console.log("Waiting for the deployment tx to confirm");
+await counter.waitForDeployment();
+
+console.log("Counter address:", await counter.getAddress());
+
+console.log("Calling counter.incBy(5)");
+const tx = await counter.incBy(5n);
+
+console.log("Waiting for the counter.incBy(5) tx to confirm");
+await tx.wait();
+
+console.log("Deployment successful!");
+```
+
+## Running your deployment script
+
+To run your deployment, use `hardhat run <script>`.
+
+Make sure you use the [`production` Build Profile](/docs/guides/writing-contracts/build-profiles) so your contracts get optimized for production and compiled using [Isolated Builds](/docs/guides/writing-contracts/isolated-builds).
+
+<Run command="hardhat run scripts/deploy-counter.ts --build-profile production --network sepolia" />
+
+Input your keystore password and wait for the deployment to complete.
+
+## Disadvantages of deploying with scripts
+
+Deploying with a script can be simple in basic cases like the ones shown here, but doesn't scale well to mid-size and larger projects.
+
+Some of the problems are:
+
+- They can't recover from errors automatically
+- They can't be resumed after being updated or fixed (everything will be redeployed!)
+- They don't have a standardized format to track and version your deployment results
+- They are harder to integrate with TypeScript tests
