@@ -1,0 +1,88 @@
+---
+title: Running a local development node
+description: How to run and configure a local Hardhat development node for testing and development
+---
+
+import Run from "@hh/Run.astro";
+
+The Hardhat `node` task starts a local development node that runs until you stop it, exposing an HTTP-based JSON-RPC server for your scripts and applications to connect to.
+
+## Using the node task
+
+Suppose you have a script that sends 1 ETH from the first local account to the zero address and then prints its balance:
+
+```ts
+// my-script.ts
+import { network } from "hardhat";
+
+const { viem } = await network.connect();
+const publicClient = await viem.getPublicClient();
+const [wallet] = await viem.getWalletClients();
+
+await wallet.sendTransaction({
+  to: "0x0000000000000000000000000000000000000000",
+  value: 10n ** 18n,
+});
+
+const zeroAddressBalance = await publicClient.getBalance({
+  address: "0x0000000000000000000000000000000000000000",
+});
+
+console.log(`Balance of zero address: ${zeroAddressBalance}`);
+```
+
+If you run this script multiple times, the output won't change:
+
+<Run command="hardhat run my-script.ts" />
+
+To have a locally simulated network that persists for longer than the duration of a single task, start a node in one terminal:
+
+<Run command="hardhat node" />
+
+Then, in another terminal, run your script using the `--network localhost` option, which connects to the running node:
+
+<Run command="hardhat run my-script.ts --network localhost" />
+
+Now, if you run the script again while the node is running, you'll see the output change each time, as the state is preserved between runs.
+
+## Running a development node programmatically
+
+In addition to using the `hardhat node` task, you can start a development node programmatically using the Network Manager's `createServer` method. This method creates a local simulated network and exposes it through an HTTP-based JSON-RPC server, just like `hardhat node`.
+
+Here's a complete example that creates a server, runs it for 60 seconds, and then closes it:
+
+```ts
+// scripts/server.ts
+import { network } from "hardhat";
+
+// Create a JsonRpcServer wrapping a blockchain simulation based on the
+// "default" Network Config, with `loggingEnabled` setting overridden to `true`
+const server = await network.createServer(
+  {
+    network: "default",
+    override: { loggingEnabled: true },
+  },
+  // hostname and port are optional parameters
+  // "127.0.0.1",
+  // 8545,
+);
+
+const { address, port } = await server.listen();
+console.log(`JSON-RPC running in: http://${address}:${port}`);
+
+// Example of closing the server from another async context
+console.log("Closing the server in 60 seconds");
+setTimeout(async () => {
+  await server.close();
+}, 60_000);
+
+// Wait for the server to close before printing a message
+await server.afterClosed();
+console.log("Server closed");
+```
+
+Run this script with:
+
+<Run command="hardhat run scripts/server.ts" />
+
+While the server is running, you can connect to it through HTTP, for example using `--network localhost`, or any client with its address and port.

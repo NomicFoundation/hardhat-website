@@ -124,7 +124,7 @@ export default defineConfig({
                       link: "http://hardhat.org/docs/explanations/edr-simulated-networks#forking-mode",
                     },
                     // { slug: "docs/guides/forking" },
-                    // { slug: "docs/guides/hardhat-node" },
+                    { slug: "docs/guides/hardhat-node" },
                     // { slug: "docs/guides/hardhat-console" },
                     // { slug: "docs/guides/command-line-completion" },
                     { slug: "docs/guides/getting-help" },
