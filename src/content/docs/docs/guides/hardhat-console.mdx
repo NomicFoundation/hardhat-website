@@ -1,0 +1,76 @@
+---
+title: Using the Hardhat console
+description: How to use the interactive Hardhat console
+---
+
+import Run from "@hh/Run.astro";
+
+The built-in `console` task starts a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) that can be used to experiment with your contracts and the [Hardhat Runtime Environment (HRE)](/docs/explanations/hardhat-runtime-environment).
+
+## Starting the console
+
+To start a Hardhat console, run the following command:
+
+<Run command="hardhat console" />
+
+The `console` task starts a [Node.js REPL](https://nodejs.org/en/learn/command-line/how-to-use-the-nodejs-repl) similar to the one you get when you run `node` in your terminal, but with some added features:
+
+- The HRE and some of its properties are globally available
+- Your project is built before the REPL starts
+- It maintains a separate command history for each project
+
+Here's an example where you deploy a contract and interact with it:
+
+```
+> const { viem } = await network.connect()
+> const counter = await viem.deployContract("Counter")
+> await counter.write.inc()
+> await counter.read.x()
+1n
+```
+
+To skip compilation before starting the console, pass the `--no-compile` flag:
+
+<Run command="hardhat console --no-compile" />
+
+## Running commands on startup
+
+The `console` task accepts an optional list of positional arguments. Each argument you provide will be executed as a command immediately after the REPL starts, letting you run a series of commands automatically:
+
+<Run command='hardhat console "const { viem } = await network.connect();" />' />
+
+Make sure to wrap each command in quotes to avoid issues with your shell interpreting special characters.
+
+You can also define a custom task that runs `console` with some predefined commands. For example:
+
+```ts {5-10}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig, task } from "hardhat/config";
+
+const myConsole = task(
+  "my-console",
+  "Starts a console with predefined commands",
+)
+  .setAction(() => import("./tasks/my-console.js"))
+  .build();
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: "0.8.28",
+  tasks: [myConsole],
+});
+```
+
+```ts
+// tasks/my-console.ts
+export default function myConsoleTask(_, hre) {
+  return hre.tasks.getTask("console").run({
+    commands: ["const { viem } = await network.connect();"],
+  });
+}
+```
+
+:::tip
+Learn more about writing custom tasks in our [Writing Hardhat tasks](/docs/guides/writing-tasks) guide.
+:::
