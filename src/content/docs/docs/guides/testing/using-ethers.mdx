@@ -224,6 +224,20 @@ const [defaultSigner, nonOwnerSigner] = await ethers.getSigners();
 
 :::
 
+## Multichain support
+
+The tests we have written run on a simulated network that behaves like Ethereum Mainnet. However, Hardhat has built-in multichain support that lets you run tests on other Chain Types, like OP Mainnet.
+
+One way to test on a different kind of chain is to pass a `chainType` option when creating your Network Connection:
+
+```ts
+const { ethers } = await hre.network.connect({
+  chainType: "op",
+});
+```
+
+To learn more about Hardhat's multichain support, read [our multichain explanation](/docs/explanations/multichain-support).
+
 ## Using fixtures
 
 So far, we've deployed the `Counter` contract in each test. This might be fine for a single contract, but if you have a more complicated setup, each test will need several lines at the beginning to set up the desired state, and most of the time these lines will be the same.
