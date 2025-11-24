@@ -116,14 +116,7 @@ export default defineConfig({
                     { slug: "docs/guides/configuration-variables" },
                     { slug: "docs/guides/writing-tasks" },
                     { slug: "docs/guides/writing-scripts" },
-                    // The "docs/guides/forking" document isn't ready on time,
-                    // so we use a link to another explanation that mentions
-                    // something similar
-                    {
-                      label: "Forking a network",
-                      link: "http://hardhat.org/docs/explanations/edr-simulated-networks#forking-mode",
-                    },
-                    // { slug: "docs/guides/forking" },
+                    { slug: "docs/guides/forking" },
                     // { slug: "docs/guides/hardhat-node" },
                     // { slug: "docs/guides/hardhat-console" },
                     // { slug: "docs/guides/command-line-completion" },
