@@ -22,6 +22,8 @@ export default defineConfig({
     maxFeeBumps: 4,
     requiredConfirmations: 5,
     disableFeeBumping: false,
+    maxRetries: 10,
+    retryInterval: 1_000,
   },
 });
 ```
@@ -58,11 +60,17 @@ If set to `true`, Hardhat Ignition will not bump the fee for unconfirmed transac
 
 Default value: `false`
 
-### `explorerUrl`
+### `maxRetries`
 
-The default block explorer to use.
+The number of times Hardhat Ignition will retry sending a transaction if it fails due to a network error.
 
-Default value: `undefined`
+Default value: `10`
+
+### `retryInterval`
+
+The time in milliseconds that Hardhat Ignition will wait between retries when a transaction fails due to a network error.
+
+Default value: `1_000` (1 second)
 
 ## Network configuration options
 
@@ -83,6 +91,8 @@ export default defineConfig({
         gasPrice: 50_000_000_000n, // 50 gwei
         disableFeeBumping: false,
         explorerUrl: "https://sepolia.etherscan.io",
+        maxRetries: 10,
+        retryInterval: 1_000,
       },
       // ...
     },
@@ -127,3 +137,15 @@ Default value: false
 The default block explorer to use.
 
 Default value: `undefined`
+
+### `maxRetries`
+
+The number of times Hardhat Ignition will retry sending a transaction if it fails due to a network error.
+
+Default value: `10`
+
+### `retryInterval`
+
+The time in milliseconds that Hardhat Ignition will wait between retries when a transaction fails due to a network error.
+
+Default value: `1_000` (1 second)
