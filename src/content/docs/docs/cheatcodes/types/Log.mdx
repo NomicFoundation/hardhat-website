@@ -1,0 +1,21 @@
+---
+title: Log
+description: Log cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct Log {
+  /// The topics of the log, including the signature, if any.
+  bytes32[] topics;
+  /// The raw data of the log.
+  bytes data;
+  /// The address of the log's emitter.
+  address emitter;
+}
+```
+
+### Description
+
+An Ethereum log. Returned by `getRecordedLogs`.

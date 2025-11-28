@@ -1,0 +1,21 @@
+---
+title: FfiResult
+description: FfiResult cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct FfiResult {
+  /// The exit code of the call.
+  int32 exitCode;
+  /// The optionally hex-decoded `stdout` data.
+  bytes stdout;
+  /// The `stderr` data.
+  bytes stderr;
+}
+```
+
+### Description
+
+The result of a `tryFfi` call.

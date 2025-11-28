@@ -1,0 +1,27 @@
+---
+title: StorageAccess
+description: StorageAccess cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct StorageAccess {
+  /// The account whose storage was accessed.
+  address account;
+  /// The slot that was accessed.
+  bytes32 slot;
+  /// If the access was a write.
+  bool isWrite;
+  /// The previous value of the slot.
+  bytes32 previousValue;
+  /// The new value of the slot.
+  bytes32 newValue;
+  /// If the access was reverted.
+  bool reverted;
+}
+```
+
+### Description
+
+The storage accessed during an `AccountAccess`.

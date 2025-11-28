@@ -1,0 +1,17 @@
+---
+title: signP256
+description: signP256 cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function signP256(
+  uint256 privateKey,
+  bytes32 digest
+) external pure returns (bytes32 r, bytes32 s);
+```
+
+### Description
+
+Signs `digest` with `privateKey` using the secp256r1 curve.

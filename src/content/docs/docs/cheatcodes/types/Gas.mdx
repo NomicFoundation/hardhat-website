@@ -1,0 +1,25 @@
+---
+title: Gas
+description: Gas cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct Gas {
+  /// The gas limit of the call.
+  uint64 gasLimit;
+  /// The total gas used.
+  uint64 gasTotalUsed;
+  /// DEPRECATED: The amount of gas used for memory expansion. Ref: <https://github.com/foundry-rs/foundry/pull/7934#pullrequestreview-2069236939>
+  uint64 gasMemoryUsed;
+  /// The amount of gas refunded.
+  int64 gasRefunded;
+  /// The amount of gas remaining.
+  uint64 gasRemaining;
+}
+```
+
+### Description
+
+Gas used. Returned by `lastCallGas`.

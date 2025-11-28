@@ -1,0 +1,15 @@
+---
+title: setBlockhash
+description: setBlockhash cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function setBlockhash(uint256 blockNumber, bytes32 blockHash) external;
+```
+
+### Description
+
+Set blockhash for the current block.
+It only sets the blockhash for blocks where `block.number - 256 <= number < block.number`.

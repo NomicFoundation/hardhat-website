@@ -1,0 +1,23 @@
+---
+title: Chain
+description: Chain cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct Chain {
+  /// The chain name.
+  string name;
+  /// The chain's Chain ID.
+  uint256 chainId;
+  /// The chain's alias. (i.e. what gets specified in `foundry.toml`).
+  string chainAlias;
+  /// A default RPC endpoint for this chain.
+  string rpcUrl;
+}
+```
+
+### Description
+
+Information about a blockchain.

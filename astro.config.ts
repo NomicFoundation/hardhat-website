@@ -145,6 +145,13 @@ export default defineConfig({
                   },
                 },
                 {
+                  label: "Solidity test cheatcodes",
+                  collapsed: true,
+                  autogenerate: {
+                    directory: "docs/cheatcodes",
+                  },
+                },
+                {
                   label: "Explanations",
                   collapsed: true,
                   autogenerate: {

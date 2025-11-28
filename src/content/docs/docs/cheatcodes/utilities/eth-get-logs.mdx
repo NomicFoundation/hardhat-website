@@ -1,0 +1,19 @@
+---
+title: eth_getLogs
+description: eth_getLogs cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function eth_getLogs(
+  uint256 fromBlock,
+  uint256 toBlock,
+  address target,
+  bytes32[] calldata topics
+) external returns (EthGetLogs[] memory logs);
+```
+
+### Description
+
+Gets all the logs according to specified filter.

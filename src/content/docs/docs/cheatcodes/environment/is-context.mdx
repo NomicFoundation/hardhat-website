@@ -1,0 +1,37 @@
+---
+title: isContext
+description: isContext cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+enum ExecutionContext {
+  /// Test group execution context (test, coverage or snapshot).
+  TestGroup,
+  /// Test execution context.
+  Test,
+  /// Code coverage execution context.
+  Coverage,
+  /// Gas snapshot execution context.
+  Snapshot,
+  /// Unknown execution context.
+  Unknown
+}
+function isContext(
+  ExecutionContext context
+) external view returns (bool result);
+```
+
+### Description
+
+Returns true if the test was executed in given context.
+
+### Examples
+
+```solidity
+assertEq(vm.isContext(Vm.ExecutionContext.Test), true);
+assertEq(vm.isContext(Vm.ExecutionContext.TestGroup), true);
+```

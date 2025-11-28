@@ -1,0 +1,37 @@
+---
+title: AccountAccessKind
+description: AccountAccessKind cheatcode documentation
+---
+
+### Definition
+
+```solidity
+enum AccountAccessKind {
+    /// The account was called.
+    Call,
+    /// The account was called via delegatecall.
+    DelegateCall,
+    /// The account was called via callcode.
+    CallCode,
+    /// The account was called via staticcall.
+    StaticCall,
+    /// The account was created.
+    Create,
+    /// The account was selfdestructed.
+    SelfDestruct,
+    /// Synthetic access indicating the current context has resumed after a previous sub-context (AccountAccess).
+    Resume,
+    /// The account's balance was read.
+    Balance,
+    /// The account's codesize was read.
+    Extcodesize,
+    /// The account's codehash was read.
+    Extcodehash,
+    /// The account's code was copied.
+    Extcodecopy,
+}
+```
+
+### Description
+
+The kind of account access that occurred.

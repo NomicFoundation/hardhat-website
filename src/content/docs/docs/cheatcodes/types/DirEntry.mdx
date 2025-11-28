@@ -1,0 +1,25 @@
+---
+title: DirEntry
+description: DirEntry cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct DirEntry {
+  /// The error message, if any.
+  string errorMessage;
+  /// The path of the entry.
+  string path;
+  /// The depth of the entry.
+  uint64 depth;
+  /// Whether the entry is a directory.
+  bool isDir;
+  /// Whether the entry is a symlink.
+  bool isSymlink;
+}
+```
+
+### Description
+
+A single entry in a directory listing. Returned by `readDir`.

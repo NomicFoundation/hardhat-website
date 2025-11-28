@@ -1,0 +1,21 @@
+---
+title: CallerMode
+description: CallerMode cheatcode documentation
+---
+
+### Definition
+
+```solidity
+enum CallerMode {
+    /// No caller modification is currently active.
+    None,
+    /// A one time prank triggered by a `vm.prank()` call is currently active.
+    Prank,
+    /// A recurrent prank triggered by a `vm.startPrank()` call is currently active.
+    RecurrentPrank,
+}
+```
+
+### Description
+
+A modification applied to either `msg.sender` or `tx.origin`. Returned by `readCallers`.

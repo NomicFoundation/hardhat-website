@@ -1,0 +1,49 @@
+---
+title: AccountAccess
+description: AccountAccess cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct AccountAccess {
+  /// The chain and fork the access occurred.
+  ChainInfo chainInfo;
+  /// The kind of account access that determines what the account is.
+  /// If kind is Call, DelegateCall, StaticCall or CallCode, then the account is the callee.
+  /// If kind is Create, then the account is the newly created account.
+  /// If kind is SelfDestruct, then the account is the selfdestruct recipient.
+  /// If kind is a Resume, then account represents a account context that has resumed.
+  AccountAccessKind kind;
+  /// The account that was accessed.
+  /// It's either the account created, callee or a selfdestruct recipient for CREATE, CALL or SELFDESTRUCT.
+  address account;
+  /// What accessed the account.
+  address accessor;
+  /// If the account was initialized or empty prior to the access.
+  /// An account is considered initialized if it has code, a
+  /// non-zero nonce, or a non-zero balance.
+  bool initialized;
+  /// The previous balance of the accessed account.
+  uint256 oldBalance;
+  /// The potential new balance of the accessed account.
+  /// That is, all balance changes are recorded here, even if reverts occurred.
+  uint256 newBalance;
+  /// Code of the account deployed by CREATE.
+  bytes deployedCode;
+  /// Value passed along with the account access
+  uint256 value;
+  /// Input data provided to the CREATE or CALL
+  bytes data;
+  /// If this access reverted in either the current or parent context.
+  bool reverted;
+  /// An ordered list of storage accesses made during an account access operation.
+  StorageAccess[] storageAccesses;
+  /// Call depth traversed during the recording of state differences
+  uint64 depth;
+}
+```
+
+### Description
+
+The result of a `stopAndReturnStateDiff` call.

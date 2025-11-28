@@ -1,0 +1,33 @@
+---
+title: FsMetadata
+description: FsMetadata cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct FsMetadata {
+  /// True if this metadata is for a directory.
+  bool isDir;
+  /// True if this metadata is for a symlink.
+  bool isSymlink;
+  /// The size of the file, in bytes, this metadata is for.
+  uint256 length;
+  /// True if this metadata is for a readonly (unwritable) file.
+  bool readOnly;
+  /// The last modification time listed in this metadata.
+  uint256 modified;
+  /// The last access time of this metadata.
+  uint256 accessed;
+  /// The creation time listed in this metadata.
+  uint256 created;
+}
+```
+
+### Description
+
+Metadata information about a file.
+
+This structure is returned from the `fsMetadata` function and represents known
+metadata about a file such as its permissions, size, modification
+times, etc.

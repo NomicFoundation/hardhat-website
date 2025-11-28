@@ -1,0 +1,23 @@
+---
+title: PotentialRevert
+description: PotentialRevert cheatcode documentation
+---
+
+### Definition
+
+```solidity
+struct PotentialRevert {
+  /// The allowed origin of the revert opcode; address(0) allows reverts from any address
+  address reverter;
+  /// When true, only matches on the beginning of the revert data, otherwise, matches on entire revert data
+  bool partialMatch;
+  /// The data to use to match encountered reverts
+  bytes revertData;
+}
+```
+
+### Description
+
+Represents a "potential" revert reason from a single subsequent call when using `vm.assumeNoReverts`.
+Reverts that match will result in a FOUNDRY::ASSUME rejection, whereas unmatched reverts will be surfaced
+as normal.

@@ -1,0 +1,17 @@
+---
+title: getChain
+description: getChain cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function getChain(
+  string calldata chainAlias
+) external view returns (Chain memory chain);
+function getChain(uint256 chainId) external view returns (Chain memory chain);
+```
+
+### Description
+
+Returns a `Chain` struct for specific `chainId` or `chainAlias`.

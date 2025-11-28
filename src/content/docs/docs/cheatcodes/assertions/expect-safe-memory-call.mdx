@@ -1,0 +1,16 @@
+---
+title: expectSafeMemoryCall
+description: expectSafeMemoryCall cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function expectSafeMemoryCall(uint64 min, uint64 max) external;
+```
+
+### Description
+
+Only allows memory writes to offsets [0x00, 0x60) ∪ [min, max) in the next created subcontext.
+If any other memory is written to, the test will fail. Can be called multiple times to add more ranges
+to the set.

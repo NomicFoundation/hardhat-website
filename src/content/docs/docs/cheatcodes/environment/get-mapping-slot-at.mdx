@@ -1,0 +1,19 @@
+---
+title: getMappingSlotAt
+description: getMappingSlotAt cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function getMappingSlotAt(
+  address target,
+  bytes32 mappingSlot,
+  uint256 idx
+) external returns (bytes32 value);
+```
+
+### Description
+
+Gets the elements at index idx of the mapping at the given slot, for a given address. The
+index must be less than the length of the mapping (i.e. the number of keys in the mapping).
