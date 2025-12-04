@@ -1,0 +1,23 @@
+---
+title: fee
+description: fee cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function fee(uint256) external;
+```
+
+### Description
+
+Sets `block.basefee`.
+
+### Examples
+
+```solidity
+vm.fee(25 gwei);
+emit log_uint(block.basefee); // 25000000000
+```

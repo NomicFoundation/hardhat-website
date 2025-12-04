@@ -1,0 +1,23 @@
+---
+title: interceptInitcode
+description: interceptInitcode cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function interceptInitcode() external;
+```
+
+### Description
+
+Causes the next contract creation (via new) to fail and return its initcode in the returndata buffer.
+This allows type-safe access to the initcode payload that would be used for contract creation.
+Example usage:
+
+```solidity
+vm.interceptInitcode();
+bytes memory initcode;
+try new MyContract(param1, param2) { assert(false); }
+catch (bytes memory interceptedInitcode) { initcode = interceptedInitcode; }
+```

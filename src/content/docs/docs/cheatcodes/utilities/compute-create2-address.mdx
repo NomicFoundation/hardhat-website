@@ -1,0 +1,22 @@
+---
+title: computeCreate2Address
+description: computeCreate2Address cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function computeCreate2Address(
+  bytes32 salt,
+  bytes32 initCodeHash,
+  address deployer
+) external pure returns (address);
+function computeCreate2Address(
+  bytes32 salt,
+  bytes32 initCodeHash
+) external pure returns (address);
+```
+
+### Description
+
+Compute the address of a contract created with CREATE2. If `deployer` is not specified, the default CREATE2 deployer is used.

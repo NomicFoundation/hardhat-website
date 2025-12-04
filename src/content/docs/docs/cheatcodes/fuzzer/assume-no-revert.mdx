@@ -1,0 +1,54 @@
+---
+title: assumeNoRevert
+description: assumeNoRevert cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+struct PotentialRevert {
+  /// The allowed origin of the revert opcode; address(0) allows reverts from any address
+  address reverter;
+  /// When true, only matches on the beginning of the revert data, otherwise, matches on entire revert data
+  bool partialMatch;
+  /// The data to use to match encountered reverts
+  bytes revertData;
+}
+function assumeNoRevert() external pure;
+function assumeNoRevert(PotentialRevert calldata potentialRevert) external pure;
+function assumeNoRevert(
+  PotentialRevert[] calldata potentialReverts
+) external pure;
+```
+
+### Description
+
+Discard this run's fuzz inputs and generate new ones if next call reverted. If `potentialRevert`/`potentialReverts` is specified, only apply if the call matches the provided parameter.
+
+The fuzzer will discard the current fuzz inputs and start a new fuzz run if next call reverted.
+
+The test may fail if you hit the max number of rejects.
+
+You can configure the rejection thresholds by setting `fuzz.maxTestRejects` in your [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration).
+
+### Examples
+
+For a function that requires an amount in certain range:
+
+```solidity
+function doSomething(uint256 amount) public {
+  require(amount > 100 ether && amount < 1_000 ether);
+}
+```
+
+reverts are discarded, resulting in test pass (or fail if max number of rejects hit):
+
+```solidity
+function testSomething(uint256 amount) public {
+  vm.assumeNoRevert();
+  target.doSomething(amount);
+  // [PASS]
+}
+```

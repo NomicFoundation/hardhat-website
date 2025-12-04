@@ -1,0 +1,201 @@
+---
+title: File cheatcodes
+description: File cheatcodes documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+// Reads the entire content of file to string, (path) => (data)
+function readFile(string calldata) external returns (string memory);
+// Reads the entire content of file as binary. `path` is relative to the project root.
+function readFileBinary(
+  string calldata path
+) external view returns (bytes memory data);
+
+struct DirEntry {
+  /// The error message, if any.
+  string errorMessage;
+  /// The path of the entry.
+  string path;
+  /// The depth of the entry.
+  uint64 depth;
+  /// Whether the entry is a directory.
+  bool isDir;
+  /// Whether the entry is a symlink.
+  bool isSymlink;
+}
+
+// Reads the directory at the given path recursively, up to `maxDepth`.
+// `maxDepth` defaults to 1, meaning only the direct children of the given directory will be returned.
+// Follows symbolic links if `followLinks` is true.
+function readDir(
+  string calldata path
+) external view returns (DirEntry[] memory entries);
+function readDir(
+  string calldata path,
+  uint64 maxDepth
+) external view returns (DirEntry[] memory entries);
+function readDir(
+  string calldata path,
+  uint64 maxDepth,
+  bool followLinks
+) external view returns (DirEntry[] memory entries);
+// Reads next line of file to string, (path) => (line)
+function readLine(string calldata) external returns (string memory);
+// Reads a symbolic link, returning the path that the link points to.
+// This cheatcode will revert in the following situations, but is not limited to just these cases:
+// - `path` is not a symbolic link.
+// - `path` does not exist.
+function readLink(
+  string calldata linkPath
+) external view returns (string memory targetPath);
+// Writes data to file, creating a file if it does not exist, and entirely replacing its contents if it does.
+// (path, data) => ()
+function writeFile(string calldata path, string calldata data) external;
+// Writes binary data to a file, creating a file if it does not exist, and entirely replacing its contents if it does.
+// `path` is relative to the project root.
+// (path, data) => ()
+function writeFileBinary(string calldata path, bytes calldata data) external;
+// Writes line to file, creating a file if it does not exist.
+// (path, data) => ()
+function writeLine(string calldata, string calldata) external;
+// Closes file for reading, resetting the offset and allowing to read it from beginning with readLine.
+// (path) => ()
+function closeFile(string calldata) external;
+// Copies the contents of one file to another. This function will **overwrite** the contents of `to`.
+// On success, the total number of bytes copied is returned and it is equal to the length of the `to` file as reported by `metadata`.
+// Both `from` and `to` are relative to the project root.
+// (from, to) => (copied)
+function copyFile(
+  string calldata from,
+  string calldata to
+) external returns (uint64 copied);
+// Creates a new, empty directory at the provided path.
+// This cheatcode will revert in the following situations, but is not limited to just these cases:
+//
+// - User lacks permissions to modify `path`.
+// - A parent of the given path doesn't exist and `recursive` is false.
+// - `path` already exists and `recursive` is false.
+//   `path` is relative to the project root.
+// (path, recursive) => ()
+function createDir(string calldata path, bool recursive) external;
+// Removes file. This cheatcode will revert in the following situations, but is not limited to just these cases:
+// - Path points to a directory.
+// - The file doesn't exist.
+// - The user lacks permissions to remove the file.
+// (path) => ()
+function removeFile(string calldata) external;
+// Removes a directory at the provided path.
+// This cheatcode will revert in the following situations, but is not limited to just these cases:
+//
+// - `path` doesn't exist.
+// - `path` isn't a directory.
+// - User lacks permissions to modify `path`.
+// - The directory is not empty and `recursive` is false.
+//   `path` is relative to the project root.
+// (path, recursive) => ()
+function removeDir(string calldata path, bool recursive) external;
+// Returns true if the given path points to an existing entity, else returns false
+// (path) => (bool)
+function exists(string calldata) external returns (bool);
+// Returns true if the path exists on disk and is pointing at a regular file, else returns false
+// (path) => (bool)
+function isFile(string calldata) external returns (bool);
+// Returns true if the path exists on disk and is pointing at a directory, else returns false
+// (path) => (bool)
+function isDir(string calldata) external returns (bool);
+```
+
+### Description
+
+These cheatcodes can be used for filesystem manipulation operations.
+
+By default, filesystem access is disallowed and requires the `fsPermissions` setting in [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration):
+
+- `fsPermissions`: An optional object to configure file system permissions for cheatcodes. Defaults to no permissions. Exact path matching is used for file permissions. Prefix matching is used for directory permissions.
+  - `readFile`: An array of file paths that can be read.
+  - `writeFile`: An array of file paths that can be written.
+  - `readWriteFile`: An array of file paths that can be both read and written.
+  - `readDirectory`: An array of directory paths. All files and directories inside these directories can be read.
+  - `dangerouslyWriteDirectory`: An array of directory paths. All files and directories inside these directories can be written. See warning above to understand why it's dangerous.
+  - `dangerouslyReadWriteDirectory`: An array of directory paths. All files and directories inside these directories can be both read and written. See warning above to understand why it's dangerous.
+
+### Examples
+
+Append a line to a file, this will create the file if it does not exist yet
+
+This requires read access to the file / project root
+
+```js
+fsPermissions: {
+    readDirectory: ["./"],
+}
+```
+
+```solidity
+string memory path = "output.txt";
+
+string memory line1 = "first line";
+vm.writeLine(path, line1);
+
+string memory line2 = "second line";
+vm.writeLine(path, line2);
+```
+
+Write to and read from a file
+
+This requires read-write access to file / project root:
+
+```js
+fsPermissions: {
+    dangerouslyReadWriteDirectory: ["./"],
+}
+```
+
+```solidity
+string memory path = "file.txt";
+string memory data = "hello world";
+vm.writeFile(path, data);
+
+assertEq(vm.readFile(path), data);
+```
+
+Remove a file
+
+This requires write access to file / project root:
+
+```js
+fsPermissions: {
+    dangerouslyWriteDirectory: ["./"],
+}
+```
+
+```solidity
+string memory path = "file.txt";
+vm.removeFile(path);
+
+assertFalse(vm.exists(validPath));
+```
+
+Verify that a filesystem path is valid
+
+```solidity
+// Verify that path 'foo/files/bar.txt' exists
+string memory validPath = "foo/files/bar.txt";
+assertTrue(vm.exists(validPath));
+```
+
+Verify that a filesystem path points to a file or directory
+
+```solidity
+// Verify that path 'foo/file/bar.txt' points to a file
+string memory validFilePath = "foo/files/bar.txt";
+assertTrue(vm.isFile(validFilePath));
+
+// Verify that 'foo/file' points to a directory
+string memory validDirPath = "foo/files";
+assertTrue(vm.isDir(validDirPath));
+```

@@ -1,0 +1,29 @@
+---
+title: warp
+description: warp cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function warp(uint256) external;
+```
+
+### Description
+
+Sets `block.timestamp`.
+
+### Examples
+
+```solidity
+vm.warp(1641070800);
+emit log_uint(block.timestamp); // 1641070800
+```
+
+### SEE ALSO
+
+Forge Standard Library
+
+[`skip`](https://getfoundry.sh/reference/forge-std/skip), [`rewind`](https://getfoundry.sh/reference/forge-std/rewind)

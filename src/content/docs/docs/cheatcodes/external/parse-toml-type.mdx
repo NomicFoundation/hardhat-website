@@ -1,0 +1,18 @@
+---
+title: parseTomlType
+description: parseTomlType cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function parseTomlType(
+  string calldata toml,
+  string calldata key,
+  string calldata typeDescription
+) external pure returns (bytes memory);
+```
+
+### Description
+
+Parses a string of TOML data at `key` and coerces it to type corresponding to `typeDescription`.

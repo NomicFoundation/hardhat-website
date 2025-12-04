@@ -1,0 +1,26 @@
+---
+title: lastCallGas
+description: lastCallGas cheatcode documentation
+---
+
+### Signature
+
+```solidity
+struct Gas {
+  /// The gas limit of the call.
+  uint64 gasLimit;
+  /// The total gas used.
+  uint64 gasTotalUsed;
+  /// DEPRECATED: The amount of gas used for memory expansion.
+  uint64 gasMemoryUsed;
+  /// The amount of gas refunded.
+  int64 gasRefunded;
+  /// The amount of gas remaining.
+  uint64 gasRemaining;
+}
+function lastCallGas() external view returns (Gas memory gas);
+```
+
+### Description
+
+Gets the gas used in the last call from the callee perspective.

@@ -1,0 +1,32 @@
+---
+title: fsMetadata
+description: fsMetadata cheatcode documentation
+---
+
+### Signature
+
+```solidity
+struct FsMetadata {
+  /// True if this metadata is for a directory.
+  bool isDir;
+  /// True if this metadata is for a symlink.
+  bool isSymlink;
+  /// The size of the file, in bytes, this metadata is for.
+  uint256 length;
+  /// True if this metadata is for a readonly (unwritable) file.
+  bool readOnly;
+  /// The last modification time listed in this metadata.
+  uint256 modified;
+  /// The last access time of this metadata.
+  uint256 accessed;
+  /// The creation time listed in this metadata.
+  uint256 created;
+}
+function fsMetadata(
+  string calldata path
+) external view returns (FsMetadata memory metadata);
+```
+
+### Description
+
+Given a path, query the file system to get information about a file, directory, etc.

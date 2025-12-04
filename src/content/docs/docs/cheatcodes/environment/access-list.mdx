@@ -1,0 +1,20 @@
+---
+title: accessList
+description: accessList cheatcode documentation
+---
+
+### Signature
+
+```solidity
+struct AccessListItem {
+  /// The address to be added in access list.
+  address target;
+  /// The storage keys to be added in access list.
+  bytes32[] storageKeys;
+}
+function accessList(AccessListItem[] calldata access) external;
+```
+
+### Description
+
+Utility cheatcode to set an EIP-2930 access list for all subsequent transactions.

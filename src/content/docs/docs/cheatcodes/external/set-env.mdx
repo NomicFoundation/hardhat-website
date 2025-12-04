@@ -1,0 +1,37 @@
+---
+title: setEnv
+description: setEnv cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function setEnv(string calldata key, string calldata value) external;
+```
+
+### Description
+
+Set an environment variable `key=value`.
+
+:::note
+Environment variables set by a process are only accessible by itself and its child
+processes. Thus, calling `setEnv` will only modify environment variables of the currently running
+process, and won't affect the shell (parent process), i.e., they won't persist after the
+current process exits.
+:::
+
+### Tips
+
+- The environment variable key can't be empty.
+- The environment variable key can't contain the equal sign `=` or the NUL character `\0`.
+- The environment variable value can't contain the NUL character `\0`.
+
+### Examples
+
+```solidity
+string memory key = "hello";
+string memory val = "world";
+cheats.setEnv(key, val);
+```
