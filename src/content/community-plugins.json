@@ -98,6 +98,27 @@
       "authorUrl": "https://github.com/AxelLoupias",
       "description": "Display function, event, and error signatures for your contracts in the console",
       "tags": ["function", "error", "event", "tooling", "selector"]
+    },
+    {
+      "name": "@solarity/hardhat-migrate",
+      "author": "Distributed Lab",
+      "authorUrl": "https://distributedlab.com/",
+      "description": "The simplest way to deploy smart contracts",
+      "tags": ["Deployment", "Verification", "Migration", "Solarity"]
+    },
+    {
+      "name": "@solarity/hardhat-gobind",
+      "author": "Distributed Lab",
+      "authorUrl": "https://distributedlab.com/",
+      "description": "Hardhat plugin to generate Go bindings for smart contracts",
+      "tags": ["Bindings", "Go", "Testing", "Abigen", "Solarity"]
+    },
+    {
+      "name": "@solarity/hardhat-markup",
+      "author": "Distributed Lab",
+      "authorUrl": "https://distributedlab.com/",
+      "description": "Hardhat plugin to generate customizable smart contracts documentation",
+      "tags": ["Documentation", "NatSpec", "Markdown", "Solarity"]
     }
   ]
 }
