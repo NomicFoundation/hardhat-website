@@ -1,0 +1,36 @@
+---
+title: expectEmitAnonymous
+description: expectEmitAnonymous cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function expectEmitAnonymous() external;
+function expectEmitAnonymous(address emitter) external;
+function expectEmitAnonymous(
+  bool checkTopic0,
+  bool checkTopic1,
+  bool checkTopic2,
+  bool checkTopic3,
+  bool checkData
+) external;
+function expectEmitAnonymous(
+  bool checkTopic0,
+  bool checkTopic1,
+  bool checkTopic2,
+  bool checkTopic3,
+  bool checkData,
+  address emitter
+) external;
+```
+
+### Description
+
+Prepare an expected anonymous log. If no boolean parameter is specified, all topic and data checks are enabled.
+Otherwise, `(bool checkTopic1, bool checkTopic2, bool checkTopic3, bool checkData)` control the checks.
+
+If `emitter` is specified, it also checks supplied address against emitting contract.
+
+Call this function, then emit an anonymous event, then call a function. Internally after the call, we check if
+logs were emitted in the expected order with the expected topics and data.

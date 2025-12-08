@@ -1,0 +1,26 @@
+---
+title: parseBytes
+description: parseBytes cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function parseBytes(
+  string calldata stringifiedValue
+) external pure returns (bytes memory parsedValue);
+```
+
+### Description
+
+Parses the value of `string` into `bytes`
+
+### Examples
+
+```solidity
+string memory bytesAsString = "0x00000000000000000000000000000000";
+bytes memory stringToBytes = vm.parseBytes(bytesAsString); // 0x00000000000000000000000000000000
+
+```

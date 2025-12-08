@@ -1,0 +1,24 @@
+---
+title: setNonce
+description: setNonce cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function setNonce(address account, uint64 nonce) external;
+```
+
+### Description
+
+Sets the nonce of the given account.
+
+The new nonce must be higher than the current nonce of the account.
+
+### Examples
+
+```solidity
+vm.setNonce(address(100), 1234);
+```

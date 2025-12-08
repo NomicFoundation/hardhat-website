@@ -1,0 +1,27 @@
+---
+title: getChain
+description: getChain cheatcode documentation
+---
+
+### Signature
+
+```solidity
+struct Chain {
+  /// The chain name.
+  string name;
+  /// The chain's Chain ID.
+  uint256 chainId;
+  /// The chain's alias. (i.e. what gets specified in `foundry.toml`).
+  string chainAlias;
+  /// A default RPC endpoint for this chain.
+  string rpcUrl;
+}
+function getChain(
+  string calldata chainAlias
+) external view returns (Chain memory chain);
+function getChain(uint256 chainId) external view returns (Chain memory chain);
+```
+
+### Description
+
+Returns a `Chain` struct for specific `chainId` or `chainAlias`.

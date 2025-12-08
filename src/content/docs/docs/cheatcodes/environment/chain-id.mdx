@@ -1,0 +1,23 @@
+---
+title: chainId
+description: chainId cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function chainId(uint256) external;
+```
+
+### Description
+
+Sets `block.chainid`.
+
+### Examples
+
+```solidity
+vm.chainId(31337);
+emit log_uint(block.chainid); // 31337
+```

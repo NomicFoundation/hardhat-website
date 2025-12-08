@@ -1,0 +1,27 @@
+---
+title: difficulty
+description: difficulty cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function difficulty(uint256) external;
+```
+
+### Description
+
+Sets `block.difficulty`.
+
+If used with a post-merge EVM version (Paris and onwards), it will revert. In that case, use [`vm.prevrandao`][prevrandao] instead.
+
+### Examples
+
+```solidity
+vm.difficulty(25);
+emit log_uint(block.difficulty); // 25
+```
+
+[prevrandao]: /docs/cheatcodes/environment/prevrandao

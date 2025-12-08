@@ -1,0 +1,39 @@
+---
+title: eth_getLogs
+description: eth_getLogs cheatcode documentation
+---
+
+### Signature
+
+```solidity
+struct EthGetLogs {
+  /// The address of the log's emitter.
+  address emitter;
+  /// The topics of the log, including the signature, if any.
+  bytes32[] topics;
+  /// The raw data of the log.
+  bytes data;
+  /// The block hash.
+  bytes32 blockHash;
+  /// The block number.
+  uint64 blockNumber;
+  /// The transaction hash.
+  bytes32 transactionHash;
+  /// The transaction index in the block.
+  uint64 transactionIndex;
+  /// The log index.
+  uint256 logIndex;
+  /// Whether the log was removed.
+  bool removed;
+}
+function eth_getLogs(
+  uint256 fromBlock,
+  uint256 toBlock,
+  address target,
+  bytes32[] calldata topics
+) external returns (EthGetLogs[] memory logs);
+```
+
+### Description
+
+Gets all the logs according to specified filter.

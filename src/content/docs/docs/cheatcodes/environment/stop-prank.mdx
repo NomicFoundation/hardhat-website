@@ -1,0 +1,16 @@
+---
+title: stopPrank
+description: stopPrank cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function stopPrank() external;
+```
+
+### Description
+
+Stops an active prank started by [`startPrank`](/docs/cheatcodes/environment/start-prank), resetting `msg.sender` and `tx.origin` to the values before `startPrank` was called.

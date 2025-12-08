@@ -1,0 +1,16 @@
+---
+title: getBlobhashes
+description: getBlobhashes cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function getBlobhashes() external view returns (bytes32[] memory hashes);
+```
+
+### Description
+
+Gets the blockhashes from the current transaction.
+Not available on EVM versions before Cancun.
+If used on unsupported EVM versions it will revert.

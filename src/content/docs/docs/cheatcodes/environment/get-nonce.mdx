@@ -1,0 +1,25 @@
+---
+title: getNonce
+description: getNonce cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function getNonce(address account) external returns (uint64);
+```
+
+### Description
+
+Gets the nonce of the given account.
+
+### Examples
+
+#### `address`
+
+```solidity
+uint256 nonce = vm.getNonce(address(100));
+emit log_uint(nonce); // 0
+```

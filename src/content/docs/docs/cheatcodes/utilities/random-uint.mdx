@@ -1,0 +1,17 @@
+---
+title: randomUint
+description: randomUint cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function randomUint() external returns (uint256);
+function randomUint(uint256 min, uint256 max) external returns (uint256);
+function randomUint(uint256 bits) external view returns (uint256);
+```
+
+### Description
+
+Returns a random `uint256` value. If `bits` is specified, the returned value has the given bits size.
+If `min` and `max` are specified, the returned value is in the provided range (=min..=max).

@@ -1,0 +1,26 @@
+---
+title: expectCallMinGas
+description: expectCallMinGas cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function expectCallMinGas(
+  address callee,
+  uint256 msgValue,
+  uint64 minGas,
+  bytes calldata data
+) external;
+function expectCallMinGas(
+  address callee,
+  uint256 msgValue,
+  uint64 minGas,
+  bytes calldata data,
+  uint64 count
+) external;
+```
+
+### Description
+
+Expect given number of calls to an address with the specified `msg.value` and calldata, and a _minimum_ amount of gas. If `count` is not specified, only a call is expected.

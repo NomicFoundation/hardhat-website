@@ -1,0 +1,78 @@
+---
+title: getCode
+description: getCode cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+function getCode(string calldata) external returns (bytes memory);
+```
+
+### Description
+
+Returns the **creation** bytecode for a contract in the project given the path to the contract.
+
+The calldata parameter can either be in the form `ContractFile.sol` (if the filename and contract name are the same), `ContractFile.sol:ContractName`, or the path to an artifact, relative to the root of your project.
+
+> ℹ️ **Note**
+>
+> `getCode` requires read permission for the output directory, see [file cheatcodes](/docs/cheatcodes/file/fs).
+>
+> To grant read access set `fsPermissions = {"readDirectory": ["./out"]}` in your [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration).
+
+### Examples
+
+```solidity
+MyContract myContract = new MyContract(arg1, arg2);
+
+// Let's do the same thing with `getCode`
+bytes memory args = abi.encode(arg1, arg2);
+bytes memory bytecode = abi.encodePacked(vm.getCode("MyContract.sol:MyContract"), args);
+address anotherAddress;
+assembly {
+    anotherAddress := create(0, add(bytecode, 0x20), mload(bytecode))
+}
+
+assertEq0(address(myContract).code, anotherAddress.code); // [PASS]
+```
+
+Deploy a contract to an arbitrary address by combining `getCode` and [`etch`](/docs/cheatcodes/environment/etch)
+
+```solidity
+// Deploy
+bytes memory args = abi.encode(arg1, arg2);
+bytes memory bytecode = abi.encodePacked(vm.getCode("MyContract.sol:MyContract"), args);
+address deployed;
+assembly {
+    deployed := create(0, add(bytecode, 0x20), mload(bytecode))
+}
+
+// Set the bytecode of an arbitrary address
+vm.etch(targetAddr, deployed.code);
+```
+
+### Supported formats
+
+You can fetch artifacts by either contract path or contract name. Fetching artifacts for a specific version is also supported. If not provided, cheatcode will default to the version of a test being executed or the only version artifact was compiled with.
+
+```solidity
+vm.getCode("MyContract.sol:MyContract");
+vm.getCode("MyContract");
+vm.getCode("MyContract.sol:0.8.18");
+vm.getCode("MyContract:0.8.18");
+```
+
+### SEE ALSO
+
+[`getDeployedCode`](/docs/cheatcodes/external/get-deployed-code)
+[`etch`](/docs/cheatcodes/environment/etch)
+
+Forge Standard Library
+
+[`deployCode`](https://getfoundry.sh/reference/forge-std/deployCode)
+[`deployCodeTo`](https://getfoundry.sh/reference/forge-std/deployCodeTo)
+
+[forge-std]: https://getfoundry.sh/reference/forge-std
