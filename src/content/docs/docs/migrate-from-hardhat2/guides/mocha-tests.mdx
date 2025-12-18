@@ -5,11 +5,11 @@ sidebar:
   label: Migrate Mocha tests
 ---
 
-This page covers the changes needed to migrate your Mocha tests from Hardhat 2 to Hardhat 3.
+This guide walks you through the changes needed to migrate your Mocha tests from Hardhat 2 to Hardhat 3.
 
 ## ESM
 
-Hardhat 3 is ESM-first, so files with a `.js` extension are treated as ES modules. If your tests are written in JavaScript, this means that you have to update them to use ESM syntax or change their extension to `.cjs`.
+Since Hardhat 3 is ESM-first, files with a `.js` extension are treated as ES modules. If your tests are written in JavaScript, this means you have to update them to use ESM syntax or change their extension to `.cjs`.
 
 ### Updating the syntax to ESM
 
@@ -22,9 +22,9 @@ Check [this guide](https://deno.com/blog/convert-cjs-to-esm) to learn how to con
 
 ### Changing the extension to .cjs
 
-Alternatively, you can rename your test files so that they have a `.cjs` extension. This way, they will be treated as CommonJS modules and you won't have to change any syntax. **That said, we still recommend writing new tests in ESM** to take advantage of modern JavaScript features and match Hardhat 3's defaults.
+Alternatively, you can rename your test files so that they have a `.cjs` extension. This way, they will be treated as CommonJS modules and you won't have to change any syntax. **We still recommend writing new tests in ESM** to take advantage of modern JavaScript features and match Hardhat 3's defaults.
 
-If you go with the `.cjs` approach, note that you can't require Hardhat as a top-level module. This code:
+If you go with the `.cjs` approach, keep in mind that you can't require Hardhat as a top-level module. This code:
 
 ```js
 const hre = require("hardhat");
@@ -67,7 +67,7 @@ describe("suite", function () {
 
 ## Network connections
 
-In Hardhat 3, you don't have a single, global network connection. Instead, you create and manage network connections explicitly. For example, if you have a test that uses the JSON-RPC provider:
+One of the biggest changes in Hardhat 3 is how network connections work. You don't have a single, global network connection anymore. Instead, you create and manage network connections explicitly. For example, if you have a test that uses the JSON-RPC provider:
 
 ```ts
 describe("suite", function () {
@@ -88,7 +88,7 @@ describe("suite", function () {
 });
 ```
 
-Most of the time you probably want to use the same provider for multiple tests. If you are using ESM syntax, you can use top-level await and define it as a shared variable:
+Most of the time, you'll want to use the same provider for multiple tests. If you're using ESM syntax, you can use top-level await and define it as a shared variable:
 
 ```ts
 const { provider } = await hre.network.connect();
@@ -100,7 +100,7 @@ describe("suite", function () {
 });
 ```
 
-If you are using CommonJS modules instead, you can define the provider in a `before` block:
+If you're using CommonJS modules instead, you can define the provider in a `before` block:
 
 ```ts
 let provider;

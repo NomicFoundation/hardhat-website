@@ -35,3 +35,4 @@ predeployed
 predeploys
 automining
 Superchain
+seti

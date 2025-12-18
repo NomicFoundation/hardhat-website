@@ -5,6 +5,8 @@ sidebar:
   label: Overview
 ---
 
+import { TabItem, Tabs } from "@astrojs/starlight/components";
+import { Code } from "@astrojs/starlight/components";
 import Install from "@hh/Install.astro";
 import Run from "@hh/Run.astro";
 
@@ -14,12 +16,12 @@ Hardhat 3 is production-ready and you can migrate today! We'll keep it in beta s
 
 :::
 
-Hardhat 3 is a complete rewrite of Hardhat 2. While many features are familiar, several fundamental changes mean the new version is not compatible with Hardhat 2 projects out of the box:
+Hardhat 3 is a complete rewrite of Hardhat 2. While many features are familiar, several fundamental changes mean the new version isn't directly compatible with Hardhat 2 projects:
 
 - **ESM-first**: Your Hardhat config must be an ES module. Scripts and JavaScript/TypeScript tests can still be CommonJS, but ESM is the default.
 - **Declarative config**: Plugins, tasks, and other extensions are configured explicitly in your config instead of being registered by side effects.
-- **Explicit network connections**: You create and manage network connections yourself, allowing multiple concurrent connections in one process, but meaning that `hre.network` no longer represents a single network connection that is immediately available.
-- **Extensibility through hooks**: Features like `extendConfig` and subtask overriding were replaced by the new hooks system. Adding new fields to the Hardhat Runtime Environment with `extendEnvironment` is no longer possible, but the typical use cases for extending it can be covered by other mechanisms.
+- **Explicit network connections**: You create and manage [network connections](/docs/explanations/network-management) yourself, allowing multiple concurrent connections in one process, but meaning that `hre.network` no longer represents a single network connection that is immediately available.
+- **Extensibility through hooks**: Features like `extendConfig` and subtask overriding were replaced by the new [hooks system](/docs/plugin-development/explanations/hooks). Adding new fields to the Hardhat Runtime Environment with `extendEnvironment` is no longer possible, but the typical use cases for extending it can be covered by other mechanisms.
 
 Because these changes are significant, this guide recommends starting with a clean config and migrating features step by step, rather than trying to adapt an Hardhat 2 project in place.
 
@@ -27,48 +29,59 @@ Because these changes are significant, this guide recommends starting with a cle
 
 Before making any changes, prepare your project so that installing and running Hardhat 3 won’t conflict with leftover dependencies, configs, or build artifacts from Hardhat 2.
 
-1. **Check node.js version**
+1.  **Check node.js version**
 
-   Make sure you are using Node.js v22.10.0 or later:
+    Make sure you are using Node.js v22.10.0 or later:
 
-   ```sh
-   node --version
-   ```
+    ```sh
+    node --version
+    ```
 
-2. **Clear caches and artifacts**
+2.  **Clear caches and artifacts**
 
-   Run the `clean` task to avoid issues with stale artifacts or caches:
+    Run the `clean` task to avoid issues with stale artifacts or caches:
 
-   <Run command="hardhat clean" />
+    <Run command="hardhat clean" />
 
-3. **Remove Hardhat 2 dependencies**
+3.  **Remove Hardhat 2 dependencies**
 
-   Start by removing these packages from your `package.json`:
-   - `hardhat`
-   - Any packages starting with `hardhat-`, `@nomicfoundation/`, or `@nomiclabs/`
-   - `solidity-coverage`
+    Start by removing these packages from your `package.json`:
+    - `hardhat`
+    - Any packages starting with `hardhat-`, `@nomicfoundation/`, or `@nomiclabs/`
+    - `solidity-coverage` and `hardhat-gas-reporter`
 
-   Then reinstall and check for remaining packages that depend on Hardhat:
+    Then reinstall and check for remaining packages that depend on Hardhat:
 
-   <Run command={["install", "why hardhat"]} />
+    <Run command={["install", "why hardhat"]} />
 
-   Repeat until no Hardhat-related dependencies remain.
+    Repeat until no Hardhat-related dependencies remain.
 
-4. **Rename your old config**
+4.  **Rename your old config**
 
-   Keep your old config for reference, but rename it so you can create a new one alongside it:
+    Keep your old config for reference, but rename it so you can create a new one alongside it:
 
-   ```sh
-   mv hardhat.config.js hardhat.config.old.js
-   ```
+    ```sh
+    mv hardhat.config.js hardhat.config.old.js
+    ```
 
-5. **Make your project ESM**
+5.  **Make your project ESM**
 
-   Add `"type": "module"` to your `package.json`.
+    {/* prettier-ignore */}
+    <Tabs syncKey="package-manager">
+      <TabItem label="npm" icon="npm">
+        <Code code="npm pkg set type=module" lang="sh" frame="terminal" />
+      </TabItem>
+      <TabItem label="pnpm" icon="pnpm">
+        <Code code="pnpm pkg set type=module" lang="sh" frame="terminal" />
+      </TabItem>
+      <TabItem label="Yarn" icon="seti:yarn">
+        <Code code={`# yarn doesn't have a command for this\nnpm pkg set type=module`} lang="sh" frame="terminal" />
+      </TabItem>
+    </Tabs>
 
-6. **(Optional) Adapt your `tsconfig.json`**
+6.  **(Optional) Adapt your `tsconfig.json`**
 
-   If you have a `tsconfig.json` file, make sure that `compilerOptions.module` is set to an ESM-compatible value like `"node16"`.
+    If you have a `tsconfig.json` file, make sure that `compilerOptions.module` is set to an ESM-compatible value like `"node16"`.
 
 ## Setting up Hardhat 3
 
@@ -99,7 +112,7 @@ With your npm project ready, you can start setting up Hardhat 3.
 
 ## Progressively migrating your config
 
-With a minimal version of Hardhat 3 working, you can migrate your config bit by bit.
+With a minimal version of Hardhat 3 working, you can migrate your config step by step.
 
 Let's start with the minimal settings required to compile your contracts.
 
@@ -107,7 +120,7 @@ Let's start with the minimal settings required to compile your contracts.
 
    Copy the `solidity` entry from your old config as-is. The format is backwards-compatible in Hardhat 3, so it should just work:
 
-   ```ts
+   ```ts ins={5-7}
    // hardhat.config.ts
    import { defineConfig } from "hardhat/config";
 
@@ -124,11 +137,11 @@ Let's start with the minimal settings required to compile your contracts.
 
    <Run command="hardhat build" />
 
-To learn more about the updated config format, and continue with your migration, please take a look at [this section](/docs/reference/configuration#solidity-configuration).
+To learn more about the updated config format and continue with your migration, see [this section](/docs/reference/configuration#solidity-configuration).
 
 ## Migrating tests
 
-This section assumes that your Hardhat 2 project uses Mocha as its tests runner, which is the default experience.
+This section assumes that your Hardhat 2 project uses Mocha as its test runner, which is the default.
 
 1. **Install the recommended toolbox for Mocha and Ethers.js**
 
@@ -138,7 +151,7 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
 
    Then in your Hardhat config, import the plugin and add it to the list of plugins:
 
-   ```ts
+   ```ts ins={3,6}
    // hardhat.config.ts
    import { defineConfig } from "hardhat/config";
    import hardhatToolboxMochaEthers from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
@@ -151,11 +164,11 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
    });
    ```
 
-   Notice that, unlike Hardhat 2, it's not enough to just import the plugin in the config. You also have to add it to the list of plugins.
+   Unlike Hardhat 2, you need to both import the plugin and add it to the list of plugins.
 
 2. **Update your test files**
 
-   This is usually the most involved part of the migration, and so it has [its own page](/docs/migrate-from-hardhat2/guides/mocha-tests) with the details.
+   Updating tests is usually the most involved part of the migration, so we've created [a dedicated page](/docs/migrate-from-hardhat2/guides/mocha-tests) with the details.
 
    You can start by migrating a single test and run it individually to verify that it works as expected:
 
