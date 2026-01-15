@@ -200,47 +200,24 @@ If you provide a Chain Type both as an option and as part of your Network Config
 
 ### The `network.createServer()` method
 
-If you need to create a network simulation and expose its JSON-RPC through HTTP, like `hardhat node` does, you can use the `network.createServer()` method. It takes the same arguments as `network.connect()`, plus two additional optional arguments:
+The `network.createServer()` method creates a local blockchain simulation and exposes it through an HTTP-based JSON-RPC server, similar to what `hardhat node` does.
 
-- `hostname`: The hostname of the network interface the server should use to listen for new connections. It defaults to `"127.0.0.1"` if not provided, and to `"0.0.0.0"` if running on a Docker container.
-- `port`: The port to use in the HTTP server. If not provided, your OS will assign an unused random port.
+#### Parameters
 
-Calling `await network.createServer()` returns a `JsonRpcServer` object, which has these methods:
+This method takes the same arguments as `network.connect()`, plus two additional optional parameters:
 
-- `listen()`: To start the server and return the `hostname` and `port` being used.
-- `close()`: To stop the server.
-- `afterClosed()`: Which you can use to await for the server to be closed. This is helpful if the `close()` method is called from a different async context.
+- `hostname`: The hostname of the network interface the server should use to listen for new connections. Defaults to `"127.0.0.1"`, or `"0.0.0.0"` if running in a Docker container.
+- `port`: The port to use for the HTTP server. If not provided, an unused random port will be assigned by the OS.
 
-To see a complete example, create a `scripts/server.ts` file with this content:
+#### Return value
 
-```ts
-// scripts/server.ts
-import { network } from "hardhat";
+Calling `await network.createServer()` returns a `JsonRpcServer` object, which provides the following methods:
 
-// Create a JsonRpcServer wrapping a blockchain simulation based on the
-// "default" Network Config, with `loggingEnabled` setting overridden to `true`
-const server = await network.createServer({
-  network: "default",
-  override: { loggingEnabled: true },
-});
+- `listen()`: Starts the server and returns the `hostname` and `port` being used.
+- `close()`: Stops the server.
+- `afterClosed()`: Returns a promise that resolves when the server has fully closed. Useful if `close()` is called from another async context.
 
-const { address, port } = await server.listen();
-console.log(`JSON-RPC running in: http://${address}:${port}`);
-
-// Example of closing the server from another async context
-console.log("Closing the server in 60 seconds");
-setTimeout(async () => {
-  await server.close();
-}, 60_000);
-
-// Wait for the server to close before printing a message
-await server.afterClosed();
-console.log("Server closed");
-```
-
-And you can run it with:
-
-<Run command="hardhat run scripts/server.ts" />
+To learn more about how to use this method, see the [Running a local development node guide](/docs/guides/hardhat-node#running-a-development-node-programmatically).
 
 ## The `NetworkConnection<ChainTypeT>` object
 
