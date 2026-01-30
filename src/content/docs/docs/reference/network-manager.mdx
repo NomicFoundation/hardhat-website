@@ -36,14 +36,14 @@ import { network } from "hardhat";
 
 The `NetworkManager` object only has two methods:
 
-- `network.create()`: To connect to remote networks and create local blockchain simulations.
+- `network.connect()`: To connect to remote networks and create local blockchain simulations.
 - `network.createServer()`: To create a local blockchain simulation and expose it through an HTTP-based JSON-RPC server.
 
-The majority of this documentation will focus on `network.create()`, as `network.createServer()` can be considered a wrapper around it.
+The majority of this documentation will focus on `network.connect()`, as `network.createServer()` can be considered a wrapper around it.
 
-### The `network.create()` method
+### The `network.connect()` method
 
-When you call the `network.create()` method, Hardhat creates a new `NetworkConnection` object.
+When you call the `network.connect()` method, Hardhat creates a new `NetworkConnection` object.
 
 The connection can either be an HTTP Network Connection connected to an external node through JSON-RPC, or an in-process connection to a new EDR-based simulated blockchain. In either case, every connection you create is independent from one another.
 
