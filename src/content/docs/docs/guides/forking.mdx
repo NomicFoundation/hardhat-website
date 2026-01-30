@@ -1,0 +1,189 @@
+---
+title: Forking a network
+description: How to fork the state of another network
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat tests run by default in a locally simulated environment that starts with an empty state. Sometimes though, you'll want to test your code using the state of an actual network. This is called **forking**.
+
+This guide will walk you through using forking in both your TypeScript and Solidity tests.
+
+## Forking in TypeScript tests
+
+To run your tests against the state of a real network (like Ethereum Mainnet), configure a forked network in your Hardhat config:
+
+```ts {9-14}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: "0.8.28",
+  networks: {
+    mainnetFork: {
+      type: "edr-simulated",
+      forking: {
+        url: "<MAINNET_RPC_URL>",
+      },
+    },
+  },
+});
+```
+
+Replace `<MAINNET_RPC_URL>` with an RPC endpoint for Ethereum Mainnet.
+
+:::tip
+Instead of hardcoding the RPC URL, consider using [Configuration Variables](/docs/guides/configuration-variables).
+:::
+
+Then run your TypeScript tests using the forked network:
+
+<Run command="hardhat test nodejs --network mainnetFork" />
+
+Your tests will now run against the forked Mainnet state, letting you use on-chain data in your local environment.
+
+### Forking only in some tests
+
+Passing a forked network with `--network` means all your tests will use that network by default. If you only want to use the forked network in specific tests, connect to it explicitly within your test code:
+
+```ts {7}
+// test/Example.ts
+import { describe, it } from "node:test";
+import { network } from "hardhat";
+
+describe("Example", function () {
+  it("should use the forked network", async function () {
+    const { viem } = await network.connect("mainnetFork");
+
+    // This test uses the forked Mainnet network
+  });
+
+  it("should use the default network", async function () {
+    const { viem } = await network.connect();
+
+    // This test uses the default local network
+  });
+});
+```
+
+If you run your TypeScript tests without passing any `--network`, the default network will be used for all tests except those that explicitly connect to `mainnetFork`.
+
+## Forking in Solidity tests
+
+Like TypeScript tests, Solidity tests also run by default in a locally simulated environment, but they can be configured to use forking. To do this, set the `test.solidity.forking.url` option in your Hardhat config:
+
+```ts {8-14}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: "0.8.28",
+  test: {
+    solidity: {
+      forking: {
+        url: "<MAINNET_RPC_URL>",
+      },
+    },
+  },
+});
+```
+
+With this configuration, your Solidity tests will now run against the forked Mainnet state:
+
+<Run command="hardhat test solidity" />
+
+### Using forking cheatcodes
+
+You can also use cheatcodes to fork a network in a more selective way. First, configure a mapping of network names to RPC endpoints in your Hardhat config:
+
+```ts {11-14}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: "0.8.28",
+  test: {
+    solidity: {
+      forking: {
+        rpcEndpoints: {
+          mainnet: "<MAINNET_RPC_URL>",
+          sepolia: "<SEPOLIA_RPC_URL>",
+        },
+      },
+    },
+  },
+});
+```
+
+Then, in your Solidity tests, use a cheatcode like `vm.createSelectFork` to select one of those configured endpoints:
+
+```solidity
+// Example.t.sol
+contract ExampleTest is Test {
+  function testInForkedMainnet() public {
+    vm.createSelectFork("mainnet");
+    // The rest of the test runs against the forked Mainnet
+  }
+}
+```
+
+Use this approach to switch between different forked networks within your tests.
+
+## Forking from a specific block number
+
+Forking configurations in both networks and Solidity tests accept an optional `blockNumber` to make your tests more deterministic and faster. If you don't set one, Hardhat will use a recent block. This has two downsides:
+
+- Tests are less deterministic, because remote state can change from run to run.
+- You don't benefit from caching state between runs, which can significantly improve performance.
+
+To specify a block number, update your Hardhat config like this:
+
+```ts {13,21}
+// hardhat.config.ts
+import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxViemPlugin],
+  solidity: "0.8.28",
+  networks: {
+    mainnetFork: {
+      type: "edr-simulated",
+      forking: {
+        url: "<MAINNET_RPC_URL>",
+        blockNumber: 23819000,
+      },
+    },
+  },
+  test: {
+    solidity: {
+      forking: {
+        url: "<MAINNET_RPC_URL>",
+        blockNumber: 23819000n,
+      },
+    },
+  },
+});
+```
+
+For forking cheatcodes, the block number can be passed as an optional second parameter:
+
+```solidity
+// Example.t.sol
+contract ExampleTest is Test {
+  function testInForkedMainnet() public {
+    vm.createSelectFork("mainnet", 23819000);
+    // The rest of the test runs against the forked Mainnet at block 23,819,000
+  }
+}
+```
+
+## Learn more
+
+Read [the forking section](/docs/explanations/edr-simulated-networks#forking-mode) in our explanation about simulated networks to learn more about forking.
