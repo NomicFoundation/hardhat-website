@@ -136,6 +136,16 @@ You can also pass one or more paths as arguments to these tasks, in which case o
 
 <Run command="hardhat test <test-file-1> <test-file-2> ..." />
 
+### Multichain support
+
+By default, Solidity tests run in an environment that simulates Ethereum Mainnet. If you're building for other blockchains, you can test against their specific behavior by specifying a different Chain Type with the `--chain-type` option:
+
+<Run command="hardhat test solidity --chain-type op" />
+
+This example uses the `op` Chain Type, which simulates OP Mainnet and its testnets.
+
+To learn more about Chain Types and testing on different blockchains, read our [multichain support](/docs/explanations/multichain-support) explanation.
+
 ## Configuring Solidity tests
 
 You can configure how Solidity tests are executed in your Hardhat configuration.
