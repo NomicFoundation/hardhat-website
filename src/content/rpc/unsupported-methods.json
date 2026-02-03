@@ -1,0 +1,25 @@
+{
+  "unsupported": [
+    "eth_compileLLL",
+    "eth_compileSerpent",
+    "eth_compileSolidity",
+    "eth_getCompilers",
+    "eth_getUncleByBlockHashAndIndex",
+    "eth_getUncleByBlockNumberAndIndex",
+    "eth_getUncleCountByBlockHash",
+    "eth_getUncleCountByBlockNumber",
+    "eth_getWork",
+    "eth_hashrate",
+    "eth_mining",
+    "eth_protocolVersion",
+    "eth_signTransaction",
+    "eth_signTypedData",
+    "eth_signTypedData_v3",
+    "eth_submitHashrate",
+    "eth_submitWork",
+    "hardhat_addCompilationResult",
+    "hardhat_reset",
+    "net_listening",
+    "net_peerCount"
+  ]
+}
