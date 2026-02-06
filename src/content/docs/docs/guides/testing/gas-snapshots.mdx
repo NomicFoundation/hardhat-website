@@ -126,4 +126,4 @@ vm.snapshotGasLastCall("gas-benchmarks", "calculator-add");
 vm.snapshotValue("state-checks", "initial-result", calculator.result());
 ```
 
-If you capture multiple snapshots with the same group and name, the last value wins.
+If you capture multiple snapshots with the same group and name, the last value will overwrite the previous values.
