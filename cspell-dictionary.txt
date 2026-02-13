@@ -2,6 +2,7 @@ viem
 Cuenta
 hardfork
 hardforks
+hashrate
 autoinstall
 X
 Typechain

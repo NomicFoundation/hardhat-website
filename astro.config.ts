@@ -143,6 +143,7 @@ export default defineConfig({
                   items: [
                     { slug: "docs/reference/configuration" },
                     { slug: "docs/reference/network-manager" },
+                    { slug: "docs/reference/json-rpc-methods" },
                     { slug: "docs/reference/artifacts" },
                     { slug: "docs/reference/console-log" },
                     {

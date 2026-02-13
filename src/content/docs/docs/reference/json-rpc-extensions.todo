@@ -1,9 +1,0 @@
----
-title: Hardhat specific JSON-RPC extensions reference
-description: Complete reference of Hardhat's custom JSON-RPC methods for testing and development
-sidebar:
-  label: JSON-RPC extensions
-  order: 6
----
-
-TODO

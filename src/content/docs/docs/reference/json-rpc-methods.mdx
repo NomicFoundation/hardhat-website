@@ -1,0 +1,521 @@
+---
+title: JSON-RPC Methods
+description: Reference of JSON-RPC methods supported by Hardhat's simulated networks
+sidebar:
+  label: JSON-RPC Methods
+  order: 6
+---
+
+### Standard methods
+
+##### `debug_traceCall`
+
+Traces the execution of an `eth_call` within the context of a specific block's execution. See the [Geth's documentation](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-debug#debugtracecall) for more info.
+
+Arguments:
+
+- transaction object
+- blockTag: optional, default value is "latest"
+- traceConfig: optional object with the following properties:
+  - disableMemory: optional boolean, default value is false
+  - disableStack: optional boolean, default value is false
+  - disableStorage: optional boolean, default value is false
+
+Example without traceConfig:
+
+```ts
+const result = await provider.request({
+  method: "debug_traceCall",
+  params: [
+    {
+      from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      to: "0x4b23ad35Da73fEe8154CDc8b291c814028A4E743",
+      data: "0xc0129d43",
+    },
+    "latest",
+  ],
+});
+```
+
+Example with traceConfig:
+
+```ts
+const trace = await provider.request({
+  method: "debug_traceCall",
+  params: [
+    {
+      from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      to: "0x4b23ad35Da73fEe8154CDc8b291c814028A4E743",
+      data: "0xc0129d43",
+    },
+    "latest",
+    {
+      disableMemory: true,
+      disableStack: true,
+      disableStorage: true,
+    },
+  ],
+});
+```
+
+##### `debug_traceTransaction`
+
+Get debug traces of already-mined transactions.
+
+To get a trace, call this method with the hash of the transaction as its argument:
+
+```ts
+const trace = await provider.request({
+  method: "debug_traceTransaction",
+  params: ["0x123..."],
+});
+```
+
+You can also selectively disable some properties in the list of steps:
+
+```ts
+const trace = await provider.request({
+  method: "debug_traceTransaction",
+  params: [
+    "0x123...",
+    {
+      disableMemory: true,
+      disableStack: true,
+      disableStorage: true,
+    },
+  ],
+});
+```
+
+###### Known limitations
+
+- You can't trace transactions that use a hardfork older than [Spurious Dragon](https://ethereum.org/en/history/#spurious-dragon)
+- The last step of a message is not guaranteed to have a correct value in the `gasCost` property
+
+##### `eth_accounts`
+
+##### `eth_blobBaseFee`
+
+##### `eth_blockNumber`
+
+##### `eth_call`
+
+This method allows you to simulate a transaction without actually executing it. See the [Geth's documentation](https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-eth#eth-call) for more info.
+
+Example:
+
+```ts
+const result = await provider.request({
+  method: "eth_call",
+  params: [
+    {
+      from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      to: "0x4b23ad35Da73fEe8154CDc8b291c814028A4E743",
+      data: "0xc0129d43",
+    },
+    "latest",
+  ],
+});
+```
+
+You can optionally pass a state override object to modify the chain before running the call:
+
+```ts
+const result = await provider.request({
+  method: "eth_call",
+  params: [
+    {
+      from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      to: "0x4b23ad35Da73fEe8154CDc8b291c814028A4E743",
+      data: "0xc0129d43",
+    },
+    "latest",
+    {
+      "0x6eE6DE5a56910E5353933761305AEF6a414d97BA": {
+        balance: "0xde0b6b3a7640000",
+        nonce: "0x123",
+        stateDiff: {
+          "0x0000000000000000000000000000000000000000000000000000000000000002":
+            "0x000000000000000000000000000000000000000000000000000000000000000c",
+        },
+      },
+    },
+  ],
+});
+```
+
+##### `eth_chainId`
+
+##### `eth_coinbase`
+
+##### `eth_estimateGas`
+
+##### `eth_feeHistory`
+
+##### `eth_gasPrice`
+
+##### `eth_getBalance`
+
+##### `eth_getBlockByHash`
+
+##### `eth_getBlockByNumber`
+
+##### `eth_getBlockTransactionCountByHash`
+
+##### `eth_getBlockTransactionCountByNumber`
+
+##### `eth_getCode`
+
+##### `eth_getFilterChanges`
+
+##### `eth_getFilterLogs`
+
+##### `eth_getLogs`
+
+##### `eth_getProof`
+
+##### `eth_getStorageAt`
+
+##### `eth_getTransactionByBlockHashAndIndex`
+
+##### `eth_getTransactionByBlockNumberAndIndex`
+
+##### `eth_getTransactionByHash`
+
+##### `eth_getTransactionCount`
+
+##### `eth_getTransactionReceipt`
+
+##### `eth_maxPriorityFeePerGas`
+
+##### `eth_newBlockFilter`
+
+##### `eth_newFilter`
+
+##### `eth_newPendingTransactionFilter`
+
+##### `eth_pendingTransactions`
+
+##### `eth_sendRawTransaction`
+
+##### `eth_sendTransaction`
+
+##### `eth_sign`
+
+##### `eth_signTypedData_v4`
+
+##### `eth_subscribe`
+
+##### `eth_syncing`
+
+##### `eth_uninstallFilter`
+
+##### `eth_unsubscribe`
+
+##### `net_version`
+
+##### `personal_sign`
+
+##### `web3_clientVersion`
+
+##### `web3_sha3`
+
+### Hardhat network methods
+
+::::tip
+
+Most of these methods can be used more easily through the [Hardhat Network Helpers](/hardhat-network-helpers) library
+
+::::
+
+##### `hardhat_dropTransaction`
+
+Remove a transaction from the mempool
+
+##### `hardhat_getAutomine`
+
+Returns `true` if automatic mining is enabled, and `false` otherwise. See [Mining Modes](/docs/explanations/edr-simulated-networks#mining-modes) to learn more.
+
+##### `hardhat_impersonateAccount`
+
+Hardhat Network allows you to send transactions impersonating specific account and contract addresses.
+
+To impersonate an account use this method, passing the address to impersonate as its parameter:
+
+```ts
+await provider.request({
+  method: "hardhat_impersonateAccount",
+  params: ["0x364d6D0333432C3Ac016Ca832fb8594A8cE43Ca6"],
+});
+```
+
+If you are using [`hardhat-ethers`](/docs/plugins/hardhat-ethers), call `getSigner` after impersonating the account:
+
+```ts
+const signer = await ethers.getSigner("0x364d6D0333432C3Ac016Ca832fb8594A8cE43Ca6")
+signer.sendTransaction(...)
+```
+
+Call [`hardhat_stopImpersonatingAccount`](#hardhat_stopimpersonatingaccount) to stop impersonating.
+
+##### `hardhat_metadata`
+
+Returns an object with metadata about the instance of the Hardhat Network. This object contains:
+
+- `clientVersion`: A string identifying the version of Hardhat, for debugging purposes, not meant to be displayed to users.
+- `chainId`: The chain's id. Used to sign transactions.
+- `instanceId`: A 0x-prefixed hex-encoded 32 bytes id which uniquely identifies an instance/run of Hardhat Network. Running Hardhat Network more than once (even with the same version and parameters) will always result in different `instanceId`s.
+- `latestBlockNumber`: The latest block's number in Hardhat Network.
+- `latestBlockHash`: The latest block's hash in Hardhat Network.
+- `forkedNetwork`: An object with information about the forked network. This field is only present when Hardhat Network is forking another chain. Its fields are:
+  - `chainId`: The chainId of the network that is being forked
+  - `forkBlockNumber`: The number of the block that the network forked from.
+  - `forkBlockHash`: The hash of the block that the network forked from.
+
+##### `hardhat_mine`
+
+Sometimes you may want to advance the latest block number of the Hardhat Network by a large number of blocks. One way to do this would be to call the `evm_mine` RPC method multiple times, but this is too slow if you want to mine thousands of blocks. The `hardhat_mine` method can mine any number of blocks at once, in constant time. (It exhibits the same performance no matter how many blocks are mined.)
+
+`hardhat_mine` accepts two parameters, both of which are optional. The first parameter is the number of blocks to mine, and defaults to 1. The second parameter is the interval between the timestamps of each block, _in seconds_, and it also defaults to 1. (The interval is applied only to blocks mined in the given method invocation, not to blocks mined afterwards.)
+
+```ts
+// mine 256 blocks
+await provider.request({
+  method: "hardhat_mine",
+  params: ["0x100"],
+});
+
+// mine 1000 blocks with an interval of 1 minute
+await provider.request({
+  method: "hardhat_mine",
+  params: ["0x3e8", "0x3c"],
+});
+```
+
+Note that most blocks mined via this method (all except for the final one) may not technically be valid blocks. Specifically, they have an invalid parent hash, the coinbase account will not have been credited with block rewards, and the `baseFeePerGas` will be incorrect. (The final block in a sequence produced by `hardhat_mine` will always be fully valid.)
+
+Also note that blocks created via `hardhat_mine` may not trigger new-block events, such as filters created via `eth_newBlockFilter` and WebSocket subscriptions to new-block events.
+
+##### `hardhat_setBalance`
+
+Modifies the balance of an account.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setBalance",
+  params: ["0x0d2026b3EE6eC71FC6746ADb6311F6d3Ba1C000B", "0x1000"],
+});
+```
+
+This will result in account `0x0d20...000B` having a balance of 4096 wei.
+
+##### `hardhat_setCode`
+
+Modifies the bytecode stored at an account's address.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setCode",
+  params: ["0x0d2026b3EE6eC71FC6746ADb6311F6d3Ba1C000B", "0xa1a2a3..."],
+});
+```
+
+This will result in account `0x0d20...000B` becoming a smart contract with bytecode `a1a2a3....` If that address was already a smart contract, then its code will be replaced by the specified one.
+
+##### `hardhat_setCoinbase`
+
+Sets the coinbase address to be used in new blocks.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setCoinbase",
+  params: ["0x0d2026b3EE6eC71FC6746ADb6311F6d3Ba1C000B"],
+});
+```
+
+This will result in account `0x0d20...000B` being used as miner/coinbase in every new block.
+
+##### `hardhat_setLoggingEnabled`
+
+Enable or disable logging in Hardhat Network
+
+##### `hardhat_setMinGasPrice`
+
+Change the minimum gas price accepted by the network (in wei)
+
+##### `hardhat_setNextBlockBaseFeePerGas`
+
+Sets the base fee of the next block.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setNextBlockBaseFeePerGas",
+  params: ["0x2540be400"], // 10 gwei
+});
+```
+
+This only affects the next block; the base fee will keep being updated in each subsequent block according to [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559).
+
+##### `hardhat_setNonce`
+
+Modifies an account's nonce by overwriting it.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setNonce",
+  params: ["0x0d2026b3EE6eC71FC6746ADb6311F6d3Ba1C000B", "0x21"],
+});
+```
+
+This will result in account `0x0d20...000B` having a nonce of 33.
+
+Throws an `InvalidInputError` if nonce is smaller than the current one. The reason for this restriction is to avoid collisions when deploying contracts using the same nonce more than once.
+
+You can only use this method to increase the nonce of an account; you can't set a lower value than the account's current nonce.
+
+##### `hardhat_setPrevRandao`
+
+Sets the PREVRANDAO value of the next block.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setPrevRandao",
+  params: [
+    "0x1234567812345678123456781234567812345678123456781234567812345678",
+  ],
+});
+```
+
+This only affects the next block. The PREVRANDAO of the following blocks will continue to be computed as the keccak256 hash of the previous value.
+
+##### `hardhat_setStorageAt`
+
+Writes a single position of an account's storage.
+
+For example:
+
+```ts
+await provider.request({
+  method: "hardhat_setStorageAt",
+  params: [
+    "0x0d2026b3EE6eC71FC6746ADb6311F6d3Ba1C000B",
+    "0x0",
+    "0x0000000000000000000000000000000000000000000000000000000000000001",
+  ],
+});
+```
+
+This will set the contract's first storage position (at index `0x0`) to 1.
+
+The mapping between a smart contract's variables and its storage position is not straightforward except in some very simple cases. For example, if you deploy this contract:
+
+```solidity
+contract Foo {
+  uint public x;
+}
+```
+
+And you set the first storage position to 1 (as shown in the previous snippet), then calling `foo.x()` will return 1.
+
+The storage position index must not exceed 2^256, and the value to write must be exactly 32 bytes long.
+
+##### `hardhat_stopImpersonatingAccount`
+
+Use this method to stop impersonating an account after having previously used [`hardhat_impersonateAccount`](#hardhat_impersonateaccount), like:
+
+```ts
+await provider.request({
+  method: "hardhat_stopImpersonatingAccount",
+  params: ["0x364d6D0333432C3Ac016Ca832fb8594A8cE43Ca6"],
+});
+```
+
+### Special testing/debugging methods
+
+##### `evm_increaseTime`
+
+Same as Ganache.
+
+##### `evm_mine`
+
+Same as Ganache
+
+##### `evm_revert`
+
+Same as Ganache.
+
+##### `evm_setAutomine`
+
+Enables or disables, based on the single boolean argument, the automatic mining of new blocks with each new transaction submitted to the network. You can use [`hardhat_getAutomine`](#hardhat_getautomine) to get the current value. See also [Mining Modes](/docs/explanations/edr-simulated-networks#mining-modes).
+
+##### `evm_setBlockGasLimit`
+
+##### `evm_setIntervalMining`
+
+Enables (with a numeric argument greater than 0) or disables (with a numeric argument equal to 0), the automatic mining of blocks at a regular interval of milliseconds, each of which will include all pending transactions. See also [Mining Modes](/docs/explanations/edr-simulated-networks#mining-modes).
+
+##### `evm_setNextBlockTimestamp`
+
+This method works like `evm_increaseTime`, but takes the exact timestamp that you want in the next block, and increases the time accordingly.
+
+##### `evm_snapshot`
+
+Same as [Ganache](https://github.com/trufflesuite/ganache/blob/ef1858d5d6f27e4baeb75cccd57fb3dc77a45ae8/src/chains/ethereum/ethereum/RPC-METHODS.md#evm_snapshot).
+
+Snapshot the state of the blockchain at the current block. Takes no parameters. Returns the id of the snapshot that was created. A snapshot can only be reverted once. After a successful `evm_revert`, the same snapshot id cannot be used again. Consider creating a new snapshot after each `evm_revert` if you need to revert to the same point multiple times.
+
+### Unsupported methods
+
+##### `eth_compileLLL`
+
+##### `eth_compileSerpent`
+
+##### `eth_compileSolidity`
+
+##### `eth_getCompilers`
+
+##### `eth_getUncleByBlockHashAndIndex`
+
+##### `eth_getUncleByBlockNumberAndIndex`
+
+##### `eth_getUncleCountByBlockHash`
+
+##### `eth_getUncleCountByBlockNumber`
+
+##### `eth_getWork`
+
+##### `eth_hashrate`
+
+##### `eth_mining`
+
+##### `eth_protocolVersion`
+
+##### `eth_signTransaction`
+
+##### `eth_signTypedData`
+
+##### `eth_signTypedData_v3`
+
+##### `eth_submitHashrate`
+
+##### `eth_submitWork`
+
+##### `hardhat_addCompilationResult`
+
+##### `hardhat_reset`
+
+##### `net_listening`
+
+##### `net_peerCount`
