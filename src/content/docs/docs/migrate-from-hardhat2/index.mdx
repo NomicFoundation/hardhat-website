@@ -177,7 +177,7 @@ task("accounts", "Prints the accounts", async (taskArgs, hre) => {
 
 In Hardhat 3, the equivalent uses `setInlineAction` and requires calling `.build()` and adding the task to the `tasks` array in your config:
 
-```ts ins={4-5,8-10,14}
+```ts ins={4-5,8-9,13}
 // hardhat.config.ts
 import { defineConfig, task } from "hardhat/config";
 

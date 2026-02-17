@@ -253,7 +253,7 @@ task("accounts", "Print the accounts")
   .build();
 ```
 
-Inline actions are loaded immediately when the configuration file is evaluated, so they don't benefit from lazy loading.
+Inline actions are loaded immediately when the configuration file is evaluated, so they don't benefit from lazy loading. For a practical guide on choosing between action types, see [Writing Hardhat tasks](/docs/guides/writing-tasks#choosing-between-setaction-and-setinlineaction).
 
 :::caution[Plugin restriction]
 Plugins cannot use `setInlineAction()`. Attempting to do so will result in an error. Plugins must always use `setAction()` with lazy-loaded modules.
