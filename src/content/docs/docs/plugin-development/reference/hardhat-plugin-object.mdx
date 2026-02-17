@@ -88,3 +88,5 @@ An array of Global Option definitions. You can create them using the `globalOpti
 ### `tasks`
 
 An array of Task definitions. Define them using the `task` and `overrideTask` functions exported by `hardhat/config`.
+
+**Important:** Plugin tasks must use `setAction()` with lazy-loaded modules. The `setInlineAction()` method is not available for plugin tasks. To learn more about task action lifecycle and the differences between these methods, see the [Task Actions' lifecycle](/docs/plugin-development/explanations/lifecycle#task-actions-lifecycle) documentation.

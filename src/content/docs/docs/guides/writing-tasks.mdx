@@ -65,4 +65,52 @@ That module exports the action function itself. You can do anything you want in 
 
 You can add parameters to your tasks, and Hardhat will handle their parsing and validation for you. You can also override existing tasks, which lets you customize how different parts of Hardhat work.
 
+## Using inline actions
+
+As an alternative to defining task actions in separate files, you can define them directly inline using `setInlineAction`. This is convenient for simple tasks where creating a separate file would be overkill.
+
+Here's how the accounts task would look using an inline action:
+
+```ts
+// hardhat.config.ts
+import { defineConfig, task } from "hardhat/config";
+
+const printAccounts = task("accounts", "Print the accounts")
+  .setInlineAction(async (taskArguments, hre) => {
+    const { provider } = await hre.network.connect();
+    console.log(await provider.request({ method: "eth_accounts" }));
+  })
+  .build();
+
+export default defineConfig({
+  // ... rest of the config
+  tasks: [printAccounts],
+});
+```
+
+With `setInlineAction`, the task logic is defined directly as a function parameter, eliminating the need for a separate file.
+
+### Choosing between `setAction` and `setInlineAction`
+
+Here's when to use each approach:
+
+| Feature | `setAction()` (Lazy-loaded) | `setInlineAction()` (Inline) |
+|---------|----------------------------|------------------------------|
+| **Use case** | Complex tasks, plugins | Simple user tasks |
+| **Available for plugins** | ✅ Yes (required) | ❌ No |
+| **Available for users** | ✅ Yes | ✅ Yes |
+| **Performance** | Lazy-loaded on demand | Loaded with config |
+| **File organization** | Separate action files | Defined inline |
+| **Best for** | Reusable, complex logic | Quick, simple tasks |
+
+Each task must define exactly one action: call either `setAction()` or `setInlineAction()`, but not both.
+
+You can also use `setInlineAction` with `overrideTask` to customize existing tasks directly in your config file.
+
+:::caution[Plugin developers]
+If you're developing a plugin, you must use `setAction()` with lazy-loaded modules. The `setInlineAction()` method is only available for user-defined tasks in configuration files.
+:::
+
+To learn more about how task actions are loaded, see the [Task Actions' lifecycle](/docs/plugin-development/explanations/lifecycle#task-actions-lifecycle) documentation.
+
 {/* To learn more about tasks, please read [this guide](../advanced/create-task). */}

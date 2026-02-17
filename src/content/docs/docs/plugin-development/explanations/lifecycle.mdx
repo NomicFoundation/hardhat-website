@@ -195,7 +195,14 @@ The lifecycle of a Dynamic Hook Handler is simpler, as it's manually registered 
 
 ## Task Actions' lifecycle
 
-You define Task Actions using the `setAction` method of the `TaskDefinitionBuilder`s APIs.
+Task actions define the behavior that executes when a task runs. There are two ways to define task actions in Hardhat 3:
+
+1. **Lazy-loaded actions** using `setAction()` - Required for plugins
+2. **Inline actions** using `setInlineAction()` - Only for user tasks
+
+### Lazy-loaded actions (plugins must use this)
+
+Plugins must always use the `setAction` method with lazy-loaded modules. This method is also available for user-defined tasks in configuration files.
 
 It looks like this:
 
@@ -225,6 +232,38 @@ export default async function (
   console.log(`${hre.config.myConfig.greeting}, ${taskArguments.who}!`);
 }
 ```
+
+**Why plugins must use lazy-loaded actions:**
+- **Performance**: Lazy loading ensures plugin code is only loaded when needed, keeping Hardhat initialization fast
+- **Maintainability**: Separating task logic into dedicated files improves code organization
+
+### Inline actions (user tasks only)
+
+User-defined tasks in configuration files can optionally use `setInlineAction()` to define task behavior directly inline. This is convenient for simple tasks but is **not available for plugins**.
+
+Example of an inline action:
+
+```ts
+task("accounts", "Print the accounts")
+  .setInlineAction(async (taskArguments, hre) => {
+    const { provider } = await hre.network.connect();
+    console.log(await provider.request({ method: "eth_accounts" }));
+  })
+  .build();
+```
+
+Inline actions are loaded immediately when the configuration file is evaluated, so they don't benefit from lazy loading.
+
+:::caution[Plugin restriction]
+Plugins cannot use `setInlineAction()`. Attempting to do so will result in an error. Plugins must always use `setAction()` with lazy-loaded modules.
+:::
+
+### Action definition rules
+
+Each task must define exactly one action:
+- You must call either `setAction()` or `setInlineAction()`, but not both
+- You cannot call the same method multiple times on the same task
+- Violating these rules will result in an error
 
 ## Configuration Variables' lifecycle
 

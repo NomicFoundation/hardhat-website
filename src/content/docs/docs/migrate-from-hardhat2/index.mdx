@@ -161,7 +161,40 @@ This section assumes that your Hardhat 2 project uses Mocha as its tests runner,
 
    <Run command="hardhat test test/some-test.ts" />
 
-{/* A section was removed here until we have setInlineAction. Take a look at the git history to restore it. */}
+## Migrating custom tasks
+
+In Hardhat 2, tasks were defined imperatively in the config file, and the action function was passed directly:
+
+```ts
+// Hardhat 2
+task("accounts", "Prints the accounts", async (taskArgs, hre) => {
+  const accounts = await hre.ethers.getSigners();
+  for (const account of accounts) {
+    console.log(account.address);
+  }
+});
+```
+
+In Hardhat 3, the equivalent uses `setInlineAction` and requires calling `.build()` and adding the task to the `tasks` array in your config:
+
+```ts ins={4-5,8-10,14}
+// hardhat.config.ts
+import { defineConfig, task } from "hardhat/config";
+
+const printAccounts = task("accounts", "Print the accounts")
+  .setInlineAction(async (taskArguments, hre) => {
+    const { provider } = await hre.network.connect();
+    console.log(await provider.request({ method: "eth_accounts" }));
+  })
+  .build();
+
+export default defineConfig({
+  // ... rest of the config
+  tasks: [printAccounts],
+});
+```
+
+For more complex tasks, you can use `setAction()` with a separate file for lazy loading. To learn more, see [Writing Hardhat tasks](/docs/guides/writing-tasks).
 
 ## Migrating `extendConfig` and `extendEnvironment`
 

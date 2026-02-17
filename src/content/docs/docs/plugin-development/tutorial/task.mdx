@@ -41,6 +41,12 @@ task("my-account", "Prints your account.")
 
 You'll get an error in the highlighted line because a file is missing. We'll create it in the next section.
 
+:::caution[Plugin tasks must use setAction]
+Plugins must always use `setAction()` with lazy-loaded modules. The `setInlineAction()` method is only available for user-defined tasks in configuration files.
+
+To learn more, see the [Task Actions' lifecycle](/docs/plugin-development/explanations/lifecycle#task-actions-lifecycle) documentation.
+:::
+
 ## Creating a task action file
 
 The task action is defined in a separate file that's only imported when the task runs.
