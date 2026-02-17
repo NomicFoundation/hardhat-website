@@ -234,6 +234,7 @@ export default async function (
 ```
 
 **Why plugins must use lazy-loaded actions:**
+
 - **Performance**: Lazy loading ensures plugin code is only loaded when needed, keeping Hardhat initialization fast
 - **Maintainability**: Separating task logic into dedicated files improves code organization
 
@@ -261,6 +262,7 @@ Plugins cannot use `setInlineAction()`. Attempting to do so will result in an er
 ### Action definition rules
 
 Each task must define exactly one action:
+
 - You must call either `setAction()` or `setInlineAction()`, but not both
 - You cannot call the same method multiple times on the same task
 - Violating these rules will result in an error

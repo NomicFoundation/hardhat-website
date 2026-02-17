@@ -94,14 +94,14 @@ With `setInlineAction`, the task logic is defined directly as a function paramet
 
 Here's when to use each approach:
 
-| Feature | `setAction()` (Lazy-loaded) | `setInlineAction()` (Inline) |
-|---------|----------------------------|------------------------------|
-| **Use case** | Complex tasks, plugins | Simple user tasks |
-| **Available for plugins** | ✅ Yes (required) | ❌ No |
-| **Available for users** | ✅ Yes | ✅ Yes |
-| **Performance** | Lazy-loaded on demand | Loaded with config |
-| **File organization** | Separate action files | Defined inline |
-| **Best for** | Reusable, complex logic | Quick, simple tasks |
+| Feature                   | `setAction()` (Lazy-loaded) | `setInlineAction()` (Inline) |
+| ------------------------- | --------------------------- | ---------------------------- |
+| **Use case**              | Complex tasks, plugins      | Simple user tasks            |
+| **Available for plugins** | ✅ Yes (required)           | ❌ No                        |
+| **Available for users**   | ✅ Yes                      | ✅ Yes                       |
+| **Performance**           | Lazy-loaded on demand       | Loaded with config           |
+| **File organization**     | Separate action files       | Defined inline               |
+| **Best for**              | Reusable, complex logic     | Quick, simple tasks          |
 
 Each task must define exactly one action: call either `setAction()` or `setInlineAction()`, but not both.
 
