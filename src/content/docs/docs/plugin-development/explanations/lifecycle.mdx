@@ -236,7 +236,7 @@ export default async function (
 **Why plugins must use lazy-loaded actions:**
 
 - **Performance**: Lazy loading ensures plugin code is only loaded when needed, keeping Hardhat initialization fast
-- **Maintainability**: Separating task logic into dedicated files improves code organization
+- **Robustness**: Lazy loding also makes Hardhat more robust to plugin errors (e.g. installation issues), as a failure in one part of your plugin won't affect the rest of the system
 
 ### Inline actions (user tasks only)
 
@@ -258,14 +258,6 @@ Inline actions are loaded immediately when the configuration file is evaluated, 
 :::caution[Plugin restriction]
 Plugins cannot use `setInlineAction()`. Attempting to do so will result in an error. Plugins must always use `setAction()` with lazy-loaded modules.
 :::
-
-### Action definition rules
-
-Each task must define exactly one action:
-
-- You must call either `setAction()` or `setInlineAction()`, but not both
-- You cannot call the same method multiple times on the same task
-- Violating these rules will result in an error
 
 ## Configuration Variables' lifecycle
 
