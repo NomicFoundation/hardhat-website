@@ -98,15 +98,14 @@ On the other hand, if you're building a simple task that only uses the Hardhat R
 
 Here's a comparison of the two approaches:
 
-| Feature                             | `setAction()` (Lazy-loaded)                            | `setInlineAction()` (Inline)                                                |
-| ----------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
-| **Use case**                        | Complex tasks, plugins                                 | Simple user tasks                                                           |
-| **Available for plugins**           | ✅ Yes (required)                                      | ❌ No                                                                       |
-| **Can `import {} from 'hardhat'`?** | ✅ Yes. They are loaded after Hardhat's initialization | ❌ No. They are defined in the config file, before Hardhat's initialization |
-| **Available for users**             | ✅ Yes                                                 | ✅ Yes                                                                      |
-| **Performance**                     | Lazy-loaded on demand                                  | Loaded every time you run Hardhat                                           |
-| **File organization**               | Separate action files                                  | Defined inline in your config                                               |
-| **Best for**                        | Complex logic. Tasks that need to import dependencies. | Quick simple tasks                                                          |
+| Feature                                      | `setAction()` (Lazy-loaded)                                             | `setInlineAction()`                                               |
+| -------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Use cases**                                | Complex tasks <br /> Plugin tasks <br /> Tasks that import dependencies | Simple user tasks                                                 |
+| **Available for plugins**                    | ✅ Yes (required)                                                       | ❌ No                                                             |
+| **Available for users**                      | ✅ Yes                                                                  | ✅ Yes                                                            |
+| **Performance**                              | Lazy-loaded on demand                                                   | Loaded every time you run Hardhat                                 |
+| **File organization**                        | Separate action files                                                   | Defined inline in your config                                     |
+| **Can use `import { ... } from 'hardhat'`?** | ✅ Yes, because they are loaded after Hardhat's initialization          | ❌ No, because they are evaluated during Hardhat's initialization |
 
 Each task must define exactly one action: call either `setAction()` or `setInlineAction()`, but not both.
 
