@@ -92,16 +92,21 @@ With `setInlineAction`, the task logic is defined directly as a function paramet
 
 ### Choosing between `setAction` and `setInlineAction`
 
-Here's when to use each approach:
+You should use `setAction` when you are building a plugin or a complex tasks with a large amount of code, or if it needs to import dependencies. This makes the code more organized, improves the load time of Hardhat (as they are loaded on demand), and makes your setup or plugin more robust to installation errors.
 
-| Feature                   | `setAction()` (Lazy-loaded) | `setInlineAction()` (Inline) |
-| ------------------------- | --------------------------- | ---------------------------- |
-| **Use case**              | Complex tasks, plugins      | Simple user tasks            |
-| **Available for plugins** | ✅ Yes (required)           | ❌ No                        |
-| **Available for users**   | ✅ Yes                      | ✅ Yes                       |
-| **Performance**           | Lazy-loaded on demand       | Loaded with config           |
-| **File organization**     | Separate action files       | Defined inline               |
-| **Best for**              | Reusable, complex logic     | Quick, simple tasks          |
+On the other hand, if you are building a simple task that only uses the Hardhat Runtime Environment, you can use `setInlineAction` to define the task's behavior inline, without the boilerplate of a separate file.
+
+Here's a comparison of the two approaches:
+
+| Feature                             | `setAction()` (Lazy-loaded)                            | `setInlineAction()` (Inline)                                                |
+| ----------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **Use case**                        | Complex tasks, plugins                                 | Simple user tasks                                                           |
+| **Available for plugins**           | ✅ Yes (required)                                      | ❌ No                                                                       |
+| **Can `import {} from 'hardhat'`?** | ✅ Yes. They are loaded after Hardhat's initialization | ❌ No. They are defined in the config file, before Hardhat's initialization |
+| **Available for users**             | ✅ Yes                                                 | ✅ Yes                                                                      |
+| **Performance**                     | Lazy-loaded on demand                                  | Loaded every time you run Hardhat                                           |
+| **File organization**               | Separate action files                                  | Defined inline in your config                                               |
+| **Best for**                        | Complex logic. Tasks that need to import dependencies. | Quick simple tasks                                                          |
 
 Each task must define exactly one action: call either `setAction()` or `setInlineAction()`, but not both.
 
