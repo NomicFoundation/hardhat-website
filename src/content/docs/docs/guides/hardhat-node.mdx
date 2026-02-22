@@ -35,7 +35,7 @@ If you run this script multiple times, the output won't change:
 
 <Run command="hardhat run my-script.ts" />
 
-To have a locally simulated network that persists for longer than the duration of a single task, start a node in one terminal:
+To run a simulated network that persists beyond a single task, start a node in one terminal:
 
 <Run command="hardhat node" />
 
@@ -44,6 +44,39 @@ Then, in another terminal, run your script using the `--network localhost` optio
 <Run command="hardhat run my-script.ts --network localhost" />
 
 Now, if you run the script again while the node is running, you'll see the output change each time, as the state is preserved between runs.
+
+## Configuring the local development node
+
+There are two ways to configure the local development node:
+
+1. By passing options to the `node` task
+2. By configuring the `node` network in your Hardhat config
+
+To pass options to the `node` task, you just run it with them, like this:
+
+<Run command="hardhat node --chain-id 123" />
+
+You can see the complete list of options by running:
+
+<Run command="hardhat node --help" />
+
+To configure it in your Hardhat config, add a `node` network. For example, to use the `123` chain ID:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  networks: {
+    node: {
+      type: "edr-simulated",
+      chainId: 123,
+    },
+  },
+});
+```
+
+The type of the `node` network config must be `edr-simulated`. To learn about all the config values, read the [Network configuration reference](/docs/reference/configuration#network-configuration).
 
 ## Running a development node programmatically
 
