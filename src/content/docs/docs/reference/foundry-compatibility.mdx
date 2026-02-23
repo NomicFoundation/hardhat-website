@@ -17,7 +17,7 @@ You may want to configure your Hardhat project to make it easier to work with Fo
 
 ### Remappings
 
-Hardhat 3 supports `remappings.txt` files by default. It automatically loads all the `remappings.txt` files in your project, and in the npm packages that your project depends on. Hardhat 3's remappings support is more advanced, and limits the scope of each remapping to the directory they are defined in, avoiding any remapping conflicts. Read more about them in the [Using Solidity remappings](/docs/guides/writing-contracts/remappings) guide.
+Hardhat 3 supports `remappings.txt` files by default. It automatically loads all the `remappings.txt` files in your project, and in the npm packages that your project depends on. Hardhat 3's remappings support is more advanced, and limits the scope of each remapping to the directory they are defined in, avoiding any remapping conflicts. Read more about remappings in the [Using Solidity remappings](/docs/guides/writing-contracts/remappings) guide.
 
 #### The `@nomicfoundation/hardhat-foundry` plugin
 
@@ -43,10 +43,10 @@ const config: HardhatUserConfig = {
 
 ## Solidity tests compatibility
 
-Hardhat 3 can run Solidity tests built with Foundry, including using `forge-std`. Learn more about them by reading the [Writing Solidity tests](/docs/guides/testing) guide, and the [Cheatcodes](/docs/reference/cheatcodes/cheatcodes-overview) reference documentation.
+Hardhat 3 can run Solidity tests by default, including those previously built for Foundry. Learn more about writing and running Solidity tests in Hardhat 3 by reading the [Writing Solidity tests](/docs/guides/testing) guide, and the [Cheatcodes](/docs/reference/cheatcodes/cheatcodes-overview) reference documentation.
 
 To learn how to configure the Solidity tests runner, read the [Configuration](/docs/reference/configuration#solidity-tests-configuration) reference documentation.
 
 ## Separate build process and test artifacts
 
-Hardhat 3 builds smart contracts and tests as separate build processes. On top of that, it doesn't expose the build artifacts of tests to users, and considers them internal and part of the `cache/` directory. These are intentional design decisions that give Hardhat more flexibility for future improvements.
+Hardhat 3 builds smart contracts and tests as separate build processes. On top of that, it doesn't expose the build artifacts of tests to users, and considers them internal and part of the `cache/` directory.
