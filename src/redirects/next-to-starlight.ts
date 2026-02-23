@@ -59,7 +59,6 @@ export default [
     "/ignition/docs/guides/error-handling",
     "/ignition/docs/explanations/error-handling",
   ],
-  ["/migrate-from-hardhat2", "/docs/migrate-from-hardhat2"],
   [
     "/migrate-from-hardhat2/mocha-tests",
     "/docs/migrate-from-hardhat2/guides/mocha-tests",
