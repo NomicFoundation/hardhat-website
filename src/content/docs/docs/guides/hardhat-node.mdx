@@ -47,10 +47,11 @@ Now, if you run the script again while the node is running, you'll see the outpu
 
 ## Configuring the local development node
 
-There are two ways to configure the local development node:
+There are three ways to configure the local development node:
 
 1. By passing options to the `node` task
-2. By configuring the `node` network in your Hardhat config
+2. By configuring the `node` network in your Hardhat config, which is the network used by default
+3. By providing a network config name with `--network`
 
 To pass options to the `node` task, you just run it with them, like this:
 
@@ -77,6 +78,10 @@ export default defineConfig({
 ```
 
 The type of the `node` network config must be `edr-simulated`. To learn about all the config values, read the [Network configuration reference](/docs/reference/configuration#network-configuration).
+
+Finally, you can configure it using `--network` and the name of the network:
+
+<Run command="hardhat node --network my-network" />
 
 ## Running a development node programmatically
 
@@ -118,4 +123,4 @@ Run this script with:
 
 <Run command="hardhat run scripts/server.ts" />
 
-While the server is running, you can connect to it through HTTP, for example using `--network localhost`, or any client with its address and port.
+While the server is running, you can connect to it through HTTP, for example using `--network localhost`, or with any HTTP client using the server's address and port.
