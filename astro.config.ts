@@ -140,6 +140,7 @@ export default defineConfig({
                     { slug: "docs/reference/json-rpc-methods" },
                     { slug: "docs/reference/artifacts" },
                     { slug: "docs/reference/console-log" },
+                    { slug: "docs/reference/foundry-compatibility" },
                     {
                       label: "Solidity test cheatcodes",
                       collapsed: true,
