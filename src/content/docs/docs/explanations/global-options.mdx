@@ -25,25 +25,24 @@ The `--verbosity` (or `-v`) option controls the amount of output shown during te
 
 **For tests** (`hardhat test`):
 
-| Flag | Level | Effect |
-|------|-------|--------|
-| (none) | 0-2 | No call traces (level 2 is the default: shows logs) |
-| `-vvv` | 3 | Execution traces for failing tests only |
-| `-vvvv` | 4 | Execution traces for all tests + setUp traces for failing tests |
-| `-vvvvv` | 5 | All traces (execution + setUp) for all tests |
+| Flag     | Level | Effect                                                          |
+| -------- | ----- | --------------------------------------------------------------- |
+| (none)   | 0-2   | No call traces (level 2 is the default: shows logs)             |
+| `-vvv`   | 3     | Execution traces for failing tests only                         |
+| `-vvvv`  | 4     | Execution traces for all tests + setUp traces for failing tests |
+| `-vvvvv` | 5     | All traces (execution + setUp) for all tests                    |
 
 **For non-test tasks** (`hardhat run`, `hardhat ignition deploy`, etc.):
 
-| Flag | Level | Effect |
-|------|-------|--------|
-| (none) | 0-2 | No call traces |
-| `-vvv` | 3 | Call traces for failing transactions only |
-| `-vvvv` / `-vvvvv` | 4-5 | All call traces |
+| Flag               | Level | Effect                                    |
+| ------------------ | ----- | ----------------------------------------- |
+| (none)             | 0-2   | No call traces                            |
+| `-vvv`             | 3     | Call traces for failing transactions only |
+| `-vvvv` / `-vvvvv` | 4-5   | All call traces                           |
 
 <Run command="hardhat test -vvv" />
 
 <Run command="hardhat run scripts/deploy.ts -vvvvv" />
-
 
 The verbosity option is available on any Hardhat command. You can also use the long form:
 
