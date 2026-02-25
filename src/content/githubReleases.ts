@@ -3,12 +3,12 @@ import { z } from "astro:schema";
 
 const githubRelaseApiSchema = z.object({
   id: z.number(),
-  name: z.string().optional(),
+  name: z.string().nullable(),
   tag_name: z.string(),
-  body: z.string().optional(),
+  body: z.string().nullable(),
   draft: z.boolean(),
   prerelease: z.boolean(),
-  published_at: z.string(),
+  published_at: z.string().nullable(),
   html_url: z.string(),
 });
 
