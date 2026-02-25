@@ -7,7 +7,7 @@ import Run from "@hh/Run.astro";
 
 At its core, Hardhat is a task runner that lets you automate your development workflow. It comes with built-in tasks like `compile` and `test`, but you can also add your own custom tasks.
 
-This guide will show you how to extend Hardhat's functionality using tasks. It assumes you've initialized a sample project. If you haven't, please read the [getting started guide](/docs/getting-started) first.
+In this guide, we'll explore how to extend Hardhat's functionality using tasks. It assumes you've initialized a sample project. If you haven't, read the [getting started guide](/docs/getting-started) first.
 
 ## Writing a task
 
@@ -61,8 +61,60 @@ We're using the `task` function to define our new task. Its first argument is th
 
 The `task` function returns a task builder object that lets you further configure the task. In this case, we use the `setAction` method to define the task's behavior by providing a function that lazy loads another module.
 
-That module exports the action function itself. You can do anything you want in this function. In this case, we send a request to the network provider to get all the configured accounts and print their addresses.
+That module exports the action function itself, which implements your custom logic. In this case, we send a request to the network provider to get all the configured accounts and print their addresses.
 
-You can add parameters to your tasks, and Hardhat will handle their parsing and validation for you. You can also override existing tasks, which lets you customize how different parts of Hardhat work.
+Add parameters to your tasks, and Hardhat handles their parsing and validation for you. Override existing tasks to customize how different parts of Hardhat work.
+
+## Using inline actions
+
+As an alternative to defining task actions in separate files, define them directly inline using `setInlineAction`. This is convenient for simple tasks where a separate file would be overkill.
+
+Here's how the accounts task would look using an inline action:
+
+```ts
+// hardhat.config.ts
+import { defineConfig, task } from "hardhat/config";
+
+const printAccounts = task("accounts", "Print the accounts")
+  .setInlineAction(async (taskArguments, hre) => {
+    const { provider } = await hre.network.connect();
+    console.log(await provider.request({ method: "eth_accounts" }));
+  })
+  .build();
+
+export default defineConfig({
+  // ... rest of the config
+  tasks: [printAccounts],
+});
+```
+
+With `setInlineAction`, the task logic is defined directly as a function parameter, eliminating the need for a separate file.
+
+### Choosing between `setAction` and `setInlineAction`
+
+Use `setAction` when you're building a plugin or a complex task with a lot of code, or if it needs to import dependencies. This keeps the code organized, improves Hardhat's load time (as they're loaded on demand), and makes your setup or plugin more resilient to installation errors.
+
+On the other hand, if you're building a simple task that only uses the Hardhat Runtime Environment, use `setInlineAction` to define the task's behavior inline, without the boilerplate of a separate file.
+
+Here's a comparison of the two approaches:
+
+|                                              | `setAction()` (Lazy-loaded)                                             | `setInlineAction()`                                               |
+| -------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Use cases**                                | Complex tasks <br /> Plugin tasks <br /> Tasks that import dependencies | Simple user tasks                                                 |
+| **Available for plugins**                    | ✅ Yes (required)                                                       | ❌ No                                                             |
+| **Available for users**                      | ✅ Yes                                                                  | ✅ Yes                                                            |
+| **Performance**                              | Lazy-loaded on demand                                                   | Loaded every time you run Hardhat                                 |
+| **File organization**                        | Separate action files                                                   | Defined inline in your config                                     |
+| **Can use `import { ... } from 'hardhat'`?** | ✅ Yes, because they are loaded after Hardhat's initialization          | ❌ No, because they are evaluated during Hardhat's initialization |
+
+Each task must define exactly one action: call either `setAction()` or `setInlineAction()`, but not both.
+
+You can also use `setInlineAction` with `overrideTask` to customize existing tasks directly in your config file.
+
+:::caution[Plugin developers]
+If you're developing a plugin, you must use `setAction()` with lazy-loaded modules. The `setInlineAction()` method is only available for user-defined tasks in configuration files.
+:::
+
+To learn more about how task actions are loaded, see the [Task Actions' lifecycle](/docs/plugin-development/explanations/lifecycle#task-actions-lifecycle) documentation.
 
 {/* To learn more about tasks, please read [this guide](../advanced/create-task). */}
