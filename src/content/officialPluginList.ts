@@ -106,6 +106,12 @@ export const officialPluginsList: OfficialPlugin[] = [
       "Integrates Node.js' builtin test runner into a Hardhat project",
     tags: ["Node.js test runner", "node:test", "Test runner"],
   },
+  {
+    npmPackage: "@nomicfoundation/hardhat-foundry",
+    description:
+      "Hardhat plugin that provides compatibility with Foundry-based projects' remappings",
+    tags: ["foundry", "forge", "remappings"],
+  },
 ].map((p) => ({
   ...p,
   slug: generateSlug(p.npmPackage.replace(/^@nomicfoundation\//, "")),
