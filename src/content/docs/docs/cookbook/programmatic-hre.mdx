@@ -1,0 +1,56 @@
+---
+title: Creating a Hardhat Runtime Environment programmatically
+description: How to initialize and configure a Hardhat Runtime Environment programmatically
+sidebar:
+  order: 8
+---
+
+The Hardhat Runtime Environment can be created programmatically, which is useful for scripting, testing, and having multiple instances of it at the same time.
+
+## Creating a Hardhat Runtime Environment with a configuration file
+
+You can create a Hardhat Runtime Environment using a configuration file like this:
+
+```ts
+import {
+  createHardhatRuntimeEnvironment,
+  resolveHardhatConfigPath,
+  importUserConfig,
+} from "hardhat/hre";
+
+const configPath = await resolveHardhatConfigPath();
+const config = await importUserConfig(configPath);
+const hre = await createHardhatRuntimeEnvironment(config, {
+  config: configPath,
+  // other global options, like network
+});
+```
+
+In this example, `resolveHardhatConfigPath` finds the configuration file path using the same logic as the Hardhat CLI. You can use an absolute path instead.
+
+`createHardhatRuntimeEnvironment` takes a configuration object as its first argument, followed by an object with [Global Options](/docs/explanations/global-options). It also accepts an optional third parameter with the path to the project root. You'll rarely need it, but it's useful for creating a Hardhat Runtime Environment in a different directory.
+
+## Creating a Hardhat Runtime Environment without a configuration file
+
+You can also create a Hardhat Runtime Environment with an in-memory configuration object that doesn't come from a file:
+
+```ts
+import { defineConfig } from "hardhat/config";
+import { createHardhatRuntimeEnvironment } from "hardhat/hre";
+
+const config = defineConfig({
+  solidity: "0.8.28",
+});
+
+const hre = await createHardhatRuntimeEnvironment(config, {
+  // optional object with global options, but no config path
+});
+```
+
+The only differences here are that you define the config inline instead of using a file, and that you don't pass the `config` Global Option to `createHardhatRuntimeEnvironment`.
+
+## Learn more
+
+To learn more about the Hardhat Runtime Environment, read the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment) documentation.
+
+For configuration details, see the [Configuration reference](/docs/reference/configuration).

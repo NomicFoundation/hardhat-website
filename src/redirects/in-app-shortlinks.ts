@@ -24,4 +24,5 @@ export default [
   ["/hd-wallet-config", "/docs/reference/configuration#hd-wallet-config"],
   ["/getting-started", "/docs/getting-started"],
   ["/foundry-compatibility", "/docs/reference/foundry-compatibility"],
+  ["/migrate-from-hardhat2", "/docs/migrate-from-hardhat2"],
 ] satisfies Redirects;

@@ -1,14 +1,10 @@
 import type { Redirects } from "./types";
 
-const HHVSCODE_MARKETPLACE_URL =
-  "https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity";
-
 export default [
-  ["/hardhat-vscode", HHVSCODE_MARKETPLACE_URL],
-  ["/hardhat-vscode/docs", HHVSCODE_MARKETPLACE_URL],
-  ["/hardhat-vscode/docs/overview", HHVSCODE_MARKETPLACE_URL],
-  ["/hardhat-vscode/docs/hardhat-projects", HHVSCODE_MARKETPLACE_URL],
-  ["/hardhat-vscode/docs/formatting", HHVSCODE_MARKETPLACE_URL],
+  ["/hardhat-vscode/docs", "/hardhat-vscode"],
+  ["/hardhat-vscode/docs/overview", "/hardhat-vscode"],
+  ["/hardhat-vscode/docs/hardhat-projects", "/hardhat-vscode"],
+  ["/hardhat-vscode/docs/formatting", "/hardhat-vscode"],
   ["/hardhat-network-helpers", "/docs/plugins/hardhat-network-helpers"],
   ["/hardhat-network-helpers/docs", "/docs/plugins/hardhat-network-helpers"],
   [
@@ -63,7 +59,6 @@ export default [
     "/ignition/docs/guides/error-handling",
     "/ignition/docs/explanations/error-handling",
   ],
-  ["/migrate-from-hardhat2", "/docs/migrate-from-hardhat2"],
   [
     "/migrate-from-hardhat2/mocha-tests",
     "/docs/migrate-from-hardhat2/guides/mocha-tests",

@@ -267,6 +267,7 @@ export default defineConfig({
                 "/docs/plugins/*",
               ],
             },
+            exclude: ["/hardhat-vscode"],
           },
         ),
         starlightLinksValidator({
