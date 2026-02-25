@@ -17,6 +17,49 @@ Plugins can define their own Global Options, so the complete list depends on you
 
 <Run command="hardhat --help" />
 
+## Core Global Options
+
+### Verbosity
+
+The `--verbosity` (or `-v`) option controls the amount of output shown during test execution, script runs, and deployments when using Hardhat Network. Use `-v` flags to increase the verbosity level. For example, `-vvv` sets level 3, and `-vvvvv` sets level 5. The default level is 2.
+
+**For tests** (`hardhat test`):
+
+| Flag     | Level | Effect                                                          |
+| -------- | ----- | --------------------------------------------------------------- |
+| (none)   | 0-2   | No call traces (level 2 is the default: shows logs)             |
+| `-vvv`   | 3     | Execution traces for failing tests only                         |
+| `-vvvv`  | 4     | Execution traces for all tests + setUp traces for failing tests |
+| `-vvvvv` | 5     | All traces (execution + setUp) for all tests                    |
+
+**For non-test tasks** (`hardhat run`, `hardhat ignition deploy`, etc.):
+
+| Flag               | Level | Effect                                    |
+| ------------------ | ----- | ----------------------------------------- |
+| (none)             | 0-2   | No call traces                            |
+| `-vvv`             | 3     | Call traces for failing transactions only |
+| `-vvvv` / `-vvvvv` | 4-5   | All call traces                           |
+
+<Run command="hardhat test -vvv" />
+
+<Run command="hardhat run scripts/deploy.ts -vvvvv" />
+
+The verbosity option is available on any Hardhat command. You can also use the long form:
+
+<Run command="hardhat test --verbosity 3" />
+
+:::tip
+
+Call traces show the sequence of contract function calls made during a transaction, which is invaluable for debugging why a transaction reverted or understanding complex contract interactions.
+
+:::
+
+:::note
+
+The `--verbosity` flag only produces output when using Hardhat Network (the built-in EDR-based local network). It does not apply to external networks like mainnet forks via URL, testnets, or tasks that don't involve network connections (e.g., `hardhat build`, `hardhat clean`).
+
+:::
+
 ## Global Options and environment variables
 
 Global Options can also be provided using environment variables formatted like `HARDHAT_<SCREAMING_SNAKE_CASE>`. For example, you can run:
