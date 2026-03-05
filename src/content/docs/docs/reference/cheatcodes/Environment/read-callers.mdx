@@ -11,6 +11,10 @@ description: readCallers cheatcode documentation
 enum CallerMode {
     /// No caller modification is currently active.
     None,
+    /// Unsupported. Present for forge-std ABI compatibility.
+    Broadcast,
+    /// Unsupported. Present for forge-std ABI compatibility.
+    RecurrentBroadcast,
     /// A one time prank triggered by a `vm.prank()` call is currently active.
     Prank,
     /// A recurrent prank triggered by a `vm.startPrank()` call is currently active.
@@ -24,7 +28,7 @@ function readCallers()
 
 ### Description
 
-Reads the current `CallerMode`, `msg.sender`, and `tx.origin`.
+Reads the current `msg.sender` and `tx.origin` from state and reports if there is any active caller modification.
 
 The `CallerMode` enum indicates if there is an active caller modification and the type.
 
@@ -35,6 +39,10 @@ The `CallerMode` enum indicates if there is an active caller modification and th
 
 - If no caller modification is active:
   - `callerMode` will be equal to `CallerMode.None`.
+
+:::note
+`readCallers` never returns `CallerMode.Broadcast` or `CallerMode.RecurrentBroadcast`, as `broadcast` and `startBroadcast` are unsupported. These variants are present in the enum for forge-std ABI compatibility.
+:::
 
 ### Examples
 
