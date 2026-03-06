@@ -1,0 +1,129 @@
+---
+title: Gas snapshots
+description: How to track and compare gas usage across test runs
+sidebar:
+  order: 9
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat can track gas usage across your Solidity test runs and save it to snapshot files for later comparison.
+
+There are two types of snapshots:
+
+- **Function gas snapshots** track the gas used by each test function in your Solidity test suite.
+- **Snapshot cheatcodes** let you capture specific gas measurements or values from within your Solidity tests using cheatcodes.
+
+## Updating snapshots
+
+To create or update your snapshots, run your tests with the `--snapshot` flag:
+
+<Run
+  command={["hardhat test --snapshot", "hardhat test solidity --snapshot"]}
+/>
+
+Function gas snapshots are only written when all tests pass. Snapshot cheatcodes are always written, even if some tests fail.
+
+## Checking snapshots
+
+To verify that snapshots haven't changed, use the `--snapshot-check` flag:
+
+<Run
+  command={[
+    "hardhat test --snapshot-check",
+    "hardhat test solidity --snapshot-check",
+  ]}
+/>
+
+This compares the current test run against your saved snapshots. If anything changes, the command exits with a non-zero code and shows the differences:
+
+```
+Snapshot check failed
+
+Function gas snapshots: 1 changed
+
+  CalculatorTest#testAddition
+    (in test/Calculator.t.sol:34)
+    Expected (gas): 56852
+    Actual (gas):   58921 (+3.64%, Δ+2069)
+
+To update snapshots, run your tests with --snapshot
+```
+
+The check only fails when existing values change. Adding or removing test functions or cheatcode snapshot calls won't cause a failure.
+
+## Function gas snapshots
+
+The `.gas-snapshot` file records the gas used by each test function. Each line contains the contract name, function name, and gas details:
+
+```
+CalculatorTest#testAddition() (gas: 56852)
+CalculatorTest#testSubtraction() (gas: 48291)
+```
+
+For fuzz tests, the file records the number of runs, mean (μ), and median (~) gas usage:
+
+```
+CalculatorTest#testFuzzAddition(uint128,uint128) (runs: 256, μ: 55070, ~: 55040)
+```
+
+When checking snapshots, only the median is compared for fuzz tests.
+
+## Snapshot cheatcodes
+
+Snapshot cheatcodes let you capture specific values from within your Solidity tests. These are useful when you want to track something other than the total gas used by a test function.
+
+### Capturing gas for a specific call
+
+Use `snapshotGasLastCall` to capture the gas used by the previous call:
+
+```solidity
+contract CalculatorTest is Test {
+  Calculator calculator;
+
+  function setUp() public {
+    calculator = new Calculator();
+  }
+
+  function testAdditionGas() public {
+    calculator.add(1, 2);
+    vm.snapshotGasLastCall("calculator-add");
+  }
+}
+```
+
+### Capturing gas for a code block
+
+Use `startSnapshotGas` and `stopSnapshotGas` to measure the gas used by a block of code:
+
+```solidity
+function testMultipleOperations() public {
+  vm.startSnapshotGas("multiple-ops");
+  calculator.add(1, 2);
+  calculator.multiply(3, 4);
+  calculator.subtract(10, 5);
+  vm.stopSnapshotGas("multiple-ops");
+}
+```
+
+### Capturing arbitrary values
+
+Use `snapshotValue` to capture any `uint256` value:
+
+```solidity
+function testInitialState() public {
+  uint256 result = calculator.result();
+  vm.snapshotValue("calculator-initial-result", result);
+}
+```
+
+### Organizing snapshots into groups
+
+By default, snapshots are grouped by the test contract name. You can specify a custom group as the first argument:
+
+```solidity
+vm.snapshotGasLastCall("gas-benchmarks", "calculator-add");
+vm.snapshotValue("state-checks", "initial-result", calculator.result());
+```
+
+If you capture multiple snapshots with the same group and name, the last value will overwrite the previous values.
