@@ -61,6 +61,20 @@ When running a standalone script, you can pass any Hardhat Global Option to the 
 
 - `HARDHAT_BUILD_PROFILE`: Specifies which build profile to use
 
+- `HARDHAT_VERBOSITY`: Sets the verbosity level for call traces
+
 To view the full list of Global Options available in Hardhat, run:
 
 <Run command="hardhat --help" />
+
+## Debugging scripts with call traces
+
+When your script connects to Hardhat Network and involves transactions, you can use the `--verbosity` (or `-v`) flag to show call traces. For example, `-vvv` shows traces for failing transactions:
+
+<Run command="hardhat run scripts/deploy.ts -vvv" />
+
+To see traces for all transactions, use `-vvvvv`:
+
+<Run command="hardhat run scripts/deploy.ts -vvvvv" />
+
+Call traces show the sequence of contract function calls, making it easier to debug deployment scripts and understand complex interactions. See [Global Options](/docs/explanations/global-options#verbosity) for the full list of verbosity levels.
