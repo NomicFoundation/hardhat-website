@@ -1,0 +1,35 @@
+---
+title: Using AI assistants with Hardhat
+description: How to use AI-enhanced development tools for Hardhat projects
+---
+
+AI coding assistants can help you write, test, and audit smart contracts. This guide covers [Solskill](https://github.com/Cyfrin/solskill), a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin created by [Cyfrin](https://www.cyfrin.io/) that makes Claude more aware of smart contract security concerns, more thorough with testing and code quality, and easier to work with on Hardhat projects.
+
+## Installing Solskill
+
+Solskill requires [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Once you have Claude Code set up, install the plugin:
+
+```bash
+npx skills add cyfrin/solskill
+```
+
+## Usage
+
+Once installed, you can make natural language requests directly in Claude Code. For example:
+
+```txt
+With hardhat, create me an AMM with 2 tokens and a 0.3% fee 
+```
+
+```txt
+With hardhat, build a token vault contract for a specific token
+```
+
+```txt
+With hardhat, create a minimal ERC20 with mint and burn functions. Include a test suite that verifies:
+- mint increases balance and total supply
+- burn decreases balance and total supply
+- unauthorized minting reverts
+```
+
+Solskill will generate both the contract and a Hardhat test suite, applying security best practices automatically.

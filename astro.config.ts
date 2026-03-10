@@ -120,6 +120,7 @@ export default defineConfig({
                     { slug: "docs/guides/hardhat-node" },
                     { slug: "docs/guides/hardhat-console" },
                     // { slug: "docs/guides/command-line-completion" },
+                    { slug: "docs/guides/using-ai-assistants" },
                     { slug: "docs/guides/getting-help" },
                   ],
                 },
