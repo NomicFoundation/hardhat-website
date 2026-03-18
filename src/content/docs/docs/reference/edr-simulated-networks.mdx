@@ -35,7 +35,7 @@ export default defineConfig({
     },
     hardhatOptimism: {
       type: "edr-simulated",
-      chainType: "op", // OP Mainnet and its testnets
+      chainType: "op", // OP Stack chains, like OP Mainnet, Base, or their testnets
     },
     other: {
       type: "edr-simulated",
@@ -44,6 +44,8 @@ export default defineConfig({
   },
 });
 ```
+
+To learn more about the `op` Chain Type, including predeploy contracts, supported chains, and forking, see the [OP Stack support reference](/docs/reference/op-stack-support).
 
 ### Solidity stack traces
 
