@@ -61,7 +61,88 @@ This prints a table like the following:
 
 The statistics are collected from the functions called by the tests you executed. This means that running `test solidity --gas-stats` will produce a different result than running `test nodejs --gas-stats`, because different tests will have been run.
 
-## Understanding the Gas Statistics Table
+## Exporting gas statistics to a JSON file
+
+To save gas statistics to a JSON file, pass the `--gas-stats-json <path>` flag:
+
+<Run
+  command={[
+    "hardhat test --gas-stats-json gas-stats.json",
+    "hardhat test solidity --gas-stats-json gas-stats.json",
+    "hardhat test nodejs --gas-stats-json gas-stats.json",
+  ]}
+/>
+
+This flag works independently of `--gas-stats`, so either or both can be used together. For example, to print the table to the terminal and also save the results to a file:
+
+<Run command="hardhat test --gas-stats --gas-stats-json gas-stats.json" />
+
+The JSON file has the following structure:
+
+```json
+{
+  "contracts": {
+    "contracts/Calculator.sol:Calculator": {
+      "sourceName": "contracts/Calculator.sol",
+      "contractName": "Calculator",
+      "deployment": {
+        "min": 288115,
+        "max": 288115,
+        "avg": 288115,
+        "median": 288115,
+        "count": 1
+      },
+      "functions": {
+        "divide": {
+          "min": 44316,
+          "max": 44316,
+          "avg": 44316,
+          "median": 44316,
+          "count": 1
+        },
+        "multiply(uint256,uint256)": {
+          "min": 44254,
+          "max": 44254,
+          "avg": 44254,
+          "median": 44254,
+          "count": 2
+        }
+        // ...
+      }
+    },
+    "contracts/Counter.sol:Counter": {
+      "sourceName": "contracts/Counter.sol",
+      "contractName": "Counter",
+      "deployment": {
+        "min": 234940,
+        "max": 234940,
+        "avg": 234940,
+        "median": 234940,
+        "count": 1
+      },
+      "functions": {
+        "add(uint256)": {
+          "min": 43915,
+          "max": 43915,
+          "avg": 43915,
+          "median": 43915,
+          "count": 1
+        },
+        "add(uint256,bool)": {
+          "min": 44284,
+          "max": 44554,
+          "avg": 44419,
+          "median": 44419,
+          "count": 2
+        }
+        // ...
+      }
+    }
+  }
+}
+```
+
+## Understanding the gas statistics
 
 The gas statistics table shows the following information for each function:
 
