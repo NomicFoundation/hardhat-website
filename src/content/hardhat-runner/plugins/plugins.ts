@@ -1035,6 +1035,15 @@ const communityPlugins: IPlugin[] = [
       "script",
     ],
   },
+  {
+    name: "hardhat-airsign",
+    author: "Harshit Sharmaa",
+    authorUrl: "https://github.com/harshitbwc",
+    description: "Hardhat plugin to deploy smart contracts without private keys. Sign transactions from any browser or remotely from your wallet, run tasks & scripts from a browser UI",
+    tags: [
+      "hardhat", "hardhat-plugin", "smart-contracts", "ethereum", "web3", "remote-signing"
+      ]
+  }
 ];
 
 const officialPlugins: IPlugin[] = [
