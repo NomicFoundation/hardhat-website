@@ -58,7 +58,9 @@ export default defineConfig({
   },
   test: {
     solidity: {
-      timeout: 40000,
+      fuzz: {
+        runs: 256,
+      },
       // other solidity tests options
     },
   },
