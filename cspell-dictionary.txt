@@ -32,6 +32,7 @@ IERC
 ERC
 EIP
 DELEGATECALL
+predeploy
 predeployed
 predeploys
 automining

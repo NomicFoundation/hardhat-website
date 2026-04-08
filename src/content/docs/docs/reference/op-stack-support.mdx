@@ -1,0 +1,64 @@
+---
+title: OP Stack support
+description: Reference documentation for OP Stack chain simulation in Hardhat
+sidebar:
+  label: OP Stack support
+---
+
+When you set `chainType` to `"op"`, Hardhat adjusts its simulation to match OP Stack execution semantics. Only standard OP Stack behavior is simulated, so any chain-specific behavior that falls outside the OP Stack specification is not supported.
+
+To learn more about Chain Types in general, see the [Multichain support explanation](/docs/explanations/multichain-support).
+
+## What the `op` Chain Type changes
+
+Here's what changes compared to the `l1` Chain Type:
+
+- **Predeploy contracts**: OP Stack predeploy contracts are automatically deployed at genesis. The `L1Block` and `GasPriceOracle` predeploys are fully functional, while other predeploys are present at their expected addresses but will revert if called.
+- **Hardfork schedule**: Instead of Ethereum hardforks like `cancun` or `prague`, the `op` Chain Type uses its own set of OP Stack hardforks. See the [configuration reference](/docs/reference/configuration#network-configuration) for the full list.
+- **Transaction receipts**: Receipts for non-deposit transactions include OP Stack L1 fee fields like `l1GasUsed`, `l1Fee`, `l1GasPrice`, `l1FeeScalar`, and `l1BlobBaseFee`.
+
+## Supported chains
+
+Hardhat includes built-in chain-specific parameters for many OP Stack chains, including OP Mainnet, Base, and their testnets. These parameters are sourced from the [Optimism Superchain Registry](https://github.com/ethereum-optimism/superchain-registry) and include chain IDs, hardfork activation block numbers, and EIP-1559 base fee configuration.
+
+When you configure a network with `chainType: "op"` and the right `chainId`, the correct parameters are applied automatically.
+
+OP Mainnet and Base are actively maintained, while other chains have default parameters that may not be fully up-to-date.
+
+Here's an example of forking OP Mainnet:
+
+```ts
+// hardhat.config.ts
+// ... imports ...
+
+export default defineConfig({
+  // ... other config ...
+  networks: {
+    // ... other networks ...
+    opMainnetFork: {
+      type: "edr-simulated",
+      chainType: "op",
+      chainId: 10,
+      forking: {
+        url: configVariable("OP_MAINNET_RPC_URL"),
+      },
+    },
+  },
+});
+```
+
+To fork Base instead, just change the `chainId` and RPC URL:
+
+```ts del={2-3} ins={4-5}
+      chainType: "op",
+      chainId: 10,
+      forking: { url: configVariable("OP_MAINNET_RPC_URL") },
+      chainId: 8453,
+      forking: { url: configVariable("BASE_MAINNET_RPC_URL") },
+```
+
+### Base fee accuracy on local chains
+
+Since the Holocene hardfork, OP Stack chains define their EIP-1559 base fee parameters dynamically, and these are expressed as block-number activations. On forked chains this works as expected, since they start at the forked block number. On local (non-forked) chains, the genesis block starts at block `0`, so some of these activations may not take effect as expected.
+
+{/* NOTE: If Hardhat exposes EDR's `baseFeeConfig` option in the future, update the paragraph above to mention that users can override base fee parameters manually. */}
