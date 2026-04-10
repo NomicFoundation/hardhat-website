@@ -85,6 +85,7 @@ The JSON file has the following structure:
     "contracts/Calculator.sol:Calculator": {
       "sourceName": "contracts/Calculator.sol",
       "contractName": "Calculator",
+      "proxyChain": [],
       "deployment": {
         "min": 288115,
         "max": 288115,
@@ -113,6 +114,7 @@ The JSON file has the following structure:
     "contracts/Counter.sol:Counter": {
       "sourceName": "contracts/Counter.sol",
       "contractName": "Counter",
+      "proxyChain": [],
       "deployment": {
         "min": 234940,
         "max": 234940,
@@ -137,10 +139,42 @@ The JSON file has the following structure:
         }
         // ...
       }
+    },
+    "contracts/Counter.sol:Counter (via contracts/Proxy.sol:Proxy)": {
+      "sourceName": "contracts/Counter.sol",
+      "contractName": "Counter",
+      "proxyChain": [
+        "contracts/Proxy.sol:Proxy",
+        "contracts/Counter.sol:Counter"
+      ],
+      "deployment": null,
+      "functions": {
+        "add(uint256)": {
+          "min": 45100,
+          "max": 45100,
+          "avg": 45100,
+          "median": 45100,
+          "count": 1
+        }
+        // ...
+      }
     }
   }
 }
 ```
+
+### Understanding the JSON structure
+
+Each key in the `contracts` object is a display label. For direct calls, the label is `sourceName:contractName` (e.g. `contracts/Counter.sol:Counter`). For proxied calls, it is suffixed with the proxy chain: `contracts/Counter.sol:Counter (via contracts/Proxy.sol:Proxy)`. These labels are meant for display; for programmatic use, rely on `sourceName`, `contractName`, and `proxyChain` instead.
+
+Each contract entry contains:
+
+- **`sourceName`** and **`contractName`**: the source file path and the contract name of the implementation contract.
+- **`proxyChain`**: an empty array `[]` for direct calls. For proxied calls, it lists each contract the call passed through, with proxies first and the implementation contract last.
+- **`deployment`**: gas statistics for deploying the contract, including `runtimeSize` (the deployed bytecode size in bytes). This is `null` when the contract was not directly deployed during the test run.
+- **`functions`**: a map of function signatures to their gas statistics, or `null` if no functions were called.
+
+When a contract is called both directly and through a proxy, it appears as separate entries, one without a proxy suffix (for the direct call) and one with it (for the proxied call).
 
 ## Understanding the gas statistics
 
