@@ -92,13 +92,15 @@ The `solidity` config is an optional field that can be one of the following:
   - `preferWasm`: If true, forces Hardhat to use the WebAssembly (wasm) build of solc instead of a native binary. This can improve build reproducibility across platforms, at the cost of slower compilation times. This is automatically `true` for the compiler configuration objects in a `production` build profile if the version is lower than `0.8.31`; otherwise `false`.
   - `npmFilesToBuild`: A list of source names for which Hardhat should generate artifacts in addition to your project's own sources.
   - `path`: An optional path to a local Solidity compiler. If provided, this will be used instead of downloading a solc version.
+  - `toolVersionsInBuildInfo`: If `true`, the version of Hardhat is included in Build Info files. Defaults to `true` for the `production` Build Profile and `false` for all other profiles.
 - An object which describes multiple compilers and their respective configurations. It contains the following:
-  - `compilers`: A list of compiler configuration objects like the one above.
-  - `overrides`: An optional map of compiler configuration override objects. This maps file names to compiler configuration objects.
+  - `compilers`: A list of compiler configuration objects like the one above, except for `toolVersionsInBuildInfo`.
+  - `overrides`: An optional map of compiler configuration override objects. This maps file names to compiler configuration objects. The configuration objects don't include `toolVersionsInBuildInfo`.
   - `preferWasm`: See above.
   - `npmFilesToBuild`: See above.
+  - `toolVersionsInBuildInfo`: If `true`, the version of Hardhat is included in Build Info files. Defaults to `true` for the `production` Build Profile and `false` for all other profiles.
 - An object which describes multiple build profiles and their respective configurations. It contains the following:
-  - `profiles`: A map of build profile names to compiler configuration objects like the one above.
+  - `profiles`: A map of Build Profile names to compiler configuration objects like either of the two above.
   - `npmFilesToBuild`: See above.
   - `preferWasm`: See above. Defaults to `false`. It has lower priority than the `preferWasm` field in the compiler configuration or override objects.
 
