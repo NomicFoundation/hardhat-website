@@ -227,7 +227,7 @@ import DemoModule from "../ignition/modules/ProxyModule.js";
 import UpgradeModule from "../ignition/modules/UpgradeModule.js";
 
 describe("Demo Proxy", async function () {
-  const { ignition, viem } = await hre.network.connect();
+  const { ignition, viem } = await hre.network.create();
 
   describe("Proxy interaction", function () {
     it("Should be usable via proxy", async function () {

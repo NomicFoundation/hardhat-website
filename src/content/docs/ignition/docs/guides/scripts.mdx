@@ -25,7 +25,7 @@ import hre from "hardhat";
 import ApolloModule from "../ignition/modules/Apollo.js";
 
 async function main() {
-  const connection = await hre.network.connect();
+  const connection = await hre.network.create();
   const { apollo } = await connection.ignition.deploy(ApolloModule);
 
   // or `apollo.getAddress()` if you're using Ethers.js
@@ -71,7 +71,7 @@ async function getRocketNameFromAPI() {
 async function main() {
   const rocketName = await getRocketNameFromAPI();
 
-  const connection = await hre.network.connect();
+  const connection = await hre.network.create();
   const { apollo } = await connection.ignition.deploy(ApolloModule, {
     parameters: { Apollo: { rocketName } },
   });

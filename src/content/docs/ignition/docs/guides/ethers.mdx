@@ -64,7 +64,7 @@ const ApolloModule = buildModule("Apollo", (m) => {
 });
 
 it("should have named the rocket Saturn V", async function () {
-  const connection = await hre.network.connect();
+  const connection = await hre.network.create();
   const { apollo } = await connection.ignition.deploy(ApolloModule);
 
   assert.equal(await apollo.getFunction("name")(), "Saturn V");
@@ -80,7 +80,7 @@ The `ignition.deploy` method will default to using the first account in the `acc
 You can change this by passing a `defaultSender` within the options object as a second argument to the `deploy` method:
 
 ```ts
-const connection = await hre.network.connect();
+const connection = await hre.network.create();
 const [first, second] = await connection.ethers.getSigners();
 
 const result = await connection.ignition.deploy(ApolloModule, {

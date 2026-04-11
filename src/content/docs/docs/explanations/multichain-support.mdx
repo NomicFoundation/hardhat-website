@@ -53,7 +53,7 @@ When you connect to a network using the [Network Manager](/docs/reference/networ
 // scripts/example-op.ts
 import { network } from "hardhat";
 
-const { viem } = await network.connect({
+const { viem } = await network.create({
   network: "hardhatOp",
   chainType: "op",
 });
@@ -68,7 +68,7 @@ const l1Gas = await publicClient.estimateL1Gas({
 
 The network simulation will be created using the `op` Chain Type and its simulation will be stricter.
 
-Moreover, the Chain Type information will be available to network-related plugins, both at runtime and at type-level. This allows them to modify their behavior and the result of `network.connect()` depending on the Chain Type, potentially adding more functionality.
+Moreover, the Chain Type information will be available to network-related plugins, both at runtime and at type-level. This allows them to modify their behavior and the result of `network.create()` depending on the Chain Type, potentially adding more functionality.
 
 For example, the method highlighted in the snippet above is only available when you're using the `op` Chain Type.
 

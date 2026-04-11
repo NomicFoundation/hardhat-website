@@ -82,7 +82,7 @@ You now have to create a network connection first:
 ```ts
 describe("suite", function () {
   it("some test", async function () {
-    const { provider } = await hre.network.connect();
+    const { provider } = await hre.network.create();
     const blockNumber = await provider.send("eth_blockNumber");
   });
 });
@@ -91,7 +91,7 @@ describe("suite", function () {
 Most of the time, you'll want to use the same provider for multiple tests. If you're using ESM syntax, you can use top-level await and define it as a shared variable:
 
 ```ts
-const { provider } = await hre.network.connect();
+const { provider } = await hre.network.create();
 
 describe("suite", function () {
   it("some test", async function () {
@@ -107,7 +107,7 @@ let provider;
 
 describe("suite", function () {
   before(async function () {
-    ({ provider } = await hre.network.connect());
+    ({ provider } = await hre.network.create());
   });
 
   it("some test", async function () {
@@ -138,7 +138,7 @@ import hre from "hardhat";
 describe("suite", function () {
   let ethers;
   before(async function () {
-    ({ ethers } = await hre.network.connect());
+    ({ ethers } = await hre.network.create());
   });
 
   it("some test", async function () {
@@ -164,7 +164,7 @@ The `@nomicfoundation/hardhat-network-helpers` package is now a plugin. Instead 
 
 ```ts
 import { network } from "hardhat";
-const { networkHelpers } = await network.connect();
+const { networkHelpers } = await network.create();
 
 await networkHelpers.mine(5);
 ```

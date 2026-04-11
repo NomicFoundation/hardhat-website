@@ -33,16 +33,21 @@ import { network } from "hardhat";
 
 ## The `NetworkManager` object
 
-The `NetworkManager` object only has two methods:
+The `NetworkManager` object has these methods:
 
-- `network.connect()`: To connect to remote networks and create local blockchain simulations.
+- `network.create()`: To create connections to remote networks and local blockchain simulations.
+- `network.getOrCreate()`: Like `network.create()`, but returns an existing connection if one was previously created with the same network name and chain type.
 - `network.createServer()`: To create a local blockchain simulation and expose it through an HTTP-based JSON-RPC server.
 
-The majority of this documentation will focus on `network.connect()`, as `network.createServer()` can be considered a wrapper around it.
+The majority of this documentation will focus on `network.create()`, as `network.createServer()` can be considered a wrapper around it.
 
-### The `network.connect()` method
+:::caution
+`network.connect()` is deprecated and will be removed in a future version. Use `network.create()` or `network.getOrCreate()` instead.
+:::
 
-When you call the `network.connect()` method, Hardhat creates a new `NetworkConnection` object.
+### The `network.create()` method
+
+When you call the `network.create()` method, Hardhat creates a new `NetworkConnection` object.
 
 The connection can either be an HTTP Network Connection connected to an external node through JSON-RPC, or an in-process connection to a new EDR-based simulated blockchain. In either case, every connection you create is independent from one another.
 
@@ -56,7 +61,7 @@ The simplest way to create a new `NetworkConnection` is without any parameter:
 // script/no-params-example.ts
 import { network } from "hardhat";
 
-const connection = await network.connect();
+const connection = await network.create();
 console.log(connection.networkName);
 ```
 
@@ -74,9 +79,9 @@ You can also choose a Network Config by providing its name as a string, or as pa
 // script/with-name-example.ts
 import { network } from "hardhat";
 
-const connection = await network.connect("localhost");
+const connection = await network.create("localhost");
 
-const connectionWithOptions = await network.connect({ network: "localhost" });
+const connectionWithOptions = await network.create({ network: "localhost" });
 ```
 
 #### Network Config overrides
@@ -89,7 +94,7 @@ For example, this script creates a Network Connection with logging enabled, and 
 // script/with-overrides-example.ts
 import { network } from "hardhat";
 
-const { networkHelpers } = await network.connect({
+const { networkHelpers } = await network.create({
   override: { loggingEnabled: true },
 });
 
@@ -103,7 +108,7 @@ You can also provide a `chainType` in the options object. For example:
 ```ts
 import { network } from "hardhat";
 
-const { viem } = await network.connect({
+const { viem } = await network.create({
   network: "hardhatOp",
   chainType: "op",
 });
@@ -139,11 +144,11 @@ export default defineConfig({
 
 When you do this, you get most of the benefits of providing it as an option, except for the type-level extensions that a plugin can provide.
 
-If you provide a Chain Type both as an option and as part of your Network Config, the one provided in the `network.connect()` options will take precedence, and chain-type-dependent fields like `hardfork` will be re-resolved accordingly.
+If you provide a Chain Type both as an option and as part of your Network Config, the one provided in the `network.create()` options will take precedence, and chain-type-dependent fields like `hardfork` will be re-resolved accordingly.
 
 ##### Changing the default Chain Type
 
-By default, the default Chain Type that's used when neither a Network Config nor the `network.connect()` options provide one is `generic`.
+By default, the default Chain Type that's used when neither a Network Config nor the `network.create()` options provide one is `generic`.
 
 You can customize this with a [Type Extension](/docs/plugin-development/explanations/type-extensions), and a config value. Like this:
 
@@ -175,7 +180,7 @@ When you do that, the default Chain Type will be updated both at type-level and 
 // scripts/example-op.ts
 import { network } from "hardhat";
 
-const { viem } = await network.connect();
+const { viem } = await network.create();
 
 const publicClient = await viem.getPublicClient();
 const l1Gas = await publicClient.estimateL1Gas({
@@ -191,13 +196,33 @@ You can run it with:
 
 <Run command="hardhat run scripts/example-op.ts" />
 
+### The `network.getOrCreate()` method
+
+The `network.getOrCreate()` method works like `network.create()`, but returns an existing connection if one was previously created with the same network name and chain type, instead of always creating a new one.
+
+This is useful when you want to share a single connection across different parts of your code without having to pass it around manually.
+
+```ts
+import { network } from "hardhat";
+
+// Creates a new connection the first time
+const connection1 = await network.getOrCreate("mainnet");
+
+// Returns the same connection
+const connection2 = await network.getOrCreate("mainnet");
+
+// connection1 === connection2
+```
+
+`network.getOrCreate()` takes the same parameters as `network.create()`, except that the `override` option is not supported.
+
 ### The `network.createServer()` method
 
 The `network.createServer()` method creates a local blockchain simulation and exposes it through an HTTP-based JSON-RPC server, similar to what `hardhat node` does.
 
 #### Parameters
 
-This method takes the same arguments as `network.connect()`, plus two additional optional parameters:
+This method takes the same arguments as `network.create()`, plus two additional optional parameters:
 
 - `hostname`: The hostname of the network interface the server should use to listen for new connections. Defaults to `"127.0.0.1"`, or `"0.0.0.0"` if running in a Docker container.
 - `port`: The port to use for the HTTP server. If not provided, an unused random port will be assigned by the OS.
@@ -214,6 +239,6 @@ To learn more about how to use this method, see the [Running a local development
 
 ## The `NetworkConnection<ChainTypeT>` object
 
-The `NetworkConnection` returned by `network.connect()` provides the basic functionality to interact with the network, and can be extended through plugins.
+The `NetworkConnection` returned by `network.create()` provides the basic functionality to interact with the network, and can be extended through plugins.
 
 To learn more about it, read [this explanation](/docs/explanations/network-management#the-networkconnection-object).

@@ -20,7 +20,7 @@ Unlike connecting to a remote node through JSON-RPC, simulated networks give you
 
 The only difference between a blockchain simulated by EDR and a production one is that EDR requires no consensus mechanism or peer-to-peer network, as it's run by a single process each time.
 
-When you call `await network.connect()` with a Network Config of type `edr-simulated`, Hardhat creates a new, independent blockchain simulation. Each simulation is isolated, so you can create multiple simulations simultaneously without them interfering with each other.
+When you call `await network.create()` with a Network Config of type `edr-simulated`, Hardhat creates a new, independent blockchain simulation. Each simulation is isolated, so you can create multiple simulations simultaneously without them interfering with each other.
 
 ## How to use simulated networks
 
@@ -33,7 +33,7 @@ When you run your tests or scripts, Hardhat automatically creates an in-process 
 ```ts
 import { network } from "hardhat";
 
-const connection = await network.connect();
+const connection = await network.create();
 ```
 
 This creates a new blockchain simulation based on the Network Config specified in your configuration file or via the `--network` flag.

@@ -88,7 +88,7 @@ Make sure your `test/Counter.ts` file looks like this:
 import { expect } from "chai";
 import hre from "hardhat";
 
-const { ethers, networkHelpers } = await hre.network.connect();
+const { ethers, networkHelpers } = await hre.network.create();
 
 describe("Counter", function () {
   it("Should emit the Increment event when calling the inc() function", async function () {
@@ -104,11 +104,11 @@ First, we import the things we're going to use:
 - The [`expect`](https://www.chaijs.com/api/bdd/) function from `chai` to write our assertions
 - The [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment), or `hre`, which exposes all of Hardhat's functionality
 
-Then, we call `hre.network.connect()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with an instance of `ethers` and `networkHelpers` already connected to that simulation.
+Then, we call `hre.network.create()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with an instance of `ethers` and `networkHelpers` already connected to that simulation.
 
 After that, we use the `describe` and `it` functions, which are global Mocha functions used to define and group your tests. You can read more about Mocha [here](https://mochajs.org/#getting-started).
 
-The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `ethers` instance returned by our `hre.network.connect()` call.
+The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `ethers` instance returned by our `hre.network.create()` call.
 
 Finally, we call the `inc()` function of the contract and assert that the `Increment` event is emitted with the correct argument. The `.to.emit` matcher is provided by the [`hardhat-ethers-chai-matchers`](/docs/plugins/hardhat-ethers-chai-matchers) plugin.
 
@@ -172,7 +172,7 @@ With these changes, our previous test will still pass because by default the con
 import { expect } from "chai";
 import hre from "hardhat";
 
-const { ethers, networkHelpers } = await hre.network.connect();
+const { ethers, networkHelpers } = await hre.network.create();
 
 describe("Counter", function () {
   it("Should emit the Increment event when calling the inc() function", async function () {
@@ -231,7 +231,7 @@ The tests we have written run on a simulated network that behaves like Ethereum 
 One way to test on a different kind of chain is to pass a `chainType` option when creating your Network Connection:
 
 ```ts
-const { ethers } = await hre.network.connect({
+const { ethers } = await hre.network.create({
   chainType: "op",
 });
 ```
@@ -274,7 +274,7 @@ This is what our tests look like when a fixture is used:
 import { expect } from "chai";
 import { network } from "hardhat";
 
-const { ethers, networkHelpers } = await network.connect();
+const { ethers, networkHelpers } = await network.create();
 
 describe("Counter", function () {
   async function deployCounterFixture() {

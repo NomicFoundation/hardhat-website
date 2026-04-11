@@ -64,7 +64,7 @@ export default async function (
   taskArguments: MyAccountTaskArguments,
   hre: HardhatRuntimeEnvironment,
 ) {
-  const conn = await hre.network.connect();
+  const conn = await hre.network.create();
   console.log(taskArguments.title);
   console.log(conn.myAccount);
 }

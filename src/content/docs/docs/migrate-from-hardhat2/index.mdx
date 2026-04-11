@@ -196,7 +196,7 @@ import { defineConfig, task } from "hardhat/config";
 
 const printAccounts = task("accounts", "Print the accounts")
   .setInlineAction(async (taskArguments, hre) => {
-    const { provider } = await hre.network.connect();
+    const { provider } = await hre.network.create();
     console.log(await provider.request({ method: "eth_accounts" }));
   })
   .build();

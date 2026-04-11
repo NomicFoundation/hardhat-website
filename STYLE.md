@@ -95,12 +95,12 @@ Examples:
 
 Too cold/direct:
 
-- First, you'll add the `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
+- First, you'll add the `myAccount` property to the `NetworkConnection` object returned by `network.create()`.
 
 Warm and conversational:
 
-- Let's start by adding a `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
-- The first step is adding the `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
+- Let's start by adding a `myAccount` property to the `NetworkConnection` object returned by `network.create()`.
+- The first step is adding the `myAccount` property to the `NetworkConnection` object returned by `network.create()`.
 
 Note that this is really important, and key to our branding. We don't want our documentation to be perceived too cold/direct just to be slightly more concise.
 

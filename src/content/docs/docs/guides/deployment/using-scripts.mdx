@@ -22,7 +22,7 @@ To build a deployment script using viem, create the `scripts/deploy-counter.ts` 
 // scripts/deploy-counter.ts
 import { network } from "hardhat";
 
-const { viem, networkName } = await network.connect();
+const { viem, networkName } = await network.create();
 const client = await viem.getPublicClient();
 
 console.log(`Deploying Counter to ${networkName}...`);
@@ -48,7 +48,7 @@ To build a deployment script using ethers, create the `scripts/deploy-counter.ts
 // scripts/deploy-counter.ts
 import { network } from "hardhat";
 
-const { ethers, networkName } = await network.connect();
+const { ethers, networkName } = await network.create();
 
 console.log(`Deploying Counter to ${networkName}...`);
 

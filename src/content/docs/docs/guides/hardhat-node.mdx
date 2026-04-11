@@ -15,7 +15,7 @@ Suppose you have a script that sends 1 ETH from the first local account to the z
 // my-script.ts
 import { network } from "hardhat";
 
-const { viem } = await network.connect();
+const { viem } = await network.create();
 const publicClient = await viem.getPublicClient();
 const [wallet] = await viem.getWalletClients();
 

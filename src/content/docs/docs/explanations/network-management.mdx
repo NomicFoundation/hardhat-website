@@ -69,14 +69,14 @@ This object allows you to create network connections. You can do it like this:
 ```ts
 import { network } from "hardhat";
 
-const networkConnection = await network.connect();
+const networkConnection = await network.create();
 ```
 
 By default, it creates a `NetworkConnection` using the Network Config called `default`, which is always present. You can choose a different fallback Network Config name by using the `network` [Global Option](/docs/explanations/global-options), like this:
 
 <Run command="hardhat --network mainnet" />
 
-Every time you call `network.connect()` a new independent `NetworkConnection` object is created:
+Every time you call `network.create()` a new independent `NetworkConnection` object is created:
 
 - If the Network Config is of type `"http"`, the JSON-RPC server in the `url` setting will be used. No synchronization between two HTTP Network Connections is performed by Hardhat, either at the HTTP layer or at the protocol layer (e.g. when handling account nonces).
 
@@ -86,19 +86,21 @@ Every time you call `network.connect()` a new independent `NetworkConnection` ob
 This document makes a distinction between blockchain and Network Config, their names, Network Connection, and creating a Network Connection, to be precise in its explanations.
 
 In practice, most people will simplify this vocabulary and just say that, for example, running the command above connected to the network mainnet. Using "connect" interchangeably with creating a Network Connection, and the network name with the blockchain they intend to connect to.
+
+If you want to reuse the same connection across different parts of your code, you can use `network.getOrCreate()` instead. It returns an existing connection if one was previously created with the same network name and chain type.
 :::
 
 ### Using an explicit Network Config
 
-You can also create a connection using an explicit Network Config, and not just relying on `--network`. This is done by providing parameters to `network.connect()`:
+You can also create a connection using an explicit Network Config, and not just relying on `--network`. This is done by providing parameters to `network.create()`:
 
 ```ts
-const mainnetConnection = await network.connect("mainnet");
+const mainnetConnection = await network.create("mainnet");
 
-const simulatedConnection = await network.connect("simulatedNetwork");
+const simulatedConnection = await network.create("simulatedNetwork");
 
 // Creating a second simulated blockchain
-const anotherSimulated = await network.connect("simulatedNetwork");
+const anotherSimulated = await network.create("simulatedNetwork");
 ```
 
 ### Cleaning up your Network Connections
@@ -111,7 +113,7 @@ await networkConnection.close();
 
 ## The `NetworkConnection` object
 
-The result of calling `await network.connect()` is a `NetworkConnection` object.
+The result of calling `await network.create()` is a `NetworkConnection` object.
 
 By default, they have the basics to interact with a blockchain:
 
@@ -135,7 +137,7 @@ For example, if you use the [`@nomicfoundation/hardhat-toolbox-viem`](/docs/plug
 The idiomatic way to use the Network Connection fields is by creating them like this:
 
 ```ts
-const { viem, networkHelpers, ignition } = await network.connect();
+const { viem, networkHelpers, ignition } = await network.create();
 ```
 
 :::

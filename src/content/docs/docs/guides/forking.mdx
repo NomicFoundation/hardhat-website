@@ -55,13 +55,13 @@ import { network } from "hardhat";
 
 describe("Example", function () {
   it("should use the forked network", async function () {
-    const { viem } = await network.connect("mainnetFork");
+    const { viem } = await network.create("mainnetFork");
 
     // This test uses the forked Mainnet network
   });
 
   it("should use the default network", async function () {
-    const { viem } = await network.connect();
+    const { viem } = await network.create();
 
     // This test uses the default local network
   });

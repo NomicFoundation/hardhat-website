@@ -15,14 +15,14 @@ You also need to create a new repository based on the [Hardhat 3 plugin template
 
 ## Your first Hardhat 3 plugin
 
-Let's create a plugin that lets users pick an account for each network in their config and store it as `myAccount` in the `NetworkConnection` object returned by `network.connect()`. We'll also define a task to print that account's address.
+Let's create a plugin that lets users pick an account for each network in their config and store it as `myAccount` in the `NetworkConnection` object returned by `network.create()`. We'll also define a task to print that account's address.
 
 Your plugin will let users write:
 
 ```ts
 import { network } from "hardhat";
 
-const { myAccount } = await network.connect();
+const { myAccount } = await network.create();
 console.log("My account is:", myAccount);
 ```
 
@@ -34,7 +34,7 @@ pnpm hardhat my-account --network networkName
 
 By implementing this plugin, you'll learn to:
 
-1. Extend the `NetworkConnection` objects returned by `network.connect()`.
+1. Extend the `NetworkConnection` objects returned by `network.create()`.
 2. Extend the Hardhat Config System, adding custom validation and resolution logic.
 3. Add a task that builds on these features.
 

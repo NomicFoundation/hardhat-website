@@ -35,7 +35,7 @@ const CounterModule = buildModule("Counter", (m) => {
 });
 
 it("should set the start count to 0 by default", async function () {
-  const { ignition } = await network.connect();
+  const { ignition } = await network.create();
   const { counter } = await ignition.deploy(CounterModule);
 
   assert.equal(await counter.read.count(), 0);
@@ -55,7 +55,7 @@ import assert from "node:assert/strict";
 import { it } from "node:test";
 
 it("should allow setting the start count for new counters", async function () {
-  const { ignition } = await network.connect();
+  const { ignition } = await network.create();
   const { counter } = await ignition.deploy(CounterModule, {
     parameters: {
       Counter: {
@@ -79,12 +79,12 @@ import assert from "node:assert/strict";
 import { it } from "node:test";
 
 async function deployCounterModuleFixture() {
-  const { ignition } = await network.connect();
+  const { ignition } = await network.create();
   return ignition.deploy(CounterModule);
 }
 
 it("should set the start count to 0 by default", async function () {
-  const { networkHelpers } = await network.connect();
+  const { networkHelpers } = await network.create();
   const { counter } = await networkHelpers.loadFixture(
     deployCounterModuleFixture,
   );
@@ -100,7 +100,7 @@ The `ignition.deploy` method will default to using the first account in Hardhat 
 You can change this by passing a `defaultSender` within the options object as a second argument to the `deploy` method:
 
 ```ts
-const connection = await network.connect();
+const connection = await network.create();
 
 const [first, second] = await connection.viem.getWalletClients();
 const result = await connection.ignition.deploy(CounterModule, {

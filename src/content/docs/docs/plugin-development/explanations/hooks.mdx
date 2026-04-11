@@ -13,7 +13,7 @@ Hooks are extension points that allow you to introduce custom logic to the execu
 
 Different workflows of Hardhat define their own Hooks. When we build a piece of functionality that a plugin may want to customize, we define a Hook and run it. That is, instead of just implementing the default behavior, we add an extension point and use the normal behavior as default.
 
-For example, there's a `NetworkHooks#newConnection` Hook that allows you to customize the behavior of `network.connect()`.
+For example, there's a `NetworkHooks#newConnection` Hook that allows you to customize the behavior of `network.create()`.
 
 Plugins can define their own Hooks too, so they can also be extensible.
 

@@ -93,7 +93,7 @@ import path from "path";
 import ApolloModule from "../ignition/modules/Apollo.js";
 
 async function main() {
-  const connection = await hre.network.connect();
+  const connection = await hre.network.create();
   const { apollo } = await connection.ignition.deploy(ApolloModule, {
     // This must be an absolute path to your parameters JSON file
     parameters: path.resolve(

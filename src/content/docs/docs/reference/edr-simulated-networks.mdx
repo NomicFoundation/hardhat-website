@@ -214,7 +214,7 @@ If you disable both automine and interval mining, transactions will accumulate i
 // scripts/manual-mining.ts
 import { network } from "hardhat";
 
-const { networkHelpers } = await network.connect();
+const { networkHelpers } = await network.create();
 await networkHelpers.mine();
 ```
 

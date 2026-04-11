@@ -22,7 +22,7 @@ The `console` task starts a [Node.js REPL](https://nodejs.org/en/learn/command-l
 Here's an example where you deploy a contract and interact with it:
 
 ```
-> const { viem } = await network.connect()
+> const { viem } = await network.create()
 > const counter = await viem.deployContract("Counter")
 > await counter.write.inc()
 > await counter.read.x()
@@ -37,7 +37,7 @@ To skip compilation before starting the console, pass the `--no-compile` flag:
 
 The `console` task accepts an optional list of positional arguments. Each argument you provide will be executed as a command immediately after the REPL starts, letting you run a series of commands automatically:
 
-<Run command='hardhat console "const { viem } = await network.connect();" />' />
+<Run command='hardhat console "const { viem } = await network.create();" />' />
 
 Make sure to wrap each command in quotes to avoid issues with your shell interpreting special characters.
 
@@ -66,7 +66,7 @@ export default defineConfig({
 // tasks/my-console.ts
 export default function myConsoleTask(_, hre) {
   return hre.tasks.getTask("console").run({
-    commands: ["const { viem } = await network.connect();"],
+    commands: ["const { viem } = await network.create();"],
   });
 }
 ```

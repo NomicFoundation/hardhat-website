@@ -23,7 +23,7 @@ describe("myAccount initialization on network connection", () => {
   it("should initialize the myAccount field on the network connection", async () => {
     const hre = await createFixtureProjectHRE("base-project");
 
-    const connection = await hre.network.connect();
+    const connection = await hre.network.create();
     const accounts: string[] = await connection.provider.request({
       method: "eth_accounts",
     });
@@ -58,7 +58,7 @@ it("should throw a plugin error if the myAccountIndex is too high with respect t
 
   await assert.rejects(
     async () => {
-      await hre.network.connect("withMyAccountIndexTooHigh");
+      await hre.network.create("withMyAccountIndexTooHigh");
     },
     HardhatPluginError, // Import it from "hardhat/plugins"
     "hardhat-plugin-template: Invalid index 100000 for myAccount when connecting to network withMyAccountIndexTooHigh",

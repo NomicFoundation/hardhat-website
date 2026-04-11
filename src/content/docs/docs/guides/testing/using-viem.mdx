@@ -94,7 +94,7 @@ Make sure your `test/Counter.ts` file looks like this:
 import { describe, it } from "node:test";
 import hre from "hardhat";
 
-const { viem, networkHelpers } = await hre.network.connect();
+const { viem, networkHelpers } = await hre.network.create();
 
 describe("Counter", function () {
   it("Should emit the Increment event when calling the inc() function", async function () {
@@ -115,11 +115,11 @@ First, we import the things we're going to use:
 - The `describe` and `it` functions from `node:test` to define and group your tests
 - The [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-environment), or `hre`, which exposes all of Hardhat's functionality
 
-Then, we call `hre.network.connect()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with instances of `viem` and `networkHelpers` already connected to that simulation.
+Then, we call `hre.network.create()` to create a new local simulation of an Ethereum blockchain to run our test on. It returns an object with instances of `viem` and `networkHelpers` already connected to that simulation.
 
 After that, we use the `describe` and `it` functions to build your tests. You can read more about the Node.js test runner [here](https://nodejs.org/api/test.html). If you're used to Mocha, it's mostly backwards compatible, but faster and with no dependencies.
 
-The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `viem` instance returned by our `hre.network.connect()` call.
+The test itself is what's inside the callback argument to the `it` function. First, we deploy our `Counter` contract using the `viem` instance returned by our `hre.network.create()` call.
 
 Finally, we call the `inc()` function of the contract and assert that the `Increment` event is emitted with the correct argument. The `viem.assertions.emitWithArgs` helper is provided by the [`hardhat-viem-assertions`](/docs/plugins/hardhat-viem-assertions) plugin.
 
@@ -183,7 +183,7 @@ However, we should also add a test to check that calling `inc()` from a non-owne
 import { describe, it } from "node:test";
 import hre from "hardhat";
 
-const { viem, networkHelpers } = await hre.network.connect();
+const { viem, networkHelpers } = await hre.network.create();
 
 describe("Counter", function () {
   it("Should emit the Increment event when calling the inc() function", async function () {
@@ -256,7 +256,7 @@ The tests we have written run on a simulated network that behaves like Ethereum 
 One way to test on a different kind of chain is to pass a `chainType` option when creating your Network Connection:
 
 ```ts
-const { viem } = await hre.network.connect({
+const { viem } = await hre.network.create({
   chainType: "op",
 });
 ```
@@ -297,7 +297,7 @@ This is what our tests look like when a fixture is used:
 import { describe, it } from "node:test";
 import { network } from "hardhat";
 
-const { viem, networkHelpers } = await network.connect();
+const { viem, networkHelpers } = await network.create();
 
 describe("Counter", function () {
   async function deployCounterFixture() {
@@ -348,13 +348,13 @@ The fixture function can return anything you want, and `loadFixture` will return
 
 ## Using `viem` and `hardhat-viem` in the same file
 
-The `viem` object that you get from calling `network.connect()` only includes the functionality added by `hardhat-viem`. To use viem's own functionality, import it from the `viem` module:
+The `viem` object that you get from calling `network.create()` only includes the functionality added by `hardhat-viem`. To use viem's own functionality, import it from the `viem` module:
 
 ```ts
 import { keccak256 } from "viem";
 import { network } from "hardhat";
 
-const { viem } = await network.connect();
+const { viem } = await network.create();
 ```
 
 Keep in mind that you can get a name clash if you use a namespace import:
@@ -364,13 +364,13 @@ import * as viem from "viem";
 import { network } from "hardhat";
 
 // this is an error because viem is already declared
-const { viem } = await network.connect();
+const { viem } = await network.create();
 ```
 
 One way to work around this problem is to use a different name for the Hardhat viem object:
 
 ```ts
-const { viem: hhViem } = await network.connect();
+const { viem: hhViem } = await network.create();
 
 const publicClient = await hhViem.getPublicClient();
 ```

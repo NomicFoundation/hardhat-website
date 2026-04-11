@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-Let's start by adding the `myAccount` property to the `NetworkConnection` object returned by `network.connect()`.
+Let's start by adding the `myAccount` property to the `NetworkConnection` object returned by `network.create()`.
 
 ## Defining a network Hook Handler
 
@@ -43,7 +43,7 @@ export default async (): Promise<Partial<NetworkHooks>> => {
 };
 ```
 
-The `newConnection` function above is a Hook Handler. Hardhat calls it every time a new network connection is created with `network.connect()`.
+The `newConnection` function above is a Hook Handler. Hardhat calls it every time a new network connection is created with `network.create()`.
 
 Within this function, we first call `next` to call any other Hook Handler, or the default behavior of Hardhat. It returns the `NetworkConnection` object.
 
@@ -106,7 +106,7 @@ Create the file `packages/example-project/scripts/my-account-example.ts` with th
 ```ts
 import { network } from "hardhat";
 
-const connection = await network.connect();
+const connection = await network.create();
 
 console.log("connection.myAccount:", connection.myAccount);
 ```
