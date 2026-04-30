@@ -14,11 +14,12 @@ Inline overrides take precedence over the global settings defined in your [Solid
 
 Each override is a single line inside a NatSpec comment (line `///` or block `/** */`), following the format `hardhat-config: <key> = <value>`.
 
-Keys can be written in camelCase, snake_case, or kebab-case:
+Keys can be written in camelCase, snake_case, or kebab-case, and string values must be double-quoted:
 
 ```solidity
 /// hardhat-config: fuzz.runs = 10000
 /// hardhat-config: fuzz.maxTestRejects = 500
+/// hardhat-config: evmVersion = "cancun"
 function testTransferFuzz(uint256 amount) public {
   // ...
 }
@@ -39,17 +40,22 @@ function invariantBalanceAlwaysPositive() public {
 
 ## Supported configuration keys
 
-| Key                      | Description                                               |
-| ------------------------ | --------------------------------------------------------- |
-| `fuzz.runs`              | Number of fuzz iterations to run                          |
-| `fuzz.maxTestRejects`    | Maximum number of rejected inputs before aborting         |
-| `fuzz.showLogs`          | Whether to show console logs during fuzzing               |
-| `fuzz.timeout`           | Timeout for the fuzz test                                 |
-| `invariant.runs`         | Number of invariant test runs                             |
-| `invariant.depth`        | Number of calls per run to attempt to break the invariant |
-| `invariant.failOnRevert` | Whether to fail the invariant if a revert occurs          |
-| `invariant.callOverride` | Whether to override unsafe external calls                 |
-| `invariant.timeout`      | Timeout for the invariant test                            |
+Keys with the `fuzz.`/`invariant.` prefix apply only to that test type; the rest apply to the test as a whole and work on both fuzz and invariant tests.
+
+| Key                         | Description                                                              |
+| --------------------------- | ------------------------------------------------------------------------ |
+| `fuzz.runs`                 | Number of fuzz iterations to run                                         |
+| `fuzz.maxTestRejects`       | Maximum number of rejected inputs before aborting                        |
+| `fuzz.showLogs`             | Whether to show console logs during fuzzing                              |
+| `fuzz.timeout`              | Timeout for the fuzz test                                                |
+| `invariant.runs`            | Number of invariant test runs                                            |
+| `invariant.depth`           | Number of calls per run to attempt to break the invariant                |
+| `invariant.failOnRevert`    | Whether to fail the invariant if a revert occurs                         |
+| `invariant.callOverride`    | Whether to override unsafe external calls                                |
+| `invariant.timeout`         | Timeout for the invariant test                                           |
+| `allowInternalExpectRevert` | See [below](#allowinternalexpectrevert)                                  |
+| `isolate`                   | Run each top-level call as a separate transaction in its own EVM context |
+| `evmVersion`                | EVM version to use for this test                                         |
 
 ### `allowInternalExpectRevert`
 
