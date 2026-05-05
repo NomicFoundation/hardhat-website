@@ -37,8 +37,8 @@
     "prettier-plugin-solidity": "2.1.0",
     "sass": "^1.93.2",
     "sharp": "^0.34.2",
-    "starlight-links-validator": "^0.18.0",
-    "starlight-sidebar-topics": "^0.6.1",
+    "starlight-links-validator": "^0.24.0",
+    "starlight-sidebar-topics": "^0.7.1",
     "tar-stream": "^3.1.7",
     "typescript": "5.9.3",
     "undici": "^7.16.0"
