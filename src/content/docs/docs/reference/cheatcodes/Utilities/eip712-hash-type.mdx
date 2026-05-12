@@ -1,0 +1,40 @@
+---
+title: eip712HashType
+description: eip712HashType cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function eip712HashType(
+  string calldata typeNameOrDefinition
+) external pure returns (bytes32);
+```
+
+### Description
+
+Returns `keccak256(bytes(canonicalTypeString))` for the given EIP-712 type.
+
+The argument can be a registered struct name (e.g., `"Mail"`) or a full EIP-712 type definition string.
+
+> **Note:** Requires the `test.solidity.eip712Types` configuration. See the [EIP-712 type hashing guide](/docs/guides/testing/eip712-types) for setup.
+
+### Examples
+
+```solidity
+// Look up by registered name
+bytes32 hash = cheats.eip712HashType("Mail");
+
+// Or pass a full type definition directly
+bytes32 hash2 = cheats.eip712HashType(
+    "Mail(Person from,Person to,string contents)Person(address wallet,string name)"
+);
+
+assertEq(hash, hash2);
+```
+
+### SEE ALSO
+
+- [eip712HashStruct](/docs/reference/cheatcodes/utilities/eip712-hash-struct)
+- [eip712HashTypedData](/docs/reference/cheatcodes/utilities/eip712-hash-typed-data)
+- [EIP-712 type hashing guide](/docs/guides/testing/eip712-types)

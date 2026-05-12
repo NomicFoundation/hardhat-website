@@ -271,6 +271,9 @@ If write access to a directory is needed, please make sure that it doesn't conta
 - `coinbase`: The value of `block.coinbase` in tests. Defaults to `0x0000000000000000000000000000000000000000`.
 - `blockTimestamp`: The value of `block.timestamp` in tests. Defaults to 1.
 - `blockGasLimit`: The `block.gaslimit` value during EVM execution. Set it to false to disable the block gas limit. Defaults to none.
+- `eip712Types`: Optional object to configure EIP-712 type collection for the [`eip712HashType`](/docs/reference/cheatcodes/utilities/eip712-hash-type) and [`eip712HashStruct`](/docs/reference/cheatcodes/utilities/eip712-hash-struct) cheatcodes. Disabled by default. See the [EIP-712 type hashing guide](/docs/guides/testing/eip712-types) for details.
+  - `include`: An array of glob patterns matching source files to collect EIP-712 struct types from. Required to enable type collection. Supports `*`, `**`, and `?` wildcards.
+  - `exclude`: An optional array of glob patterns matching source files to exclude from type collection.
 - `forking`: Optional fork configuration options object. Defaults to none.
   - `url`: If set, all tests are run in fork mode using this url or remote name. Defaults to none.
   - `blockNumber`: Optional block number to pin the global state fork. If `url` is set, defaults to the latest block number.

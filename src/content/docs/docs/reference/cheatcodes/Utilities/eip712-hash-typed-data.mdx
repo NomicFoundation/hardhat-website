@@ -1,0 +1,41 @@
+---
+title: eip712HashTypedData
+description: eip712HashTypedData cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function eip712HashTypedData(
+  string calldata jsonData
+) external pure returns (bytes32);
+```
+
+### Description
+
+Returns the complete EIP-712 digest: `keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash))`.
+
+`jsonData` must be a self-describing EIP-712 JSON payload containing `domain`, `types`, `primaryType`, and `message` fields. This cheatcode is fully self-contained and **does not** require any `eip712Types` configuration in your `hardhat.config.ts`.
+
+### Example
+
+```solidity
+string memory json = '{'
+    '"domain":{"name":"Ether Mail","version":"1","chainId":1,"verifyingContract":"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"},'
+    '"types":{'
+        '"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],'
+        '"Mail":[{"name":"from","type":"Person"},{"name":"to","type":"Person"},{"name":"contents","type":"string"}],'
+        '"Person":[{"name":"wallet","type":"address"},{"name":"name","type":"string"}]'
+    '},'
+    '"primaryType":"Mail",'
+    '"message":{"from":{"wallet":"0xA","name":"Alice"},"to":{"wallet":"0xB","name":"Bob"},"contents":"hello"}'
+'}';
+
+bytes32 digest = cheats.eip712HashTypedData(json);
+```
+
+### SEE ALSO
+
+- [eip712HashType](/docs/reference/cheatcodes/utilities/eip712-hash-type)
+- [eip712HashStruct](/docs/reference/cheatcodes/utilities/eip712-hash-struct)
+- [EIP-712 type hashing guide](/docs/guides/testing/eip712-types)
