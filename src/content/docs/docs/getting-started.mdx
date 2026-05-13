@@ -21,7 +21,8 @@ This guide will walk you through installing our recommended setup, but since mos
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) v22 or later
+- [Node.js](https://nodejs.org/) v22.13.0 or later
+  - For Docker users: the plain `node:22-alpine` tag is not guaranteed to ship Node.js ≥ 22.13.0. Pin a specific patch tag (e.g. `node:22.13-alpine`) to avoid version-check failures.
 - A package manager like [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), or [yarn](https://yarnpkg.com/) (we strongly recommend pnpm)
 - A text editor (we recommend [VS Code](https://code.visualstudio.com/) with our [Official Hardhat extension](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity))
 
