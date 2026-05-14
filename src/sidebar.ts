@@ -83,6 +83,7 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/guides/hardhat-node" },
           { slug: "docs/guides/hardhat-console" },
           // { slug: "docs/guides/command-line-completion" },
+          { slug: "docs/guides/build-with-ai" },
           { slug: "docs/guides/getting-help" },
         ],
       },

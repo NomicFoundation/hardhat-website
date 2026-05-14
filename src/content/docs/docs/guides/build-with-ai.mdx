@@ -1,0 +1,30 @@
+---
+title: Build with AI
+description: How to build with Hardhat using coding agents
+---
+
+import RunRemote from "@hh/RunRemote.astro";
+
+This guide explains how to use coding agents effectively in Hardhat projects.
+
+## Agent skills
+
+LLMs are good at working with Hardhat, but they tend to prefer Hardhat 2 APIs. A small amount of extra context about Hardhat 3 is usually enough to steer them in the right direction.
+
+The easiest way to provide that context is to install our main Hardhat skill:
+
+<RunRemote command="skills add https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat/skills --skill hardhat" />
+
+Hardhat projects are extensible and can rely on different plugins, so we also publish skills tailored to specific setups.
+
+If your project is based on [`hardhat-toolbox-viem`](/docs/plugins/hardhat-toolbox-viem), install the corresponding skill:
+
+<RunRemote command="skills add https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat/skills --skill hardhat-toolbox-viem" />
+
+If your project is based on [`hardhat-toolbox-mocha-ethers`](/docs/plugins/hardhat-toolbox-mocha-ethers):
+
+<RunRemote command="skills add https://github.com/NomicFoundation/hardhat/tree/main/packages/hardhat/skills --skill hardhat-toolbox-mocha-ethers" />
+
+## Documentation
+
+Hardhat docs are agent-friendly: we offer an [`llms.txt`](/llms.txt) index, and any docs page is also available as Markdown. Pointing your agent at our docs should just work.
