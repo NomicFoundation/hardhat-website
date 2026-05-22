@@ -1,0 +1,177 @@
+---
+title: Migrate from a Hardhat 2 + Foundry hybrid project
+description: How to migrate a project that uses Hardhat 2 alongside Foundry to a pure Hardhat 3 project
+sidebar:
+  label: Migrate from a Hardhat 2 + Foundry hybrid
+---
+
+This guide walks you through migrating a project that uses **Hardhat 2 alongside Foundry** (typically via the `hardhat-foundry` plugin and a `foundry.toml`) to a **pure Hardhat 3 project** that drops Foundry entirely.
+
+The code blocks below are minimal examples. Adapt paths, versions, and settings to your project.
+
+## Before you start
+
+This guide does not repeat content already published elsewhere in the docs. Skim these first:
+
+- [What's New in Hardhat 3](/docs/hardhat3/whats-new)
+- [Migrate from Hardhat 2](/docs/migrate-from-hardhat2)
+- [Foundry Compatibility](/docs/reference/foundry-compatibility)
+- [Unsupported Cheatcodes](/docs/reference/cheatcodes/unsupported-cheatcodes)
+
+This guide uses the [`@nomicfoundation/hardhat-toolbox-mocha-ethers`](/docs/plugins/hardhat-toolbox-mocha-ethers) toolbox. If you prefer viem, swap in [`@nomicfoundation/hardhat-toolbox-viem`](/docs/plugins/hardhat-toolbox-viem), which uses the Node.js test runner instead of Mocha.
+
+## Step 1: Bootstrap the Hardhat 3 project
+
+The fastest path is to start a fresh Hardhat 3 project and copy your contracts and tests over:
+
+```bash
+mkdir my-project-hh3 && cd my-project-hh3
+npx hardhat --init
+```
+
+Pick the **Mocha + Ethers** template (labelled `A TypeScript Hardhat project using Mocha and Ethers.js` in the prompt). If you would rather upgrade in place, follow [Migrate from Hardhat 2](/docs/migrate-from-hardhat2) first, then return here.
+
+## Step 2: Replace `foundry.toml` with `hardhat.config.ts`
+
+Key mappings:
+
+| `foundry.toml`                | `hardhat.config.ts`                                 |
+| ----------------------------- | --------------------------------------------------- |
+| `[profile.default]` `solc`    | `solidity.profiles.default.version`                 |
+| `optimizer`, `optimizer_runs` | `solidity.profiles.default.settings.optimizer`      |
+| `src`                         | `paths.sources` (defaults to `contracts/`)          |
+| `test`                        | `paths.tests.solidity` (defaults to `test/`)        |
+| `out`                         | `paths.artifacts` (defaults to `artifacts/`)        |
+
+If your Hardhat 2 config set `paths.sources` to `./src` to match Foundry, either keep that setting in Hardhat 3 or move `src/` to `contracts/`.
+
+Example `hardhat.config.ts` (adapt to your project):
+
+```ts
+import hardhatToolboxMochaEthersPlugin from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  plugins: [hardhatToolboxMochaEthersPlugin],
+  solidity: {
+    profiles: {
+      default: {
+        version: "0.8.28",
+        settings: {
+          optimizer: { enabled: true, runs: 200 },
+        },
+      },
+    },
+  },
+  networks: {
+    hardhat: {
+      type: "edr-simulated",
+      chainType: "l1",
+    },
+  },
+});
+```
+
+For the full schema, see [Configuration Reference](/docs/reference/configuration).
+
+## Step 3: Migrate dependencies and remappings
+
+Foundry projects keep dependencies as git submodules under `lib/` and resolve imports via `remappings.txt`. Hardhat 3 resolves dependencies via npm.
+
+For `forge-std`, install it directly from the Foundry repository as an npm dependency. Replace `forge install foundry-rs/forge-std` with this entry in `package.json`:
+
+```json
+{
+  "devDependencies": {
+    "forge-std": "foundry-rs/forge-std#v1.9.7"
+  }
+}
+```
+
+Run `pnpm install` (or `npm install`); `forge-std/Test.sol` imports keep working unchanged. Install the rest of your contract libraries (OpenZeppelin and any others) via npm; npm also supports git URLs in `dependencies` for libraries that ship only as a git repository.
+
+Once everything resolves through npm, delete `lib/`, `remappings.txt`, and the `.gitmodules` entries for Foundry libraries. If your project still needs custom path aliases, configure them via Hardhat 3 remappings. See [Managing Smart Contract Dependencies](/docs/guides/writing-contracts/dependencies) and [Using Solidity Remappings](/docs/guides/writing-contracts/remappings).
+
+## Step 4: Move Solidity tests into the Hardhat 3 layout
+
+Hardhat 3 discovers any `*.t.sol` file in the project as a Solidity test. The conventional locations are `paths.sources` (default `contracts/`, alongside your contracts) and `paths.tests.solidity` (default `test/`). Pick one and keep it consistent.
+
+A typical test file is unchanged from its Foundry form:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import {Counter} from "./Counter.sol";
+import {Test} from "forge-std/Test.sol";
+
+contract CounterTest is Test {
+  Counter counter;
+
+  function setUp() public {
+    counter = new Counter();
+  }
+
+  function test_InitialValue() public view {
+    assertEq(counter.x(), 0);
+  }
+
+  function testFuzz_IncBy(uint8 by) public {
+    vm.assume(by > 0);
+    counter.incBy(by);
+    assertEq(counter.x(), by);
+  }
+
+  function test_IncByZeroReverts() public {
+    vm.expectRevert("incBy: increment should be positive");
+    counter.incBy(0);
+  }
+}
+```
+
+For details, see [Writing Unit Tests in Solidity](/docs/guides/testing/using-solidity) and [Writing Fuzz Tests in Solidity](/docs/tutorial/fuzz-tests).
+
+## Step 5: Check cheatcode compatibility
+
+Most `vm.*` cheatcodes work unchanged; a small subset is not yet supported.
+
+Scan your tests for the cheatcodes you actually use and confirm each against:
+
+- [Cheatcodes Overview](/docs/reference/cheatcodes/cheatcodes-overview)
+- [Unsupported Cheatcodes](/docs/reference/cheatcodes/unsupported-cheatcodes)
+
+If a cheatcode you rely on is unsupported, either drop the test or rewrite it in JavaScript.
+
+Note: `vm.ffi` is supported but disabled by default. Enable it under `test.solidity.ffi` in the config if your suite needs it.
+
+## Step 6: Remove Foundry from the project
+
+If you bootstrapped a fresh Hardhat 3 project in Step 1, the only thing to remove is the `forge` invocation in CI. Replace it with `npx hardhat build` and `npx hardhat test`.
+
+If you upgraded in place, also delete:
+
+- `foundry.toml`
+- `remappings.txt`
+- `lib/` and the matching entries in `.gitmodules`
+- The `hardhat-foundry` plugin import in `hardhat.config`
+- `@nomiclabs/hardhat-ethers`, `hardhat` (v2), and `@nomicfoundation/hardhat-foundry` entries in `devDependencies`
+- Any `package.json` scripts that chain `forge test && hardhat test`; replace with a single `hardhat test`
+
+## Verify the migration
+
+From the project root:
+
+```bash
+pnpm install
+npx hardhat build
+npx hardhat test
+```
+
+You should see both your Solidity tests and your JavaScript tests run from a single command.
+
+## Where to go next
+
+- [Computing Code Coverage](/docs/guides/testing/code-coverage) replaces `forge coverage`.
+- [Gas Snapshots](/docs/guides/testing/gas-snapshots) and [Gas Statistics](/docs/guides/testing/gas-statistics) replace `forge snapshot` and `--gas-report`.
+- [Hardhat Ignition](/ignition/docs/getting-started) replaces `forge script` for deployments.
+- [Inline Configuration for Solidity Tests](/docs/guides/testing/inline-configuration) covers per-test compiler overrides.
