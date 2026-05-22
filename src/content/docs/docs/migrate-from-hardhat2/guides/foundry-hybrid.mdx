@@ -5,7 +5,7 @@ sidebar:
   label: Migrate from a Hardhat 2 + Foundry hybrid
 ---
 
-This guide walks you through migrating a project that uses **Hardhat 2 alongside Foundry** (typically via the `hardhat-foundry` plugin and a `foundry.toml`) to a **pure Hardhat 3 project** that drops Foundry entirely.
+This guide walks you through migrating a project that uses **Hardhat 2 alongside Foundry** to a **pure Hardhat 3 project** that drops Foundry entirely.
 
 The code blocks below are minimal examples. Adapt paths, versions, and settings to your project.
 
@@ -22,14 +22,19 @@ This guide uses the [`@nomicfoundation/hardhat-toolbox-mocha-ethers`](/docs/plug
 
 ## Step 1: Bootstrap the Hardhat 3 project
 
-The fastest path is to start a fresh Hardhat 3 project and copy your contracts and tests over:
+Since you're migrating an existing Hardhat 2 + Foundry project, you have two options:
+
+- **Start a fresh Hardhat 3 project and copy your contracts and tests over.**
+- **Upgrade in place.** Follow [Migrate from Hardhat 2](/docs/migrate-from-hardhat2) first, then return here for the Foundry-specific changes.
+
+To start fresh:
 
 ```bash
 mkdir my-project-hh3 && cd my-project-hh3
 npx hardhat --init
 ```
 
-Pick the **Mocha + Ethers** template (labelled `A TypeScript Hardhat project using Mocha and Ethers.js` in the prompt). If you would rather upgrade in place, follow [Migrate from Hardhat 2](/docs/migrate-from-hardhat2) first, then return here.
+Pick the **Mocha + Ethers** template (labelled `A TypeScript Hardhat project using Mocha and Ethers.js` in the prompt), then copy your contracts and tests from the existing project into the new one.
 
 ## Step 2: Replace `foundry.toml` with `hardhat.config.ts`
 
@@ -164,10 +169,10 @@ From the project root:
 ```bash
 pnpm install
 npx hardhat build
-npx hardhat test
+npx hardhat test solidity
 ```
 
-You should see both your Solidity tests and your JavaScript tests run from a single command.
+You should see your Solidity tests run successfully.
 
 ## Where to go next
 
