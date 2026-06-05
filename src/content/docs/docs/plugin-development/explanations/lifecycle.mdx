@@ -14,7 +14,7 @@ The lifecycle of a Hardhat plugin can be divided into two parts: importing the p
 
 ### Plugin import
 
-A Hardhat 3 plugin is a TypeScript object with the `HardhatPlugin` type. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
+A Hardhat 3 plugin is defined using `definePlugin` from `hardhat/plugins`. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
 
 Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](/docs/plugin-development/explanations/type-extensions). All the actual behavior must be in separate files that are loaded dynamically.
 
@@ -22,12 +22,12 @@ For example, the `index.ts` file of the [Hardhat 3 plugin template](https://gith
 
 ```ts
 import { task } from "hardhat/config";
+import { definePlugin } from "hardhat/plugins";
 import { ArgumentType } from "hardhat/types/arguments";
-import type { HardhatPlugin } from "hardhat/types/plugins";
 
 import "./type-extensions.js";
 
-const plugin: HardhatPlugin = {
+const plugin = definePlugin({
   id: "hardhat-my-plugin",
   hookHandlers: {
     config: () => import("./hooks/config.js"),
@@ -44,7 +44,7 @@ const plugin: HardhatPlugin = {
       .setAction(() => import("./tasks/my-task.js"))
       .build(),
   ],
-};
+});
 ```
 
 Importing this file only loads Hardhat's modules and the type extensions.
