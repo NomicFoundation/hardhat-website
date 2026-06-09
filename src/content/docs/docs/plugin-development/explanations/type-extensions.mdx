@@ -85,10 +85,45 @@ In the example above, you'd need to hook into the `NetworkConnection` creation t
 
 ## Loading your plugin's type extensions
 
-To make TypeScript aware of your type extensions, import them in your plugin's index file. Normally, adding this import to your `index.ts` file is enough:
+To make TypeScript aware of your type extensions, add a type-only re-export in your plugin's `index.ts`:
 
 ```ts
-import "./type-extensions.js";
+export type * from "./type-extensions.js";
+```
+
+This tells TypeScript to apply your type extensions without generating a runtime `import` statement in the compiled JavaScript. The older `import "./type-extensions.js"` pattern also works but produces an unnecessary side-effect import in the compiled output.
+
+### Writing a correct `type-extensions.ts` file
+
+Your `type-extensions.ts` file must follow these rules for `export type *` to work correctly:
+
+- **No side effects.** The file must not execute any runtime code — only type-level declarations are allowed.
+- **No exported types.** Do not export any types. Only use `declare module` augmentations.
+- **Use `export {};` as the module marker.** Because the file has no imports, TypeScript treats it as a script rather than a module by default. Adding `export {};` forces module mode without introducing a runtime import. Alternatively, set [`"moduleDetection": "force"`](https://www.typescriptlang.org/tsconfig/#moduleDetection) in your `tsconfig.json`.
+
+A minimal `type-extensions.ts` looks like this:
+
+```ts
+export {};
+
+declare module "hardhat/types/network" {
+  export interface NetworkConnection {
+    myProp: string;
+  }
+}
+```
+
+If your plugin depends on another Hardhat plugin's type extensions, chain the re-export:
+
+```ts
+export {};
+export type * from "other-hardhat-plugin";
+
+declare module "hardhat/types/network" {
+  export interface NetworkConnection {
+    myProp: string;
+  }
+}
 ```
 
 ## Learn more
