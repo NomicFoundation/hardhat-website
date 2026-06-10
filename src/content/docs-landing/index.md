@@ -3,6 +3,16 @@ title: Documentation
 description: Documentation about Hardhat, the Ethereum development environment
 ---
 
+:::tip[**Hardhat 2 is reaching end of life and is being replaced by Hardhat 3**]
+Hardhat 3 is stable and production ready, and teams are already migrating.
+Hardhat 2 will be upgraded to support the Glamsterdam hardfork and will continue
+to receive bug fixes and security fixes until its **end of life** — the earlier
+of the **Hegota mainnet activation** or the **1<sup>st</sup> of July 2027**.
+After that, there will be no further Hardhat 2 releases.
+
+**Plan your migration to Hardhat 3 now** with our [migration guide](https://hardhat.org/docs/migrate-from-hardhat2)
+:::
+
 Hardhat is a development environment for Ethereum software. It consists of different components for editing, compiling, debugging and deploying your smart contracts and dApps, all of which work together to create a complete development environment.
 
 To get started check out these sections:
