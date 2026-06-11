@@ -1,0 +1,10 @@
+diff --git a/cjs/react-jsx-dev-runtime.production.min.js b/cjs/react-jsx-dev-runtime.production.min.js
+index 02c1a5b3a9aba5378f62d053ce2b5940c3c8d2d5..80d71ceb3a690868d58dc19b698b950bb513efe8 100644
+--- a/cjs/react-jsx-dev-runtime.production.min.js
++++ b/cjs/react-jsx-dev-runtime.production.min.js
+@@ -6,4 +6,4 @@
+  * This source code is licensed under the MIT license found in the
+  * LICENSE file in the root directory of this source tree.
+  */
+-'use strict';require("object-assign");require("react");exports.Fragment=60107;if("function"===typeof Symbol&&Symbol.for){var a=Symbol.for;exports.Fragment=a("react.fragment")}exports.jsxDEV=void 0;
++'use strict';require("object-assign");require("react");exports.Fragment=60107;if("function"===typeof Symbol&&Symbol.for){var a=Symbol.for;exports.Fragment=a("react.fragment")}var jsxRuntime=require('./react-jsx-runtime.production.min.js');exports.jsxDEV=function(type,props,key,isStaticChildren){return (isStaticChildren?jsxRuntime.jsxs:jsxRuntime.jsx)(type,props,key);};
