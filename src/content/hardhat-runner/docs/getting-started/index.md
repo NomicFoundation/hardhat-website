@@ -7,7 +7,7 @@ description: Getting started with Hardhat, a development environment to compile,
 Hardhat 3 is stable and production ready, and teams are already migrating.
 Hardhat 2 will be upgraded to support the Glamsterdam hardfork and will continue
 to receive bug fixes and security fixes until its **end of life** — the earlier
-of the **Hegota mainnet activation** or the **1<sup>st</sup> of July 2027**.
+of the **Hegota mainnet activation** or the **1<sup>st</sup> of June 2027**.
 After that, there will be no further Hardhat 2 releases.
 
 **Start your next project with Hardhat 3** with our [getting started guide](https://hardhat.org/docs/getting-started)
