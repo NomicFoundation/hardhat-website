@@ -79,3 +79,5 @@ lockfiles
 gitmodules
 resumability
 uninstrumented
+Glamsterdam
+Hegota

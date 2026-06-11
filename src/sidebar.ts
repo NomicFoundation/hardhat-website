@@ -118,6 +118,7 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/reference/stability-guarantees" },
           { slug: "docs/reference/nodejs-support" },
           { slug: "docs/reference/errors" },
+          { slug: "docs/reference/hardhat-2-end-of-life" },
         ],
       },
       {
