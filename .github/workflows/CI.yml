@@ -25,7 +25,7 @@ jobs:
           path: websites-version-of-hardhat
       - uses: pnpm/action-setup@v3
         with:
-          version: 9
+          version: 10
           run_install: false
       - uses: actions/setup-node@v4
         id: setup-node

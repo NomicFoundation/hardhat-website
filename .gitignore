@@ -42,3 +42,6 @@ src/content/hardhat-runner/docs/errors/index.md
 
 # typescript
 *.tsbuildinfo
+
+# Ignore pnpm store in dev container
+.pnpm-store/
