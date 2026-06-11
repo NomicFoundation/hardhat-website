@@ -34,7 +34,7 @@ It will **not** be upgraded to the **Hegota** hardfork or any of its EIPs.
 Hardhat 2 will reach **end of life** on whichever date comes first between:
 
 - the activation of **the Hegota hardfork** on Ethereum mainnet
-- the **1<sup>st</sup> of July 2027**, if Hegota is delayed
+- the **1<sup>st</sup> of June 2027**, if Hegota is delayed
 
 After that date, no further releases should be expected, including for security
 fixes. If you haven't started yet, now is the time to plan your move to
