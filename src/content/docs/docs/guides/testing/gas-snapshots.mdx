@@ -52,6 +52,12 @@ To update snapshots, run your tests with --snapshot
 
 The check only fails when existing values change. Adding or removing test functions or cheatcode snapshot calls won't cause a failure.
 
+:::note
+
+`--snapshot-check` only reads your snapshot files. It never creates, updates, or deletes them. Use `--snapshot` to update the baseline. If no snapshots exist yet, it reports that there's nothing to compare against and suggests running `--snapshot`.
+
+:::
+
 ## Function gas snapshots
 
 The `.gas-snapshot` file records the gas used by each test function. Each line contains the contract name, function name, and gas details:
