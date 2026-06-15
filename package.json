@@ -2,6 +2,9 @@
   "name": "docs",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "prebuild": "bash scripts/clone-and-build-hardhat.sh && tsx scripts/prepare-error-list.ts",
     "dev": "next-remote-watch ./src/content",

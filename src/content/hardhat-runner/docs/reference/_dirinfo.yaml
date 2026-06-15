@@ -1,6 +1,7 @@
 section-type: group
 section-title: Reference
 order:
+  - /hardhat-2-end-of-life
   - /stability-guarantees
   - /solidity-support
   - /environment-variables
