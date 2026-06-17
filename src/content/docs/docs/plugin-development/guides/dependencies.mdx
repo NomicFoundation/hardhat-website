@@ -18,17 +18,15 @@ To use another plugin as a dependency, you need to:
 Here's how a plugin that depends on `another-plugin` would look:
 
 ```ts
-import type { HardhatPlugin } from "hardhat/types/plugins";
+import { definePlugin } from "hardhat/plugins";
 
 import "./type-extensions.js";
 
-const plugin: HardhatPlugin = {
+export default definePlugin({
   id: "hardhat-my-plugin",
   dependencies: () => [import("another-plugin")],
   // ...
-};
-
-export default plugin;
+});
 ```
 
 When you declare a plugin as a dependency, its Hook Handlers, Tasks, and Global Options will be loaded before your plugin's.
