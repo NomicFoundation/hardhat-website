@@ -50,7 +50,13 @@ Function gas snapshots: 1 changed
 To update snapshots, run your tests with --snapshot
 ```
 
-The check only fails when existing values change. Adding or removing test functions or cheatcode snapshot calls won't cause a failure.
+The check only fails when existing values change, or when no snapshots exist yet and there's nothing to compare against. Adding or removing test functions or cheatcode snapshot calls won't cause a failure.
+
+:::note
+
+`--snapshot-check` only reads your snapshot files. It never creates, updates, or deletes them. Use `--snapshot` to update your snapshots.
+
+:::
 
 ## Function gas snapshots
 
