@@ -31,7 +31,11 @@ However, this comes with some side effects:
 
 - The bytecode of your contracts running in coverage mode is different and larger
 - The gas costs of your contracts when running in coverage mode are higher
-- The `allowUnlimitedContractSize` [setting of `edr-simulated` networks](/docs/reference/configuration#simulated-network-options) is automatically set to `true` when using `--coverage`
+
+To keep this larger bytecode and higher gas usage from tripping size and gas limits, `--coverage` adjusts some defaults. In every case an explicit value in your config is respected — the override only applies when you haven't set the option yourself:
+
+- The `allowUnlimitedContractSize` [setting of `edr-simulated` networks](/docs/reference/configuration#simulated-network-options) defaults to `true`.
+- The `blockGasLimit` and `transactionGasCap` settings of [`edr-simulated` networks](/docs/reference/configuration#simulated-network-options) and [Solidity tests](/docs/reference/configuration#solidity-tests-configuration) default to disabled.
 
 ## HTML report generation
 

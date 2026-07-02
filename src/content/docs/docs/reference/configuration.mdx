@@ -154,7 +154,8 @@ The following options are specific to simulated networks:
 - `accounts`: This field controls which accounts Hardhat uses. It can use a list of local accounts (by setting it to an array of `{privateKey, balance}` objects) or an [HD Wallet](#hd-wallet-config). Default value: an HD Wallet with 20 unlocked accounts and a balance of 10,000 ETH each.
 - `allowBlocksWithSameTimestamp`: A boolean to allow mining blocks that have the same timestamp. This is not allowed by default because Ethereum's consensus rules specify that each block should have a different timestamp. Default value: `false`.
 - `allowUnlimitedContractSize`: An optional boolean that disables the contract size limit imposed by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). Default value: `false`.
-- `blockGasLimit`: The block gas limit to use in Hardhat Network's blockchain. Default value: `60_000_000`.
+- `blockGasLimit`: The block gas limit to use in Hardhat Network's blockchain. Set it to `false` to disable the block gas limit. Default value: `60_000_000`.
+- `transactionGasCap`: The maximum amount of gas a single transaction may use. Set it to `false` to disable the cap. Default value: the [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap (`16_777_216`) on the `osaka` hardfork and later, and the block gas limit on earlier hardforks.
 - `coinbase`: The address used as coinbase in new blocks. Default value: `"0xc014ba5ec014ba5ec014ba5ec014ba5ec014ba5e"`.
 - `forking`: An object that describes the forking configuration and can have the following fields:
   - `url`: a URL that points to a JSON-RPC node with state that you want to fork off. There's no default value for this field. It must be provided for the fork to work.
@@ -264,7 +265,8 @@ If write access to a directory is needed, please make sure that it doesn't conta
 - `blockBaseFeePerGas`: The base fee per gas (in wei) in tests. Defaults to `0`.
 - `coinbase`: The value of `block.coinbase` in tests. Defaults to `0x0000000000000000000000000000000000000000`.
 - `blockTimestamp`: The value of `block.timestamp` in tests. Defaults to 1.
-- `blockGasLimit`: The `block.gaslimit` value during EVM execution. Set it to false to disable the block gas limit. Defaults to none.
+- `blockGasLimit`: The `block.gaslimit` value during EVM execution. Set it to a number or bigint to enforce a limit, or to `false` to disable it. Disabled by default.
+- `transactionGasCap`: The maximum amount of gas a single transaction may use. Set it to a number or bigint to enforce a cap, or to `false` to disable it. Disabled by default.
 - `eip712Types`: Optional object to configure EIP-712 type collection for the [`eip712HashType`](/docs/reference/cheatcodes/utilities/eip712-hash-type) and [`eip712HashStruct`](/docs/reference/cheatcodes/utilities/eip712-hash-struct) cheatcodes. Disabled by default. See the [EIP-712 type hashing guide](/docs/guides/testing/eip712-types) for details.
   - `include`: An array of glob patterns matching source files to collect EIP-712 struct types from. Required to enable type collection. Supports `*`, `**`, and `?` wildcards.
   - `exclude`: An optional array of glob patterns matching source files to exclude from type collection.
