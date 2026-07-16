@@ -126,6 +126,18 @@ Or a single file with:
 
 <Run command="hardhat test test/Counter.ts" />
 
+### Filtering tests by name
+
+To run only the tests whose name matches a string or regular expression, use the `--grep` option:
+
+<Run command="hardhat test mocha --grep Increment" />
+
+To skip the matching tests instead, use `--grep-exclude`:
+
+<Run command="hardhat test mocha --grep-exclude reverts" />
+
+Combine both options to run the tests that match `--grep` while skipping any that also match `--grep-exclude`.
+
 ## Testing a function that reverts
 
 In the previous test, we checked that a function emitted an event with the correct value. For that example, we know there's no way the `inc()` function could possibly revert on chain since it's merely incrementing a number and emitting an event with the result.
