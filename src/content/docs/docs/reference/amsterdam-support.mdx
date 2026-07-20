@@ -24,8 +24,8 @@ We are implementing Amsterdam's EIPs incrementally, and will add more as the har
 The following Amsterdam EIPs are currently supported:
 
 - [EIP-7708: ETH transfers emit logs](#eip-7708-eth-transfers-emit-logs)
-- [EIP-7778: block gas accounting excludes refunds](#eip-7778-block-gas-accounting-excludes-refunds)
-- [EIP-7928: block-level access list hash](#eip-7928-block-level-access-list-hash)
+- [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
+- [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
 
 ## Enabling Amsterdam
 
@@ -131,14 +131,14 @@ Running it prints a log emitted by the system address, with the `from` and `to` 
 
 <Run command="hardhat run scripts/transfer-logs.ts" />
 
-## EIP-7778: block gas accounting excludes refunds
+## EIP-7778: Block Gas Accounting without Refunds
 
 Under [EIP-7778](https://eips.ethereum.org/EIPS/eip-7778), gas refunds no longer reduce the gas counted towards the block gas limit. From Amsterdam onwards, a block's `gasUsed` reflects the gross gas spent by its transactions, without subtracting refunds. This only affects block-level accounting; per-transaction costs are unchanged.
 
 In practice, this may affect test suites that assert on a block's `gasUsed`, which can now be higher than on earlier hardforks if there are transactions that trigger refunds.
 
-## EIP-7928: block-level access list hash
+## EIP-7928: Block-Level Access Lists
 
 [EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) introduces block-level access lists, which record every account and storage slot accessed while executing a block. Amsterdam blocks carry a new `blockAccessListHash` header field: the `keccak256` hash of the RLP-encoded block-level access list.
 
-Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Don't assert on specific `blockAccessListHash` values.
+Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Within a chain the placeholder `blockAccessListHash` is unique per block, and a block with no state changes uses the empty-list hash `keccak256(rlp([]))` as the EIP specifies. Don't assert on specific `blockAccessListHash` values.
