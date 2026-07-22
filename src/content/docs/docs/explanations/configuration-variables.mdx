@@ -15,6 +15,7 @@ While you could read these values directly from `process.env`, Hardhat 3's _Conf
 - **Validation and type safety**: Values are validated and converted to the appropriate type (URL, `bigint`, etc.) with clear error messages
 - **Extensibility**: Plugins can customize where values are read from (like encrypted vaults) instead of just environment variables
 - **Format reuse**: A single stored value (like an API key) can be formatted differently for multiple uses
+- **Fallback values**: You can set a default value that's used when the variable isn't provided anywhere else, so resolution won't fail
 - **Stored outside of the repo**: Values aren't defined inside of your repo, so you can't accidentally commit them, which is a common problem with `.env` files.
 
 This section explains how Configuration Variables work.
@@ -23,7 +24,7 @@ This section explains how Configuration Variables work.
 
 A Configuration Variable is a named value that can be used in your config and is read only when needed.
 
-Configuration Variables are represented in your config as `ConfigurationVariable` objects. Each object contains a name and an optional formatting parameter.
+Configuration Variables are represented in your config as `ConfigurationVariable` objects. Each object contains a name, an optional format, and an optional default value.
 
 ## How Configuration Variables are used in your config
 
@@ -48,9 +49,9 @@ export default defineConfig({
 
 Each field of the config that can have a sensitive value also accepts a Configuration Variable.
 
-### Using a Configuration Variable with a `format` parameter
+### Using a Configuration Variable with a `format`
 
-To reuse a value as part of different fields, you can provide a second argument to `configVariable`, called `format`. For example, you can use a single API key to build different URLs by calling `configVariable` multiple times with the same name but different format strings.
+To reuse a value as part of different fields, you can pass an options object as a second argument to `configVariable` with a `format` field. For example, you can use a single API key to build different URLs by calling `configVariable` multiple times with the same name but different format strings.
 
 For example, use the `ALCHEMY_API_KEY` name to define multiple Configuration Variables representing different URLs:
 
@@ -65,23 +66,25 @@ export default defineConfig({
   networks: {
     mainnet: {
       type: "http",
-      url: configVariable(
-        "ALCHEMY_API_KEY",
-        "https://eth-mainnet.g.alchemy.com/v2/{variable}",
-      ),
+      url: configVariable("ALCHEMY_API_KEY", {
+        format: "https://eth-mainnet.g.alchemy.com/v2/{variable}",
+      }),
     },
     sepolia: {
       type: "http",
-      url: configVariable(
-        "ALCHEMY_API_KEY",
-        "https://eth-sepolia.g.alchemy.com/v2/{variable}",
-      ),
+      url: configVariable("ALCHEMY_API_KEY", {
+        format: "https://eth-sepolia.g.alchemy.com/v2/{variable}",
+      }),
     },
   },
 });
 ```
 
-When each config variable with a format is read, Hardhat will first read the original value of the Configuration Variable (e.g. the value associated with `ALCHEMY_API_KEY`) and replace all the occurrences of `{variable}` in the `format` argument with it.
+When each config variable with a format is read, Hardhat will first read the original value of the Configuration Variable (e.g. the value associated with `ALCHEMY_API_KEY`) and replace all the occurrences of `{variable}` in the `format` with it.
+
+### Providing a default value
+
+The options object also accepts a `default` field, used as a fallback when the Configuration Variable can't be resolved from any other source, so reading it won't throw even if the variable was never set. Like a resolved value, the `default` is substituted in place of `{variable}` when you also set a `format`.
 
 ## How Configuration Variables are read
 
@@ -91,7 +94,7 @@ When the [Hardhat Runtime Environment](/docs/explanations/hardhat-runtime-enviro
 
 To read the value of a config variable, call one of the async getters on its `ResolvedConfigurationVariable` object. The `ResolvedConfigurationVariable` interface has multiple getters, which you can see in its type's inline docs.
 
-When you call a getter, Hardhat will read the value associated with the config variable's name. If none is present, it will throw an error. If the value can be successfully read, it gets cached and formatted as explained above. It's then validated and potentially parsed into a different type before being returned.
+When you call a getter, Hardhat will read the value associated with the config variable's name. If none is present and no default value is set, it will throw an error. If the value can be successfully read (or the default value is used), it gets cached and formatted as explained above. It's then validated and potentially parsed into a different type before being returned.
 
 Continuing with the example from the previous section, a script could access the URL of the `mainnet` network configuration like this:
 
@@ -142,3 +145,5 @@ The mainnet URL is: https://eth-mainnet.g.alchemy.com/v2/foo
 ```
 
 Plugins can extend the Configuration Variables system using [Hardhat's Hooks](/docs/plugin-development/explanations/hooks). For example, the official [`@nomicfoundation/hardhat-keystore`](/docs/plugins/hardhat-keystore) plugin reads values from an encrypted vault. To learn how to use it, please read [this guide](/docs/guides/configuration-variables).
+
+When more than one source can provide a value, Hardhat uses the first available of: the environment variable, then a plugin source like [`hardhat-keystore`](/docs/plugins/hardhat-keystore), then the `default`. If none provide a value and no `default` is set, reading the Configuration Variable throws an error.
