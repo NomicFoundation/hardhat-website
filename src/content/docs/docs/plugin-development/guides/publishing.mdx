@@ -46,7 +46,7 @@ You don't need to follow any specific process to publish your plugin, but here a
 When you publish your plugin as a separate package, follow these two steps:
 
 1. Make sure your [plugin's `id`](/docs/plugin-development/reference/hardhat-plugin-object#id) matches the package name
-2. Define the [main entry point in your `package.json` file](https://nodejs.org/api/packages.html#main-entry-point-export) to point to the module that exports your `HardhatPlugin` object as `default`.
+2. Define the [main entry point in your `package.json` file](https://nodejs.org/api/packages.html#main-entry-point-export) to point to the module that exports your plugin as `default`.
 
 This lets users import your plugin like this:
 
