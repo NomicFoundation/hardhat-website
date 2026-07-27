@@ -14,7 +14,7 @@ The lifecycle of a Hardhat plugin can be divided into two parts: importing the p
 
 ### Plugin import
 
-A Hardhat 3 plugin is defined using `definePlugin` from `hardhat/plugins`. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
+A Hardhat 3 plugin is created with `definePlugin` from `hardhat/plugins`. It can be defined in any `.ts` file, but it's usually defined in the `index.ts` file of the plugin's package and exported as `default`.
 
 Importing it shouldn't generate any side effects at runtime or import anything other than Hardhat and the plugin's [Type Extensions](/docs/plugin-development/explanations/type-extensions). All the actual behavior must be in separate files that are loaded dynamically.
 
