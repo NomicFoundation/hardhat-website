@@ -27,8 +27,8 @@ importers:
         specifier: ^0.41.3
         version: 0.41.3
       '@nomicfoundation/hardhat-errors':
-        specifier: ^3.0.16
-        version: 3.0.16
+        specifier: ^3.0.17
+        version: 3.0.17
       '@types/tar-stream':
         specifier: ^3.1.4
         version: 3.1.4
@@ -767,11 +767,11 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nomicfoundation/hardhat-errors@3.0.16':
-    resolution: {integrity: sha512-z3hxWX2vG0C0JBojKHcUjArOXftHQZ2cPnHOSReILq6/UZXuzm9WIEBDPbotH2tgjRDKBlh0+XOpJZjFhEODIw==}
+  '@nomicfoundation/hardhat-errors@3.0.17':
+    resolution: {integrity: sha512-x8/Bv7Mn0a90ZRX4ZfWuq8uGuqF10LzLMXD1LD0kEIRBwSvr71fcxYyONcuf+MzznbrJ+WBTNz3ov9Rd++8DfQ==}
 
-  '@nomicfoundation/hardhat-utils@4.1.4':
-    resolution: {integrity: sha512-DEAu/uIBTNkPedfTnokh6tKum/Kxr5xMlh8ZovBGqlKA8AlxP26J0PBjK73fmeUQ0sh432suWksSr5CtHVG04A==}
+  '@nomicfoundation/hardhat-utils@4.1.6':
+    resolution: {integrity: sha512-j3LUq/4puVWUaS5BsbehR90LiGZaABYAWHSA4nGfRUxfBUjay82AwSSzaGKfDQYaRkdKoP9ZXeMDTEIFJGI24Q==}
 
   '@nomicfoundation/slang@1.2.0':
     resolution: {integrity: sha512-+04Z1RHbbz0ldDbHKQFOzveCdI9Rd3TZZu7fno5hHy3OsqTo9UK5Jgqo68wMvRovCO99POv6oCEyO7+urGeN8Q==}
@@ -3779,11 +3779,11 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nomicfoundation/hardhat-errors@3.0.16':
+  '@nomicfoundation/hardhat-errors@3.0.17':
     dependencies:
-      '@nomicfoundation/hardhat-utils': 4.1.4
+      '@nomicfoundation/hardhat-utils': 4.1.6
 
-  '@nomicfoundation/hardhat-utils@4.1.4':
+  '@nomicfoundation/hardhat-utils@4.1.6':
     dependencies:
       '@streamparser/json-node': 0.0.22
       env-paths: 2.2.1
