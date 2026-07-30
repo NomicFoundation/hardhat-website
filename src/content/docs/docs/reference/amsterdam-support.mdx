@@ -25,6 +25,7 @@ The following Amsterdam EIPs are currently supported:
 
 - [EIP-7708: ETH transfers emit logs](#eip-7708-eth-transfers-emit-logs)
 - [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
+- [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
 - [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
 
 ## Enabling Amsterdam
@@ -136,6 +137,40 @@ Running it prints a log emitted by the system address, with the `from` and `to` 
 Under [EIP-7778](https://eips.ethereum.org/EIPS/eip-7778), gas refunds no longer reduce the gas counted towards the block gas limit. From Amsterdam onwards, a block's `gasUsed` reflects the gross gas spent by its transactions, without subtracting refunds. This only affects block-level accounting; per-transaction costs are unchanged.
 
 In practice, this may affect test suites that assert on a block's `gasUsed`, which can now be higher than on earlier hardforks if there are transactions that trigger refunds.
+
+## EIP-7843: SLOTNUM opcode
+
+[EIP-7843](https://eips.ethereum.org/EIPS/eip-7843) exposes the consensus-layer slot number to the execution layer, so contracts can read it without hardcoding slot-length calculations or checking it against a beacon root. Amsterdam blocks carry a new `slotNumber` header field, and the new `SLOTNUM` (`0x4b`) opcode returns the executing block's slot number. In practice, most test suites won't need the slot number.
+
+Hardhat's simulated network has no consensus layer, so it simulates the slot number. On a new chain it starts at 0, and it increments by one for every mined block, including the blocks that `hardhat_mine` fast-forwards through. When you fork, the forked block keeps its original slot number, and blocks mined on top of it continue from there.
+
+The simulated value is deterministic, but it doesn't advance the way a real network's does. On Ethereum, slots advance at a fixed interval regardless of whether a validator proposes a block. Because some slots are empty, consecutive blocks often have non-consecutive slot numbers. Don't rely on one slot per block outside of a simulated network.
+
+`slotNumber` isn't part of the standard block response. To read it, send a raw JSON-RPC request:
+
+```ts
+// scripts/slot-number.ts
+import { network } from "hardhat";
+
+const { provider } = await network.create({ network: "edrAmsterdam" });
+
+for (let i = 0; i < 3; i++) {
+  await provider.request({ method: "hardhat_mine", params: [] });
+
+  const block = (await provider.request({
+    method: "eth_getBlockByNumber",
+    params: ["latest", false],
+  })) as { number: string; slotNumber: string };
+
+  console.log(
+    `block ${BigInt(block.number)} has slot number ${BigInt(block.slotNumber)}`,
+  );
+}
+```
+
+Running it prints the slot number of each newly mined block:
+
+<Run command="hardhat run scripts/slot-number.ts" />
 
 ## EIP-7928: Block-Level Access Lists
 
