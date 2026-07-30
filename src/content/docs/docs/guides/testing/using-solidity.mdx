@@ -136,6 +136,18 @@ You can also pass one or more paths as arguments to these tasks, in which case o
 
 <Run command="hardhat test <test-file-1> <test-file-2> ..." />
 
+### Filtering tests by name
+
+To run only the tests whose name matches a string or regular expression, use the `--grep` option:
+
+<Run command="hardhat test solidity --grep testInc" />
+
+To skip the matching tests instead, use `--grep-exclude`:
+
+<Run command="hardhat test solidity --grep-exclude testIncBy" />
+
+Combine both options to run the tests that match `--grep` while skipping any that also match `--grep-exclude`.
+
 ### Multichain support
 
 By default, Solidity tests run in an environment that simulates Ethereum Mainnet. If you're building for other blockchains, you can test against their specific behavior by specifying a different Chain Type with the `--chain-type` option:
