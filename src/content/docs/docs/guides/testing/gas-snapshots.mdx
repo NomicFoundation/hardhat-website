@@ -58,6 +58,21 @@ The check only fails when existing values change, or when no snapshots exist yet
 
 :::
 
+### Allowing small differences
+
+Gas usage can drift slightly for reasons unrelated to the code you're testing, like compiler or dependency updates. To keep these small changes from failing the check, use the `--tolerance` option to set an allowed drift percentage:
+
+<Run
+  command={[
+    "hardhat test --snapshot-check --tolerance 0.5",
+    "hardhat test solidity --snapshot-check --tolerance 0.5",
+  ]}
+/>
+
+With `--tolerance 0.5`, values that differ from the stored snapshot by at most 0.5% don't fail the check. A difference exactly equal to the tolerance is still allowed.
+
+The tolerance applies to function gas snapshots and to numeric snapshot cheatcode values. By default the tolerance is `0`, so any change fails the check. `--tolerance` can only be used together with `--snapshot-check`.
+
 ## Function gas snapshots
 
 The `.gas-snapshot` file records the gas used by each test function. Each line contains the contract name, function name, and gas details:
