@@ -5,7 +5,11 @@ sidebar:
   order: 6
 ---
 
-Hardhat supports custom compilers like [solx](https://solx.zksync.io). You'll need to manually download the compiler binary (for example, from the [solx releases page](https://github.com/matter-labs/solx/releases)) and reference it in the Solidity settings of your `hardhat.config.ts` file.
+Hardhat supports custom compilers. To use them, you'll need to manually download the compiler binary and reference it in the Solidity settings of your `hardhat.config.ts` file.
+
+:::note
+Looking for `slang-solx` (aka `solx`)? It has its own plugin. Read [Compiling with slang-solx](/docs/cookbook/compiling-with-slang-solx) instead.
+:::
 
 Configure the path to the custom compiler binary using the `path` property. You can use this property in both the simple and extended formats of the `solidity` property. For example, using the simple format:
 
@@ -17,7 +21,7 @@ export default defineConfig({
   //...
   solidity: {
     version: "0.8.29",
-    path: "/path/to/solx", // Replace with the actual path to the solx binary
+    path: "/path/to/compiler", // Replace with the actual path to the compiler
   },
 });
 ```
@@ -34,7 +38,7 @@ export default defineConfig({
     compilers: [
       {
         version: "0.8.29",
-        path: "/path/to/solx",
+        path: "/path/to/compiler",
       },
     ],
   },
