@@ -1,6 +1,6 @@
 ---
 title: Compiling with slang-solx
-description: How to compile and test your contracts with the solx Solidity compiler in Hardhat 3
+description: How to compile and test your contracts with the slang-solx Solidity compiler in Hardhat 3
 sidebar:
   order: 9
 ---
@@ -9,17 +9,21 @@ import { Steps } from "@astrojs/starlight/components";
 import Install from "@hh/Install.astro";
 import Run from "@hh/Run.astro";
 
-:::caution
+This guide will show you how to use the `hardhat-slang-solx` plugin to get faster compilation times during development.
 
-Solx is experimental and isn't ready for production use. We recommend using it for local builds and test runs.
+## What is `slang-solx`?
 
-:::
+`slang-solx` is a Solidity compiler based on `solc` and `LLVM`. It provides faster compilation times, producing better optimized bytecode, and gets rid of Stack too deep errors.
 
-Solx is an LLVM-based Solidity compiler. The `hardhat-slang-solx` plugin lets you use it in your Hardhat project.
+This new compiler can be used to improve your development workflow, but it shouldn't be used for deploying to production network.
 
-This recipe covers setting up the plugin, building and testing with solx, and tuning how it optimizes your contracts.
+The easiest way to use `slang-solx` is with the `hardhat-slang-solx` plugin. Read the rest of this guide to learn how to set it up.
 
-## Setup
+## Setting up `hardhat-slang-solx`
+
+### Installing the plugin
+
+You need to install and add the plugin to your Hardhat config first:
 
 <Steps>
 
@@ -27,9 +31,9 @@ This recipe covers setting up the plugin, building and testing with solx, and tu
 
    <Install packages="@nomicfoundation/hardhat-slang-solx" />
 
-2. Add it to the list of plugins in your Hardhat configuration, and create a `slangSolx` Build Profile:
+2. Add it to the list of plugins in your config:
 
-   ```ts ins={3,8,15-18}
+   ```ts ins={3,8}
    // hardhat.config.ts
    import { defineConfig } from "hardhat/config";
    import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
@@ -39,49 +43,111 @@ This recipe covers setting up the plugin, building and testing with solx, and tu
        // ...other plugins...
        hardhatSlangSolx,
      ],
-     solidity: {
-       profiles: {
-         default: {
-           version: "0.8.29",
-         },
-         slangSolx: {
-           type: "slangSolx",
-           version: "0.8.34",
-         },
-       },
-     },
+     // ...other config fields...
    });
    ```
 
 </Steps>
 
-The plugin needs a Build Profile named `slangSolx`, following the [Build Profiles](/docs/guides/writing-contracts/build-profiles) format of the `solidity` config. The `type: "slangSolx"` property is what selects solx. Your `default` profile has no `type`, so it keeps using solc.
+The plugin will extend the possible values that your Solidity config accepts, adding a new compiler `type` named `slangSolx`. This new type won't be used automatically, so you need to modify your config to use it.
 
-Your contracts also need pragmas that solx can satisfy. A range like `pragma solidity ^0.8.29;` works, while a strict pragma for a version solx doesn't support, like `pragma solidity 0.8.28;`, won't compile under the `slangSolx` profile. See [supported Solidity and EVM versions](#supported-solidity-and-evm-versions) below.
+### Using the `slangSolx` compiler type in your config
 
-## Building and testing with solx
+The recommended way to configure the plugin is to create a `slangSolx` Build Profile:
 
-Pass `--build-profile slangSolx` to build with solx:
+```ts ins={14-17}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins...
+    hardhatSlangSolx,
+  ],
+  // ...other config fields...
+  solidity: {
+    profiles: {
+      // ...existing solidity config...
+      slangSolx: {
+        type: "slangSolx",
+        version: "0.8.34",
+      },
+    },
+  },
+});
+```
+
+:::tip
+If you don't have a `profiles` field in your `solidity` config, please read [this guide](/docs/guides/writing-contracts/build-profiles) before continuing.
+:::
+
+By setting the `type: "slangSolx"` property, the Hardhat will use `slang-solx` to build your contracts and tests when this Build Profile is used. Any Build Profile without `type` will continue using `solc`.
+
+Note that you need to set the `version` property to a [supported Solidity version](#supported-solidity-versions) for the plugin to work, like `0.8.34`.
+
+### Making sure your contracts have the right solidity pragma
+
+Your contracts also need solidity pragmas that compatible with the version used in the `slangSolx` Build Profile.
+
+For example, a range like `pragma solidity ^0.8.29;` works, while a strict pragma for a version `slang-solx` doesn't support, like `pragma solidity 0.8.28;`, won't compile under the `slangSolx` profile.
+
+See [supported Solidity versions](#supported-solidity-versions) below for a list of supported versions.
+
+Note that modifying your contracts' pragmas to widen the range of Solidity versions shouldn't modify the result of building them with `solc`, except for their [metadata hash](https://docs.soliditylang.org/en/latest/metadata.html). To make sure this is the case, try recompiling your contracts, and you should see a message telling you that the same version of `solc` is used.
+
+If some of your contracts can't be built with a compatible pragma, you can mix `solc` and `slang-solx` in the same Build Profile, please read [Using `solc` and `slang-solx` in the same Build Profile].
+
+## Building and testing with `slang-solx`
+
+If you followed the steps above, you can use `slang-solx` by passing the `--build-profile slangSolx` flag to your build commands:
 
 <Run command="hardhat build --build-profile slangSolx" />
 
-The same flag works for your tests:
+You can also use it to run your tests:
 
 <Run command="hardhat test --build-profile slangSolx" />
 
-## Choosing an optimization level
+# Advanced documentation
 
-Solx optimizes through LLVM, and you set the level with `settings.optimizer.mode` on the profile:
+## Using `solc` and `slang-solx` in the same Build Profile
+
+If your project uses several Solidity versions, you can list several compilers in the `slangSolx` profile. Only the ones with `type: "slangSolx"` use `slang-solx`, and the rest use `solc`, which is handy when `slang-solx` doesn't support a version you need:
+
+```ts ins={4}
+slangSolx: {
+  compilers: [
+    { type: "slangSolx", version: "0.8.34" },
+    { version: "0.8.20" }, // using `solc` for this unsupported version
+  ],
+},
+```
+
+When building with this profile, Hardhat will choose `slang-solx` for the contracts that are compatible with `0.8.34`, and `solc` for the ones that are only compatible with `0.8.20`.
+
+## Advanced documentation
+
+### Configuring the optimizer
+
+`slang-solx` is based on `solc` and `LLVM`, which means that it can optimize your code using `LLVM`'s optimizations, and the Yul optimizer at the same time. This section explains how to configure each of them.
+
+#### Choosing an optimization level
+
+To set the level of `LLVM`-based optimizations, use the `settings.optimizer.mode` property of your compiler config:
 
 ```ts ins={4-8}
 slangSolx: {
-  type: "slangSolx",
-  version: "0.8.34",
-  settings: {
-    optimizer: {
-      mode: "z", // optimize aggressively for size
-    },
-  },
+  compilers: [
+    {
+      type: "slangSolx",
+      version: "0.8.34",
+      settings: {
+        optimizer: {
+          mode: "z", // optimize aggressively for size
+        }
+      }
+    }
+  ]
 },
 ```
 
@@ -90,14 +156,14 @@ These are the available modes:
 | Mode  | What it does                                          |
 | ----- | ----------------------------------------------------- |
 | `"1"` | Least optimization, fastest to compile (the default). |
-| `"2"` | More optimization                                     |
+| `"2"` | More runtime optimization.                            |
 | `"3"` | Best runtime performance.                             |
-| `"s"` | Optimize for size                                     |
-| `"z"` | Optimize aggressively for size                        |
+| `"s"` | Optimize for size.                                    |
+| `"z"` | Optimize aggressively for size.                       |
 
-### Enabling the Yul optimizer
+#### Enabling the Yul optimizer
 
-Solx provides Yul optimization via `settings.optimizer.enabled`. It is `false` by default, and enabling it optimizes on top of LLVM rather than replacing it:
+`slang-solx` provides Yul optimization via `settings.optimizer.enabled`. It is `false` by default, and enabling it optimizes on top of LLVM rather than replacing it:
 
 ```ts ins={7}
 slangSolx: {
@@ -112,24 +178,23 @@ slangSolx: {
 },
 ```
 
-## Mixing solx and solc in one profile
+### Supported Solidity versions
 
-If your project uses several Solidity versions, you can list several compilers in the `slangSolx` profile. Only the ones with `type: "slangSolx"` use solx, and the rest use solc, which is handy when solx doesn't support a version you need:
+The `slang-solx` compiler has it own version numbers. Each of them maps to a specific Solidity version. Here's a table with their equivalence:
 
-```ts ins={4}
-slangSolx: {
-  compilers: [
-    { type: "slangSolx", version: "0.8.34" },
-    { version: "0.8.20" }, // solx doesn't support this version, so use solc
-  ],
-},
-```
+| `slang-solx` version | Solidity version |
+| -------------------- | ---------------- |
+| `0.1.7`              | `0.8.34`         |
 
-## Using solx in other Build Profiles
+### Supported EVM versions/targets
 
-By default, `type: "slangSolx"` is only allowed in the `slangSolx` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because solx isn't ready for the builds you deploy.
+`slang-solx` supports these EVM versions as compilation target: `cancun`, `prague`, and `osaka`.
 
-If you understand the risk and still want solx in another profile, set `dangerouslyAllowSlangSolxInProduction`:
+### Using `slang-solx` in other Build Profiles
+
+By default, `type: "slangSolx"` is only allowed in the `slangSolx` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang-solx` isn't ready to build contracts for production deployments.
+
+If you understand the risk and still want `slang-solx` in another profile, set `dangerouslyAllowSlangSolxInProduction`:
 
 ```ts ins={10,15-17}
 // hardhat.config.ts
@@ -151,9 +216,3 @@ export default defineConfig({
   },
 });
 ```
-
-## Supported Solidity and EVM versions
-
-Each Solidity version maps to a specific solx binary. The plugin currently supports Solidity `0.8.34`, which uses solx `0.1.7`.
-
-For EVM versions, solx supports `cancun`, `prague`, and `osaka`.
