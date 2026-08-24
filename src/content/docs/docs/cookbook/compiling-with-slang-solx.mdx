@@ -86,9 +86,9 @@ export default defineConfig({
 If you don't have a `profiles` field in your `solidity` config, please read [this guide](/docs/guides/writing-contracts/build-profiles) before continuing.
 :::
 
-With the `type: "slang-solx"` property set, Hardhat will use `slang-solx` to build your contracts and tests whenever you use this Build Profile. Any Build Profile without a `type` keeps using `solc`.
+With the `type: "slang-solx"` property set, Hardhat will use `slang-solx` to build your contracts and tests whenever you use this Build Profile. Any compiler without a `type` keeps using `solc`.
 
-Make sure to set `version` to a [supported Solidity version](#supported-solidity-versions), like `0.8.34`, or the plugin won't work.
+Every compiler with `type: "slang-solx"` needs its `version` set to a [supported Solidity version](#supported-solidity-versions), like `0.8.34`, or the build will fail.
 
 ### Making sure your contracts have the right `solidity` pragma
 
@@ -149,7 +149,7 @@ When building with this Build Profile, Hardhat will choose `slang-solx` for the 
 
 ### Configuring the optimizer
 
-`slang-solx` always optimizes through `LLVM`, and you can't turn that off. Even the lowest level still optimizes the output. The `optimizer.mode` setting controls how far `LLVM` goes, and `optimizer.enabled` controls a separate optimizer in the embedded `solc` front-end.
+`slang-solx` always optimizes through `LLVM`, and you can't turn that off. Even the lowest level still optimizes the output. The `settings.optimizer.mode` setting controls how far `LLVM` goes, and `settings.optimizer.enabled` controls a separate optimizer in the embedded `solc` front-end.
 
 #### Choosing an optimization level
 
@@ -193,7 +193,7 @@ These are the available modes:
 | `"s"` | Smaller bytecode.                                     |
 | `"z"` | Smallest bytecode.                                    |
 
-#### The `optimizer.enabled` setting
+#### The `settings.optimizer.enabled` setting
 
 The `settings.optimizer.enabled` setting, which is `false` by default, enables the embedded `solc` front-end's own optimizer.
 
@@ -248,7 +248,7 @@ The `slang-solx` compiler has its own version numbers, and each one maps to a sp
 
 By default, `type: "slang-solx"` is only allowed in the `slang-solx` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang-solx` is still under heavy development and isn't ready to build contracts for production deployments.
 
-If you understand the risk and still want `slang-solx` in another Build Profile, set `dangerouslyAllowSlangSolxInProduction`:
+If you understand the risk and still want `slang-solx` in another Build Profile, set `dangerouslyAllowSlangSolxInProduction` in the plugin's own `"slang-solx"` config section, next to `solidity`:
 
 ```ts collapse={2-10} ins={14,19-21}
 // hardhat.config.ts
