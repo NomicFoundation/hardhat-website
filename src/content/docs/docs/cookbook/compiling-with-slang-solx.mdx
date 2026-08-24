@@ -149,11 +149,11 @@ When building with this Build Profile, Hardhat will choose `slang-solx` for the 
 
 ### Configuring the optimizer
 
-Because `slang-solx` is based on `solc` and `LLVM`, it can apply `LLVM`'s optimizations and the Yul optimizer at the same time. Here's how to configure each of them.
+`slang-solx` always optimizes through `LLVM`, and you can't turn that off. Even the lowest level still optimizes the output. The `optimizer.mode` setting controls how far `LLVM` goes, and `optimizer.enabled` controls a separate optimizer in the embedded `solc` front-end.
 
 #### Choosing an optimization level
 
-To set the level of `LLVM`-based optimizations, use the `settings.optimizer.mode` property of your compiler config:
+To set the level of `LLVM`-based optimizations, use the `settings.optimizer.mode` setting of your compiler config:
 
 ```ts collapse={2-10} ins={17-21}
 // hardhat.config.ts
@@ -193,9 +193,11 @@ These are the available modes:
 | `"s"` | Smaller bytecode.                                     |
 | `"z"` | Smallest bytecode.                                    |
 
-#### Enabling the Yul optimizer
+#### The `optimizer.enabled` setting
 
-`slang-solx` provides Yul optimization via `settings.optimizer.enabled`, which is `false` by default. Enabling it optimizes on top of `LLVM` rather than replacing it:
+The `settings.optimizer.enabled` setting, which is `false` by default, enables the embedded `solc` front-end's own optimizer.
+
+It only affects the legacy pipeline, where it optimizes the EVM assembly before `slang-solx` translates it to `LLVM` IR:
 
 ```ts collapse={2-10} ins={20}
 // hardhat.config.ts
@@ -217,7 +219,7 @@ export default defineConfig({
         settings: {
           optimizer: {
             mode: "3",
-            enabled: true, // Yul optimizer, on top of LLVM
+            enabled: true, // Enable the solc front-end's assembly optimizer, which runs before LLVM
           },
         },
       },
@@ -225,6 +227,10 @@ export default defineConfig({
   },
 });
 ```
+
+:::note
+Under `viaIR: true`, this setting changes nothing but the metadata hash. `slang-solx` bypasses the Yul optimizer entirely, so the IR handed to `LLVM` is always unoptimized.
+:::
 
 ### Supported Solidity versions
 
