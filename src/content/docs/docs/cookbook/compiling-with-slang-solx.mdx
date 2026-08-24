@@ -120,13 +120,29 @@ You can also use it to run your tests:
 
 If your project uses more than one Solidity version, list several compilers in the `slang-solx` Build Profile. Only the ones with `type: "slang-solx"` use `slang-solx`, and the rest use `solc`, which is handy when `slang-solx` doesn't support a version you need:
 
-```ts ins={4}
-"slang-solx": {
-  compilers: [
-    { type: "slang-solx", version: "0.8.34" },
-    { version: "0.8.20" }, // using `solc` for this unsupported version
+```ts collapse={2-10} ins={17}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins...
+    hardhatSlangSolx,
   ],
-},
+  // ...other config fields...
+  solidity: {
+    profiles: {
+      // ...existing solidity config...
+      "slang-solx": {
+        compilers: [
+          { type: "slang-solx", version: "0.8.34" },
+          { version: "0.8.20" }, // using `solc` for this unsupported version
+        ],
+      },
+    },
+  },
+});
 ```
 
 When building with this Build Profile, Hardhat will choose `slang-solx` for the contracts that are compatible with `0.8.34`, and `solc` for the ones that are only compatible with `0.8.20`.
@@ -139,16 +155,32 @@ Because `slang-solx` is based on `solc` and `LLVM`, it can apply `LLVM`'s optimi
 
 To set the level of `LLVM`-based optimizations, use the `settings.optimizer.mode` property of your compiler config:
 
-```ts ins={4-8}
-"slang-solx": {
-  type: "slang-solx",
-  version: "0.8.34",
-  settings: {
-    optimizer: {
-      mode: "z", // optimize aggressively for size
+```ts collapse={2-10} ins={17-21}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins...
+    hardhatSlangSolx,
+  ],
+  // ...other config fields...
+  solidity: {
+    profiles: {
+      // ...existing solidity config...
+      "slang-solx": {
+        type: "slang-solx",
+        version: "0.8.34",
+        settings: {
+          optimizer: {
+            mode: "z", // optimize aggressively for size
+          },
+        },
+      },
     },
   },
-},
+});
 ```
 
 These are the available modes:
@@ -165,17 +197,33 @@ These are the available modes:
 
 `slang-solx` provides Yul optimization via `settings.optimizer.enabled`, which is `false` by default. Enabling it optimizes on top of `LLVM` rather than replacing it:
 
-```ts ins={7}
-"slang-solx": {
-  type: "slang-solx",
-  version: "0.8.34",
-  settings: {
-    optimizer: {
-      mode: "3",
-      enabled: true, // Yul optimizer, on top of LLVM
+```ts collapse={2-10} ins={20}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins...
+    hardhatSlangSolx,
+  ],
+  // ...other config fields...
+  solidity: {
+    profiles: {
+      // ...existing solidity config...
+      "slang-solx": {
+        type: "slang-solx",
+        version: "0.8.34",
+        settings: {
+          optimizer: {
+            mode: "3",
+            enabled: true, // Yul optimizer, on top of LLVM
+          },
+        },
+      },
     },
   },
-},
+});
 ```
 
 ### Supported Solidity versions
@@ -196,13 +244,17 @@ By default, `type: "slang-solx"` is only allowed in the `slang-solx` profile. Us
 
 If you understand the risk and still want `slang-solx` in another Build Profile, set `dangerouslyAllowSlangSolxInProduction`:
 
-```ts ins={10,15-17}
+```ts collapse={2-10} ins={14,19-21}
 // hardhat.config.ts
 import { defineConfig } from "hardhat/config";
 import hardhatSlangSolx from "@nomicfoundation/hardhat-slang-solx";
 
 export default defineConfig({
-  plugins: [hardhatSlangSolx],
+  plugins: [
+    // ...other plugins...
+    hardhatSlangSolx,
+  ],
+  // ...other config fields...
   solidity: {
     profiles: {
       default: {
