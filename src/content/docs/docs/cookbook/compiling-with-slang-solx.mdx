@@ -53,11 +53,11 @@ First, install the plugin and add it to your Hardhat config:
 
 </Steps>
 
-The plugin extends the values that your Solidity config accepts, adding a new compiler `type` named `slangSolx`. Hardhat won't use this new type automatically, so you'll need to modify your config to use it.
+The plugin extends the values that your Solidity config accepts, adding a new compiler `type` named `slang-solx`. Hardhat won't use this new type automatically, so you'll need to modify your config to use it.
 
-### Using the `slangSolx` compiler type in your config
+### Using the `slang-solx` compiler type in your config
 
-The recommended way to configure the plugin is to create a `slangSolx` Build Profile:
+The recommended way to configure the plugin is to create a `slang-solx` Build Profile:
 
 ```ts ins={14-17}
 // hardhat.config.ts
@@ -73,8 +73,8 @@ export default defineConfig({
   solidity: {
     profiles: {
       // ...existing solidity config...
-      slangSolx: {
-        type: "slangSolx",
+      "slang-solx": {
+        type: "slang-solx",
         version: "0.8.34",
       },
     },
@@ -86,15 +86,15 @@ export default defineConfig({
 If you don't have a `profiles` field in your `solidity` config, please read [this guide](/docs/guides/writing-contracts/build-profiles) before continuing.
 :::
 
-With the `type: "slangSolx"` property set, Hardhat will use `slang-solx` to build your contracts and tests whenever you use this Build Profile. Any Build Profile without a `type` keeps using `solc`.
+With the `type: "slang-solx"` property set, Hardhat will use `slang-solx` to build your contracts and tests whenever you use this Build Profile. Any Build Profile without a `type` keeps using `solc`.
 
 Note that you need to set the `version` property to a [supported Solidity version](#supported-solidity-versions) for the plugin to work, like `0.8.34`.
 
 ### Making sure your contracts have the right `solidity` pragma
 
-Your contracts also need `solidity` pragmas that are compatible with the version in your `slangSolx` Build Profile.
+Your contracts also need `solidity` pragmas that are compatible with the version in your `slang-solx` Build Profile.
 
-For example, a range like `pragma solidity ^0.8.29;` works, while a strict pragma for a version `slang-solx` doesn't support, like `pragma solidity 0.8.28;`, won't compile under the `slangSolx` profile.
+For example, a range like `pragma solidity ^0.8.29;` works, while a strict pragma for a version `slang-solx` doesn't support, like `pragma solidity 0.8.28;`, won't compile under the `slang-solx` profile.
 
 See [supported Solidity versions](#supported-solidity-versions) below for a list of supported versions.
 
@@ -104,24 +104,24 @@ If some of your contracts can't use a compatible pragma, you can mix `solc` and 
 
 ## Building and testing with `slang-solx`
 
-With that in place, use `slang-solx` by passing the `--build-profile slangSolx` flag to your build command:
+With that in place, use `slang-solx` by passing the `--build-profile slang-solx` flag to your build command:
 
-<Run command="hardhat build --build-profile slangSolx" />
+<Run command="hardhat build --build-profile slang-solx" />
 
 You can also use it to run your tests:
 
-<Run command="hardhat test --build-profile slangSolx" />
+<Run command="hardhat test --build-profile slang-solx" />
 
 ## Advanced documentation
 
 ### Using `solc` and `slang-solx` in the same Build Profile
 
-If your project uses several Solidity versions, you can list several compilers in the `slangSolx` profile. Only the ones with `type: "slangSolx"` use `slang-solx`, and the rest use `solc`, which is handy when `slang-solx` doesn't support a version you need:
+If your project uses several Solidity versions, you can list several compilers in the `slang-solx` profile. Only the ones with `type: "slang-solx"` use `slang-solx`, and the rest use `solc`, which is handy when `slang-solx` doesn't support a version you need:
 
 ```ts ins={4}
-slangSolx: {
+"slang-solx": {
   compilers: [
-    { type: "slangSolx", version: "0.8.34" },
+    { type: "slang-solx", version: "0.8.34" },
     { version: "0.8.20" }, // using `solc` for this unsupported version
   ],
 },
@@ -138,8 +138,8 @@ Because `slang-solx` is based on `solc` and `LLVM`, it can apply `LLVM`'s optimi
 To set the level of `LLVM`-based optimizations, use the `settings.optimizer.mode` property of your compiler config:
 
 ```ts ins={4-8}
-slangSolx: {
-  type: "slangSolx",
+"slang-solx": {
+  type: "slang-solx",
   version: "0.8.34",
   settings: {
     optimizer: {
@@ -164,8 +164,8 @@ These are the available modes:
 `slang-solx` provides Yul optimization via `settings.optimizer.enabled`. It is `false` by default, and enabling it optimizes on top of `LLVM` rather than replacing it:
 
 ```ts ins={7}
-slangSolx: {
-  type: "slangSolx",
+"slang-solx": {
+  type: "slang-solx",
   version: "0.8.34",
   settings: {
     optimizer: {
@@ -190,7 +190,7 @@ The `slang-solx` compiler has its own version numbers, and each one maps to a sp
 
 ### Using `slang-solx` in other Build Profiles
 
-By default, `type: "slangSolx"` is only allowed in the `slangSolx` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang-solx` is still under heavy development and isn't ready to build contracts for production deployments.
+By default, `type: "slang-solx"` is only allowed in the `slang-solx` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang-solx` is still under heavy development and isn't ready to build contracts for production deployments.
 
 If you understand the risk and still want `slang-solx` in another profile, set `dangerouslyAllowSlangSolxInProduction`:
 
@@ -204,12 +204,12 @@ export default defineConfig({
   solidity: {
     profiles: {
       default: {
-        type: "slangSolx", // allowed only because of the option below
+        type: "slang-solx", // allowed only because of the option below
         version: "0.8.34",
       },
     },
   },
-  slangSolx: {
+  "slang-solx": {
     dangerouslyAllowSlangSolxInProduction: true,
   },
 });
