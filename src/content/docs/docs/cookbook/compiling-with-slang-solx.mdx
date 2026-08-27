@@ -229,7 +229,7 @@ export default defineConfig({
 ```
 
 :::note
-Under `viaIR: true`, this setting changes nothing but the metadata hash. `slang-solx` bypasses the Yul optimizer entirely, so the IR handed to `LLVM` is always unoptimized.
+Setting `viaIR: true` changes nothing but the metadata hash. `slang-solx` bypasses the Yul optimizer entirely, so the IR handed to `LLVM` is always unoptimized.
 :::
 
 ### Supported Solidity versions
