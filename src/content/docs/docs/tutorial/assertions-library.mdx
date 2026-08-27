@@ -12,14 +12,14 @@ The tests you've written so far are simple. They call functions and check that t
 
 Install the `forge-std` library, which provides useful testing utilities:
 
-<Install packages={`"foundry-rs/forge-std#v1.11.0"`} />
+<Install packages={`"foundry-rs/forge-std#v1.16.2"`} />
 
 Now that it's installed, modify `Counter.t.sol` to use `forge-std`:
 
 ```solidity ins={6,9} del={8} collapse={12-28}
 // contracts/Counter.t.sol
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.34;
 
 import { Counter } from "./Counter.sol";
 import { Test } from "forge-std/Test.sol";
@@ -57,7 +57,7 @@ Add a new test that checks the correct event is emitted when you call `inc`:
 ```solidity collapse={1-5,10-26} ins={29-34}
 // contracts/Counter.t.sol
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.34;
 
 import { Counter } from "./Counter.sol";
 import { Test } from "forge-std/Test.sol";
