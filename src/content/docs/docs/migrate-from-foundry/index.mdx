@@ -166,7 +166,23 @@ Port the compiler settings and project layout from `foundry.toml` so Hardhat fin
 
     :::
 
-3.  **Compile your contracts**
+3.  **Split your profiles across the two axes**
+
+    Foundry has a single profile axis: a `[profile.ci]` section holds compiler settings and test settings together. Hardhat splits them in two, so each Foundry profile becomes up to two Hardhat profiles:
+    - Compiler settings go to a [Build Profile](/docs/guides/writing-contracts/build-profiles) under `solidity.profiles`, selected with `--build-profile`.
+    - Test settings go to a [Test Profile](/docs/guides/testing/test-profiles) under `test.solidity.profiles`, selected with `--test-profile`.
+
+    If you create both profiles for `ci`, select them together with:
+
+    <Run command="hardhat test --build-profile ci --test-profile ci" />
+
+    :::caution
+
+    Hardhat profiles don't inherit from each other. In Foundry, every profile is merged over `[profile.default]`, so a `[profile.ci]` that only sets `optimizer_runs` keeps everything else from `default`. In Hardhat, each profile is resolved on its own, so you have to copy shared settings into every profile, or share them through a variable in your config file.
+
+    :::
+
+4.  **Compile your contracts**
 
     Run the `build` task to verify that the config is working:
 
@@ -257,11 +273,61 @@ Hardhat 3's Solidity testing is designed for compatibility with Foundry test sui
 
     See [the Solidity tests configuration reference](/docs/reference/configuration#solidity-tests-configuration) for the full list of options, including `from`, `txOrigin`, `blockTimestamp`, fork settings, and the `fsPermissions` allowlist that replaces Foundry's `fs_permissions`.
 
-4.  **Enable `ffi` and filesystem access if your tests need them**
+    If you have more than one `foundry.toml` profile, port each one's test settings into [Test Profiles](/docs/guides/testing/test-profiles) under `test.solidity.profiles`, and select them with `--test-profile`. Remember that Hardhat profiles don't inherit from `default`, so include shared settings in each profile, either directly or through a shared variable:
+
+    ```ts
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    const sharedTestSettings = {
+      isolate: true,
+    };
+
+    export default defineConfig({
+      test: {
+        solidity: {
+          profiles: {
+            default: {
+              ...sharedTestSettings,
+              fuzz: { runs: 256 },
+            },
+            ci: {
+              ...sharedTestSettings,
+              fuzz: { runs: 10_000 },
+            },
+          },
+        },
+      },
+    });
+    ```
+
+4.  **Convert your `forge-config:` annotations**
+
+    Hardhat accepts the `forge-config:` prefix, so [inline configuration](/docs/guides/testing/inline-configuration) keeps working. But the meaning of a `default.` prefix changes, so it needs converting:
+
+    ```solidity del={1} ins={2}
+    /// forge-config: default.fuzz.runs = 10000
+    /// forge-config: fuzz.runs = 10000
+    function testTransferFuzz(uint256 amount) public {
+      // ...
+    }
+    ```
+
+    In Foundry, `default.` applies under every profile, because profiles inherit from `default`. In Hardhat it applies only under the `default` profile. Dropping the prefix keeps the Foundry behavior of applying everywhere.
+
+    :::caution
+
+    This one fails silently. If you leave the `default.` prefixes in place, your tests keep passing and the annotations keep working under the `default` profile. Under any other Test Profile, every `default.`-prefixed annotation stops applying, with no error.
+
+    :::
+
+    Annotations for other profiles, like `ci.fuzz.runs`, keep their meaning and need no change. The profile must be declared in `test.solidity.profiles`. Otherwise, the run fails.
+
+5.  **Enable `ffi` and filesystem access if your tests need them**
 
     These are off by default for security reasons. If you use `vm.ffi`, set `test.solidity.ffi: true`. If you use `vm.readFile`/`vm.writeFile`, declare the allowed paths under `test.solidity.fsPermissions`.
 
-5.  **Replace `anvil` with the in-process network (or `hardhat node`)**
+6.  **Replace `anvil` with the in-process network (or `hardhat node`)**
 
     Solidity tests run against an in-process EDR-powered network, so you don't need a separate `anvil` instance to execute them — including for fork tests, which are configured under `test.solidity.fork`. If you previously ran `anvil` for ad-hoc interaction (for example to attach a script or external client), run a JSON-RPC node with:
 
