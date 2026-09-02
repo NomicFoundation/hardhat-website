@@ -56,3 +56,5 @@ For example, to run your tests with the production profile:
 <Run command="hardhat test --build-profile production" />
 
 If you don't specify a profile, most tasks will use `default`, but each task can choose the profile that works best for its workflow. For example, when you deploy with [Hardhat Ignition](/ignition), it uses `production` by default.
+
+Build Profiles only affect how your contracts are compiled. To run your Solidity tests with different settings, use [Test Profiles](/docs/guides/testing/test-profiles), which are selected separately with `--test-profile`.
