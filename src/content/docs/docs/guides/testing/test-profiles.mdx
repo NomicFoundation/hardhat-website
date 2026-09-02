@@ -1,0 +1,104 @@
+---
+title: Test Profiles
+description: How to use Test Profiles in Hardhat 3
+sidebar:
+  label: Solidity test profiles
+  order: 5
+---
+
+import Run from "@hh/Run.astro";
+
+Test Profiles let you use different settings to run your Solidity tests. For example, you might use one Test Profile while iterating locally and another in CI, each with the number of fuzz runs that suits that workflow.
+
+## Configuring a Test Profile
+
+To configure a Test Profile, use this extended version of the `test.solidity` settings in your config:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  //...
+  test: {
+    solidity: {
+      profiles: {
+        default: {
+          fuzz: { runs: 256 },
+        },
+        ci: {
+          fuzz: { runs: 10_000 },
+        },
+      },
+    },
+  },
+});
+```
+
+Each Test Profile can use the full [Solidity tests configuration](/docs/reference/configuration#solidity-tests-configuration).
+
+When using `profiles`, a `default` profile is always required.
+
+Profile names can contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
+
+## Test Profiles don't inherit from each other
+
+Each Test Profile is resolved on its own, starting from Hardhat's defaults, the same way [Build Profiles](/docs/guides/writing-contracts/build-profiles) are. A profile that only sets `fuzz.runs` gets the default value for every other setting, not the value from `default`.
+
+To share settings between profiles, do it in your config file:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+const base = {
+  isolate: true,
+  fuzz: { runs: 256 },
+};
+
+export default defineConfig({
+  //...
+  test: {
+    solidity: {
+      profiles: {
+        default: base,
+        ci: { ...base, fuzz: { runs: 10_000 } },
+      },
+    },
+  },
+});
+```
+
+## Using a `test.solidity` config without defining Test Profiles
+
+If you define your Solidity tests config without explicitly defining Test Profiles, you're actually configuring the `default` profile. This means the configuration shown in the [configuration reference](/docs/reference/configuration#solidity-tests-configuration) applies to the `default` profile.
+
+## Choosing a Test Profile
+
+Use the `--test-profile` argument to choose which Test Profile to use when running your tests.
+
+For example, to run your Solidity tests with the `ci` profile:
+
+<Run command="hardhat test solidity --test-profile ci" />
+
+It also works on the `test` task, where it only affects the Solidity tests:
+
+<Run command="hardhat test --test-profile ci" />
+
+Set the `HARDHAT_TEST_PROFILE` environment variable to select a profile:
+
+<Run prefix="HARDHAT_TEST_PROFILE=ci" command="hardhat test" />
+
+If you provide both, the argument takes precedence. If you don't specify a profile, Hardhat uses `default`.
+
+## Test Profiles and Build Profiles
+
+Test Profiles and [Build Profiles](/docs/guides/writing-contracts/build-profiles) are independent: Test Profiles only affect how your tests run, and Build Profiles only affect how your contracts are compiled.
+
+Switching Test Profiles doesn't cause your contracts to be recompiled, so you can switch between profiles freely. If you want to change both profiles, you need to pass both arguments:
+
+<Run command="hardhat test --build-profile production --test-profile ci" />
+
+## Overriding settings for a single test
+
+Test Profiles apply to your entire test suite. To override settings for a single test function, use [inline configuration](/docs/guides/testing/inline-configuration), which can also be scoped to a Test Profile.
