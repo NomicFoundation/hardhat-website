@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import HardhatNewsImage from "../../assets/landing/what-is-new/Hardhat-news.svg";
 import { landing } from "../../config";
 import { formatSmartDate } from "../../utils/formatSmartDate";
+import { releaseBodyHtml } from "../../utils/releaseSummary";
 import Container from "./Container.astro";
 
 const githubReleases = await getCollection("githubReleases");
@@ -48,7 +49,10 @@ const githubReleases = await getCollection("githubReleases");
                 </div>
               </div>
               <div class="news-content">
-                <div class="news-text">{item.data.body}</div>
+                <div
+                  class="news-text"
+                  set:html={releaseBodyHtml(item.data.body, { links: false })}
+                />
                 <a
                   href={item.data.html_url}
                   target="_blank"
@@ -331,13 +335,19 @@ const githubReleases = await getCollection("githubReleases");
     display: -webkit-box
     -webkit-line-clamp: 4
     -webkit-box-orient: vertical
-    white-space: pre-wrap; /* Preserves all whitespace and wraps long lines */
+    overflow-wrap: break-word
 
     +dark
       color: var(--hh-gray400)
 
     +desktop
       font-size: 16px
+
+    :global(p)
+      margin: 0
+
+      & + :global(p)
+        margin-top: 0.75em
 
   .news-link
     gap: 8px
