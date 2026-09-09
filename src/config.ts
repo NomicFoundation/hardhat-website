@@ -27,8 +27,8 @@ export const landing: LandingConfig = {
     canonicalUrl: globalConfig.url,
   },
   banner: {
-    text: "Hardhat 3 is now production ready. Migrate now",
-    href: "/docs",
+    text: "Compile Solidity up to 5x faster: slang-solx",
+    href: "https://blog.nomic.foundation/announcing-slang-solx-a-solidity-compiler-thats-up-to-5x-faster/",
   },
   header: {
     logo: {
