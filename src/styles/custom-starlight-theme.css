@@ -1,5 +1,37 @@
 @import url(./colors.css);
 
+/*
+  Site-wide banner at the top of the docs. It renders inside Starlight's fixed
+  header (see starlight-overrides/Header.astro), so we grow --sl-nav-height by
+  its height: the sidebar, main frame, mobile TOC, right sidebar and scroll
+  padding all derive from that variable and clear the banner automatically.
+  Only the two pieces that center themselves within the header height need to
+  subtract it again.
+*/
+:root {
+  --hh-docs-banner-height: 40px;
+  --sl-nav-height: calc(3.5rem + var(--hh-docs-banner-height));
+}
+
+@media (min-width: 50em) {
+  :root {
+    --sl-nav-height: calc(4rem + var(--hh-docs-banner-height));
+  }
+}
+
+.site-title img {
+  height: calc(
+    var(--sl-nav-height) - var(--hh-docs-banner-height) - 2 * var(--sl-nav-pad-y)
+  );
+}
+
+starlight-menu-button button {
+  top: calc(
+    var(--hh-docs-banner-height) +
+      (var(--sl-nav-height) - var(--hh-docs-banner-height) - var(--sl-menu-button-size)) / 2
+  );
+}
+
 :root[data-theme='dark'] {
   --sl-color-accent-low:  var(--hh-yellow1150);  /* subtle accent bg (chips, callouts) */
   --sl-color-accent:      var(--hh-accent700);  /* main link color on dark (very bright) */
