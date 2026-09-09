@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import Button from "../ui/Button.astro";
 import Container from "./Container.astro";
 import heroGraphicDesktop from "../../assets/landing/hero/hero.webp";
@@ -9,6 +10,23 @@ import heroGraphicDarkTablet from "../../assets/landing/hero/heroDarkTablet.webp
 import heroGraphicDarkMobile from "../../assets/landing/hero/heroDarkMobile.webp";
 
 import { landing } from "../../config";
+import { formatSmartDate } from "../../utils/formatSmartDate";
+
+const githubReleases = await getCollection("githubReleases");
+const latestRelease = githubReleases[0];
+
+// The release body is markdown; we only show its first paragraph as plain
+// text, truncated with an ellipsis by CSS.
+function releaseSummary(body: string): string {
+  const firstParagraph = body.split(/\n\s*\n/)[0] ?? "";
+
+  return firstParagraph
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[`*_~]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 ---
 
 <section class="section">
@@ -21,12 +39,24 @@ import { landing } from "../../config";
       </Button>
     </div>
 
-    <div class="block">
-      <h2 class="block-title">{landing.hero.block.title}</h2>
-      <p class="block-text">
-        {landing.hero.block.text}
-      </p>
-    </div>
+    {
+      latestRelease && (
+        <div class="release-info">
+          <a
+            href={latestRelease.data.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="release-version"
+          >
+            {latestRelease.data.name}
+          </a>
+          <p class="release-description">
+            Released {formatSmartDate(latestRelease.data.published_at)}:{" "}
+            {releaseSummary(latestRelease.data.body)}
+          </p>
+        </div>
+      )
+    }
   </Container>
 
   <div class:list={["graphic-container", "light"]}>
@@ -63,7 +93,7 @@ import { landing } from "../../config";
 
   .section
     width: 100%
-    padding: 28px 0 95px
+    padding: 28px 0 100px
     text-align: center
     position: relative
     z-index: 1
@@ -73,13 +103,13 @@ import { landing } from "../../config";
       color: var(--hh-gray200)
 
     +tablet
-      padding: 70px 0 20px
+      padding: 70px 0 120px
 
     +laptop
-      padding: 102px 0 122px
+      padding: 102px 0 200px
 
     +desktop
-      padding: 102px 0 148px
+      padding: 102px 0 240px
 
     &::before
       background-image: url('../../assets/landing/hero/hero-texture.svg')
@@ -109,17 +139,14 @@ import { landing } from "../../config";
     gap: 22px
     max-width: 520px
     margin: 0 auto
-    margin-bottom: 425px
 
     +tablet
       gap: 24px
-      margin-bottom: 206px
 
     +laptop
       padding-top: 60px
       max-width: 730px
       gap: 40px
-      margin-bottom: 373px
 
     +desktop
       max-width: 840px
@@ -220,66 +247,75 @@ import { landing } from "../../config";
       font-size: 95px
       letter-spacing: 0.02em
 
-  .block
+  .release-info
     display: flex
     flex-direction: column
-    gap: 10px 24px
-    text-align: center
-
-    +tablet
-      align-items: center
-      flex-direction: row
-      text-align: left
-
-    +laptop
-      gap: 20px 45px
-
-  .block-title
-    font-size: 18px
-    line-height: 1.35
-    letter-spacing: 0.05em
+    align-items: center
+    gap: 6px
+    width: 100%
+    max-width: 100%
+    margin: 310px auto 0
     font-family: var(--font-code)
-    font-weight: 600
-    max-width: 180px
-    margin: 0 auto
-    flex: none
-    +tablet
-      margin: 0
-      font-size: 20px
-      max-width: 200px
-
-    +laptop
-      font-size: 25px
-      max-width: 245px
-
-    +desktop
-      font-size: 31px
-      max-width: 310px
-
-    &::after
-      content: "_"
-      display: inline
-      color: var(--hh-accent900)
-
-  .block-text
-    font-size: 14px
-    line-height: 1.45
     letter-spacing: 0.05em
-    font-family: var(--font-base)
-    max-width: 470px
-    color: var(--hh-gray700)
-    margin: 0
+    text-align: center
+    color: var(--hh-gray600)
+    position: relative
+    z-index: 2
 
     +dark
-      color: var(--hh-gray400)
+      color: var(--hh-gray500)
 
     +tablet
-      font-size: 16px
+      margin-top: 44px
+      max-width: 560px
 
     +laptop
-      font-size: 18px
-      max-width: 540px
+      margin-top: 56px
+      max-width: 660px
 
     +desktop
-      font-size: 20px
+      margin-top: 60px
+      max-width: 760px
+
+  .release-version
+    color: inherit
+    font-weight: 600
+    font-size: 11px
+    line-height: 1.3
+    text-decoration: underline
+    text-underline-offset: 2px
+
+    +tablet
+      font-size: 12px
+
+    +laptop
+      font-size: 13px
+
+    +desktop
+      font-size: 14px
+
+    &:hover
+      color: var(--hh-gray900)
+
+      +dark
+        color: var(--hh-gray200)
+
+  .release-description
+    margin: 0
+    max-width: 100%
+    font-weight: 400
+    font-size: 9px
+    line-height: 1.4
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+    +tablet
+      font-size: 10px
+
+    +laptop
+      font-size: 11px
+
+    +desktop
+      font-size: 12px
 </style>
