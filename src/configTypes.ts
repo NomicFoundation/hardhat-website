@@ -5,15 +5,16 @@ export interface GlobalConfig {
   headCommentForAgents: string;
 }
 
+export interface BannerConfig {
+  text: string;
+  href: string;
+}
+
 export interface LandingConfig {
   head: {
     title: string;
     description: string;
     canonicalUrl: string;
-  };
-  banner: {
-    text: string;
-    href: string;
   };
   header: {
     logo: {

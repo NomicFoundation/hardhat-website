@@ -2,7 +2,7 @@
 import "../styles/landing.css";
 
 import { globalConfig, landing } from "../config";
-import Banner from "../components/landing/Banner.astro";
+import Banner from "../components/ui/Banner.astro";
 import EmailForm from "../components/landing/EmailForm.astro";
 import Footer from "../components/landing/Footer.astro";
 import HardhatNews from "../components/landing/HardhatNews.astro";
@@ -85,7 +85,9 @@ ${globalConfig.headCommentForAgents}
     />
   </head>
   <body>
-    <Banner />
+    <div class="banner-sticky">
+      <Banner />
+    </div>
     <LandingHeader />
 
     <main class="main">
@@ -99,3 +101,11 @@ ${globalConfig.headCommentForAgents}
     <CookiePopup />
   </body>
 </html>
+
+<style>
+  .banner-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 19;
+  }
+</style>

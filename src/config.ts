@@ -1,4 +1,5 @@
 import type {
+  BannerConfig,
   CookiePopupConfig,
   GlobalConfig,
   LandingConfig,
@@ -19,16 +20,18 @@ export const globalConfig: GlobalConfig = {
     - Providing an Accept header with text/markdown`,
 };
 
+// Shown at the top of both the landing page and the docs.
+export const banner: BannerConfig = {
+  text: "Compile Solidity up to 5x faster: slang-solx",
+  href: "https://blog.nomic.foundation/announcing-slang-solx-a-solidity-compiler-thats-up-to-5x-faster/",
+};
+
 export const landing: LandingConfig = {
   head: {
     title: "Hardhat 3",
     description:
       "Hardhat is an Ethereum development environment. Compile your contracts and run them on a development network. Get Solidity stack traces, console.log and more.",
     canonicalUrl: globalConfig.url,
-  },
-  banner: {
-    text: "Compile Solidity up to 5x faster: slang-solx",
-    href: "https://blog.nomic.foundation/announcing-slang-solx-a-solidity-compiler-thats-up-to-5x-faster/",
   },
   header: {
     logo: {
