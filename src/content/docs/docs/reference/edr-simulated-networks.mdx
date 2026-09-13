@@ -264,6 +264,17 @@ export default defineConfig({
 
 This is useful for recreating blocks from other networks where the transaction order is known.
 
+## Gas estimation modes
+
+To answer an `eth_estimateGas` request, EDR runs a binary search over the transaction's gas limit, looking for the lowest value that makes the transaction succeed. The `gasEstimationMode` network config option controls what counts as a successful execution during this search:
+
+- `"noInternalOutOfGas"`: The transaction must succeed and no call internal to it may run out of gas. This avoids estimates that make the top-level call succeed while an internal call silently fails with an out-of-gas error, which can happen when a contract ignores a failing call (for example, with `try`/`catch` or an unchecked low-level call). Default value.
+- `"topLevelSuccess"`: The transaction only needs to succeed at the top level, even if an internal call runs out of gas along the way.
+
+In the `"noInternalOutOfGas"` mode, if an internal call runs out of gas even when the transaction is executed with the maximum amount of gas available, no gas limit can prevent the failure, so the estimation fails with a descriptive error instead of returning a misleading value. This usually indicates a call made with a fixed gas amount that is too low. If the behavior is intentional, you can set an explicit gas limit on the transaction, or switch the network to `"topLevelSuccess"`.
+
+Transactions that rely on Hardhat's automatic gas estimation (the [`gas: "auto"` setting](/docs/reference/configuration#shared-network-options), which is the default) are not rejected in this situation: Hardhat falls back to the network's default transaction gas limit instead.
+
 ## Configuration
 
 To learn more about configuring simulated networks, read the [configuration reference](/docs/reference/configuration#network-configuration).
