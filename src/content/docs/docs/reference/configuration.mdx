@@ -294,6 +294,38 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
   - `shrinkRunLimit`: The maximum number of attempts to shrink a failed sequence. The shrink process is disabled if set to 0. Defaults to 5000.
 
+#### Test Profiles
+
+Instead of the options above, `test.solidity` can contain a single `profiles` entry: a map of [Test Profile](/docs/guides/testing/test-profiles) names to objects with those same options.
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  test: {
+    solidity: {
+      profiles: {
+        default: {
+          fuzz: { runs: 256 },
+        },
+        ci: {
+          fuzz: { runs: 10_000 },
+        },
+      },
+    },
+  },
+});
+```
+
+The two shapes are mutually exclusive: a config with `profiles` can't also set options at the top level. Setting them at the top level is equivalent to defining only a `default` profile.
+
+When using `profiles`, a `default` profile is always required.
+
+Profile names can contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
+
+Like Build Profiles, each Test Profile is resolved independently: profiles don't inherit values from `default`.
+
 ### Coverage configuration
 
 Hardhat has built-in [code coverage](/docs/guides/testing/code-coverage). You can use the `coverage` entry to configure it:

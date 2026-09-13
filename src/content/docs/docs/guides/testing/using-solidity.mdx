@@ -158,6 +158,14 @@ This example uses the `op` Chain Type, which simulates OP Mainnet and its testne
 
 To learn more about Chain Types and testing on different blockchains, read our [multichain support](/docs/explanations/multichain-support) explanation.
 
+### Choosing a Test Profile
+
+If you configured multiple Test Profiles, use the `--test-profile` option to choose which one to run with:
+
+<Run command="hardhat test solidity --test-profile ci" />
+
+To learn more about running your tests with different settings, read the [Test Profiles guide](/docs/guides/testing/test-profiles).
+
 ## Configuring Solidity tests
 
 You can configure how Solidity tests are executed in your Hardhat configuration.
@@ -219,3 +227,5 @@ export default defineConfig({
 To learn more about how to configure your Solidity tests, read [the Solidity tests Configuration reference](/docs/reference/configuration#solidity-tests-configuration).
 
 You can also override config settings for individual test functions using inline configuration. Read the [Inline configuration](/docs/guides/testing/inline-configuration) guide to learn more.
+
+To define several sets of settings and choose between them when running your tests, read the [Test Profiles](/docs/guides/testing/test-profiles) guide.

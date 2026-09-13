@@ -298,6 +298,7 @@ These are proper nouns used in Hardhat 3 that need to be capitalized in the docu
 - Network Connection
 - Network Config
 - Build Profile
+- Test Profile
 - Isolated Build
 - Ignition Module
 - Ignition
