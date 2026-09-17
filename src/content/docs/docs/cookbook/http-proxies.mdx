@@ -6,6 +6,24 @@ sidebar:
   order: 2
 ---
 
-Hardhat supports the `http_proxy` environment variable. When this variable is set, Hardhat will send its requests through the given proxy for things like JSON-RPC requests, mainnet forking and downloading compilers.
+Hardhat sends its requests through a proxy when one is configured in the environment. This applies to things like JSON-RPC requests, mainnet forking, downloading compilers and verifying contracts.
 
-There's also support for the `no_proxy` variable, which accepts a comma separated list of hosts or `"*"`. Any host included in this list will not be proxied. Note that requests to `"localhost"` or `"127.0.0.1"` are never proxied.
+Set `https_proxy` for HTTPS requests and `http_proxy` for HTTP ones. The uppercase `HTTPS_PROXY` and `HTTP_PROXY` work too:
+
+```sh
+export HTTPS_PROXY=http://proxy.example.com:8080
+```
+
+## Excluding hosts
+
+Use `NO_PROXY` or `no_proxy` to reach some hosts directly. It takes a list of entries separated by commas or spaces:
+
+```sh
+export NO_PROXY=example.com,.internal.dev,staging.example.com:8080
+```
+
+Each entry also covers its subdomains, so `example.com` excludes `api.example.com` as well. You can write an entry as `.example.com` or `*.example.com` if you prefer. Adding a port restricts the entry to that port.
+
+Set `NO_PROXY` to `*` to turn proxying off entirely.
+
+Requests to `localhost` and other loopback addresses are never proxied, so a local node stays reachable without any extra configuration.
