@@ -322,7 +322,7 @@ The two shapes are mutually exclusive: a config with `profiles` can't also set o
 
 When using `profiles`, a `default` profile is always required.
 
-Profile names can contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
+Profile names must start with a letter or a number, and can only contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
 
 ### Coverage configuration
 

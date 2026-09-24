@@ -39,7 +39,7 @@ Each Test Profile can use the full [Solidity tests configuration](/docs/referenc
 
 When using `profiles`, a `default` profile is always required.
 
-Profile names can contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
+Profile names must start with a letter or a number, and can only contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
 
 If you define your Solidity tests config without explicitly defining Test Profiles, you're actually configuring the default behavior.
 
