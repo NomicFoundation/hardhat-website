@@ -6,140 +6,224 @@
       "author": "Ronan Sandford",
       "authorUrl": "https://twitter.com/wighawag",
       "description": "A Hardhat Plugin For Replicable Deployments And Easy Testing",
-      "tags": ["Deployment", "Testing", "Scripts"]
+      "tags": [
+        "Deployment",
+        "Testing",
+        "Scripts"
+      ]
     },
     {
       "name": "@solidstate/hardhat-abi-exporter",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Export Ethereum smart contract ABIs",
-      "tags": ["abi", "compilation"]
+      "tags": [
+        "abi",
+        "compilation"
+      ]
     },
     {
       "name": "@solidstate/hardhat-accounts",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Display connected accounts and balances",
-      "tags": ["accounts", "signers", "balance"]
+      "tags": [
+        "accounts",
+        "signers",
+        "balance"
+      ]
     },
     {
       "name": "@solidstate/hardhat-bytecode-exporter",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Export Ethereum smart contract bytecode",
-      "tags": ["bytecode", "compilation"]
+      "tags": [
+        "bytecode",
+        "compilation"
+      ]
     },
     {
       "name": "@solidstate/hardhat-contract-sizer",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Output Solidity contract sizes with Hardhat",
-      "tags": ["bytecode"]
+      "tags": [
+        "bytecode"
+      ]
     },
     {
       "name": "@solidstate/hardhat-git",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Git-rev-based HRE execution",
-      "tags": ["git", "hre"]
+      "tags": [
+        "git",
+        "hre"
+      ]
     },
     {
       "name": "@solidstate/hardhat-license-identifier",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Prepend local Solidity source files with an SPDX License Identifier",
-      "tags": ["solidity", "license", "spdx"]
+      "tags": [
+        "solidity",
+        "license",
+        "spdx"
+      ]
     },
     {
       "name": "@solidstate/hardhat-linearization",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Calculate Solidity contract inheritance order",
-      "tags": ["solidity", "inheritance"]
+      "tags": [
+        "solidity",
+        "inheritance"
+      ]
     },
     {
       "name": "@solidstate/hardhat-log-remover",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Remove Hardhat console.log imports and calls from Solidity source files",
-      "tags": ["console", "log"]
+      "tags": [
+        "console",
+        "log"
+      ]
     },
     {
       "name": "@solidstate/hardhat-selector-uploader",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Upload local function selectors to the Ethereum Selector Database",
-      "tags": ["selector", "4byte"]
+      "tags": [
+        "selector",
+        "4byte"
+      ]
     },
     {
       "name": "@solidstate/hardhat-storage-layout-inspector",
       "author": "Nick Barry",
       "authorUrl": "https://github.com/ItsNickBarry",
       "description": "Compare storage layouts between contracts and revisions",
-      "tags": ["storage"]
+      "tags": [
+        "storage"
+      ]
     },
     {
       "name": "hashscan-verify",
       "author": "LimeChain",
       "authorUrl": "https://github.com/LimeChain",
       "description": "Verify contracts on Hashscan",
-      "tags": ["verification", "hashscan"]
+      "tags": [
+        "verification",
+        "hashscan"
+      ]
     },
     {
       "name": "hardhat-reown",
       "author": "olehmisar",
       "authorUrl": "https://github.com/olehmisar",
       "description": "Use the reown.com supported wallets with Hardhat",
-      "tags": ["reown", "walletconnect"]
+      "tags": [
+        "reown",
+        "walletconnect"
+      ]
     },
     {
       "name": "hardhat-contract-signatures",
       "author": "Axel Loupias",
       "authorUrl": "https://github.com/AxelLoupias",
       "description": "Display function, event, and error signatures for your contracts in the console",
-      "tags": ["function", "error", "event", "tooling", "selector"]
+      "tags": [
+        "function",
+        "error",
+        "event",
+        "tooling",
+        "selector"
+      ]
     },
     {
       "name": "@solarity/hardhat-migrate",
       "author": "Distributed Lab",
       "authorUrl": "https://distributedlab.com/",
       "description": "The simplest way to deploy smart contracts",
-      "tags": ["Deployment", "Verification", "Migration", "Solarity"]
+      "tags": [
+        "Deployment",
+        "Verification",
+        "Migration",
+        "Solarity"
+      ]
     },
     {
       "name": "@solarity/hardhat-gobind",
       "author": "Distributed Lab",
       "authorUrl": "https://distributedlab.com/",
       "description": "Hardhat plugin to generate Go bindings for smart contracts",
-      "tags": ["Bindings", "Go", "Testing", "Abigen", "Solarity"]
+      "tags": [
+        "Bindings",
+        "Go",
+        "Testing",
+        "Abigen",
+        "Solarity"
+      ]
     },
     {
       "name": "@solarity/hardhat-markup",
       "author": "Distributed Lab",
       "authorUrl": "https://distributedlab.com/",
       "description": "Hardhat plugin to generate customizable smart contracts documentation",
-      "tags": ["Documentation", "NatSpec", "Markdown", "Solarity"]
+      "tags": [
+        "Documentation",
+        "NatSpec",
+        "Markdown",
+        "Solarity"
+      ]
     },
     {
       "name": "hardhat-ignore-warnings",
       "author": "@frangio",
       "authorUrl": "https://github.com/frangio",
       "description": "Hardhat plugin that adds ways to ignore Solidity warnings",
-      "tags": ["Solidity", "Warnings"]
+      "tags": [
+        "Solidity",
+        "Warnings"
+      ]
     },
     {
       "name": "@openscan/hardhat-plugin",
       "author": "openscan-explorer",
       "authorUrl": "https://github.com/openscan-explorer/hardhat-plugin",
       "description": "Hardhat plugin to explore the hardhat network, blocks, txs, contracts, etc.",
-      "tags": ["Devtools", "Testing"]
+      "tags": [
+        "Devtools",
+        "Testing"
+      ]
     },
     {
       "name": "hardhat-descriptor",
       "author": "hangleang",
       "authorUrl": "https://github.com/hangleang",
       "description": "Generate ERC-7730 clear-signing descriptors for compiled contracts using Claude, Gemini, or any OpenAI-compatible LLM.",
-      "tags": ["erc-7730", "clear-signing"]
+      "tags": [
+        "erc-7730",
+        "clear-signing"
+      ]
+    },
+    {
+      "name": "hardhat-blockhertz",
+      "author": "Blockhertz",
+      "authorUrl": "https://blockhertz.com",
+      "description": "AI-powered smart contract security auditor — automatically scans Solidity contracts for vulnerabilities and gas optimizations using the Blockhertz AI API",
+      "tags": [
+        "security",
+        "audit",
+        "AI",
+        "solidity",
+        "gas"
+      ]
     }
   ]
 }
