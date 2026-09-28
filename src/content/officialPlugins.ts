@@ -1,6 +1,6 @@
 import type { Loader } from "astro/loaders";
 import { defineCollection } from "astro:content";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 
 import fs from "node:fs/promises";
 import path from "node:path";
