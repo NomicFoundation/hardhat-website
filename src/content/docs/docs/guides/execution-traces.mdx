@@ -33,14 +33,14 @@ The verbosity levels behave slightly differently for Solidity tests and TypeScri
 
 Each level includes everything from the previous levels:
 
-| Level | What it adds                                                       |
-| ----- | ------------------------------------------------------------------ |
-| 0     | Test names and pass/fail status (failure details are always shown) |
-| 1     | Decoded logs for failing tests                                     |
-| 2     | Decoded logs for passing tests _(default)_                         |
-| 3     | Execution traces for failing tests; stack traces always collected  |
-| 4     | Execution traces for passing tests; setup traces for failing tests |
-| 5     | Setup traces for passing tests                                     |
+| Level | What it adds                                                                                                                                                                    |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Test names and pass/fail status (failure details are always shown)                                                                                                              |
+| 1     | Decoded logs for failing tests                                                                                                                                                  |
+| 2     | Decoded logs for passing tests _(default)_                                                                                                                                      |
+| 3     | Execution traces for failing tests                                                                                                                                              |
+| 4     | Execution traces for passing tests; setup traces for failing tests                                                                                                              |
+| 5     | Setup traces for passing tests; stack traces always collected, guaranteeing them for tests that aren't safe to re-run (impure cheatcodes, forking without a fixed block number) |
 
 ### TypeScript tests, scripts, and tasks
 

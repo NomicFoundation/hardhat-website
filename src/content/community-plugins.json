@@ -133,6 +133,21 @@
       "authorUrl": "https://github.com/openscan-explorer/hardhat-plugin",
       "description": "Hardhat plugin to explore the hardhat network, blocks, txs, contracts, etc.",
       "tags": ["Devtools", "Testing"]
+    },
+    {
+      "name": "hardhat-descriptor",
+      "author": "hangleang",
+      "authorUrl": "https://github.com/hangleang",
+      "description": "Generate ERC-7730 clear-signing descriptors for compiled contracts using Claude, Gemini, or any OpenAI-compatible LLM.",
+      "tags": ["erc-7730", "clear-signing"]
+    },
+    {
+      "name": "@deployoor/hardhat",
+      "website": "https://deployoor.dev/guides/hardhat",
+      "author": "Valerio Leo",
+      "authorUrl": "https://github.com/valerioleo",
+      "description": "Regenerates deployoor's typed deployers after every compile: deploy with your own viem wallet and keep a JSON record per chain.",
+      "tags": ["Deployment", "Testing", "viem", "TypeScript"]
     }
   ]
 }

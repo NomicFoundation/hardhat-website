@@ -75,3 +75,10 @@ secp
 unwritable
 llm
 llms
+lockfiles
+gitmodules
+resumability
+uninstrumented
+Glamsterdam
+Hegota
+slotnum

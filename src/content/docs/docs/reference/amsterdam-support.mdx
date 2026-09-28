@@ -1,0 +1,179 @@
+---
+title: Amsterdam hardfork support
+description: Reference documentation for Hardhat's experimental support for the upcoming Amsterdam hardfork
+sidebar:
+  label: Amsterdam support
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat provides **experimental** support for the upcoming Amsterdam execution-layer hardfork. It lets you start testing your contracts against Amsterdam's new behavior before it activates on Ethereum Mainnet.
+
+:::caution
+
+Amsterdam support is experimental and incomplete. The hardfork is still being specified and implemented. The EIPs it includes may change in backward-incompatible ways before launch.
+
+:::
+
+Amsterdam is not enabled by default: `osaka` remains Hardhat's default and latest stable hardfork. You have to opt in explicitly, see [enabling Amsterdam](#enabling-amsterdam).
+
+We are implementing Amsterdam's EIPs incrementally, and will add more as the hardfork is finalized in the run-up to launch.
+
+## Supported features
+
+The following Amsterdam EIPs are currently supported:
+
+- [EIP-7708: ETH transfers emit logs](#eip-7708-eth-transfers-emit-logs)
+- [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
+- [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
+- [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
+
+## Enabling Amsterdam
+
+Set `hardfork` to `"amsterdam"` on a simulated network with the `l1` or `generic` chain type:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  networks: {
+    edrAmsterdam: {
+      type: "edr-simulated",
+      chainType: "l1",
+      hardfork: "amsterdam",
+    },
+  },
+});
+```
+
+You can then use the new network as the default in scripts and tests with the `--network` flag:
+
+<Run command="hardhat run scripts/example.ts --network edrAmsterdam" />
+
+Or you can name it explicitly when creating a network:
+
+```ts
+import { network } from "hardhat";
+
+const connection = await network.create({ network: "edrAmsterdam" });
+```
+
+## EIP-7708: ETH transfers emit logs
+
+Under [EIP-7708](https://eips.ethereum.org/EIPS/eip-7708), ETH transfers emit a log with the same shape as an ERC-20 `Transfer` event:
+
+- **address**: the system address `0xfffffffffffffffffffffffffffffffffffffffe`
+- **topics[0]**: `keccak256("Transfer(address,address,uint256)")`
+- **topics[1]**: the sender
+- **topics[2]**: the recipient
+- **data**: the amount in wei
+
+This means plain ETH transfers — which previously produced no logs — now emit one. The following is a minimal script that sends 1 ETH and prints the resulting log using viem:
+
+```ts
+// scripts/transfer-logs.ts
+import { network } from "hardhat";
+
+import {
+  decodeEventLog,
+  formatEther,
+  getAddress,
+  parseAbiItem,
+  toEventSelector,
+} from "viem";
+
+// EIP-7708: value-transferring operations emit a log from this system address
+const LOG_EMITTING_SYSTEM_ADDRESS =
+  "0xfffffffffffffffffffffffffffffffffffffffe";
+
+// topics[0] is keccak256("Transfer(address,address,uint256)")
+const transferEvent = parseAbiItem(
+  "event Transfer(address indexed from, address indexed to, uint256 value)",
+);
+const TRANSFER_TOPIC = toEventSelector(transferEvent);
+
+const { viem } = await network.create({ network: "edrAmsterdam" });
+
+const [sender, recipient] = await viem.getWalletClients();
+const publicClient = await viem.getPublicClient();
+
+const hash = await sender.sendTransaction({
+  to: recipient.account.address,
+  value: 10n ** 18n, // 1 ETH
+});
+
+const receipt = await publicClient.waitForTransactionReceipt({ hash });
+
+const transferLogs = receipt.logs.filter(
+  (log) =>
+    getAddress(log.address) === getAddress(LOG_EMITTING_SYSTEM_ADDRESS) &&
+    log.topics[0] === TRANSFER_TOPIC,
+);
+
+console.log("ETH transfer logs emitted by the system address:\n");
+for (const log of transferLogs) {
+  const { args } = decodeEventLog({
+    abi: [transferEvent],
+    data: log.data,
+    topics: log.topics,
+  });
+
+  console.log({
+    emittedBy: getAddress(log.address),
+    from: args.from,
+    to: args.to,
+    value: `${formatEther(args.value)} ETH`,
+  });
+}
+```
+
+Running it prints a log emitted by the system address, with the `from` and `to` addresses derived from its topics and the transferred amount from its data:
+
+<Run command="hardhat run scripts/transfer-logs.ts" />
+
+## EIP-7778: Block Gas Accounting without Refunds
+
+Under [EIP-7778](https://eips.ethereum.org/EIPS/eip-7778), gas refunds no longer reduce the gas counted towards the block gas limit. From Amsterdam onwards, a block's `gasUsed` reflects the gross gas spent by its transactions, without subtracting refunds. This only affects block-level accounting; per-transaction costs are unchanged.
+
+In practice, this may affect test suites that assert on a block's `gasUsed`, which can now be higher than on earlier hardforks if there are transactions that trigger refunds.
+
+## EIP-7843: SLOTNUM opcode
+
+[EIP-7843](https://eips.ethereum.org/EIPS/eip-7843) exposes the consensus-layer slot number to the execution layer, so contracts can read it without hardcoding slot-length calculations or checking it against a beacon root. Amsterdam blocks carry a new `slotNumber` header field, and the new `SLOTNUM` (`0x4b`) opcode returns the executing block's slot number. In practice, most test suites won't need the slot number.
+
+Hardhat's simulated network has no consensus layer, so it simulates the slot number. On a new chain it starts at 0, and it increments by one for every mined block, including the blocks that `hardhat_mine` fast-forwards through. When you fork, the forked block keeps its original slot number, and blocks mined on top of it continue from there.
+
+The simulated value is deterministic, but it doesn't advance the way a real network's does. On Ethereum, slots advance at a fixed interval regardless of whether a validator proposes a block. Because some slots are empty, consecutive blocks often have non-consecutive slot numbers. Don't rely on one slot per block outside of a simulated network.
+
+`slotNumber` isn't part of the standard block response. To read it, send a raw JSON-RPC request:
+
+```ts
+// scripts/slot-number.ts
+import { network } from "hardhat";
+
+const { provider } = await network.create({ network: "edrAmsterdam" });
+
+for (let i = 0; i < 3; i++) {
+  await provider.request({ method: "hardhat_mine", params: [] });
+
+  const block = (await provider.request({
+    method: "eth_getBlockByNumber",
+    params: ["latest", false],
+  })) as { number: string; slotNumber: string };
+
+  console.log(
+    `block ${BigInt(block.number)} has slot number ${BigInt(block.slotNumber)}`,
+  );
+}
+```
+
+Running it prints the slot number of each newly mined block:
+
+<Run command="hardhat run scripts/slot-number.ts" />
+
+## EIP-7928: Block-Level Access Lists
+
+[EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) introduces block-level access lists, which record every account and storage slot accessed while executing a block. Amsterdam blocks carry a new `blockAccessListHash` header field: the `keccak256` hash of the RLP-encoded block-level access list.
+
+Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Within a chain the placeholder `blockAccessListHash` is unique per block, and a block with no state changes uses the empty-list hash `keccak256(rlp([]))` as the EIP specifies. Don't assert on specific `blockAccessListHash` values.

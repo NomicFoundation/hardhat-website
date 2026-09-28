@@ -1,0 +1,52 @@
+---
+title: Migrate with an AI agent
+description: How to install and run the Foundry to Hardhat migration skill
+sidebar:
+  label: Migrate with an AI agent
+  order: 99
+---
+
+import RunRemote from "@hh/RunRemote.astro";
+
+If you use an AI coding agent, our Foundry to Hardhat migration skill allows it to perform a structured migration of your project.
+
+## Install the skill
+
+Install the skill in your project:
+
+<RunRemote command="skills add nomicfoundation/hardhat-skills --skill migrate-foundry-to-hardhat" />
+
+This launches an interactive CLI that will walk you through installing the migration skill for your agent. For instance, you can choose to install into your current project (rather than globally) and specifically for Claude, which writes the skill files into `.claude/skills/` at the repository root.
+
+## Run the migration
+
+Open your project in your coding agent and ask it to migrate from Foundry to Hardhat 3, for example:
+
+> Migrate this project from Foundry to Hardhat 3 using the Hardhat migration skill.
+
+For Claude you can invoke the migration as a command with:
+
+```
+/migrate-foundry-to-hardhat
+```
+
+The agent will use the skill to start a campaign to migrate the repo to Hardhat 3. The agent will migrate the project by systematically working through the following steps in order:
+
+1. **Analyze** the Foundry project including `foundry.toml`, remappings, submodules, inline config, and scripts.
+2. **Add Hardhat** to the project with the detected package manager.
+3. **Create `hardhat.config.ts`**, mapping every `foundry.toml` section across.
+4. **Handle absolute imports** and remapping differences.
+5. **Compile** the contracts.
+6. **Run Solidity tests** and get them passing.
+7. **Migration report** covering migration gaps and a Foundry cleanup checklist.
+
+## Review the result
+
+The skill automates the migration, but you should still review the changes and verify your core development workflows are correct, for example:
+
+```sh
+npx hardhat build
+npx hardhat test
+```
+
+Further manual migration may be necessary for additional workflows e.g. CI, deployment, specialist scripts etc.

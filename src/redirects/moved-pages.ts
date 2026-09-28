@@ -15,4 +15,5 @@ export default [
   ["/docs/guides/gas-statistics", "/docs/guides/testing/gas-statistics"],
   ["/docs/guides/cookbook", "/docs/cookbook"],
   ["/docs/plugins", "/docs/plugins/official-plugins"],
+  ["/docs/hardhat3/beta-status", "/docs/getting-started"],
 ] satisfies Redirects;

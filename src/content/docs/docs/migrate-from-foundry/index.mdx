@@ -1,0 +1,348 @@
+---
+title: Migrate from Foundry
+description: How to migrate from Foundry to Hardhat 3
+sidebar:
+  label: Overview
+---
+
+import { TabItem, Tabs } from "@astrojs/starlight/components";
+import { Code } from "@astrojs/starlight/components";
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+import RunRemote from "@hh/RunRemote.astro";
+
+:::tip
+If you use an AI coding agent, you can leverage our _Foundry to Hardhat migration skill_ to have it run your migration. See [Migrate with an AI agent](/docs/migrate-from-foundry/guides/migration-skill) for details.
+:::
+
+Hardhat 3 is a full replacement for Foundry: it runs Solidity tests, understands `remappings.txt`, and can build contracts laid out the way Foundry expects.
+
+On top of that compatibility, Hardhat 3 brings capabilities Foundry doesn't:
+
+- **An extensible stack** — with a [plugin system](/docs/plugins/official-plugins) and integration with the TypeScript ecosystem, you can bring your own opinions to deployment, verification and other workflows.
+- **Dependencies managed with npm** — Hardhat supports both git submodules and npm dependencies. You have the option to keep your existing `lib/` git submodules, and you can also install dependencies as npm packages to get lockfiles, semver, and native support for transitive dependencies.
+- **Multichain testing** — run the same Solidity tests against a simulated Ethereum L1 or OP Stack chain by switching the chain type, so you catch chain-specific behavior before you deploy.
+- **The right test for the job** — write fast Solidity unit tests for contract logic, exactly as you do today, and reach for TypeScript for integration tests (with viem or ethers) when you need to test against a full network, or to build custom scripts in a full-featured language.
+
+This guide will take you, step by step, through migrating a Foundry project to Hardhat 3. We start with a clean Hardhat config, alongside your existing `foundry.toml`, and migrate one capability at a time.
+
+## Before starting the migration
+
+Before installing Hardhat 3, prepare your project.
+
+1.  **Check Node.js version**
+
+    Make sure you have installed Node.js v22.13.0 or later:
+
+    ```sh
+    node --version
+    ```
+
+2.  **Initialize an npm project**
+
+    If your repo doesn't already have a `package.json`, create one and set it to ESM:
+
+    <Tabs syncKey="package-manager">
+      <TabItem label="npm" icon="npm">
+        <Code
+          code={`npm init -y\nnpm pkg set type=module`}
+          lang="sh"
+          frame="terminal"
+        />
+      </TabItem>
+      <TabItem label="pnpm" icon="pnpm">
+        <Code
+          code={`pnpm init\npnpm pkg set type=module`}
+          lang="sh"
+          frame="terminal"
+        />
+      </TabItem>
+      <TabItem label="Yarn" icon="seti:yarn">
+        <Code
+          code={`yarn init -y\n# yarn doesn't have a command for type=module\nnpm pkg set type=module`}
+          lang="sh"
+          frame="terminal"
+        />
+      </TabItem>
+    </Tabs>
+
+    Add `node_modules/` to your `.gitignore` if it isn't there already.
+
+3.  **Keep your Foundry setup for reference**
+
+    Leave `foundry.toml`, `remappings.txt`, and the `lib/` directory in place during the migration. Hardhat will pick up your `remappings.txt` automatically, and you can remove `lib/` if you choose to move your dependencies to npm.
+
+4.  **(Optional) Add or adapt your `tsconfig.json`**
+
+    We recommend TypeScript over JavaScript for tasks, scripts and deployments. Add or edit your `tsconfig.json` so that `compilerOptions.module` is set to an ESM-compatible value like "node20". A minimal `tsconfig.json` would be:
+
+    ```json
+    // tsconfig.json
+    {
+      "compilerOptions": {
+        "lib": ["es2023"],
+        "module": "node20",
+        "target": "es2023",
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "types": ["node"]
+      }
+    }
+    ```
+
+## Setting up Hardhat 3
+
+With your npm project ready, you can install Hardhat 3.
+
+1.  **Install Hardhat 3**
+
+    <Install packages="hardhat" />
+
+2.  **Create an empty config file**
+
+    Create a `hardhat.config.ts` file with the following content:
+
+    ```ts
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    export default defineConfig({});
+    ```
+
+3.  **Run the help command**
+
+    Verify that Hardhat 3 is working:
+
+    <Run command="hardhat --help" />
+
+## Migrating your Solidity config
+
+Port the compiler settings and project layout from `foundry.toml` so Hardhat finds and builds the same files.
+
+1.  **Add a `solidity` entry**
+
+    Copy your `solc` version, optimizer settings, `via_ir` and `evm_version` from `foundry.toml` into the `solidity` entry. For example:
+
+    ```ts ins={5-13}
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    export default defineConfig({
+      solidity: {
+        version: "0.8.34",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          evmVersion: "cancun",
+          viaIR: false,
+        },
+      },
+    });
+    ```
+
+2.  **Point Hardhat at your existing source and test directories**
+
+    Foundry's defaults are `src/` for contracts and `test/` for tests. Hardhat defaults to `contracts/` and `test/`, so override the `sources` path:
+
+    ```ts ins={5-7}
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    export default defineConfig({
+      paths: {
+        sources: "./src",
+      },
+      solidity: {
+        /* ... */
+      },
+    });
+    ```
+
+    :::note
+
+    Setting `sources` to `./src` tells Hardhat where to find your contracts, but it doesn't make `import "src/Foo.sol"` resolve automatically the way Foundry does. If your code uses root-relative imports like that, see [Using absolute imports](/docs/cookbook/absolute-imports).
+
+    :::
+
+3.  **Split your profiles into Build and Test Profiles**
+
+    Foundry uses a single profile to hold both compiler and test settings: a `[profile.ci]` section holds them together. Hardhat splits them in two, so each Foundry profile becomes two Hardhat profiles:
+    - Compiler settings go to a [Build Profile](/docs/guides/writing-contracts/build-profiles) under `solidity.profiles`, selected with `--build-profile`.
+    - Test settings go to a [Test Profile](/docs/guides/testing/test-profiles) under `test.solidity.profiles`, selected with `--test-profile`.
+
+    If you create both profiles for `ci`, select them together with:
+
+    <Run command="hardhat test --build-profile ci --test-profile ci" />
+
+    :::caution
+
+    Hardhat profiles don't inherit from each other. In Foundry, every profile is merged over `[profile.default]`, so a `[profile.ci]` that only sets `optimizer_runs` keeps everything else from `default`. In Hardhat, each profile is resolved on its own, you can share settings between profiles through shared data in your config file (i.e. a variable).
+
+    :::
+
+4.  **Compile your contracts**
+
+    Run the `build` task to verify that the config is working:
+
+    <Run command="hardhat build" />
+
+For the full configuration reference, see [the configuration reference](/docs/reference/configuration#solidity-configuration).
+
+## Migrating dependencies
+
+Foundry installs dependencies as git submodules under `lib/` and exposes them through `remappings.txt`. Hardhat supports that approach without changes, but also offers the option to use npm packages as dependencies rather than git submodules.
+
+1.  **Install npm equivalents of your `lib/` dependencies**
+
+    Most common dependencies are published to npm. For example:
+
+    <Install packages="@openzeppelin/contracts" />
+
+    For `forge-std`, install it directly from GitHub via your package manager:
+
+    <Install packages="'github:foundry-rs/forge-std#v1.16.2'" />
+
+2.  **Reconcile remappings**
+
+    Hardhat 3 reads `remappings.txt` files automatically, including the ones inside npm packages and git submodules, so your existing entries keep working. Once a dependency is installed via npm, you can either:
+    - **Keep your existing imports** by updating the remapping target within `remappings.txt` to point at the npm package (e.g. `@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/`), or
+    - **Drop the remapping entirely** and rewrite your `import` statements to use the npm package path (e.g. `import "@openzeppelin/contracts/access/Ownable.sol"`) — Hardhat resolves npm imports natively, no remapping required.
+
+    If your project relies on `forge`-generated remappings (no `remappings.txt` is checked in), install the [`@nomicfoundation/hardhat-foundry`](/docs/reference/foundry-compatibility#the-nomicfoundationhardhat-foundry-plugin) plugin and add it to your `plugins` array.
+
+3.  **Optionally remove `lib/` once everything builds**
+
+    Re-run `hardhat build` to confirm the npm-resolved dependencies work. If all of your dependencies have been migrated to npm, you can delete `lib/` and the corresponding `.gitmodules` entries.
+
+## Migrating Solidity tests
+
+Hardhat 3's Solidity testing is designed for compatibility with Foundry test suites. Solidity tests, cheatcodes, and `forge-std` are supported out of the box — no plugin required.
+
+1.  **Confirm your test layout is picked up**
+
+    By default, Hardhat treats every `.sol` file under `test/` as a test file, and any `.t.sol` file under `src/` (or your configured `sources` directory). A contract is treated as a test contract if it has at least one `test*` function, and `setUp()` runs before each test — the same conventions as Foundry. If your tests live somewhere else, override `paths.tests.solidity`:
+
+    ```ts
+    // hardhat.config.ts
+    export default defineConfig({
+      paths: {
+        tests: {
+          solidity: "./test",
+        },
+      },
+    });
+    ```
+
+2.  **Run a single test file**
+
+    Start by running one test file to confirm everything compiles and executes:
+
+    <Run command="hardhat test solidity test/SomeTest.t.sol" />
+
+    Then run the full Solidity suite:
+
+    <Run command="hardhat test solidity" />
+
+    `hardhat test` (without `solidity`) runs every test runner registered in your config (e.g. `node:test`); if you only have Solidity tests today, the two are equivalent.
+
+3.  **Port your test execution settings**
+
+    Translate settings from `[profile.default]` and `[fuzz]` / `[invariant]` in `foundry.toml` into the `test.solidity` entry:
+
+    ```ts ins={5-15}
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    export default defineConfig({
+      test: {
+        solidity: {
+          isolate: true,
+          fuzz: {
+            runs: 256,
+          },
+          invariant: {
+            runs: 256,
+            depth: 15,
+          },
+        },
+      },
+    });
+    ```
+
+    See [the Solidity tests configuration reference](/docs/reference/configuration#solidity-tests-configuration) for the full list of options, including `from`, `txOrigin`, `blockTimestamp`, fork settings, and the `fsPermissions` allowlist that replaces Foundry's `fs_permissions`.
+
+    If you have more than one `foundry.toml` profile, port each one's test settings into [Test Profiles](/docs/guides/testing/test-profiles) under `test.solidity.profiles`, and select them with `--test-profile`. Hardhat profiles don't inherit from `default`, so share the settings they have in common through shared data in your config file:
+
+    ```ts
+    // hardhat.config.ts
+    import { defineConfig } from "hardhat/config";
+
+    const sharedTestSettings = {
+      isolate: true,
+    };
+
+    export default defineConfig({
+      test: {
+        solidity: {
+          profiles: {
+            default: {
+              ...sharedTestSettings,
+              fuzz: { runs: 256 },
+            },
+            ci: {
+              ...sharedTestSettings,
+              fuzz: { runs: 10_000 },
+            },
+          },
+        },
+      },
+    });
+    ```
+
+    If your tests use `forge-config:` annotations, they will keep working. Hardhat supports defaults for all profiles at the root rather than with a `default.` profile. Read the [inline configuration](/docs/guides/testing/inline-configuration) guide to see how they interact with Test Profiles.
+
+4.  **Enable `ffi` and filesystem access if your tests need them**
+
+    These are off by default for security reasons. If you use `vm.ffi`, set `test.solidity.ffi: true`. If you use `vm.readFile`/`vm.writeFile`, declare the allowed paths under `test.solidity.fsPermissions`.
+
+5.  **Replace `anvil` with the in-process network (or `hardhat node`)**
+
+    Solidity tests run against an in-process EDR-powered network, so you don't need a separate `anvil` instance to execute them — including for fork tests, which are configured under `test.solidity.fork`. If you previously ran `anvil` for ad-hoc interaction (for example to attach a script or external client), run a JSON-RPC node with:
+
+    <Run command="hardhat node" />
+
+:::caution
+
+A small number of Foundry cheatcodes aren't supported. The [Cheatcodes reference](/docs/reference/cheatcodes/cheatcodes-overview) lists what's available. If your tests use an unsupported cheatcode, the test will fail at runtime with a clear error — port or stub those tests last.
+
+:::
+
+## Migrating scripts and deployments
+
+Hardhat doesn't have a direct equivalent of `forge script`. For deployments, we recommend [Hardhat Ignition](/docs/guides/deployment), which is declarative and handles resumability, idempotency, and verification. For one-off scripts (admin actions, data migrations), define a [Hardhat task](/docs/guides/writing-tasks) and call your contracts through a network connection:
+
+```ts
+// hardhat.config.ts
+import { defineConfig, task } from "hardhat/config";
+
+const deployCounter = task("deploy-counter", "Deploys the Counter contract")
+  .setInlineAction(async (_taskArgs, hre) => {
+    const { viem } = await hre.network.create();
+    const counter = await viem.deployContract("Counter");
+
+    console.log("Counter deployed at:", counter.address);
+  })
+  .build();
+
+export default defineConfig({
+  tasks: [deployCounter],
+});
+```
+
+The `viem` (or `ethers`) helpers come from a toolbox plugin; install whichever you prefer and add it to `plugins` in your config.
+
+## Migration blockers
+
+If your migration is blocked by a missing feature, plugin, or cheatcode, please let us know [in this issue](https://github.com/NomicFoundation/hardhat/issues/8347).

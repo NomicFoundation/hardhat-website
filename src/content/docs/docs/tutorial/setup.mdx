@@ -9,7 +9,7 @@ import { Badge } from "@astrojs/starlight/components";
 import Run from "@hh/Run.astro";
 import RunRemote from "@hh/RunRemote.astro";
 
-Before you start, make sure you have [Node.js](https://nodejs.org/) 22+ and a package manager (such as `npm` or `pnpm`) installed:
+Before you start, make sure you have [Node.js](https://nodejs.org/) 22.13.0+ and a package manager (such as `npm` or `pnpm`) installed:
 
 <Run preCommand="node --version" command="--version" />
 
@@ -28,10 +28,16 @@ You'll create an empty directory and initialize a Hardhat project inside it:
 
 You'll be prompted to select a few options. Accept the defaults for everything **except the project type** (we'll use a minimal project):
 
-1. Version: "Hardhat 3 Beta"
+1. Version: "Hardhat 3"
 2. Directory: current directory (`"."`)
 3. **Project type: "A minimal Hardhat project"** <Badge text="not default" variant="caution" />
 4. Install dependencies: yes
+
+:::note
+You can run the same initialization non-interactively with:
+
+<RunRemote command="hardhat --init --template minimal" />
+:::
 
 Once the setup is complete, let's verify that everything is working:
 

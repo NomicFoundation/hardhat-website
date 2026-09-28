@@ -66,6 +66,7 @@ For example, if you augment the `hardhat/types/network` module and then redeclar
 
 ```ts
 import "hardhat/types/network";
+
 declare module "hardhat/types/network" {
   export interface NetworkConnection {
     myProp: string;
@@ -85,11 +86,21 @@ In the example above, you'd need to hook into the `NetworkConnection` creation t
 
 ## Loading your plugin's type extensions
 
-To make TypeScript aware of your type extensions, import them in your plugin's index file. Normally, adding this import to your `index.ts` file is enough:
+To make TypeScript aware of your type extensions, add a type-only re-export in your plugin's `index.ts`:
 
 ```ts
-import "./type-extensions.js";
+export type * from "./type-extensions.js";
 ```
+
+This tells TypeScript to apply your type extensions without generating a runtime `import` statement in the compiled JavaScript.
+
+### Writing a correct `type-extensions.ts` file
+
+Your `type-extensions.ts` file should follow these rules for `export type *` to work correctly:
+
+- **No side effects**: the file should not execute any runtime code.
+- **No exported types**: do not export any types, only use `declare module` augmentations.
+- **Use `export {};` as the module marker**: as the file has no imports, TypeScript treats it as a script rather than a module by default. Adding `export {};` forces module mode without introducing a runtime import. Alternatively, set [`"moduleDetection": "force"`](https://www.typescriptlang.org/tsconfig/#moduleDetection) in your `tsconfig.json`.
 
 ## Learn more
 

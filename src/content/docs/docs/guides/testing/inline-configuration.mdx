@@ -1,24 +1,25 @@
 ---
 title: Inline configuration for Solidity tests
-description: How to use inline comments to override the solidity tests' configuration
+description: How to use inline comments to override Solidity test settings
 sidebar:
   label: Solidity tests inline config
-  order: 5
+  order: 6
 ---
 
-Hardhat lets you override solidity test settings on a per-function basis using NatSpec comments. This is useful when different tests need different parameters. For example, running more fuzz iterations on a critical function, or increasing the depth of an invariant test.
+Hardhat lets you override Solidity test settings using NatSpec comments, on a single test function or on a whole test contract. This is useful when different tests need different parameters. For example, a critical function may need more fuzz iterations, while an invariant test may need a greater depth.
 
-Inline overrides take precedence over the global settings defined in your [Solidity tests configuration](/docs/reference/configuration#solidity-tests-configuration).
+Inline overrides take precedence over the global settings defined in your [Solidity tests configuration](/docs/reference/configuration#solidity-tests-configuration). They can also be scoped to a [Test Profile](/docs/guides/testing/test-profiles).
 
 ## Syntax
 
 Each override is a single line inside a NatSpec comment (line `///` or block `/** */`), following the format `hardhat-config: <key> = <value>`.
 
-Keys can be written in camelCase, snake_case, or kebab-case:
+Keys can be written in camelCase, snake_case, or kebab-case, and string values must be double-quoted:
 
 ```solidity
 /// hardhat-config: fuzz.runs = 10000
 /// hardhat-config: fuzz.maxTestRejects = 500
+/// hardhat-config: evmVersion = "cancun"
 function testTransferFuzz(uint256 amount) public {
   // ...
 }
@@ -37,19 +38,81 @@ function invariantBalanceAlwaysPositive() public {
 }
 ```
 
+## Overriding settings for a whole contract
+
+A directive above a contract applies to every test it runs, including the ones it inherits:
+
+```solidity
+/// hardhat-config: fuzz.runs = 500
+contract TransferTest is Test {
+  function testTransferFuzz(uint256 amount) public {
+    // ...
+  }
+}
+```
+
+If a test function sets the same setting, its value wins. The contract's other settings still apply to it.
+
+## Scoping an override to a Test Profile
+
+An unprefixed directive applies under every [Test Profile](/docs/guides/testing/test-profiles). To apply one under a single profile, prefix its key with the profile's name. This works the same way above a function and above a contract:
+
+```solidity
+/// hardhat-config: ci.fuzz.runs = 10000
+function testTransferFuzz(uint256 amount) public {
+  // ...
+}
+```
+
+Combine both forms in the same place to use different values. When its profile is selected, the prefixed directive takes precedence over the unprefixed one for the same key:
+
+```solidity
+/// hardhat-config: fuzz.runs = 100
+/// hardhat-config: ci.fuzz.runs = 10000
+function testTransferFuzz(uint256 amount) public {
+  // ...
+}
+```
+
+This runs 10000 iterations under the `ci` profile, and 100 under any other.
+
+## Which directive applies
+
+Directives are applied in this order of priority:
+
+1. Function-level over contract-level
+2. Profile-prefixed over unprefixed, within the same level
+
+The level comes first, so a function's unprefixed directive beats the contract's prefixed one, even under that profile:
+
+```solidity
+/// hardhat-config: ci.fuzz.runs = 10000
+contract TransferTest is Test {
+  /// hardhat-config: fuzz.runs = 100
+  function testTransferFuzz(uint256 amount) public {
+    // 100 runs under every profile, including `ci`
+  }
+}
+```
+
 ## Supported configuration keys
 
-| Key                      | Description                                               |
-| ------------------------ | --------------------------------------------------------- |
-| `fuzz.runs`              | Number of fuzz iterations to run                          |
-| `fuzz.maxTestRejects`    | Maximum number of rejected inputs before aborting         |
-| `fuzz.showLogs`          | Whether to show console logs during fuzzing               |
-| `fuzz.timeout`           | Timeout for the fuzz test                                 |
-| `invariant.runs`         | Number of invariant test runs                             |
-| `invariant.depth`        | Number of calls per run to attempt to break the invariant |
-| `invariant.failOnRevert` | Whether to fail the invariant if a revert occurs          |
-| `invariant.callOverride` | Whether to override unsafe external calls                 |
-| `invariant.timeout`      | Timeout for the invariant test                            |
+Keys with the `fuzz.`/`invariant.` prefix apply only to that test type; the rest apply to the test as a whole and work on both fuzz and invariant tests.
+
+| Key                         | Description                                                              |
+| --------------------------- | ------------------------------------------------------------------------ |
+| `fuzz.runs`                 | Number of fuzz iterations to run                                         |
+| `fuzz.maxTestRejects`       | Maximum number of rejected inputs before aborting                        |
+| `fuzz.showLogs`             | Whether to show console logs during fuzzing                              |
+| `fuzz.timeout`              | Timeout for the fuzz test                                                |
+| `invariant.runs`            | Number of invariant test runs                                            |
+| `invariant.depth`           | Number of calls per run to attempt to break the invariant                |
+| `invariant.failOnRevert`    | Whether to fail the invariant if a revert occurs                         |
+| `invariant.callOverride`    | Whether to override unsafe external calls                                |
+| `invariant.timeout`         | Timeout for the invariant test                                           |
+| `allowInternalExpectRevert` | See [below](#allowinternalexpectrevert)                                  |
+| `isolate`                   | Run each top-level call as a separate transaction in its own EVM context |
+| `evmVersion`                | EVM version to use for this test                                         |
 
 ### `allowInternalExpectRevert`
 
@@ -61,20 +124,28 @@ Setting `allowInternalExpectRevert` to `true` allows `expectRevert` to work on c
 /// hardhat-config: allowInternalExpectRevert = true
 function testInternalRevert() public {
   vm.expectRevert("some error");
-  this.myInternalHelper(); // reverts at the same call depth
+  myInternalHelper(); // reverts at the same call depth
 }
 ```
 
 ## Foundry compatibility
 
-Hardhat also accepts the `forge-config:` prefix and the `default` profile, so existing Foundry inline configuration works without changes:
+Hardhat also accepts the `forge-config:` prefix, so you can keep using it:
 
 ```solidity
-/// forge-config: default.fuzz.runs = 10000
+/// forge-config: fuzz.runs = 10000
 /// forge-config: fuzz.max-test-rejects = 500
 function testTransferFuzz(uint256 amount) public {
   // ...
 }
 ```
 
-Omitting the profile is equivalent to using `default`.
+The `default.` prefix is the one thing that changes. In Foundry it applies under every profile, because profiles inherit from `default`. In Hardhat it applies only under the `default` profile, so remove `default` to keep the Foundry behavior:
+
+```solidity del={1} ins={2}
+/// forge-config: default.fuzz.runs = 10000
+/// forge-config: fuzz.runs = 10000
+function testTransferFuzz(uint256 amount) public {
+  // ...
+}
+```

@@ -28,3 +28,5 @@ pnpm-debug.log*
 
 # vscode local config
 .vscode/settings.json
+
+.pnpm-store/

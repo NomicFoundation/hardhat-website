@@ -11,16 +11,16 @@ Welcome to the Hardhat plugin development documentation. In this section, you'll
 
 A Hardhat plugin is a reusable extension of the functionality of Hardhat and its plugins.
 
-Plugins are defined as TypeScript objects with a `HardhatPlugin` type. Users add them to the `plugins` array in their `hardhat.config.ts` file.
+Plugins are defined using `definePlugin` from `hardhat/plugins`. Users add them to the `plugins` array in their `hardhat.config.ts` file.
 
 Let's look at the structure of a basic plugin:
 
 ```ts
-import type { HardhatPlugin } from "hardhat/types/plugins";
+import { definePlugin } from "hardhat/plugins";
 
 import "./type-extensions.js";
 
-const plugin: HardhatPlugin = {
+export default definePlugin({
   id: "hardhat-my-plugin",
   hookHandlers: {
     // The hook handlers that this plugin defines
@@ -37,9 +37,7 @@ const plugin: HardhatPlugin = {
   conditionalDependencies: [
     // Plugins that are loaded only if the user is already using certain other plugins
   ],
-};
-
-export default plugin;
+});
 ```
 
 A plugin can define:

@@ -19,11 +19,11 @@ Here's what changes compared to the `l1` Chain Type:
 
 ## Supported chains
 
-Hardhat includes built-in chain-specific parameters for many OP Stack chains, including OP Mainnet, Base, and their testnets. These parameters are sourced from the [Optimism Superchain Registry](https://github.com/ethereum-optimism/superchain-registry) and include chain IDs, hardfork activation block numbers, and EIP-1559 base fee configuration.
+Hardhat includes built-in chain-specific parameters for many OP Stack chains, including OP Mainnet and its testnets. These parameters are sourced from the [Optimism Superchain Registry](https://github.com/ethereum-optimism/superchain-registry) and include chain IDs, hardfork activation block numbers, and EIP-1559 base fee configuration.
 
 When you configure a network with `chainType: "op"` and the right `chainId`, the correct parameters are applied automatically.
 
-OP Mainnet and Base are actively maintained, while other chains have default parameters that may not be fully up-to-date.
+OP Mainnet is actively maintained, while other chains have default parameters that may not be fully up-to-date.
 
 Here's an example of forking OP Mainnet:
 
@@ -47,18 +47,18 @@ export default defineConfig({
 });
 ```
 
-To fork Base instead, just change the `chainId` and RPC URL:
+To fork a different OP Stack chain, like Ink, change the `chainId` and the RPC URL:
 
 ```ts del={2-3} ins={4-5}
       chainType: "op",
       chainId: 10,
       forking: { url: configVariable("OP_MAINNET_RPC_URL") },
-      chainId: 8453,
-      forking: { url: configVariable("BASE_MAINNET_RPC_URL") },
+      chainId: 57073,
+      forking: { url: configVariable("INK_MAINNET_RPC_URL") },
 ```
 
 ### Base fee accuracy on local chains
 
 Since the Holocene hardfork, OP Stack chains define their EIP-1559 base fee parameters dynamically, and these are expressed as block-number activations. On forked chains this works as expected, since they start at the forked block number. On local (non-forked) chains, the genesis block starts at block `0`, so some of these activations may not take effect as expected.
 
-{/* NOTE: If Hardhat exposes EDR's `baseFeeConfig` option in the future, update the paragraph above to mention that users can override base fee parameters manually. */}
+{/_ NOTE: If Hardhat exposes EDR's `baseFeeConfig` option in the future, update the paragraph above to mention that users can override base fee parameters manually. _/}

@@ -83,6 +83,7 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/guides/hardhat-node" },
           { slug: "docs/guides/hardhat-console" },
           // { slug: "docs/guides/command-line-completion" },
+          { slug: "docs/guides/build-with-ai" },
           { slug: "docs/guides/getting-help" },
         ],
       },
@@ -101,6 +102,7 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/reference/network-manager" },
           { slug: "docs/reference/edr-simulated-networks" },
           { slug: "docs/reference/op-stack-support" },
+          { slug: "docs/reference/amsterdam-support" },
           { slug: "docs/reference/json-rpc-methods" },
           { slug: "docs/reference/artifacts" },
           { slug: "docs/reference/console-log" },
@@ -117,6 +119,7 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/reference/stability-guarantees" },
           { slug: "docs/reference/nodejs-support" },
           { slug: "docs/reference/errors" },
+          { slug: "docs/reference/hardhat-2-end-of-life" },
         ],
       },
       {
@@ -188,6 +191,22 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
         label: "Guides",
         autogenerate: {
           directory: "/docs/migrate-from-hardhat2/guides",
+        },
+      },
+    ],
+  },
+  {
+    label: "Migrate from Foundry",
+    id: "migrate-from-foundry",
+    link: "/docs/migrate-from-foundry/",
+    items: [
+      {
+        slug: "docs/migrate-from-foundry",
+      },
+      {
+        label: "Guides",
+        autogenerate: {
+          directory: "/docs/migrate-from-foundry/guides",
         },
       },
     ],

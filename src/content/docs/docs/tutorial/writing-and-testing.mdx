@@ -19,7 +19,7 @@ Create a new file at `contracts/Counter.sol` and add the following code:
 
 export const counterContractCode = `
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.34;
 
 contract Counter {
   uint public x;
@@ -67,7 +67,7 @@ Create a new file at `contracts/Counter.t.sol` with the following content:
 ```solidity
 // contracts/Counter.t.sol
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.34;
 
 import { Counter } from "./Counter.sol";
 
@@ -115,7 +115,7 @@ Fix the problem in `contracts/Counter.sol`:
 ```diff lang=solidity collapse={1-7,15-20}
 // contracts/Counter.sol
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.34;
 
 contract Counter {
   uint public x;

@@ -15,7 +15,7 @@ export default [
     "/hardhat-network-helpers/docs/reference",
     "/docs/plugins/hardhat-network-helpers#reference",
   ],
-  ["/docs/learn-more/beta-status", "/docs/hardhat3/beta-status"],
+  ["/docs/learn-more/beta-status", "/docs/getting-started"],
   [
     "/docs/learn-more/configuration-variables",
     "/docs/guides/configuration-variables",

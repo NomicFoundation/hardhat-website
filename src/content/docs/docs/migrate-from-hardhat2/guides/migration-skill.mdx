@@ -1,0 +1,51 @@
+---
+title: Migrate with an AI agent
+description: How to install and run the Hardhat 2 to Hardhat 3 migration skill
+sidebar:
+  label: Migrate with an AI agent
+  order: 99
+---
+
+import RunRemote from "@hh/RunRemote.astro";
+
+If you use an AI coding agent, our Hardhat 2 to Hardhat 3 migration skill allows it to perform a structured migration of your project.
+
+## Install the skill
+
+Install the skill in your project:
+
+<RunRemote command="skills add nomicfoundation/hardhat-skills --skill migrate-hardhat2-to-hardhat3" />
+
+This launches an interactive CLI that will walk you through installing the migration skill for your agent. For instance, you can choose to install into your current project (rather than globally) and specifically for Claude, which writes the skill files into `.claude/skills/` at the repository root.
+
+## Run the migration
+
+Open your project in your coding agent and ask it to migrate to Hardhat 3, for example:
+
+> Migrate this project from Hardhat 2 to Hardhat 3 using the Hardhat migration skill.
+
+For Claude you can invoke the migration as a command with:
+
+```
+/migrate-hardhat2-to-hardhat3
+```
+
+The agent will use the skill to start a campaign to migrate the repo to Hardhat 3. The migration will proceed step by step, pausing for review after each:
+
+1. **Project setup** — `tsconfig.json` for ESM and the `package.json` Hardhat 2 to Hardhat 3 dependency swap.
+2. **Config** — rewrite `hardhat.config.ts` to the declarative `defineConfig` (plugins, networks, tasks, solidity, verify etc).
+3. **Solidity tests** — migrate `.t.sol` files to Hardhat 3 conventions.
+4. **Source files** — convert `.ts`/`.js` sources CJS to ESM and update Hardhat 2 APIs to Hardhat 3 (plus TypeChain import fixes).
+5. **Test fix-up** — get the TypeScript test suite passing under Hardhat 3.
+6. **Script validation** — run and fix the `package.json` scripts you select.
+
+## Review the result
+
+The skill automates the migration, but you should still review the changes and verify your core development workflows are correct, for example:
+
+```sh
+npx hardhat build
+npx hardhat test
+```
+
+Further manual migration may be necessary for additional workflows e.g. CI, deployment, specialist scripts etc.

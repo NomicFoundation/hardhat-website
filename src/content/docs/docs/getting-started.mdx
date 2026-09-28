@@ -9,19 +9,13 @@ import { FileTree } from "@astrojs/starlight/components";
 import RunRemote from "@hh/RunRemote.astro";
 import Run from "@hh/Run.astro";
 
-:::tip
-
-Hardhat 3 is production-ready and you can migrate today. We'll keep it in beta status as we work on missing features and stabilize it.
-
-:::
-
 Hardhat is a flexible and extensible development environment for Ethereum software. It helps you write, test, debug, and deploy your smart contracts with ease, whether you're building a simple prototype or a complex production system.
 
 This guide will walk you through installing our recommended setup, but since most of Hardhat's functionality comes from plugins, you're free to customize it or choose a completely different path.
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) v22 or later
+- [Node.js](https://nodejs.org/) v22.13.0 or later
 - A package manager like [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), or [yarn](https://yarnpkg.com/) (we strongly recommend pnpm)
 - A text editor (we recommend [VS Code](https://code.visualstudio.com/) with our [Official Hardhat extension](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity))
 
@@ -87,6 +81,18 @@ Here's what each file and directory does:
 
 You can learn more about what's included in your sample project by reading the [`hardhat-toolbox-viem` documentation](/docs/plugins/hardhat-toolbox-viem), which is the recommended setup you're using.
 
+## Non-interactive initialization
+
+You can also initialize a project in non-interactive mode, which is useful for automation scripts and AI agents.
+
+To create the same project as above without prompts, run:
+
+<RunRemote command="hardhat --init --template node-test-runner-viem" />
+
+The `--template` option specifies which template to use. To see all available templates, run:
+
+<RunRemote command="hardhat --init --templates" />
+
 ## Learn more
 
 To learn more about Hardhat, we recommend reading the [tutorial](/docs/tutorial) next.
@@ -101,4 +107,4 @@ Once you've finished the tutorial, or if you prefer smaller focused guides, chec
 - [Getting gas statistics of your test runs](/docs/guides/testing/gas-statistics)
 - [Computing the code coverage of your tests](/docs/guides/testing/code-coverage)
 
-Join our [Hardhat 3](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group to share feedback and stay updated on new releases.
+Join our [Hardhat 3](https://hardhat.org/hardhat3-telegram-group) Telegram group to share feedback and stay updated on new releases.

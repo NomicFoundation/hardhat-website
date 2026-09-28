@@ -10,6 +10,7 @@ import type { Redirects } from "./types";
 export default [
   ["/configuration", "/docs/reference/configuration"],
   ["/errors", "/docs/reference/errors"],
+  ["/hardhat3-telegram-group", "https://t.me/+nx5My-pzR0piMjU5"],
   ["/hardhat3-beta-telegram-group", "https://t.me/+nx5My-pzR0piMjU5"],
   ["/plugin-authors-group", "https://t.me/+cFxwO53KTrY5MjYx"],
   ["/discord", "https://discord.gg/TETZs2KK4k"],
@@ -18,6 +19,7 @@ export default [
   ["/docs", "/docs/getting-started"],
   ["/ignition", "/ignition/docs"],
   ["/ignition/docs", "/ignition/docs/getting-started"],
+  ["/hardhat-2-end-of-life", "/docs/reference/hardhat-2-end-of-life"],
   // This is a temporary workaround because the link validator can't
   // find the #hashes of plugins and fail
   [

@@ -69,12 +69,13 @@ describe("generateMarkdown", () => {
     assert.ok(!result.includes("Components used in this page:"));
   });
 
-  it("handles real .mdx with components (migrate-from-hardhat2)", () => {
-    const filePath = "src/content/docs/docs/migrate-from-hardhat2/index.mdx";
+  it("handles real .mdx with components (migrate-to-esm)", () => {
+    const filePath =
+      "src/content/docs/docs/migrate-from-hardhat2/guides/migrate-to-esm.mdx";
     const { title, description, body } = parseMdx(filePath);
     const result = generateMarkdown({ title, description, body, filePath });
 
-    assert.ok(result.includes("# Migrate from Hardhat 2"));
+    assert.ok(result.includes("# Migrate your project to ESM"));
     assert.ok(result.includes("Note: This document was authored using MDX"));
     assert.ok(
       result.includes(

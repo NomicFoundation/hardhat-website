@@ -1,8 +1,36 @@
 ---
 import Default from "@astrojs/starlight/components/Header.astro";
+import Banner from "../ui/Banner.astro";
 import CookiePopup from "../ui/CookiePopup.astro";
 ---
 
 <CookiePopup />
-{/* Render the default sidebar. */}
-<Default><slot /></Default>
+{
+  /*
+    Starlight's header is position: fixed and everything else in the layout is
+    offset by --sl-nav-height. We render the banner inside the header, at its
+    top, and reserve room for it by adding --hh-docs-banner-height to
+    --sl-nav-height in custom-starlight-theme.css.
+  */
+}
+<div class="docs-banner">
+  <Banner />
+</div>
+<div class="header-content">
+  <Default><slot /></Default>
+</div>
+
+<style>
+  .docs-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--hh-docs-banner-height);
+  }
+
+  .header-content {
+    height: 100%;
+    padding-top: var(--hh-docs-banner-height);
+  }
+</style>

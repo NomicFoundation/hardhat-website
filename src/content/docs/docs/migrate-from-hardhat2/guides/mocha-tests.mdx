@@ -3,62 +3,24 @@ title: Migrate Mocha tests from Hardhat 2
 description: How to migrate Mocha tests from Hardhat 2 to Hardhat 3
 sidebar:
   label: Migrate Mocha tests
+  order: 2
 ---
 
 This guide walks you through the changes needed to migrate your Mocha tests from Hardhat 2 to Hardhat 3.
 
 ## ESM
 
-Since Hardhat 3 is ESM-first, files with a `.js` extension are treated as ES modules. If your tests are written in JavaScript, this means you have to update them to use ESM syntax or change their extension to `.cjs`.
+Hardhat 3 is ESM-first, so JavaScript test files (`.js`) are treated as ES modules. See the [ESM migration guide](/docs/migrate-from-hardhat2/guides/migrate-to-esm) for the conversion steps, or for how to keep your tests as CommonJS with a `.cjs` extension.
 
-### Updating the syntax to ESM
-
-Check [this guide](https://deno.com/blog/convert-cjs-to-esm) to learn how to convert CommonJS code to ESM, but here's a summary:
-
-- Convert statements like `const x = require("x")` to `import x from "x"`.
-- When importing a relative path, you always have to include the file extension. For example, `const x = require("./x")` becomes `import x from "./x.js"`, not `import x from "./x"`.
-- Convert `module.exports = x` to `export default x` and `module.exports.x = 1` to `export const x = 1`.
-- `__dirname` and `__filename` are now available as `import.meta.dirname` and `import.meta.filename`.
-
-### Changing the extension to .cjs
-
-Alternatively, you can rename your test files so that they have a `.cjs` extension. This way, they will be treated as CommonJS modules and you won't have to change any syntax. **We still recommend writing new tests in ESM** to take advantage of modern JavaScript features and match Hardhat 3's defaults.
-
-If you go with the `.cjs` approach, keep in mind that you can't require Hardhat as a top-level module. This code:
-
-```js
-const hre = require("hardhat");
-
-describe("suite", function () {
-  it("some test", async function () {
-    // use the hre
-  });
-});
-```
-
-has to be changed to:
+If you keep your tests as CommonJS, you can't `require("hardhat")` at the top level. Use a dynamic `import` from a `before` hook instead:
 
 ```js
 describe("suite", function () {
   let hre;
   before(async function () {
-    hre = await import("hardhat");
+    ({ default: hre } = await import("hardhat"));
   });
 
-  it("some test", async function () {
-    // use the hre
-  });
-});
-```
-
-Notice that this can only be done inside async functions.
-
-If you migrated to ESM instead, that would be:
-
-```js
-import hre from "hardhat";
-
-describe("suite", function () {
   it("some test", async function () {
     // use the hre
   });

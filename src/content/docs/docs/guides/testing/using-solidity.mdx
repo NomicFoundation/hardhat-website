@@ -56,7 +56,7 @@ In the previous example, the error message doesn't show the actual value of `by`
 
 To use `forge-std` in a Hardhat project, first install it:
 
-<Install packages="'github:foundry-rs/forge-std#v1.9.7'" />
+<Install packages="'github:foundry-rs/forge-std#v1.16.2'" />
 
 You can then import the `Test` base contract and extend your test contracts from it. This lets you use helper functions like `assertEq`, which shows the mismatched values when the assertion fails:
 
@@ -136,6 +136,18 @@ You can also pass one or more paths as arguments to these tasks, in which case o
 
 <Run command="hardhat test <test-file-1> <test-file-2> ..." />
 
+### Filtering tests by name
+
+To run only the tests whose name matches a string or regular expression, use the `--grep` option:
+
+<Run command="hardhat test solidity --grep testInc" />
+
+To skip the matching tests instead, use `--grep-exclude`:
+
+<Run command="hardhat test solidity --grep-exclude testIncBy" />
+
+Combine both options to run the tests that match `--grep` while skipping any that also match `--grep-exclude`.
+
 ### Multichain support
 
 By default, Solidity tests run in an environment that simulates Ethereum Mainnet. If you're building for other blockchains, you can test against their specific behavior by specifying a different Chain Type with the `--chain-type` option:
@@ -207,3 +219,5 @@ export default defineConfig({
 To learn more about how to configure your Solidity tests, read [the Solidity tests Configuration reference](/docs/reference/configuration#solidity-tests-configuration).
 
 You can also override config settings for individual test functions using inline configuration. Read the [Inline configuration](/docs/guides/testing/inline-configuration) guide to learn more.
+
+To define several sets of settings and choose between them when running your tests, read the [Test Profiles](/docs/guides/testing/test-profiles) guide.

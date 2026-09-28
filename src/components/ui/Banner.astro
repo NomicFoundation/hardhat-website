@@ -1,7 +1,7 @@
 ---
-import { landing } from "../../config";
+import { banner } from "../../config";
 
-const { text, href } = landing.banner;
+const { text, href } = banner;
 ---
 
 <a href={href} target="_blank" rel="noreferrer" class="banner-link">
@@ -29,15 +29,16 @@ const { text, href } = landing.banner;
 <style lang="sass">
   @use '../../styles/mixins' as *
 
+  // Positioning (sticky on the landing, inside the fixed header in the docs)
+  // is up to the parent.
   .banner-link
     text-decoration: none
-    position: sticky
-    top: 0
-    z-index: 19
     display: block
 
   .banner
-    font-family: var(--font-code)
+    // The docs don't load the landing fonts, so fall back to Starlight's
+    // monospace stack there.
+    font-family: var(--font-code, var(--sl-font-system-mono, monospace))
     user-select: none
     z-index: 100
     width: 100%
@@ -49,7 +50,7 @@ const { text, href } = landing.banner;
     text-align: center
     background-color: var(--hh-gray900)
     color: var(--hh-neutral0)
-    font-weight: 600
+    font-weight: 500
     line-height: 1.2
     letter-spacing: 0.02em
     cursor: pointer

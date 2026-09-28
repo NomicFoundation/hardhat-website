@@ -3,12 +3,6 @@ title: Configuration
 description: Hardhat 3 configuration reference
 ---
 
-:::tip
-
-Hardhat 3 is production-ready and you can migrate today! We'll keep it in beta status as we work on missing features and stabilize it in the near future.
-
-:::
-
 When Hardhat is run, it searches for the closest `hardhat.config.ts` file starting from the Current Working Directory. This file normally lives in the root of your project. An empty `hardhat.config.ts` is enough for Hardhat to work.
 
 The entirety of your Hardhat setup (i.e. your config, plugins and custom tasks) is contained in this file.
@@ -160,14 +154,16 @@ The following options are specific to simulated networks:
 - `accounts`: This field controls which accounts Hardhat uses. It can use a list of local accounts (by setting it to an array of `{privateKey, balance}` objects) or an [HD Wallet](#hd-wallet-config). Default value: an HD Wallet with 20 unlocked accounts and a balance of 10,000 ETH each.
 - `allowBlocksWithSameTimestamp`: A boolean to allow mining blocks that have the same timestamp. This is not allowed by default because Ethereum's consensus rules specify that each block should have a different timestamp. Default value: `false`.
 - `allowUnlimitedContractSize`: An optional boolean that disables the contract size limit imposed by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). Default value: `false`.
-- `blockGasLimit`: The block gas limit to use in Hardhat Network's blockchain. Default value: `60_000_000`.
+- `blockGasLimit`: The block gas limit to use in Hardhat Network's blockchain. Set it to `false` to disable the block gas limit. Default value: `60_000_000`.
+- `transactionGasCap`: The maximum amount of gas a single transaction may use. Set it to `false` to disable the cap. Default value: the [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap (`16_777_216`) on the `osaka` hardfork and later, and the block gas limit on earlier hardforks.
 - `coinbase`: The address used as coinbase in new blocks. Default value: `"0xc014ba5ec014ba5ec014ba5ec014ba5ec014ba5e"`.
 - `forking`: An object that describes the forking configuration and can have the following fields:
   - `url`: a URL that points to a JSON-RPC node with state that you want to fork off. There's no default value for this field. It must be provided for the fork to work.
   - `blockNumber`: an optional number or bigint to pin which block to fork from. If no value is provided, the latest block is used.
   - `enabled`: an optional boolean to switch on or off the fork functionality. Default value: `true` if `url` is set, `false` otherwise.
+- `gasEstimationMode`: Controls how `eth_estimateGas` computes its result. When set to `"noInternalOutOfGas"`, the returned estimate also prevents calls internal to the transaction from running out of gas, and the estimation fails if an internal call runs out of gas no matter how much gas is provided. When set to `"topLevelSuccess"`, the estimate only needs to make the top-level call succeed, even if an internal call runs out of gas along the way. See [gas estimation modes](/docs/reference/edr-simulated-networks#gas-estimation-modes) for more details. Default value: `"noInternalOutOfGas"`.
 - `hardfork`: This setting changes how the simulated network works, to mimic the target chain at a given hardfork. The available values depend on the `chainType`:
-  - For `l1` and `generic` chain types: `"byzantium"`, `"constantinople"`, `"petersburg"`, `"istanbul"`, `"muirGlacier"`, `"berlin"`, `"london"`, `"arrowGlacier"`, `"grayGlacier"`, `"merge"`, `"shanghai"`, `"cancun"`, `"prague"`, and `"osaka"`. Default value: `"osaka"`.
+  - For `l1` and `generic` chain types: `"byzantium"`, `"constantinople"`, `"petersburg"`, `"istanbul"`, `"muirGlacier"`, `"berlin"`, `"london"`, `"arrowGlacier"`, `"grayGlacier"`, `"merge"`, `"shanghai"`, `"cancun"`, `"prague"`, `"osaka"` and `"amsterdam"` (experimental, see [Amsterdam support](/docs/reference/amsterdam-support) for details). Default value: `"osaka"`.
   - For the `op` chain type: `"bedrock"`, `"regolith"`, `"canyon"`, `"ecotone"`, `"fjord"`, `"granite"`, `"holocene"`, and `"isthmus"`. Default value: `"isthmus"`.
 - `initialBaseFeePerGas`: The `baseFeePerGas` of the first block. Note that when forking a remote network, the "first block" is the one immediately after the block you forked from. This field must not be present if `hardfork` is not `"london"` or a later one. Default value: `"1000000000"` if not forking. When forking a remote network, if the remote network uses EIP-1559, the first local block will use the right baseFeePerGas according to the EIP, otherwise `"10000000000"` is used.
 - `initialDate`: An optional string setting the date of the blockchain. Valid values are [Javascript's date time strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#Date_Time_String_Format). Default value: the current date and time if not forking another network. When forking another network, the timestamp of the block you forked from, plus one second, is used.
@@ -270,7 +266,11 @@ If write access to a directory is needed, please make sure that it doesn't conta
 - `blockBaseFeePerGas`: The base fee per gas (in wei) in tests. Defaults to `0`.
 - `coinbase`: The value of `block.coinbase` in tests. Defaults to `0x0000000000000000000000000000000000000000`.
 - `blockTimestamp`: The value of `block.timestamp` in tests. Defaults to 1.
-- `blockGasLimit`: The `block.gaslimit` value during EVM execution. Set it to false to disable the block gas limit. Defaults to none.
+- `blockGasLimit`: The `block.gaslimit` value during EVM execution. Set it to a number or bigint to enforce a limit, or to `false` to disable it. Disabled by default.
+- `transactionGasCap`: The maximum amount of gas a single transaction may use. Set it to a number or bigint to enforce a cap, or to `false` to disable it. Disabled by default.
+- `eip712Types`: Optional object to configure EIP-712 type collection for the [`eip712HashType`](/docs/reference/cheatcodes/utilities/eip712-hash-type) and [`eip712HashStruct`](/docs/reference/cheatcodes/utilities/eip712-hash-struct) cheatcodes. Disabled by default. See the [EIP-712 type hashing guide](/docs/guides/testing/eip712-types) for details.
+  - `include`: An array of glob patterns matching source files to collect EIP-712 struct types from. Required to enable type collection. Supports `*`, `**`, and `?` wildcards.
+  - `exclude`: An optional array of glob patterns matching source files to exclude from type collection.
 - `forking`: Optional fork configuration options object. Defaults to none.
   - `url`: If set, all tests are run in fork mode using this url or remote name. Defaults to none.
   - `blockNumber`: Optional block number to pin the global state fork. If `url` is set, defaults to the latest block number.
@@ -294,6 +294,55 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `includeStorage`: The flag indicating whether to include values from storage. Defaults to true.
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
   - `shrinkRunLimit`: The maximum number of attempts to shrink a failed sequence. The shrink process is disabled if set to 0. Defaults to 5000.
+
+#### Test Profiles
+
+Instead of the options above, `test.solidity` can contain a single `profiles` entry: a map of [Test Profile](/docs/guides/testing/test-profiles) names to objects with those same options.
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  test: {
+    solidity: {
+      profiles: {
+        default: {
+          fuzz: { runs: 256 },
+        },
+        ci: {
+          fuzz: { runs: 10_000 },
+        },
+      },
+    },
+  },
+});
+```
+
+The two shapes are mutually exclusive: a config with `profiles` can't also set options at the top level. Setting them at the top level is equivalent to defining only a `default` profile.
+
+When using `profiles`, a `default` profile is always required.
+
+Profile names can contain letters, numbers, underscores, and dashes. They can't be `fuzz`, `invariant`, `isolate`, `evmVersion`, or `allowInternalExpectRevert`, as those would be ambiguous with [inline configuration](/docs/guides/testing/inline-configuration) keys.
+
+### Coverage configuration
+
+Hardhat has built-in [code coverage](/docs/guides/testing/code-coverage). You can use the `coverage` entry to configure it:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  coverage: {
+    skipFiles: ["**/mocks/**", "contracts/Migrations.sol"],
+  },
+});
+```
+
+The following options are available for configuring coverage:
+
+- `skipFiles`: An array of glob patterns matching Solidity files to exclude from coverage during a `--coverage` run. A matching file is left uninstrumented, so it doesn't appear in the coverage report. Patterns are matched against each file's source name — its project-relative path as shown in the coverage report, e.g. `contracts/Migrations.sol` — not its absolute path. Supports `*`, `**`, and `?` wildcards. Defaults to `[]`.
 
 ## Toolbox options
 

@@ -16,10 +16,10 @@ importers:
         version: 2.1.7
       '@astrojs/starlight':
         specifier: ^0.38.4
-        version: 0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+        version: 0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       '@astrojs/vercel':
         specifier: ^10.0.6
-        version: 10.0.6(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))(rollup@4.52.4)
+        version: 10.0.6(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))(rollup@4.52.4)
       '@expressive-code/plugin-collapsible-sections':
         specifier: ^0.41.3
         version: 0.41.3
@@ -27,14 +27,14 @@ importers:
         specifier: ^0.41.3
         version: 0.41.3
       '@nomicfoundation/hardhat-errors':
-        specifier: ^3.0.10
-        version: 3.0.10
+        specifier: ^3.0.20
+        version: 3.0.20
       '@types/tar-stream':
         specifier: ^3.1.4
         version: 3.1.4
       astro:
         specifier: ^6.2.2
-        version: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
+        version: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
       cspell:
         specifier: ^9.2.2
         version: 9.2.2
@@ -64,10 +64,10 @@ importers:
         version: 0.34.4
       starlight-links-validator:
         specifier: ^0.24.0
-        version: 0.24.0(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)))(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+        version: 0.24.0(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)))(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       starlight-sidebar-topics:
         specifier: ^0.7.1
-        version: 0.7.1(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)))
+        version: 0.7.1(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)))
       tar-stream:
         specifier: ^3.1.7
         version: 3.1.7
@@ -768,11 +768,11 @@ packages:
     resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
 
-  '@nomicfoundation/hardhat-errors@3.0.10':
-    resolution: {integrity: sha512-jfQ75/t21674cIQPbQmzRSY8YdusvQhKMsT+IGEoXlJuAzw+ngWsD7y7nHT8UKQ+liHWgMA+Am2843KwP0KtiA==}
+  '@nomicfoundation/hardhat-errors@3.0.20':
+    resolution: {integrity: sha512-6wmiB5zkqQ+3d+3Ta/vl0MvlIXdrAwUF+OMX2bi7RbCgBfGbbjBbzQhXmJUuhx6XDMPeswdRjjOChpK07tDNmw==}
 
-  '@nomicfoundation/hardhat-utils@4.0.2':
-    resolution: {integrity: sha512-6lK0+9ygB7wGDlu11DAmTuZxhnoGbyGZC2aRaKKehW0vDNTS9iT7GUimgVvlO3B23E/HwwRKOOLmSVPC4qmmQw==}
+  '@nomicfoundation/hardhat-utils@4.1.6':
+    resolution: {integrity: sha512-j3LUq/4puVWUaS5BsbehR90LiGZaABYAWHSA4nGfRUxfBUjay82AwSSzaGKfDQYaRkdKoP9ZXeMDTEIFJGI24Q==}
 
   '@nomicfoundation/slang@1.2.0':
     resolution: {integrity: sha512-+04Z1RHbbz0ldDbHKQFOzveCdI9Rd3TZZu7fno5hHy3OsqTo9UK5Jgqo68wMvRovCO99POv6oCEyO7+urGeN8Q==}
@@ -1695,10 +1695,6 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-
-  fast-equals@5.3.2:
-    resolution: {integrity: sha512-6rxyATwPCkaFIL3JLqw8qXqMpIZ942pTX/tbQFkRsDGblS8tNGtlUauA/+mt6RUfqn/4MoEr+WDkYoIQbibWuQ==}
-    engines: {node: '>=6.0.0'}
 
   fast-equals@5.4.0:
     resolution: {integrity: sha512-jt2DW/aNFNwke7AUd+Z+e6pz39KO5rzdbbFCg2sGafS4mk13MI7Z8O5z9cADNn5lhGODIgLwug6TZO2ctf7kcw==}
@@ -3126,12 +3122,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@5.0.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))':
+  '@astrojs/mdx@5.0.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))':
     dependencies:
       '@astrojs/markdown-remark': 7.1.1
       '@mdx-js/mdx': 3.1.1
       acorn: 8.16.0
-      astro: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
+      astro: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
       es-module-lexer: 2.1.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -3160,17 +3156,17 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 4.4.3
 
-  '@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))':
+  '@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))':
     dependencies:
       '@astrojs/markdown-remark': 7.1.1
-      '@astrojs/mdx': 5.0.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+      '@astrojs/mdx': 5.0.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       '@astrojs/sitemap': 3.7.2
       '@pagefind/default-ui': 1.4.0
       '@types/hast': 3.0.4
       '@types/js-yaml': 4.0.9
       '@types/mdast': 4.0.4
-      astro: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
-      astro-expressive-code: 0.41.7(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+      astro: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
+      astro-expressive-code: 0.41.7(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       bcp-47: 2.1.0
       hast-util-from-html: 2.0.3
       hast-util-select: 6.0.4
@@ -3203,14 +3199,14 @@ snapshots:
       is-wsl: 3.1.1
       which-pm-runs: 1.1.0
 
-  '@astrojs/vercel@10.0.6(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))(rollup@4.52.4)':
+  '@astrojs/vercel@10.0.6(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))(rollup@4.52.4)':
     dependencies:
       '@astrojs/internal-helpers': 0.9.0
       '@vercel/analytics': 1.6.1
       '@vercel/functions': 3.5.0
       '@vercel/nft': 1.5.0(rollup@4.52.4)
       '@vercel/routing-utils': 5.3.3
-      astro: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
+      astro: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
       esbuild: 0.27.7
       tinyglobby: 0.2.15
     transitivePeerDependencies:
@@ -3770,24 +3766,19 @@ snapshots:
 
   '@noble/hashes@1.4.0': {}
 
-  '@nomicfoundation/hardhat-errors@3.0.10':
+  '@nomicfoundation/hardhat-errors@3.0.20':
     dependencies:
-      '@nomicfoundation/hardhat-utils': 4.0.2
-    transitivePeerDependencies:
-      - supports-color
+      '@nomicfoundation/hardhat-utils': 4.1.6
 
-  '@nomicfoundation/hardhat-utils@4.0.2':
+  '@nomicfoundation/hardhat-utils@4.1.6':
     dependencies:
       '@streamparser/json-node': 0.0.22
-      debug: 4.4.3
       env-paths: 2.2.1
       ethereum-cryptography: 2.2.1
       fast-equals: 5.4.0
       json-stream-stringify: 3.1.6
       rfdc: 1.4.1
       undici: 6.22.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@nomicfoundation/slang@1.2.0':
     dependencies:
@@ -4244,12 +4235,12 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-expressive-code@0.41.7(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)):
+  astro-expressive-code@0.41.7(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)):
     dependencies:
-      astro: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
+      astro: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
       rehype-expressive-code: 0.41.7
 
-  astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2):
+  astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4):
     dependencies:
       '@astrojs/compiler': 4.0.0
       '@astrojs/internal-helpers': 0.9.0
@@ -4299,10 +4290,10 @@ snapshots:
       ultrahtml: 1.6.0
       unifont: 0.7.4
       unist-util-visit: 5.1.0
-      unstorage: 1.17.5
+      unstorage: 1.17.5(@vercel/functions@3.5.0)
       vfile: 6.0.3
-      vite: 7.3.2(@types/node@24.12.2)(sass@1.93.2)
-      vitefu: 1.1.3(vite@7.3.2(@types/node@24.12.2)(sass@1.93.2))
+      vite: 7.3.2(@types/node@24.12.2)(sass@1.93.2)(yaml@2.8.4)
+      vitefu: 1.1.3(vite@7.3.2(@types/node@24.12.2)(sass@1.93.2)(yaml@2.8.4))
       xxhash-wasm: 1.1.0
       yargs-parser: 22.0.0
       zod: 4.4.3
@@ -4466,7 +4457,7 @@ snapshots:
       '@cspell/cspell-pipe': 9.2.2
       '@cspell/cspell-types': 9.2.2
       cspell-trie-lib: 9.2.2
-      fast-equals: 5.3.2
+      fast-equals: 5.4.0
 
   cspell-gitignore@9.2.2:
     dependencies:
@@ -4750,8 +4741,6 @@ snapshots:
   extend@3.0.2: {}
 
   fast-deep-equal@3.1.3: {}
-
-  fast-equals@5.3.2: {}
 
   fast-equals@5.4.0: {}
 
@@ -6128,11 +6117,11 @@ snapshots:
 
   space-separated-tokens@2.0.2: {}
 
-  starlight-links-validator@0.24.0(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)))(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)):
+  starlight-links-validator@0.24.0(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)))(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)):
     dependencies:
-      '@astrojs/starlight': 0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+      '@astrojs/starlight': 0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       '@types/picomatch': 4.0.3
-      astro: 6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2)
+      astro: 6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4)
       github-slugger: 2.0.0
       hast-util-from-html: 2.0.3
       is-absolute-url: 5.0.0
@@ -6145,9 +6134,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  starlight-sidebar-topics@0.7.1(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))):
+  starlight-sidebar-topics@0.7.1(@astrojs/starlight@0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))):
     dependencies:
-      '@astrojs/starlight': 0.38.4(astro@6.2.2(@types/node@24.12.2)(rollup@4.52.4)(sass@1.93.2))
+      '@astrojs/starlight': 0.38.4(astro@6.2.2(@types/node@24.12.2)(@vercel/functions@3.5.0)(rollup@4.52.4)(sass@1.93.2)(yaml@2.8.4))
       picomatch: 4.0.4
 
   stream-replace-string@2.0.0: {}
@@ -6360,7 +6349,7 @@ snapshots:
       unist-util-is: 6.0.0
       unist-util-visit-parents: 6.0.1
 
-  unstorage@1.17.5:
+  unstorage@1.17.5(@vercel/functions@3.5.0):
     dependencies:
       anymatch: 3.1.3
       chokidar: 5.0.0
@@ -6370,6 +6359,8 @@ snapshots:
       node-fetch-native: 1.6.7
       ofetch: 1.5.1
       ufo: 1.6.4
+    optionalDependencies:
+      '@vercel/functions': 3.5.0
 
   uri-js@4.4.1:
     dependencies:
@@ -6393,7 +6384,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@7.3.2(@types/node@24.12.2)(sass@1.93.2):
+  vite@7.3.2(@types/node@24.12.2)(sass@1.93.2)(yaml@2.8.4):
     dependencies:
       esbuild: 0.27.7
       fdir: 6.5.0(picomatch@4.0.4)
@@ -6405,10 +6396,11 @@ snapshots:
       '@types/node': 24.12.2
       fsevents: 2.3.3
       sass: 1.93.2
+      yaml: 2.8.4
 
-  vitefu@1.1.3(vite@7.3.2(@types/node@24.12.2)(sass@1.93.2)):
+  vitefu@1.1.3(vite@7.3.2(@types/node@24.12.2)(sass@1.93.2)(yaml@2.8.4)):
     optionalDependencies:
-      vite: 7.3.2(@types/node@24.12.2)(sass@1.93.2)
+      vite: 7.3.2(@types/node@24.12.2)(sass@1.93.2)(yaml@2.8.4)
 
   volar-service-css@0.0.70(@volar/language-service@2.4.28):
     dependencies:

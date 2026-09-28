@@ -1,0 +1,123 @@
+---
+title: Migrate your project to ESM
+description: How to convert a Hardhat project from CommonJS to ES modules
+sidebar:
+  label: Migrate to ESM
+  order: 1
+---
+
+import { TabItem, Tabs } from "@astrojs/starlight/components";
+import { Code } from "@astrojs/starlight/components";
+
+Hardhat 3 is ESM-first, so your project needs to be an ESM package. This guide walks you through converting an existing CommonJS project to ESM, and shows the escape hatches for keeping individual files as CommonJS when that's easier.
+
+:::tip
+
+If you landed here from a Hardhat error message, you're in the right place. Jump to [Troubleshooting](#troubleshooting) to match the specific error to a fix.
+
+:::
+
+## Set your project to ESM
+
+Add `"type": "module"` to your `package.json`:
+
+{/* prettier-ignore */}
+<Tabs syncKey="package-manager">
+  <TabItem label="npm" icon="npm">
+    <Code code="npm pkg set type=module" lang="sh" frame="terminal" />
+  </TabItem>
+  <TabItem label="pnpm" icon="pnpm">
+    <Code code="pnpm pkg set type=module" lang="sh" frame="terminal" />
+  </TabItem>
+  <TabItem label="Yarn" icon="seti:yarn">
+    <Code code={`# yarn doesn't have a command for this\nnpm pkg set type=module`} lang="sh" frame="terminal" />
+  </TabItem>
+</Tabs>
+
+From this point on, every `.js` file in your project is treated as an ES module.
+
+## Update your TypeScript config
+
+If you have a `tsconfig.json`, set `compilerOptions.module` to an ESM-compatible value like `"node20"`:
+
+```json
+{
+  "compilerOptions": {
+    "module": "node20"
+  }
+}
+```
+
+## Convert source files to ESM
+
+[This guide](https://deno.com/blog/convert-cjs-to-esm) covers the conversion in depth, but the rules you'll hit most often are:
+
+- Replace `const x = require("x")` with `import x from "x"`.
+- When importing a relative path, you must include the file extension. `const x = require("./x")` becomes `import x from "./x.js"`, not `import x from "./x"`.
+- Replace `module.exports = x` with `export default x`, and `module.exports.x = 1` with `export const x = 1`.
+- `__dirname` and `__filename` are now `import.meta.dirname` and `import.meta.filename`.
+
+For example, a CommonJS script like this:
+
+```js
+const path = require("path");
+const helper = require("./helper");
+
+module.exports = function run() {
+  console.log(path.join(__dirname, helper.name));
+};
+```
+
+becomes:
+
+```js
+import path from "path";
+import helper from "./helper.js";
+
+export default function run() {
+  console.log(path.join(import.meta.dirname, helper.name));
+}
+```
+
+## Keeping files as CommonJS
+
+If converting a file is impractical, rename it from `.js` to `.cjs`. CommonJS files keep working alongside ESM ones, and you don't have to change their syntax.
+
+**We still recommend writing new files in ESM** to take advantage of modern JavaScript features and match Hardhat 3's defaults.
+
+## Using Hardhat from a CommonJS file
+
+You can't `require("hardhat")` at the top level of a `.cjs` file, because Hardhat is an ES module. Use a dynamic `import` from inside an async function instead:
+
+```js
+async function main() {
+  const { default: hre } = await import("hardhat");
+  // use hre
+}
+
+main();
+```
+
+If you're using Hardhat from a Mocha test, the same pattern applies inside a `before` hook. See the [Mocha tests migration guide](/docs/migrate-from-hardhat2/guides/mocha-tests) for an example.
+
+## Troubleshooting
+
+If a Hardhat command failed with one of the errors below, here's what's happening and how to fix it.
+
+### `__dirname is not defined in ES module scope`
+
+A file is now being treated as ESM, but it still uses the CommonJS-only `__dirname` (or `__filename`).
+
+Replace those with `import.meta.dirname` and `import.meta.filename`. See [Convert source files to ESM](#convert-source-files-to-esm) for the other syntax differences you may need to address.
+
+### `Cannot use import statement outside a module`
+
+Node.js is loading a file as CommonJS, but the file uses `import` syntax.
+
+Either set `"type": "module"` in `package.json` so `.js` files are loaded as ESM (see [Set your project to ESM](#set-your-project-to-esm)), or rename the file to `.mjs`.
+
+### `require() of ES module ...`
+
+A CommonJS file is trying to `require()` an ES module. The most common case is `require("hardhat")` from a `.cjs` file.
+
+Convert the file that's calling `require()` to ESM, or load the ES module with a dynamic `await import()`. See [Using Hardhat from a CommonJS file](#using-hardhat-from-a-commonjs-file) for the pattern.
