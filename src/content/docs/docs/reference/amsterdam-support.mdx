@@ -27,6 +27,8 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
 - [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
 - [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
+- [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
+- [EIP-8037: State Creation Gas Cost Increase](#eip-8037-state-creation-gas-cost-increase)
 
 ## Enabling Amsterdam
 
@@ -138,6 +140,8 @@ Under [EIP-7778](https://eips.ethereum.org/EIPS/eip-7778), gas refunds no longer
 
 In practice, this may affect test suites that assert on a block's `gasUsed`, which can now be higher than on earlier hardforks if there are transactions that trigger refunds.
 
+[EIP-8037](#eip-8037-state-creation-gas-cost-increase) further changes how a block's `gasUsed` is computed.
+
 ## EIP-7843: SLOTNUM opcode
 
 [EIP-7843](https://eips.ethereum.org/EIPS/eip-7843) exposes the consensus-layer slot number to the execution layer, so contracts can read it without hardcoding slot-length calculations or checking it against a beacon root. Amsterdam blocks carry a new `slotNumber` header field, and the new `SLOTNUM` (`0x4b`) opcode returns the executing block's slot number. In practice, most test suites won't need the slot number.
@@ -177,3 +181,88 @@ Running it prints the slot number of each newly mined block:
 [EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) introduces block-level access lists, which record every account and storage slot accessed while executing a block. Amsterdam blocks carry a new `blockAccessListHash` header field: the `keccak256` hash of the RLP-encoded block-level access list.
 
 Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Within a chain the placeholder `blockAccessListHash` is unique per block, and a block with no state changes uses the empty-list hash `keccak256(rlp([]))` as the EIP specifies. Don't assert on specific `blockAccessListHash` values.
+
+## EIP-7997: Deterministic Factory Contract
+
+[EIP-7997](https://eips.ethereum.org/EIPS/eip-7997) adds a `CREATE2` factory at `0x4e59b44847b379578588920cA78FbF26c0B4956C`, this allows deterministic deployments at identical addresses across EVM chains. Deployment with `CREATE2` means a contract's address depends only on the factory, a salt, and the contract's creation bytecode. This allows a contract to deploy to the same address on every chain that has the factory.
+
+To deploy through the factory, send a transaction whose data is a 32-byte salt followed by the creation bytecode. The factory returns the new contract's address, so calling it first tells you where the contract will be deployed. The following script deploys the `Counter` contract:
+
+```ts
+// scripts/deterministic-deployment.ts
+import hre, { network } from "hardhat";
+
+import { concat } from "viem";
+
+// EIP-7997: the deterministic factory address
+const FACTORY_ADDRESS = "0x4e59b44847b379578588920cA78FbF26c0B4956C";
+
+const { viem } = await network.create({ network: "edrAmsterdam" });
+
+const [deployer] = await viem.getWalletClients();
+const publicClient = await viem.getPublicClient();
+
+const { bytecode } = await hre.artifacts.readArtifact("Counter");
+
+// Any 32-byte value works as the salt
+const salt =
+  "0x0000000000000000000000000000000000000000000000000000000000000000";
+
+// The factory expects the salt followed by the creation bytecode
+const data = concat([salt, bytecode]);
+
+// Calling the factory first returns the address it will deploy to
+const { data: address } = await publicClient.call({
+  to: FACTORY_ADDRESS,
+  data,
+});
+
+await deployer.sendTransaction({ to: FACTORY_ADDRESS, data });
+
+console.log(`Counter deployed at ${address}`);
+```
+
+Running it prints the address the factory deployed `Counter` to:
+
+<Run command="hardhat run scripts/deterministic-deployment.ts" />
+
+## EIP-8037: State Creation Gas Cost Increase
+
+[EIP-8037](https://eips.ethereum.org/EIPS/eip-8037) raises the cost of operations that grow Ethereum's state, and meters it separately from everything else. From Amsterdam onwards, gas has two dimensions:
+
+- **State gas**: charged for creating state, such as new accounts, writes to empty storage slots, and deployed code
+- **Execution gas**: charged for everything else
+
+A transaction pays for both, so its receipt's `gasUsed` is the total, just like before. Blocks count the two dimensions separately, and a block's `gasUsed` reports whichever is larger. The next block's base fee follows that value.
+
+In practice, transactions that create state cost more on Amsterdam than on earlier hardforks, and a block's `gasUsed` can be lower than the sum of its transactions' `gasUsed`. Test suites that assert on gas costs, or on a block's `gasUsed`, may need updating.
+
+The following script increments a freshly deployed `Counter`, and prints the gas used by the transaction and by its block:
+
+```ts
+// scripts/state-gas.ts
+import { network } from "hardhat";
+
+const { viem } = await network.create({ network: "edrAmsterdam" });
+
+const publicClient = await viem.getPublicClient();
+const counter = await viem.deployContract("Counter");
+
+// The first increment writes to an empty storage slot, which creates state
+const hash = await counter.write.inc();
+const receipt = await publicClient.waitForTransactionReceipt({ hash });
+const block = await publicClient.getBlock({ blockNumber: receipt.blockNumber });
+
+console.log(`transaction gasUsed: ${receipt.gasUsed}`);
+console.log(`block gasUsed:       ${block.gasUsed}`);
+```
+
+Most of the increment's cost is state gas, so the block reports just that, while the transaction's `gasUsed` is the total of both dimensions:
+
+<Run command="hardhat run scripts/state-gas.ts" />
+
+### Transaction gas limits
+
+The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1). That limit still applies when you disable the cap with `transactionGasCap: false`.
+
+Hardhat's default gas limit and gas estimation still stop at the execution gas cap. A transaction that needs more gas in total, like deploying a very large contract, runs out of gas unless you set its `gas` explicitly.
