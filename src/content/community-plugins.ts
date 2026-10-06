@@ -1,5 +1,5 @@
 import { defineCollection } from "astro:content";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 
 import { styleText } from "node:util";
 import path from "node:path";

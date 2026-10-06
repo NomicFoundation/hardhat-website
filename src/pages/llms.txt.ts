@@ -1,14 +1,13 @@
 import { getCollection } from "astro:content";
 import type { StarlightSidebarTopicsUserConfig } from "starlight-sidebar-topics";
+import type { StarlightUserConfig } from "@astrojs/starlight/types";
 import { sidebarTopics } from "../sidebar";
 
 type SidebarTopic = StarlightSidebarTopicsUserConfig[number];
 
 // Sidebar items are a recursive union — Starlight types them via z.any(),
 // so we narrow with property checks at runtime.
-type SidebarItem = NonNullable<
-  Extract<SidebarTopic, { items: unknown }>["items"]
->[number];
+type SidebarItem = NonNullable<StarlightUserConfig["sidebar"]>[number];
 
 interface DocEntry {
   id: string;
