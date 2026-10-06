@@ -263,6 +263,4 @@ Most of the increment's cost is state gas, so the block reports just that, while
 
 ### Transaction gas limits
 
-The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1). That limit still applies when you disable the cap with `transactionGasCap: false`.
-
-Hardhat's default gas limit and gas estimation still stop at the execution gas cap. A transaction that needs more gas in total, like deploying a very large contract, runs out of gas unless you set its `gas` explicitly.
+The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1), which still applies when you disable the cap with `transactionGasCap: false`. The block gas limit also applies, so raise `blockGasLimit` to send more than `60_000_000` gas.
