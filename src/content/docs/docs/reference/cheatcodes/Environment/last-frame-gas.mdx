@@ -1,0 +1,124 @@
+---
+title: lastFrameGas
+description: lastFrameGas cheatcode documentation
+---
+
+{/* This document contains content copied/adapted from the Foundry Book (MIT licensed). See LICENSE in the parent directory. */}
+
+### Signature
+
+```solidity
+/// Gas used. Returned by `lastCallGas` and `lastFrameGas`.
+struct Gas {
+  /// Regular gas available to the frame at entry. Excludes the EIP-8037 state gas reservoir.
+  uint64 gasLimit;
+  /// Regular gas spent by the frame, before refunds. Excludes EIP-8037 state gas; see `gasStateUsed`.
+  /// With isolation, includes intrinsic gas and the regular-gas calldata floor.
+  uint64 gasTotalUsed;
+  /// DEPRECATED: always zero. Memory expansion costs are included in `gasTotalUsed`.
+  uint64 gasMemoryUsed;
+  /// Ordinary refund counter before transaction settlement; finalized for an isolated transaction.
+  /// Can be negative in nested frames. State gas refills are already netted into `gasStateUsed`.
+  int64 gasRefunded;
+  /// Regular gas left at frame end. Excludes the EIP-8037 state gas reservoir.
+  /// State charges can draw from this allowance, so `gasLimit - gasRemaining` can include state gas.
+  uint64 gasRemaining;
+  /// Net EIP-8037 state gas: state creation charges minus refills, including nested execution.
+  /// Zero without EIP-8037 or if the frame reverted or halted. Can be negative when the frame
+  /// undoes state created earlier in the same transaction; use signed arithmetic with `gasTotalUsed`.
+  /// Their sum measures net consumption, not the gas limit needed to execute.
+  int64 gasStateUsed;
+}
+
+/// Gets gas measurements for the last completed call or create, from the callee's perspective.
+/// Unlike `lastCallGas`, CREATE and CREATE2 frames are recorded too. Cheatcode calls are never recorded.
+/// See `Gas` for field semantics.
+function lastFrameGas() external view returns (Gas memory gas);
+```
+
+### Description
+
+`lastFrameGas` returns gas measurements for the most recently completed external call or contract creation. The values are recorded from the callee's perspective, so they describe the child execution frame rather than all overhead paid by its caller.
+
+### Comparison with `lastCallGas`
+
+`lastFrameGas` extends [`lastCallGas`](/docs/reference/cheatcodes/environment/last-call-gas) with contract creation (`CREATE` and `CREATE2`). Both return the same `Gas` struct and use the same gas accounting for a given call. `lastCallGas` only records calls and is deprecated; use `lastFrameGas` for new tests.
+
+| Most recently completed operation                           | `lastFrameGas()`                                                 | `lastCallGas()`                                                   |
+| ----------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- |
+| An external call                                            | Gas for that call                                                | The same gas measurements for that call                           |
+| Contract creation whose constructor makes no external calls | Gas for the creation frame                                       | Gas for the earlier call, or reverts if no call has been recorded |
+| Contract creation whose constructor makes external calls    | Gas for the completed creation frame, including nested execution | Gas for the most recently completed call within the constructor   |
+
+For example, after `target.setValue(42)` followed by `new GasTarget()` with no external calls in its constructor, `lastFrameGas()` describes the creation while `lastCallGas()` still describes `setValue`. Replacing `lastCallGas` with `lastFrameGas` therefore changes what you measure if a creation completes between the call you intended to measure and the measurement.
+
+Reading either value does not replace the recorded frame, because cheatcode calls are excluded from this measurement.
+
+### Returns
+
+| Field           | Type     | Description                                                                                                                                                                                                                                                                                                                                |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `gasLimit`      | `uint64` | Regular gas limit of the frame. Excludes the EIP-8037 state gas reservoir; it is not the transaction's combined limit or the minimum required to succeed.                                                                                                                                                                                  |
+| `gasTotalUsed`  | `uint64` | Regular (execution) gas used, including nested execution, before subtracting `gasRefunded`. With isolation, includes intrinsic gas and the regular-gas calldata floor. Without EIP-8037, state creation costs use the ordinary gas schedule and are included here.                                                                         |
+| `gasMemoryUsed` | `uint64` | Deprecated; always `0`. Memory expansion costs are included in `gasTotalUsed`.                                                                                                                                                                                                                                                             |
+| `gasRefunded`   | `int64`  | Ordinary gas refund counter for the frame, which can be negative in a nested frame. Without isolation, this is before the transaction-wide refund cap and calldata floor. With isolation, this is the isolated transaction's final refund. Excludes state gas refills.                                                                     |
+| `gasRemaining`  | `uint64` | Regular gas remaining at completion. Excludes the state gas reservoir. State charges can draw from regular gas and state refills can restore it, so `gasLimit - gasRemaining` need not equal `gasTotalUsed`.                                                                                                                               |
+| `gasStateUsed`  | `int64`  | Net [EIP-8037](https://eips.ethereum.org/EIPS/eip-8037) state creation gas, including nested execution, already subtracting state refills. Zero before the Amsterdam hardfork and for reverted or halted frames. Can be negative when a successful nested frame undoes state creation charged by an earlier frame in the same transaction. |
+
+:::note
+**Isolated tests**
+
+With isolation enabled, a top-level external call or creation in a test runs as a separate transaction. Its measurement includes transaction intrinsic gas, and the refund field is finalized for that transaction. Without isolation, these are frame-local measurements: intrinsic gas and the caller's call setup are outside the frame, and the refund counter has not been finalized.
+
+You can enable isolation mode by setting `isolate` to `true` in [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration).
+:::
+
+### Examples
+
+Inspect an external call:
+
+```solidity
+contract GasTarget {
+  uint256 public value;
+
+  function setValue(uint256 newValue) external {
+    value = newValue;
+  }
+}
+
+contract LastFrameGasTest is Test {
+  function testMeasureLastCallFrame() public {
+    GasTarget target = new GasTarget();
+    target.setValue(42);
+
+    Vm.Gas memory gas = vm.lastFrameGas();
+
+    assertGt(gas.gasLimit, 0);
+    assertGt(gas.gasTotalUsed, 0);
+    assertEq(gas.gasMemoryUsed, 0);
+    assertGt(gas.gasRemaining, 0);
+  }
+}
+```
+
+Inspect contract creation:
+
+```solidity
+contract LastFrameGasTest is Test {
+  function testMeasureContractCreationFrame() public {
+    new GasTarget();
+
+    Vm.Gas memory gas = vm.lastFrameGas();
+
+    assertGt(gas.gasTotalUsed, 0);
+  }
+}
+```
+
+### Gotchas
+
+- `lastFrameGas` reverts when no external call or contract creation has completed yet.
+- `lastCallGas` reverts when no external call has completed, even if a contract was created.
+- The measurement is for the callee frame. It does not equal the caller's complete gas delta around the call.
+- Expected-revert handling clears the cached frame. Do not rely on `lastFrameGas` after a call or creation consumed by `vm.expectRevert`.
+- Gas depends on EVM version, optimizer settings, isolation, and warm or cold state. Keep those inputs stable when comparing values.
