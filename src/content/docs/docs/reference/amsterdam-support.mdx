@@ -28,6 +28,7 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
 - [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
 - [EIP-7976: Increase Calldata Floor Cost](#eip-7976-increase-calldata-floor-cost)
+- [EIP-7981: Increase Access List Cost](#eip-7981-increase-access-list-cost)
 - [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
 - [EIP-8024: Backward Compatible SWAPN, DUPN, EXCHANGE](#eip-8024-backward-compatible-swapn-dupn-exchange)
 - [EIP-8037: State Creation Gas Cost Increase](#eip-8037-state-creation-gas-cost-increase)
@@ -189,6 +190,12 @@ Hardhat's simulated network populates this field so that it is present on Amster
 [EIP-7976](https://eips.ethereum.org/EIPS/eip-7976) raises the calldata gas floor: from Amsterdam onwards, every byte counts as 64 gas towards the calldata floor.
 
 Transactions that carry a lot of data but which do little computation will cost more. A test suite that asserts on their current gas usage may fail. Prefer letting Hardhat estimate the gas over using a hardcoded value, which may now be too low.
+
+## EIP-7981: Increase Access List Cost
+
+[EIP-7981](https://eips.ethereum.org/EIPS/eip-7981) raises the cost of access lists: from Amsterdam onwards, every byte of address and storage key data in an access list costs an extra 64 gas.
+
+Transactions that carry a nonempty access list will cost more. A test suite that asserts on their current gas usage may fail. Prefer letting Hardhat estimate the gas over using a hardcoded value, which may now be too low.
 
 ## EIP-7997: Deterministic Factory Contract
 
