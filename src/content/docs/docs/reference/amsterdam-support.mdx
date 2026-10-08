@@ -27,7 +27,9 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
 - [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
 - [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
+- [EIP-7976: Increase Calldata Floor Cost](#eip-7976-increase-calldata-floor-cost)
 - [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
+- [EIP-8024: Backward Compatible SWAPN, DUPN, EXCHANGE](#eip-8024-backward-compatible-swapn-dupn-exchange)
 - [EIP-8037: State Creation Gas Cost Increase](#eip-8037-state-creation-gas-cost-increase)
 
 ## Enabling Amsterdam
@@ -182,6 +184,12 @@ Running it prints the slot number of each newly mined block:
 
 Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Within a chain the placeholder `blockAccessListHash` is unique per block, and a block with no state changes uses the empty-list hash `keccak256(rlp([]))` as the EIP specifies. Don't assert on specific `blockAccessListHash` values.
 
+## EIP-7976: Increase Calldata Floor Cost
+
+[EIP-7976](https://eips.ethereum.org/EIPS/eip-7976) raises the calldata gas floor: from Amsterdam onwards, every byte counts as 64 gas towards the calldata floor.
+
+Transactions that carry a lot of data but which do little computation will cost more. A test suite that asserts on their current gas usage may fail. Prefer letting Hardhat estimate the gas over using a hardcoded value, which may now be too low.
+
 ## EIP-7997: Deterministic Factory Contract
 
 [EIP-7997](https://eips.ethereum.org/EIPS/eip-7997) adds a `CREATE2` factory at `0x4e59b44847b379578588920cA78FbF26c0B4956C`, this allows deterministic deployments at identical addresses across EVM chains. Deployment with `CREATE2` means a contract's address depends only on the factory, a salt, and the contract's creation bytecode. This allows a contract to deploy to the same address on every chain that has the factory.
@@ -225,6 +233,12 @@ console.log(`Counter deployed at ${address}`);
 Running it prints the address the factory deployed `Counter` to:
 
 <Run command="hardhat run scripts/deterministic-deployment.ts" />
+
+## EIP-8024: Backward Compatible SWAPN, DUPN, EXCHANGE
+
+[EIP-8024](https://eips.ethereum.org/EIPS/eip-8024) adds the `DUPN`, `SWAPN` and `EXCHANGE` opcodes, which reach stack items deeper than `DUP16` and `SWAP16` can.
+
+Existing contracts and tests should not be affected. The benefit comes once Solidity compilers use these opcodes, which can make the code they generate use gas more efficiently.
 
 ## EIP-8037: State Creation Gas Cost Increase
 
