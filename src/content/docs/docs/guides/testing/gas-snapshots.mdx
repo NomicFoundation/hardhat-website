@@ -96,7 +96,7 @@ Snapshot cheatcodes let you capture specific values from within your Solidity te
 
 ### Capturing gas for a specific call
 
-Use `snapshotGasLastCall` to capture the gas used by the previous call:
+Use `snapshotGasLastFrame` to capture the gas used by the previous call or contract creation:
 
 ```solidity
 contract CalculatorTest is Test {
@@ -108,7 +108,7 @@ contract CalculatorTest is Test {
 
   function testAdditionGas() public {
     calculator.add(1, 2);
-    vm.snapshotGasLastCall("calculator-add");
+    vm.snapshotGasLastFrame("calculator-add");
   }
 }
 ```
@@ -143,7 +143,7 @@ function testInitialState() public {
 By default, snapshots are grouped by the test contract name. You can specify a custom group as the first argument:
 
 ```solidity
-vm.snapshotGasLastCall("gas-benchmarks", "calculator-add");
+vm.snapshotGasLastFrame("gas-benchmarks", "calculator-add");
 vm.snapshotValue("state-checks", "initial-result", calculator.result());
 ```
 

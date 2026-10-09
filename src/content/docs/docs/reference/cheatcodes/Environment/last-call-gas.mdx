@@ -6,21 +6,37 @@ description: lastCallGas cheatcode documentation
 ### Signature
 
 ```solidity
+/// Gas used. Returned by `lastCallGas` and `lastFrameGas`.
 struct Gas {
-  /// The gas limit of the call.
+  /// Regular gas available to the frame at entry. Excludes the EIP-8037 state gas reservoir.
   uint64 gasLimit;
-  /// The total gas used.
+  /// Regular gas spent by the frame, before refunds. Excludes EIP-8037 state gas; see `gasStateUsed`.
+  /// With isolation, includes intrinsic gas and the regular-gas calldata floor.
   uint64 gasTotalUsed;
-  /// DEPRECATED: The amount of gas used for memory expansion.
+  /// DEPRECATED: always zero. Memory expansion costs are included in `gasTotalUsed`.
   uint64 gasMemoryUsed;
-  /// The amount of gas refunded.
+  /// Ordinary refund counter before transaction settlement; finalized for an isolated transaction.
+  /// Can be negative in nested frames. State gas refills are already netted into `gasStateUsed`.
   int64 gasRefunded;
-  /// The amount of gas remaining.
+  /// Regular gas left at frame end. Excludes the EIP-8037 state gas reservoir.
+  /// State charges can draw from this allowance, so `gasLimit - gasRemaining` can include state gas.
   uint64 gasRemaining;
+  /// Net EIP-8037 state gas: state creation charges minus refills, including nested execution.
+  /// Zero without EIP-8037 or if the frame reverted or halted. Can be negative when the frame
+  /// undoes state created earlier in the same transaction; use signed arithmetic with `gasTotalUsed`.
+  /// Their sum measures net consumption, not the gas limit needed to execute.
+  int64 gasStateUsed;
 }
+
+/// DEPRECATED: use `lastFrameGas` instead.
+/// Gets gas measurements for the last completed call, from the callee's perspective.
+/// Unlike `lastFrameGas`, CREATE and CREATE2 frames are not recorded; calls made by a constructor are.
+/// See `Gas` for field semantics.
 function lastCallGas() external view returns (Gas memory gas);
 ```
 
 ### Description
 
-Gets the gas used in the last call from the callee perspective.
+`lastCallGas` is being deprecated in favor of [`lastFrameGas`](/docs/reference/cheatcodes/environment/last-frame-gas). It will be removed in future versions.
+
+Gets gas measurements for the last completed call, from the callee's perspective. Unlike `lastFrameGas`, `CREATE` and `CREATE2` frames are not recorded; calls made by a constructor are. See `lastFrameGas` for the meaning of each `Gas` field.
