@@ -23,6 +23,7 @@ We are implementing Amsterdam's EIPs incrementally, and will add more as the har
 
 The following Amsterdam EIPs are currently supported:
 
+- [EIP-2780: Resource-based intrinsic transaction gas](#eip-2780-resource-based-intrinsic-transaction-gas)
 - [EIP-7708: ETH transfers emit logs](#eip-7708-eth-transfers-emit-logs)
 - [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
 - [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
@@ -32,6 +33,7 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
 - [EIP-8024: Backward Compatible SWAPN, DUPN, EXCHANGE](#eip-8024-backward-compatible-swapn-dupn-exchange)
 - [EIP-8037: State Creation Gas Cost Increase](#eip-8037-state-creation-gas-cost-increase)
+- [EIP-8246: Remove SELFDESTRUCT Burn](#eip-8246-remove-selfdestruct-burn)
 
 ## Enabling Amsterdam
 
@@ -63,6 +65,12 @@ import { network } from "hardhat";
 
 const connection = await network.create({ network: "edrAmsterdam" });
 ```
+
+## EIP-2780: Resource-based intrinsic transaction gas
+
+[EIP-2780](https://eips.ethereum.org/EIPS/eip-2780) replaces the flat 21,000 gas that every transaction pays up front with a charge per resource it uses. From Amsterdam onwards, a transaction pays a base cost of 12,000 gas, plus extra charges for accessing its recipient and for transferring value. For instance, a plain ETH transfer to an existing account still costs 21,000 gas in total, however a transfer to yourself costs only the base cost.
+
+In practice, this may affect test suites that hardcode 21,000 as the cost of a transaction, for example when asserting on a receipt's `gasUsed`.
 
 ## EIP-7708: ETH transfers emit logs
 
@@ -285,3 +293,7 @@ Most of the increment's cost is state gas, so the block reports just that, while
 ### Transaction gas limits
 
 The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1), which still applies when you disable the cap with `transactionGasCap: false`. The block gas limit also applies, so raise `blockGasLimit` to send more than `60_000_000` gas.
+
+## EIP-8246: Remove SELFDESTRUCT Burn
+
+[EIP-8246](https://eips.ethereum.org/EIPS/eip-8246) removes the remaining cases where `SELFDESTRUCT` burns ETH. Accounts marked for selfdestruction still have their code, storage, and nonce cleared at transaction finalization, but any remaining balance is preserved. In practice, most test suites will not be affected.

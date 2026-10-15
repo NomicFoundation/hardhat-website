@@ -59,6 +59,7 @@ SSTOREs
 SELFDESTRUCT
 selfdestruct
 selfdestructed
+selfdestruction
 Extcodehash
 Extcodecopy
 callcode

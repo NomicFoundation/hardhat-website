@@ -27,8 +27,8 @@ importers:
         specifier: ^0.41.3
         version: 0.41.3
       '@nomicfoundation/hardhat-errors':
-        specifier: ^3.1.1
-        version: 3.1.1
+        specifier: ^3.1.2
+        version: 3.1.2
       '@types/tar-stream':
         specifier: ^3.1.4
         version: 3.1.4
@@ -784,8 +784,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nomicfoundation/hardhat-errors@3.1.1':
-    resolution: {integrity: sha512-NeI8Ze1DsR8PE/Gm4syf3rNaiBw7Mioq3ZMw+6+/SJuNM1epA4RG2pz+06Pg0GUe4sCuuayZw30Fr1YWjF2vYA==}
+  '@nomicfoundation/hardhat-errors@3.1.2':
+    resolution: {integrity: sha512-+2+Pr2jlXbcMMDtAjhHMTh2PW0TDTvmuJlxmbZ99lweYV00x2iN3JFsXUcF684obNHr/hxaEoNaL6pjZ8bbPGg==}
 
   '@nomicfoundation/hardhat-utils@4.4.0':
     resolution: {integrity: sha512-fRaVVbPs+Az7K3B40x8jlPDM4o7jfgoTMpxNXjg2JrpxORKqQtf9YSv9HN9lZKFZecLIYwHT3U9RQEOrZBkAEQ==}
@@ -3826,7 +3826,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nomicfoundation/hardhat-errors@3.1.1':
+  '@nomicfoundation/hardhat-errors@3.1.2':
     dependencies:
       '@nomicfoundation/hardhat-utils': 4.4.0
 
