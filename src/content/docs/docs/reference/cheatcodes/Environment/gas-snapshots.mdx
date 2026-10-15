@@ -41,13 +41,26 @@ function snapshotValue(
   uint256 value
 ) external;
 
+/// DEPRECATED: use `snapshotGasLastFrame` instead.
 /// Snapshot capture the gas usage of the last call by name from the callee perspective.
 function snapshotGasLastCall(
   string calldata name
 ) external returns (uint256 gasUsed);
 
+/// DEPRECATED: use `snapshotGasLastFrame` instead.
 /// Snapshot capture the gas usage of the last call by name in a group from the callee perspective.
 function snapshotGasLastCall(
+  string calldata group,
+  string calldata name
+) external returns (uint256 gasUsed);
+
+/// Snapshot capture the gas usage of the last call or create by name from the callee perspective.
+function snapshotGasLastFrame(
+  string calldata name
+) external returns (uint256 gasUsed);
+
+/// Snapshot capture the gas usage of the last call or create by name in a group from the callee perspective.
+function snapshotGasLastFrame(
   string calldata group,
   string calldata name
 ) external returns (uint256 gasUsed);
@@ -59,7 +72,17 @@ function snapshotGasLastCall(
 **Gas snapshots are not yet fully supported.**
 :::
 
-`snapshotGas*` cheatcodes allow you to capture gas usage in your tests. This can be useful to track how much gas your logic is consuming. You can capture the gas usage of the last call by name, capture an arbitrary numerical value by name, or start and stop a snapshot capture of the current gas usage by name.
+`snapshotGas*` cheatcodes allow you to capture gas usage in your tests. This can be useful to track how much gas your logic is consuming. You can capture the gas usage of the last call or contract creation by name, capture an arbitrary numerical value by name, or start and stop a snapshot capture of the current gas usage by name.
+
+| Function               | Description                                                     |
+| ---------------------- | --------------------------------------------------------------- |
+| `startSnapshotGas`     | Start capturing gas usage                                       |
+| `stopSnapshotGas`      | Stop capturing and record the gas used                          |
+| `snapshotValue`        | Record an arbitrary numerical value                             |
+| `snapshotGasLastFrame` | Record gas usage of the last external call or contract creation |
+| `snapshotGasLastCall`  | Deprecated call-only variant; use `snapshotGasLastFrame`        |
+
+`snapshotGasLastCall` is being deprecated in favor of `snapshotGasLastFrame`. It will be removed in future versions. Use [`lastFrameGas`](/docs/reference/cheatcodes/environment/last-frame-gas) to inspect all gas fields of the last frame without writing a snapshot.
 
 :::note
 **Isolated tests**
@@ -152,7 +175,7 @@ contract SnapshotGasTest is Test {
 }
 ```
 
-Capturing the gas usage of the last call from the callee perspective:
+Capturing the gas usage of the last call or contract creation from the callee perspective:
 
 ```solidity
 contract SnapshotGasTest is Test {
@@ -163,9 +186,15 @@ contract SnapshotGasTest is Test {
   }
 
   /// Writes to `snapshots/SnapshotGasTest.json` group with name `lastCallA`.
-  function testSnapshotGasLastCall() public {
+  function testSnapshotGasLastFrame() public {
     flare.run(1);
-    vm.snapshotGasLastCall("lastCallA");
+    vm.snapshotGasLastFrame("lastCallA");
+  }
+
+  /// Writes to `snapshots/SnapshotGasTest.json` group with name `createA`.
+  function testSnapshotGasLastFrameCreate() public {
+    new Flare();
+    vm.snapshotGasLastFrame("createA");
   }
 }
 ```
