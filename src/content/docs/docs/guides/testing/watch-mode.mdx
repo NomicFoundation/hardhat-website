@@ -1,0 +1,74 @@
+---
+title: Watch mode
+description: How to rerun your tests or build each time you change a file
+sidebar:
+  order: 11
+---
+
+import Run from "@hh/Run.astro";
+
+Watch mode runs your tests or your build, then runs them again each time you save a source file, a test, or your Hardhat config. Add the `--watch` flag, or `-w`:
+
+<Run command={["hardhat test --watch", "hardhat test solidity --watch"]} />
+
+<Run command="hardhat build --watch" />
+
+Each run starts a new Hardhat process, so it picks up your latest config, plugins, and sources, exactly as if you typed the command again. After each run, Hardhat prints whether it succeeded and how long it took, then waits for the next change:
+
+```
+[Command was successful, lasted 3.57s]
+Watching 3 paths (sources, tests, and config) for changes. Press "a" to rerun everything, "q" to quit.
+```
+
+Press `a` to run everything again, or `q` (or `Ctrl+C`) to stop. While a run is in progress, it receives your keyboard input, so prompts keep working.
+
+## What runs on each change
+
+`hardhat test --watch` runs only the tests that matter for the change:
+
+- If you change one test file, only that file runs.
+- If you change several test files at once, for example by formatting the whole project, every test runs.
+- If you change something else, like a contract or the config, the test file of the previous run runs again. If there isn't one, every test runs.
+
+This works for every test runner, Solidity and TypeScript alike.
+
+To run every test on each change instead, add `--run-all`:
+
+<Run command="hardhat test --watch --run-all" />
+
+If you choose which tests to run yourself, with test file arguments or `--grep`, every run keeps your choice:
+
+<Run command="hardhat test --watch test/Counter.t.sol" />
+
+## What is watched
+
+| Command                         | Watched                                                  |
+| ------------------------------- | -------------------------------------------------------- |
+| `hardhat build --watch`         | Your sources, Solidity tests, and config file            |
+| `hardhat test solidity --watch` | Your sources, Solidity tests, and config file            |
+| `hardhat test --watch`          | Your sources, every test runner's tests, and config file |
+
+Changes inside the artifacts and cache directories, `node_modules`, and `.git` are ignored. If you change the paths in your config, restart watch mode so that it watches the new paths.
+
+## Options
+
+| Option          | Description                                                                                |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `--watch`, `-w` | Rerun the command each time a watched file changes.                                        |
+| `--watch-delay` | How long to wait for more changes before running, in milliseconds. The default is `50`.    |
+| `--no-restart`  | Ignore changes made while a run is in progress, instead of stopping it and starting again. |
+| `--run-all`     | Run every test on each change (`test` and `test solidity` only).                           |
+
+By default, a change made while a run is in progress stops that run and starts a new one. A run that doesn't stop within 5 seconds is killed.
+
+Watch mode is only available from the command line. Running a task with `watch: true` from a script throws an error.
+
+## Coming from Foundry
+
+Watch mode works like `forge test --watch` and `forge build --watch`, with the same `-w`, `--no-restart`, and `--run-all` options. The differences:
+
+- `forge test --watch` limits a run to the changed file only for Solidity tests. Hardhat does it for TypeScript tests too.
+- `--watch-delay` takes milliseconds (`--watch-delay 200`). Foundry's takes seconds by default (`--watch-delay 0.2`).
+- Foundry's `--watch` takes a list of paths to watch. Hardhat watches the paths in your config.
+- Foundry's `--rerun-failed` isn't available.
+- Hardhat quits with `q`, and Foundry quits with `Ctrl+D`. Both rerun everything with `a`.
