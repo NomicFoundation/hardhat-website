@@ -247,6 +247,10 @@ Hardhat 3's Solidity testing is designed for compatibility with Foundry test sui
 
     `hardhat test` (without `solidity`) runs every test runner registered in your config (e.g. `node:test`); if you only have Solidity tests today, the two are equivalent.
 
+    If you use `forge test --watch`, add `--watch` (or `-w`) instead. See [Watch mode](/docs/guides/testing/watch-mode) for its options and how they differ from Foundry's:
+
+    <Run command="hardhat test solidity --watch" />
+
 3.  **Port your test execution settings**
 
     Translate settings from `[profile.default]` and `[fuzz]` / `[invariant]` in `foundry.toml` into the `test.solidity` entry:
