@@ -54,7 +54,7 @@ function snapshotGasLastCall(
   string calldata name
 ) external returns (uint256 gasUsed);
 
-/// Snapshot capture the gas usage of the last call or create by name from the callee perspective.
+/// Captures the gas usage of the last call or creation by name, from the callee's perspective.
 function snapshotGasLastFrame(
   string calldata name
 ) external returns (uint256 gasUsed);
