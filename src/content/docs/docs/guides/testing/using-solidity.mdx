@@ -148,6 +148,8 @@ To skip the matching tests instead, use `--grep-exclude`:
 
 Combine both options to run the tests that match `--grep` while skipping any that also match `--grep-exclude`.
 
+These filters also narrow which tests a [gas profile](/docs/guides/testing/gas-profiles) covers when you run `test solidity --gas-profile`.
+
 ### Multichain support
 
 By default, Solidity tests run in an environment that simulates Ethereum Mainnet. If you're building for other blockchains, you can test against their specific behavior by specifying a different Chain Type with the `--chain-type` option:
