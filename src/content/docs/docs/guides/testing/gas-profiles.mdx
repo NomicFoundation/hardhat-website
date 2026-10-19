@@ -1,0 +1,158 @@
+---
+title: Gas profiles for Solidity tests
+description: How to see where each Solidity test spends its gas with the --gas-profile flag
+sidebar:
+  label: Gas profiles
+  order: 11
+---
+
+import Run from "@hh/Run.astro";
+
+When a test costs more gas than you expect, a gas profile shows you which calls spend it. Run your Solidity tests with the `--gas-profile` flag, and Hardhat breaks each test's gas down by the calls it makes:
+
+<Run command="hardhat test solidity --gas-profile" />
+
+After the test results, Hardhat prints a short summary and writes a folded-stack file per test, which you can open in a flame graph viewer.
+
+## When to use a gas profile
+
+Hardhat has three ways to look at gas, and each one answers a different question:
+
+- [Gas statistics](/docs/guides/testing/gas-statistics) (`--gas-stats`) sum the gas of each public function across all your tests. Use them to track what your functions cost your users.
+- [Execution traces](/docs/guides/execution-traces) (`-vvvv`) print every call of a test with its gas, as a tree of numbers. Use them to follow what a test does, step by step.
+- A gas profile (`--gas-profile`) splits each test's gas between its calls, merges repeated calls, and sorts them by gas. Use it to find the calls that make a test expensive.
+
+## Running a gas profile
+
+The `--gas-profile` flag is an option of the `test solidity` task. It profiles every test that runs, so you can narrow the set the same way you would for a normal test run.
+
+To profile the tests in some files only, pass them as arguments:
+
+<Run command="hardhat test solidity --gas-profile test/Dex.t.sol" />
+
+To profile the tests whose name matches a string or regular expression, use `--grep`:
+
+<Run command="hardhat test solidity --gas-profile --grep swap" />
+
+The flag doesn't change what your tests print, and it never changes the exit code. Failing tests are profiled too.
+
+## Reading the terminal summary
+
+After the test results, Hardhat prints the five heaviest tests, the five functions with the most self gas across all profiled tests, the hottest path of each of the heaviest tests, and some notes on how to read them:
+
+```text
+╔═══════════════════════════════════════════════════════════════════════════════════╗
+║                                    Gas profile                                    ║
+╚═══════════════════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════════════╗
+║ Tests by gas (top 5 of 9)                                                         ║
+╟───────────────────────────────┬──────────┬──────────┬─────────────────────┬───────╢
+║ Test                          │ Result   │ Test gas │ Heaviest call       │ Share ║
+╟───────────────────────────────┼──────────┼──────────┼─────────────────────┼───────╢
+║ GasTest#test_deployAndDeposit │ passed   │ 357,344  │ new Vault           │ 70.3% ║
+║ GasTest#test_reverts          │ passed   │ 345,607  │ new Worker          │ 39.6% ║
+║ DeployTest#test_deployCode    │ FAILED   │ 239,261  │ new Token           │ 84.9% ║
+║ DexTest#test_swapManyTimes    │ passed   │ 168,208  │ Router.swapExact ×5 │ 90.6% ║
+║ DexTest#test_swapTwoHops      │ passed   │ 131,957  │ Router.swapExact    │ 91.3% ║
+╚═══════════════════════════════╧══════════╧══════════╧═════════════════════╧═══════╝
+╔═══════════════════════════════════════════════════════════════════════════════════╗
+║ Functions by self gas (top 5 of 32, share of all profiled gas)                    ║
+╟───────────────────────────────┬──────────┬──────────┬─────────────────────┬───────╢
+║ Function                      │ Self gas │ Share    │ Calls               │ Tests ║
+╟───────────────────────────────┼──────────┼──────────┼─────────────────────┼───────╢
+║ new Vault                     │ 265,360  │ 18.1%    │ 1                   │ 1     ║
+║ new Token                     │ 203,043  │ 13.9%    │ 1                   │ 1     ║
+║ new Worker                    │ 136,781  │ 9.3%     │ 1                   │ 1     ║
+║ GasTest.test_reverts          │ 116,391  │ 8.0%     │ 1                   │ 1     ║
+║ Pool.swap                     │ 84,078   │ 5.7%     │ 8                   │ 3     ║
+╚═══════════════════════════════╧══════════╧══════════╧═════════════════════╧═══════╝
+
+  Hottest paths (share of the test's executed gas):
+  DexTest#test_swapManyTimes  Router.swapExact ×5 90.6% → Pool.swap ×5 55.7% → ERC20.transfer ×5 21.4%
+  DexTest#test_swapTwoHops    Router.swapExact 91.3% → Pool.swap ×2 66.0% → ERC20.transfer ×2 30.3%
+
+  Internal functions count as the caller's self gas. Refunds aren't attributed to any call.
+  Folded stacks write %, ;, tabs and line breaks in names as %xx (their hex code).
+  Cheatcode and console.log calls cost no gas and aren't shown.
+
+Saved gas profile (folded stacks, 9 files) to <project>/cache/gas-profile/folded
+```
+
+Here's how to read it:
+
+- **Test gas** is the gas the test runner reports for the test.
+- **Heaviest call** is the test's most expensive direct call, and **Share** is its part of the test's executed gas. `×5` means the test made that call five times, and the profile merged them.
+- **Functions by self gas** adds up each function's self gas over every profiled test. A contract creation shows up as `new <Contract>`.
+- **Hottest paths** follow the heaviest call down, one level at a time, while it still takes a large share of the test's gas.
+
+Below the notes, Hardhat lists any tests it couldn't profile, with the reason, and the folder where it saved the folded stacks.
+
+## Understanding the numbers
+
+### Self gas and total gas
+
+Every call in a profile has two numbers:
+
+- **Total gas** is what the call used, including the calls it made.
+- **Self gas** is what the call spent in its own code. It includes the function's internal functions and the cost of making its calls, but not the gas those calls used.
+
+The self gas of all the calls in a test adds up to the test's executed gas. That's why sorting by self gas points you at the code that spends the gas, while sorting by total gas points you at the entry point that triggered it.
+
+### Refunds
+
+Some operations, like clearing a storage slot, earn a refund that the EVM applies at the end of the test. The profile's calls add up to the gas executed before the refund, so the test gas is lower:
+
+```text
+test gas = executed gas − refund
+```
+
+For example, a test that executes 44,194 gas and earns a 2,800 gas refund has a test gas of 41,394. Refunds aren't attributed to any call, so the percentages in a profile are shares of the executed gas.
+
+### What a profile leaves out
+
+- **Cheatcode and `console.log` calls** don't cost gas in a test, so the profile drops them. The cost of making those calls stays in the caller's self gas.
+- **Internal functions** aren't separate calls in the EVM, so their gas counts as the self gas of the function that called them. The profile shows external calls and contract creations.
+- **Overloaded functions** are named without their parameter types, so the profile merges the overloads of a function into one entry.
+- **`setUp`** runs before each test and isn't included in the test's profile.
+
+## Using flame graph tools
+
+Hardhat writes one folded-stack file per test to `<cache>/gas-profile/folded/`, named after the test, for example `DexTest.test_swapManyTimes.folded`. Each line is a call stack followed by the self gas of its last frame:
+
+```text
+DexTest.test_swapManyTimes 15838
+DexTest.test_swapManyTimes;Router.swapExact 9660
+DexTest.test_swapManyTimes;Router.swapExact;Pool.token0 548
+DexTest.test_swapManyTimes;Router.swapExact;ERC20.transferFrom 17061
+```
+
+This is the format that flame graph tools read. To view a test's profile as a flame graph:
+
+- Drop the file into [speedscope](https://www.speedscope.app), which runs in your browser.
+- Or render it to an SVG with [inferno](https://github.com/jonhoo/inferno), using `inferno-flamegraph`.
+
+Unlike the summary, the folded files keep every call in the order it ran, without merging repeated calls.
+
+:::note
+The folded format uses `;` to separate frames and a line break to separate stacks. If a frame name contains `%`, `;`, a tab, or a line break, Hardhat writes that character as `%xx`, its hex code. For example, `a;b` is written as `a%3bb`.
+:::
+
+## Limits
+
+- **Fuzz and invariant tests aren't profiled.** They run many times with different inputs, so there's no single trace to profile. The summary lists them under "Not profiled".
+- **You can't combine `--gas-profile` with `--coverage`.** Coverage runs instrumented contracts that cost more gas, so Hardhat stops with error HHE823 before running any test.
+- **Isolation changes the numbers.** When you use `--gas-stats` or `--gas-stats-json`, or your [Test Profile](/docs/guides/testing/test-profiles) sets `isolate: true`, each top-level call of a test runs as its own transaction. Its gas then includes that transaction's cost, so the profile differs from a run without isolation. Hardhat warns you before the tests run, naming what turned isolation on:
+
+```text
+Warning: isolation is on (--gas-stats). Each top-level call then runs as its own transaction, so its gas includes that transaction's cost and the profile differs from a run without isolation.
+```
+
+The summary's notes also start with "Isolation is on: top-level call gas includes each call's transaction cost." For a profile that matches a normal test run, run `--gas-profile` without those settings.
+
+## Where the files are written
+
+Hardhat writes the gas profile to the `gas-profile` folder in your project's cache directory, which is `cache/gas-profile/` by default. Each run with `--gas-profile` replaces the folder, so it only holds the profile of the latest run.
+
+To remove it, along with the rest of the cache, run:
+
+<Run command="hardhat clean" />

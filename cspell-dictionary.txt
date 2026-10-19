@@ -85,3 +85,5 @@ Hegota
 slotnum
 dupn
 swapn
+speedscope
+flamegraph
