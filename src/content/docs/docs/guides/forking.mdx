@@ -184,6 +184,36 @@ contract ExampleTest is Test {
 }
 ```
 
+## Using an RPC proxy
+
+Hardhat caches forked state on disk, but only on the machine that ran the tests. If your RPC rate-limits or fails, or your CI starts with an empty cache, you can put a local JSON-RPC proxy such as [eRPC](https://github.com/erpc/erpc) between Hardhat and several RPCs. It fails over between them, and every process that uses it shares its cache:
+
+```yaml
+# erpc.yaml
+database:
+  evmJsonRpcCache:
+    connectors:
+      - id: mem
+        driver: memory
+    policies:
+      - connector: mem
+        network: "*"
+        method: "*"
+        finality: finalized
+        empty: allow
+projects:
+  - id: main
+    upstreams:
+      - endpoint: <MAINNET_RPC_URL>
+      - endpoint: <ANOTHER_MAINNET_RPC_URL>
+```
+
+```sh
+docker run -v $(pwd)/erpc.yaml:/erpc.yaml -p 4000:4000 ghcr.io/erpc/erpc:latest
+```
+
+Then use `http://localhost:4000/main/evm/1` as the forking `url` in your Hardhat config. The proxy only caches finalized data, so set `blockNumber` to a finalized block. `empty: allow` also caches empty results, like the empty code of an account that isn't a contract, which forked tests read often.
+
 ## Learn more
 
 Read [the forking section](/docs/reference/edr-simulated-networks#forking-mode) in our explanation about simulated networks to learn more about forking.
