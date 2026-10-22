@@ -28,6 +28,7 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7778: Block Gas Accounting without Refunds](#eip-7778-block-gas-accounting-without-refunds)
 - [EIP-7843: SLOTNUM opcode](#eip-7843-slotnum-opcode)
 - [EIP-7928: Block-Level Access Lists](#eip-7928-block-level-access-lists)
+- [EIP-7954: Increase Maximum Contract Size](#eip-7954-increase-maximum-contract-size)
 - [EIP-7976: Increase Calldata Floor Cost](#eip-7976-increase-calldata-floor-cost)
 - [EIP-7981: Increase Access List Cost](#eip-7981-increase-access-list-cost)
 - [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
@@ -192,6 +193,12 @@ Running it prints the slot number of each newly mined block:
 [EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) introduces block-level access lists, which record every account and storage slot accessed while executing a block. Amsterdam blocks carry a new `blockAccessListHash` header field: the `keccak256` hash of the RLP-encoded block-level access list.
 
 Hardhat's simulated network populates this field so that it is present on Amsterdam blocks, but its value is a placeholder and does not match the value a real network would produce. Within a chain the placeholder `blockAccessListHash` is unique per block, and a block with no state changes uses the empty-list hash `keccak256(rlp([]))` as the EIP specifies. Don't assert on specific `blockAccessListHash` values.
+
+## EIP-7954: Increase Maximum Contract Size
+
+[EIP-7954](https://eips.ethereum.org/EIPS/eip-7954) raises the maximum size of deployed contract code from 24 KiB to 64 KiB, and the maximum size of initcode from 48 KiB to 128 KiB. The new limits apply to deployment transactions and to contracts created with `CREATE` and `CREATE2`.
+
+From Amsterdam onwards, you can deploy larger contracts without enabling `allowUnlimitedContractSize`.
 
 ## EIP-7976: Increase Calldata Floor Cost
 
