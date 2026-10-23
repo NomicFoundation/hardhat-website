@@ -209,7 +209,7 @@ projects:
 ```
 
 ```sh
-docker run -v $(pwd)/erpc.yaml:/erpc.yaml -p 4000:4000 ghcr.io/erpc/erpc:latest
+docker run -v $(pwd)/erpc.yaml:/erpc.yaml -p 127.0.0.1:4000:4000 ghcr.io/erpc/erpc:latest
 ```
 
 Then use `http://localhost:4000/main/evm/1` as the forking `url` in your Hardhat config. The proxy only caches finalized data, so set `blockNumber` to a finalized block. `empty: allow` also caches empty results, like the empty code of an account that isn't a contract, which forked tests read often.
