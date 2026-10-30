@@ -273,3 +273,7 @@ The output will be:
 ```
 
 The statistics include `inc` and `incBy` because they're called directly by the tests. The `reset()` function doesn't appear because it's never called by the tests. The `_incInternal()` function doesn't appear because it's private and only called by `inc()`, not directly by the tests.
+
+:::tip
+Gas statistics tell you what each function costs across all your tests. To see how a single Solidity test's gas splits between the calls it makes, read the [gas profiles guide](/docs/guides/testing/gas-profiles).
+:::

@@ -58,3 +58,7 @@ The `--verbosity` flag only produces output when using simulated networks. It do
 | 3     | Execution traces for failing transactions only                                             |
 | 4     | Execution traces for all transactions                                                      |
 | 5     | All execution traces with no deduplication (shows gas estimations, repeated polling, etc.) |
+
+:::tip
+Execution traces show the gas of each call as numbers in a tree. To see which calls of a Solidity test spend the most gas, sorted and merged, use a [gas profile](/docs/guides/testing/gas-profiles).
+:::
