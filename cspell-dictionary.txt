@@ -31,6 +31,8 @@ onchain
 IERC
 ERC
 EIP
+eRPC
+erpc
 DELEGATECALL
 predeploy
 predeployed
