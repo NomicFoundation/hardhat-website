@@ -187,7 +187,7 @@ These are the available modes:
 
 ### Using `slang` in other Build Profiles
 
-By default, `type: "slang"` is only allowed in the `slang` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang` is still under heavy development and isn't ready to build contracts for production deployments.
+By default, `type: "slang"` is only allowed in the `slang` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang` is still under development and isn't ready to build contracts for production deployments.
 
 If you understand the risk and still want `slang` in another Build Profile, set `dangerouslyAllowSlangInProduction` in the plugin's own `slang` config section, next to `solidity`:
 
