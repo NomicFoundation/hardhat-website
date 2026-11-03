@@ -193,7 +193,7 @@ By default, `type: "slang"` is only allowed in the `slang` profile. Using it any
 
 If you understand the risk and still want `slang` in another Build Profile, set `dangerouslyAllowSlangInProduction` in the plugin's own `slang` config section, next to `solidity`:
 
-```ts collapse={2-10} ins={14,19-21}
+```ts collapse={2-10} ins={14,23-25}
 // hardhat.config.ts
 import { defineConfig } from "hardhat/config";
 import hardhatSlang from "@nomicfoundation/hardhat-slang";
@@ -208,6 +208,10 @@ export default defineConfig({
     profiles: {
       default: {
         type: "slang", // allowed only because of the option below
+        version: "0.8.34",
+      },
+      slang: {
+        type: "slang",
         version: "0.8.34",
       },
     },
