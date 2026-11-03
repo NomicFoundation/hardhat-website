@@ -15,7 +15,7 @@ This guide shows you how to use the `hardhat-slang` plugin to compile your contr
 
 `slang` is a Solidity compiler based on `LLVM`. It compiles faster, produces better optimized bytecode, and removes "stack too deep" errors.
 
-Use it to speed up your development workflow and CI builds. Avoid using it to deploy to production networks, as slang is still under development. By default, the plugin will not allow usage in production build profiles, unless config settings are explicitly overridden.
+Use it to speed up your development workflow and CI builds. Avoid using it to deploy to production networks, as `slang` is still under development. By default, the plugin will not allow usage in production build profiles, unless config settings are explicitly overridden.
 
 The easiest way to use `slang` is with the `hardhat-slang` plugin. Read the rest of this guide to learn how to set it up.
 
@@ -90,9 +90,9 @@ With the `type: "slang"` property set, Hardhat will use `slang` to build your co
 
 The `version` of a compiler with `type: "slang"` is the Solidity version. It needs to be set to one of the [supported Solidity versions](#supported-solidity-versions), like `0.8.37`, or Hardhat will report a config error.
 
-### Splitting compilation between slang and solc for older unsupported versions
+### Splitting compilation between `slang` and `solc` for older unsupported versions
 
-`slang` supports all Solidity versions `0.8.0` - `0.8.37`. See the [full list of versions](#supported-solidity-versions) to check which versions work with slang.
+`slang` supports all Solidity versions `0.8.0` - `0.8.37`. See the [full list of versions](#supported-solidity-versions) to check which versions work with `slang`.
 
 For codebases that still rely on Solidity versions prior to `0.8.0`, you can mix `solc` and `slang` in the same Build Profile. To learn how, read [Using `solc` and `slang` in the same Build Profile](#using-solc-and-slang-in-the-same-build-profile).
 
