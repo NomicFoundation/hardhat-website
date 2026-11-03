@@ -218,6 +218,31 @@ export default defineConfig({
 });
 ```
 
+### Pinning a `slang` release
+
+One `slang` binary compiles a range of Solidity versions (`0.8.x`). The plugin therefore downloads a single release, the one pinned in `slang.version`, and uses it for every `type: "slang"` compiler entry. By default, that's the latest release known to your version of the `hardhat-slang` plugin. Upgrading the plugin can therefore upgrade `slang`, and your next build compiles your contracts with the new release.
+
+To stay on a specific `slang` release, set `version` in the `slang` config section:
+
+```ts collapse={2-10} ins={11-13}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+import hardhatSlang from "@nomicfoundation/hardhat-slang";
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins...
+    hardhatSlang,
+  ],
+  // ...other config fields...
+  slang: {
+    version: "0.1.0-pre.2026-10-14",
+  },
+});
+```
+
+The supported `slang` releases are listed in the **Supported Solidity versions** section of the plugin's [README](https://www.npmjs.com/package/@nomicfoundation/hardhat-slang).
+
 ### Supported Solidity versions
 
 `slang` supports Solidity versions from `0.8.0` to `0.8.37`.
