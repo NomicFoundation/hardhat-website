@@ -224,7 +224,7 @@ export default defineConfig({
 
 One `slang` binary compiles a range of Solidity versions (`0.8.x`). The plugin downloads a single release, the one pinned in `slang.version`, and uses it for every `type: "slang"` compiler entry. By default, that's the latest release known to your version of the `hardhat-slang` plugin. Upgrading the plugin can therefore upgrade `slang`, and your next build compiles your contracts with the new release.
 
-To stay on a specific `slang` release, set `version` in the `slang` config section:
+To stay on a specific `slang` release, set the `version` in the `slang` config section:
 
 ```ts collapse={2-10} ins={11-13}
 // hardhat.config.ts
