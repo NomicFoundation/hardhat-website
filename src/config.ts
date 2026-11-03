@@ -22,8 +22,8 @@ export const globalConfig: GlobalConfig = {
 
 // Shown at the top of both the landing page and the docs.
 export const banner: BannerConfig = {
-  text: "Compile Solidity up to 5x faster: slang-solx",
-  href: "https://hardhat.org/docs/cookbook/compiling-with-slang-solx",
+  text: "Compile Solidity faster with slang",
+  href: "https://hardhat.org/docs/cookbook/compiling-with-slang",
 };
 
 export const landing: LandingConfig = {
