@@ -15,7 +15,7 @@ This guide shows you how to use the `hardhat-slang` plugin to compile your contr
 
 `slang` is a Solidity compiler based on `LLVM`. It compiles faster, produces better optimized bytecode, and removes "stack too deep" errors.
 
-Use it to speed up your development workflow and CI builds. Avoid using it to deploy to production networks, as `slang` is still under development. By default, the plugin will not allow usage in production build profiles, unless config settings are explicitly overridden.
+Use it to speed up your development workflow and CI builds. Avoid using it to deploy to production networks, as `slang` is still under development. By default, the plugin will not allow usage in production Build Profiles, unless config settings are explicitly overridden.
 
 The easiest way to use `slang` is with the `hardhat-slang` plugin. Read the rest of this guide to learn how to set it up.
 
@@ -222,7 +222,7 @@ export default defineConfig({
 
 ### Pinning a `slang` release
 
-One `slang` binary compiles a range of Solidity versions (`0.8.x`). The plugin therefore downloads a single release, the one pinned in `slang.version`, and uses it for every `type: "slang"` compiler entry. By default, that's the latest release known to your version of the `hardhat-slang` plugin. Upgrading the plugin can therefore upgrade `slang`, and your next build compiles your contracts with the new release.
+One `slang` binary compiles a range of Solidity versions (`0.8.x`). The plugin downloads a single release, the one pinned in `slang.version`, and uses it for every `type: "slang"` compiler entry. By default, that's the latest release known to your version of the `hardhat-slang` plugin. Upgrading the plugin can therefore upgrade `slang`, and your next build compiles your contracts with the new release.
 
 To stay on a specific `slang` release, set `version` in the `slang` config section:
 
