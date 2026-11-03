@@ -187,14 +187,6 @@ These are the available modes:
 | `"s"` | Smaller bytecode.                                     |
 | `"z"` | Smallest bytecode.                                    |
 
-### Supported Solidity versions
-
-`slang` supports Solidity versions from `0.8.0` to `0.8.37`.
-
-### Supported EVM versions
-
-`slang` supports these EVM versions as compilation targets: `cancun`, `prague`, and `osaka`.
-
 ### Using `slang` in other Build Profiles
 
 By default, `type: "slang"` is only allowed in the `slang` profile. Using it anywhere else, including in `default` or `production`, is a validation error. That's deliberate, because `slang` is still under heavy development and isn't ready to build contracts for production deployments.
@@ -225,3 +217,11 @@ export default defineConfig({
   },
 });
 ```
+
+### Supported Solidity versions
+
+`slang` supports Solidity versions from `0.8.0` to `0.8.37`.
+
+### Supported EVM versions
+
+`slang` supports these EVM versions as compilation targets: `cancun`, `prague`, and `osaka`.
