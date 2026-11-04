@@ -13,7 +13,7 @@ This guide shows you how to use the `hardhat-slang` plugin to compile your contr
 
 ## What is `slang`?
 
-`slang` is a Solidity compiler based on `LLVM`. It compiles faster, produces better optimized bytecode, and removes "stack too deep" errors.
+`slang` is a Solidity compiler based on `LLVM`. It compiles faster, produces better optimized bytecode, and removes "stack too deep" errors. See the performance numbers in our [announcement blog post](https://blog.nomic.foundation/announcing-slang-alpha-an-independent-solidity-compiler-that-is-up-to-79x-faster-than-solc/).
 
 Use it to speed up your development workflow and CI builds. Avoid using it to deploy to production networks, as `slang` is still under development. By default, the plugin will not allow usage in production Build Profiles, unless config settings are explicitly overridden.
 
