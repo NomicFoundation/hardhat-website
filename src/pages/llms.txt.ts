@@ -35,7 +35,9 @@ function resolveItem(item: SidebarItem, docs: DocEntry[]): DocEntry[] {
   }
 
   if ("autogenerate" in item) {
-    const dir = item.autogenerate.directory.replace(/^\//, "");
+    // Doc ids are lowercased slugs, but the directory is given as it is on
+    // disk (e.g. `docs/reference/cheatcodes/Assertions`).
+    const dir = item.autogenerate.directory.replace(/^\//, "").toLowerCase();
     return docs
       .filter((d) => d.id === dir || d.id.startsWith(dir + "/"))
       .sort((a, b) => {
