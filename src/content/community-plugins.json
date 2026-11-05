@@ -168,8 +168,17 @@
       "website": "https://aelmanaa.github.io/hardhat-kms/",
       "author": "Amine El Manaa",
       "authorUrl": "https://github.com/aelmanaa",
-      "description": "Sign transactions, messages, and typed data with AWS KMS, Google Cloud KMS, or Azure Key Vault keys in Hardhat 3. Works with viem, ethers, and Hardhat Ignition. Private keys stay in the cloud service.",
-      "tags": ["signers", "accounts", "kms", "hsm", "security", "deployment"]
+      "description": "Sign transactions, messages, and typed data with AWS KMS, Google Cloud KMS, Azure Key Vault, or Turnkey keys in Hardhat 3, and propose Safe multisig transactions. Works with viem, ethers, and Hardhat Ignition. KMS and Turnkey keys never leave their service.",
+      "tags": [
+        "signers",
+        "accounts",
+        "kms",
+        "hsm",
+        "security",
+        "deployment",
+        "safe",
+        "multisig"
+      ]
     }
   ]
 }
