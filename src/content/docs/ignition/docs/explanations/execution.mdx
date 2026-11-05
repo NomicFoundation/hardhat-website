@@ -47,6 +47,10 @@ This batching process is run before starting to execute, and the batches are not
 
 When Hardhat Ignition starts executing a batch, it will wait until all its `Future` objects are complete before executing the next batch.
 
+Set [`ignition.maxBatchSize`](/ignition/docs/reference/config#maxbatchsize) to limit the number of `Future` objects in each batch. Ignition splits each dependency batch separately and finishes all of its smaller batches before starting the next dependency batch. For example, a dependency batch of five futures with `maxBatchSize: 2` becomes three batches of two, two, and one future. Futures from the next dependency batch still wait until all five are complete.
+
+If a batch fails, Ignition stops without starting the remaining batches. Omitting `maxBatchSize` keeps the existing batches without a size limit.
+
 ## `Future` execution
 
 Each `Future` within a batch is executed independently, so we'll focus on the execution of a single `Future`.
