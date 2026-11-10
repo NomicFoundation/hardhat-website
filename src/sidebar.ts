@@ -11,19 +11,20 @@ import path from "path";
 // We manually generate the list of directories of the cheatcodes folder, so
 // that we can control the order of the documents listed at the same level.
 // Otherwise they'll be shown at the top, and the folders later.
+//
+// The paths are resolved from the project root rather than
+// `import.meta.dirname`, because this file is also bundled into the llms.txt
+// page, where `import.meta.dirname` is the bundle's directory.
+const contentDocsDirectory = path.join(process.cwd(), "src/content/docs");
+
 const cheatchodesDirectories = fs
-  .globSync(
-    path.join(import.meta.dirname, "content/docs/docs/reference/cheatcodes/*"),
-  )
+  .globSync(path.join(contentDocsDirectory, "docs/reference/cheatcodes/*"))
   .filter((file) => fs.statSync(file).isDirectory())
   .sort()
   .map((file) => ({
     label: path.basename(file),
     autogenerate: {
-      directory: path.relative(
-        path.join(import.meta.dirname, "content/docs"),
-        file,
-      ),
+      directory: path.relative(contentDocsDirectory, file),
     },
     collapsed: true,
   }));
