@@ -189,6 +189,15 @@ Running it prints the slot number of each newly mined block:
 
 <Run command="hardhat run scripts/slot-number.ts" />
 
+In Solidity tests, the [`rollSlot`](/docs/reference/cheatcodes/environment/roll-slot) and [`getSlotNumber`](/docs/reference/cheatcodes/environment/get-slot-number) cheatcodes set and read the slot number without changing the block number or timestamp, so you can test slot-dependent logic directly:
+
+```solidity
+vm.rollSlot(100);
+assertEq(vm.getSlotNumber(), 100);
+```
+
+Both cheatcodes revert on hardforks before Amsterdam.
+
 ## EIP-7928: Block-Level Access Lists
 
 [EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) introduces block-level access lists, which record every account and storage slot accessed while executing a block. Amsterdam blocks carry a new `blockAccessListHash` header field: the `keccak256` hash of the RLP-encoded block-level access list.

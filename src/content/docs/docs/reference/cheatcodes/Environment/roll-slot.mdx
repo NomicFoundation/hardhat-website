@@ -1,0 +1,30 @@
+---
+title: rollSlot
+description: rollSlot cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function rollSlot(uint64 newSlotNumber) external;
+```
+
+### Description
+
+Sets `block.slotnum`, the consensus-layer slot number that [EIP-7843](https://eips.ethereum.org/EIPS/eip-7843) exposes through the `SLOTNUM` opcode. Unlike `roll` and `warp`, it doesn't change the block number or timestamp.
+
+This cheatcode is only available from the [Amsterdam hardfork](/docs/reference/amsterdam-support#eip-7843-slotnum-opcode) onwards, and reverts on earlier hardforks.
+
+### Examples
+
+```solidity
+uint256 blockNumber = block.number;
+vm.rollSlot(100);
+assertEq(vm.getSlotNumber(), 100);
+assertEq(block.number, blockNumber); // unchanged
+```
+
+### SEE ALSO
+
+- [getSlotNumber](/docs/reference/cheatcodes/environment/get-slot-number)
+- [roll](/docs/reference/cheatcodes/environment/roll)
