@@ -34,6 +34,7 @@ The following Amsterdam EIPs are currently supported:
 - [EIP-7997: Deterministic Factory Contract](#eip-7997-deterministic-factory-contract)
 - [EIP-8024: Backward Compatible SWAPN, DUPN, EXCHANGE](#eip-8024-backward-compatible-swapn-dupn-exchange)
 - [EIP-8037: State Creation Gas Cost Increase](#eip-8037-state-creation-gas-cost-increase)
+- [EIP-8038: State-Access Gas Cost Update](#eip-8038-state-access-gas-cost-update)
 - [EIP-8246: Remove SELFDESTRUCT Burn](#eip-8246-remove-selfdestruct-burn)
 
 ## Enabling Amsterdam
@@ -300,6 +301,12 @@ Most of the increment's cost is state gas, so the block reports just that, while
 ### Transaction gas limits
 
 The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1), which still applies when you disable the cap with `transactionGasCap: false`. The block gas limit also applies, so raise `blockGasLimit` to send more than `60_000_000` gas.
+
+## EIP-8038: State-Access Gas Cost Update
+
+[EIP-8038](https://eips.ethereum.org/EIPS/eip-8038) raises the gas cost of operations that read or write Ethereum's state, to reflect how much the state has grown. See the EIP itself for the detailed changes to operation costs.
+
+In practice, transactions that touch many accounts or change many storage slots will cost more, and a test suite that asserts on their gas usage may fail. Prefer letting Hardhat estimate the gas over using a hardcoded value, which may now be too low.
 
 ## EIP-8246: Remove SELFDESTRUCT Burn
 
