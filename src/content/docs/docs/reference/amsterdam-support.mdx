@@ -311,6 +311,38 @@ Most of the increment's cost is state gas, so the block reports just that, while
 
 The [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap, which you can change with the `transactionGasCap` [network option](/docs/reference/configuration#simulated-network-options), applies only to execution gas from Amsterdam onwards. A transaction's `gas` can go above it to pay for state gas, up to a hard limit of `4_294_967_295` (2<sup>32</sup> − 1), which still applies when you disable the cap with `transactionGasCap: false`. The block gas limit also applies, so raise `blockGasLimit` to send more than `60_000_000` gas.
 
+### Gas dimensions in traces
+
+From Amsterdam onwards, `debug_traceTransaction` and `debug_traceCall` report how much of a transaction's gas went to each dimension:
+
+- The default tracer's result and the `callTracer`'s root call frame include `executionGasUsed`, `stateGasUsed`, and `gasRefund`
+- Each `structLogs` entry includes `stateGasReservoir`, and the steps that charge or refill state gas also include a signed `stateGasCost`
+
+If you only need the totals, use the `stateGasTracer`. It works on every hardfork, and reports zero state gas before Amsterdam:
+
+```ts
+// scripts/state-gas-trace.ts
+import { network } from "hardhat";
+
+const { viem, provider } = await network.create({ network: "edrAmsterdam" });
+
+const counter = await viem.deployContract("Counter");
+
+// The first increment writes to an empty storage slot, which creates state
+const hash = await counter.write.inc();
+
+const trace = await provider.request({
+  method: "debug_traceTransaction",
+  params: [hash, { tracer: "stateGasTracer" }],
+});
+
+console.log(trace);
+```
+
+Running it prints the transaction's `gasUsed`, split into `executionGasUsed` and `stateGasUsed`, as hex values:
+
+<Run command="hardhat run scripts/state-gas-trace.ts" />
+
 ## EIP-8038: State-Access Gas Cost Update
 
 [EIP-8038](https://eips.ethereum.org/EIPS/eip-8038) raises the gas cost of operations that read or write Ethereum's state, to reflect how much the state has grown. See the EIP itself for the detailed changes to operation costs.
