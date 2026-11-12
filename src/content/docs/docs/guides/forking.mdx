@@ -184,6 +184,14 @@ contract ExampleTest is Test {
 }
 ```
 
+## Chain ID of a forked network
+
+When you fork in a Network Config, the chain ID of the forked network is the one your contracts see in `block.chainid`, the one returned by `eth_chainId`, and the one used to sign transactions. You set it with the network's `chainId` field, and it defaults to `31337`, not the remote chain's ID. The rest of the simulation, like the base fee and blob parameters of new blocks, follows the remote chain regardless of this value, so it behaves like the real network.
+
+This default is different from the remote chain's ID on purpose, for security reasons. A signed transaction is only valid on networks with the chain ID it was signed for. If your forked network used the remote chain's ID, every transaction signed in your tests or scripts would also be valid on the real network. Since account nonces in a fork match the real network, those transactions could be sent there right away. Malicious code that runs in your project, like a compromised dependency, could use this to steal funds from your accounts.
+
+If you really need the remote chain's ID, you can set `chainId` in your Network Config. In that case, we recommend you only use accounts that hold no real funds on that network.
+
 ## Learn more
 
 Read [the forking section](/docs/reference/edr-simulated-networks#forking-mode) in our explanation about simulated networks to learn more about forking.
