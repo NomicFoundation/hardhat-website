@@ -1,0 +1,27 @@
+---
+title: getSlotNumber
+description: getSlotNumber cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function getSlotNumber() external view returns (uint64 slotNumber);
+```
+
+### Description
+
+Gets the current `block.slotnum`, the consensus-layer slot number that [EIP-7843](https://eips.ethereum.org/EIPS/eip-7843) exposes through the `SLOTNUM` opcode.
+
+This cheatcode is only available from the [Amsterdam hardfork](/docs/reference/amsterdam-support#eip-7843-slotnum-opcode) onwards, and reverts on earlier hardforks.
+
+### Examples
+
+```solidity
+vm.rollSlot(100);
+assertEq(vm.getSlotNumber(), 100);
+```
+
+### SEE ALSO
+
+- [rollSlot](/docs/reference/cheatcodes/environment/roll-slot)

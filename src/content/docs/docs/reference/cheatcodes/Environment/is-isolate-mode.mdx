@@ -1,0 +1,33 @@
+---
+title: isIsolateMode
+description: isIsolateMode cheatcode documentation
+---
+
+### Signature
+
+```solidity
+function isIsolateMode() external view returns (bool result);
+```
+
+### Description
+
+Returns whether the running Solidity test is executed in isolation mode, which you enable by setting `isolate` to `true` in the [Solidity tests configuration](/docs/reference/configuration#solidity-tests-configuration).
+
+In isolation mode, every top-level call runs as a separate transaction, which changes gas accounting and when state is committed. Use this cheatcode to adapt a test, or to skip it, depending on the mode it runs in.
+
+### Examples
+
+```solidity
+function testGasOfTransfer() public {
+  if (!vm.isIsolateMode()) {
+    vm.skip(true, "gas is only exact in isolation mode");
+  }
+
+  // ...
+}
+```
+
+### SEE ALSO
+
+- [Gas snapshots](/docs/reference/cheatcodes/environment/gas-snapshots)
+- [skip](/docs/reference/cheatcodes/utilities/skip)
