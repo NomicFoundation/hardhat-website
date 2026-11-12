@@ -136,7 +136,7 @@ There are a number of options that both network types share, as well as some tha
 The following options are available for both simulated and JSON-RPC networks:
 
 - `type`: The type of the network. This can be either `edr-simulated` for simulated networks or `http` for JSON-RPC networks.
-- `chainId`: An optional number, used to validate the network Hardhat connects to. If not present, this validation is omitted.
+- `chainId`: For JSON-RPC networks, an optional number used to validate the network Hardhat connects to. If not present, this validation is omitted. For simulated networks, see [simulated network options](#simulated-network-options).
 - `chainType`: Determines the type of chain for this network. This can be either `l1` for layer 1 networks like Ethereum, `op` for layer 2 networks like Optimism, or `generic` for other types of networks. Default value: `generic`.
 - `from`: The address to use as default sender. If not present the first account of the node is used.
 - `gas`: Its value should be `"auto"` or a number or bigint. If a number or bigint is used, it will be the gas limit used by default in every transaction. If `"auto"` is used, the gas limit will be automatically estimated via `eth_estimateGas` before each transaction. This estimation can be adjusted with the `gasMultiplier` option. Explicit gas limits in individual transactions always override this setting. Default value: `"auto"`.
@@ -156,6 +156,7 @@ The following options are specific to simulated networks:
 - `allowUnlimitedContractSize`: An optional boolean that disables the contract size limit imposed by [EIP-170](https://eips.ethereum.org/EIPS/eip-170). Default value: `false`.
 - `blockGasLimit`: The block gas limit to use in Hardhat Network's blockchain. Set it to `false` to disable the block gas limit. Default value: `60_000_000`.
 - `transactionGasCap`: The maximum amount of gas a single transaction may use. Set it to `false` to disable the cap. Default value: the [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) transaction gas cap (`16_777_216`) on the `osaka` hardfork and later, and the block gas limit on earlier hardforks. From the experimental `amsterdam` hardfork, it caps execution gas only, see [EIP-8037](/docs/reference/amsterdam-support#transaction-gas-limits).
+- `chainId`: The chain ID of the simulated network. Default value: `31337`.
 - `coinbase`: The address used as coinbase in new blocks. Default value: `"0xc014ba5ec014ba5ec014ba5ec014ba5ec014ba5e"`.
 - `forking`: An object that describes the forking configuration and can have the following fields:
   - `url`: a URL that points to a JSON-RPC node with state that you want to fork off. There's no default value for this field. It must be provided for the fork to work.
@@ -175,6 +176,10 @@ The following options are specific to simulated networks:
   - `mempool`: an object with an `order` field that can be set to `"fifo"` or `"priority"`. When set to `"fifo"`, transactions in the mempool are mined in FIFO order. When set to `"priority"`, they will be mined based on the fees paid to the miner. Default value: `"priority"`.
 - `throwOnCallFailures`: A boolean that controls if simulated networks throw on call failures. If this value is `true`, Hardhat will throw combined JavaScript and Solidity stack traces when a call fails. If it is `false`, it will return the call's return data, which can contain a revert reason. Default value: `true`.
 - `throwOnTransactionFailures`: A boolean that controls if simulated networks throw on transaction failures. If this value is `true`, Hardhat will throw combined JavaScript and Solidity stack traces on transaction failures. If it is `false`, it will return the failing transaction hash. In both cases the transactions are added into the blockchain. Default value: `true`.
+
+:::note
+Before setting `chainId` on a forked network, read [Chain ID of a forked network](/docs/guides/forking#chain-id-of-a-forked-network).
+:::
 
 #### JSON-RPC network options
 

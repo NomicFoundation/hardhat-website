@@ -123,7 +123,7 @@ In forking mode, the simulated network starts as a copy of a remote blockchain a
 When forking, there are some differences from the remote network:
 
 - Accounts in your Network Config have their balance and code overwritten (removing EIP-7702 delegations if present)
-- The `chainId` is taken from your Network Config, not the remote chain, for security reasons (though this can be configured)
+- The `chainId` is taken from your Network Config, not the remote chain, for security reasons. See [Chain ID of a forked network](/docs/guides/forking#chain-id-of-a-forked-network)
 
 You can configure forking in your Network Config like this:
 

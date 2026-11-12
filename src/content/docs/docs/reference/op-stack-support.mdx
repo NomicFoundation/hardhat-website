@@ -21,7 +21,7 @@ Here's what changes compared to the `l1` Chain Type:
 
 Hardhat includes built-in chain-specific parameters for many OP Stack chains, including OP Mainnet and its testnets. These parameters are sourced from the [Optimism Superchain Registry](https://github.com/ethereum-optimism/superchain-registry) and include chain IDs, hardfork activation block numbers, and EIP-1559 base fee configuration.
 
-When you configure a network with `chainType: "op"` and the right `chainId`, the correct parameters are applied automatically.
+When you configure a local network with `chainType: "op"` and the right `chainId`, the correct parameters are applied automatically. When forking, the forked chain's parameters are used regardless of `chainId`, so you don't need to set it.
 
 OP Mainnet is actively maintained, while other chains have default parameters that may not be fully up-to-date.
 
@@ -38,7 +38,6 @@ export default defineConfig({
     opMainnetFork: {
       type: "edr-simulated",
       chainType: "op",
-      chainId: 10,
       forking: {
         url: configVariable("OP_MAINNET_RPC_URL"),
       },
@@ -47,15 +46,17 @@ export default defineConfig({
 });
 ```
 
-To fork a different OP Stack chain, like Ink, change the `chainId` and the RPC URL:
+To fork a different OP Stack chain, like Ink, change the RPC URL:
 
-```ts del={2-3} ins={4-5}
+```ts del={2} ins={3}
       chainType: "op",
-      chainId: 10,
       forking: { url: configVariable("OP_MAINNET_RPC_URL") },
-      chainId: 57073,
       forking: { url: configVariable("INK_MAINNET_RPC_URL") },
 ```
+
+:::note
+Before setting `chainId` on a forked network, read [Chain ID of a forked network](/docs/guides/forking#chain-id-of-a-forked-network).
+:::
 
 ### Base fee accuracy on local chains
 
