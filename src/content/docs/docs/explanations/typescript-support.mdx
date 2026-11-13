@@ -105,7 +105,7 @@ Node.js doesn't run TypeScript files inside `node_modules`, so the packages that
 
 ## Checking your code with `tsc`
 
-These `tsconfig.json` options make `tsc --noEmit` report most of the code that the `"node"` mode can't run:
+These `tsconfig.json` options make `tsc --noEmit` report most of the code that the `"node"` mode can't run. They need TypeScript 5.9 or later:
 
 ```json title="tsconfig.json" {7,9-11}
 {
@@ -123,7 +123,7 @@ These `tsconfig.json` options make `tsc --noEmit` report most of the code that t
 }
 ```
 
-- `erasableSyntaxOnly` reports syntax that generates JavaScript. It needs TypeScript 5.8 or later.
+- `erasableSyntaxOnly` reports syntax that generates JavaScript.
 - `verbatimModuleSyntax` reports type-only imports that aren't marked with `type`.
 - `allowImportingTsExtensions` lets you import files with the `.ts` extension. It needs `noEmit`.
 
