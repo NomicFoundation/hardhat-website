@@ -154,7 +154,7 @@ Next it's time to upgrade our proxy to a new version. To do this, we'll create a
 ```js
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-import DemoModule from "./ProxyModule.js";
+import DemoModule from "./ProxyModule.ts";
 
 const upgradeModule = buildModule("UpgradeModule", (m) => {
   const proxyAdminOwner = m.getAccount(0);
@@ -223,8 +223,8 @@ import hre from "hardhat";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import DemoModule from "../ignition/modules/ProxyModule.js";
-import UpgradeModule from "../ignition/modules/UpgradeModule.js";
+import DemoModule from "../ignition/modules/ProxyModule.ts";
+import UpgradeModule from "../ignition/modules/UpgradeModule.ts";
 
 describe("Demo Proxy", async function () {
   const { ignition, viem } = await hre.network.create();

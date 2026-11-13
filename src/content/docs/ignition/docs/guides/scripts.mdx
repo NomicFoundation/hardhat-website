@@ -22,7 +22,7 @@ We will begin by creating a `scripts` directory within our Hardhat project. With
 
 ```ts
 import hre from "hardhat";
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function main() {
   const connection = await hre.network.create();
@@ -61,7 +61,7 @@ We've added a new parameter to the Ignition module called `rocketName`. This par
 
 ```ts
 import hre from "hardhat";
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function getRocketNameFromAPI() {
   // Mock function to simulate an asynchronous API call
@@ -95,7 +95,7 @@ You can read more about defining and using parameters in Ignition modules in the
 Lastly, let's add some conditional logic to our deployment script. Suppose we want to deploy the `Apollo` module only if the rocket name is not empty. We can achieve this by adding a simple `if` statement to our script:
 
 ```ts
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function getRocketNameFromAPI() {
   // Mock function to simulate an asynchronous API call

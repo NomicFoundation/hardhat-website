@@ -52,7 +52,7 @@ const myConsole = task(
   "my-console",
   "Starts a console with predefined commands",
 )
-  .setAction(() => import("./tasks/my-console.js"))
+  .setAction(() => import("./tasks/my-console.ts"))
   .build();
 
 export default defineConfig({

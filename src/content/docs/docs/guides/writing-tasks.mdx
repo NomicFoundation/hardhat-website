@@ -20,7 +20,7 @@ First, copy and paste the following code into your Hardhat config file:
 import { defineConfig, task } from "hardhat/config";
 
 const printAccounts = task("accounts", "Print the accounts")
-  .setAction(() => import("./tasks/accounts.js"))
+  .setAction(() => import("./tasks/accounts.ts"))
   .build();
 ```
 
@@ -28,7 +28,7 @@ Now let's create a `tasks/accounts.ts` file with the task action, which contains
 
 ```ts
 // tasks/accounts.ts
-import { HardhatRuntimeEnvironment } from "hardhat/types/hre";
+import type { HardhatRuntimeEnvironment } from "hardhat/types/hre";
 
 interface AccountTaskArguments {
   // No argument in this case
