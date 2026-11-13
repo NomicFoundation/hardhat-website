@@ -53,7 +53,7 @@ If you have a `tsconfig.json`, set `compilerOptions.module` to an ESM-compatible
 [This guide](https://deno.com/blog/convert-cjs-to-esm) covers the conversion in depth, but the rules you'll hit most often are:
 
 - Replace `const x = require("x")` with `import x from "x"`.
-- When importing a relative path, you must include the file extension. `const x = require("./x")` becomes `import x from "./x.js"`, not `import x from "./x"`.
+- When importing a relative path, you must include the file extension. `const x = require("./x")` becomes `import x from "./x.js"`, not `import x from "./x"`. If your project uses the `"node"` [TypeScript mode](/docs/explanations/typescript-support), TypeScript files import each other with `.ts` instead.
 - Replace `module.exports = x` with `export default x`, and `module.exports.x = 1` with `export const x = 1`.
 - `__dirname` and `__filename` are now `import.meta.dirname` and `import.meta.filename`.
 

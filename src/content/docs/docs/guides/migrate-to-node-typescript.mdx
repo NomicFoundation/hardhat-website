@@ -1,0 +1,324 @@
+---
+title: Migrate to the "node" TypeScript mode
+description: How to switch an existing Hardhat project from the "tsx" to the "node" TypeScript mode
+sidebar:
+  label: Migrate to the "node" TypeScript mode
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import Run from "@hh/Run.astro";
+import RunRemote from "@hh/RunRemote.astro";
+
+Projects created with `hardhat --init` use the `"node"` [TypeScript mode](/docs/explanations/typescript-support), which runs your TypeScript the same way Node.js does. Older projects use the `"tsx"` mode. This guide walks you through switching an existing project to the `"node"` mode.
+
+You can migrate by hand, following the steps below, or [let an AI agent do it](#migrate-with-an-ai-agent).
+
+## Migrate by hand
+
+<Steps>
+
+1. Update `hardhat` and the Hardhat plugins in your `package.json` to their latest versions, which need a [supported Node.js version](/docs/reference/nodejs-support). Then make sure that your project uses TypeScript 5.9 or later:
+
+   <Run command="tsc --version" />
+
+2. Add these options to your `tsconfig.json`, so that `tsc` reports most of the code that the `"node"` mode can't run:
+
+   ```json title="tsconfig.json" {3-6}
+   {
+     "compilerOptions": {
+       "noEmit": true,
+       "verbatimModuleSyntax": true,
+       "erasableSyntaxOnly": true,
+       "allowImportingTsExtensions": true
+     }
+   }
+   ```
+
+   If you compile your project with `tsc`, use `"rewriteRelativeImportExtensions": true` instead of `noEmit` and `allowImportingTsExtensions`.
+
+   Then run `tsc` to get the list of what you need to change in the next steps:
+
+   <Run command="tsc --noEmit" />
+
+3. Replace the syntax that the `"node"` mode doesn't support. `tsc` reports most of it, like enums, and type-only imports that aren't marked with `type`. It doesn't report decorators or `using` declarations, so search your files for those.
+
+   [Replacing unsupported syntax](#replacing-unsupported-syntax) shows how to rewrite each of them.
+
+4. Update your relative imports to use the full path of each file, including the `.ts` extension. JSON imports also need an import attribute:
+
+   ```ts title="Before"
+   import { deployCounter } from "./helpers.js";
+   import { addresses } from "./config";
+   import deployments from "./deployments.json";
+   ```
+
+   ```ts title="After"
+   import { deployCounter } from "./helpers.ts";
+   import { addresses } from "./config/index.ts";
+   import deployments from "./deployments.json" with { type: "json" };
+   ```
+
+   For `tsc` to accept import attributes, set `module` to `node20` or `nodenext` in your `tsconfig.json`.
+
+   If your `tsconfig.json` has `paths` aliases, replace them with relative imports or [subpath imports](/docs/explanations/typescript-support#paths-aliases-dont-work), as Node.js doesn't support them. If your `package.json` already has an `imports` field, change any of its paths that end in `.js` but point to TypeScript files, so that they end in `.ts`.
+
+5. Set the `"node"` mode in your `package.json`:
+
+   ```json title="package.json" {3-5}
+   {
+     "type": "module",
+     "hardhat": {
+       "typescript": "node"
+     }
+   }
+   ```
+
+   If your project uses `@nomicfoundation/hardhat-typechain`, for example through `@nomicfoundation/hardhat-toolbox-mocha-ethers`, regenerate your contract types so that they use `.ts` imports too:
+
+   <Run command="hardhat build --force" />
+
+6. Check that everything works:
+
+   <Run command={["tsc --noEmit", "hardhat test"]} />
+
+   Also run the scripts and tasks that you use, like your deployment scripts. If something fails, [Troubleshooting](#troubleshooting) matches each error to its fix.
+
+</Steps>
+
+That's it. Your project now uses the `"node"` mode.
+
+## Replacing unsupported syntax
+
+Here's how to rewrite each kind of syntax that the `"node"` mode doesn't support, so that your code works as it did before.
+
+### Enums
+
+Replace each enum with an object and a type with the same name. Code that uses `Phase.Deploy` as a value, or `Phase` as a type, keeps working:
+
+```ts title="Before"
+export enum Phase {
+  Setup,
+  Deploy,
+  Verify = 10,
+}
+
+export enum Network {
+  Mainnet = "mainnet",
+  Sepolia = "sepolia",
+}
+```
+
+```ts title="After"
+export const Phase = {
+  Setup: 0,
+  Deploy: 1,
+  Verify: 10,
+} as const;
+export type Phase = (typeof Phase)[keyof typeof Phase];
+
+export const Network = {
+  Mainnet: "mainnet",
+  Sepolia: "sepolia",
+} as const;
+export type Network = (typeof Network)[keyof typeof Network];
+```
+
+A few things to keep in mind:
+
+- Give each member the same value it had in the enum. Members without a value start at `0`, and each one is one more than the member before it.
+- A member used as a type, like `let phase: Phase.Deploy`, becomes `typeof Phase.Deploy`.
+- Numeric enums also map values back to names, so `Phase[1]` is `"Deploy"`. If your code does that, add a separate object for it, like `const PhaseName = { 0: "Setup", 1: "Deploy", 10: "Verify" } as const`.
+
+The TypeScript handbook explains this pattern in [Objects vs Enums](https://www.typescriptlang.org/docs/handbook/enums.html#objects-vs-enums).
+
+### Constructor parameter properties
+
+Declare the fields in the class, and assign them in the constructor:
+
+```ts title="Before"
+class Deployer {
+  constructor(
+    private readonly signer: Signer,
+    public gasLimit = 1_000_000n,
+  ) {}
+}
+```
+
+```ts title="After"
+class Deployer {
+  private readonly signer: Signer;
+  public gasLimit: bigint;
+
+  constructor(signer: Signer, gasLimit = 1_000_000n) {
+    this.signer = signer;
+    this.gasLimit = gasLimit;
+  }
+}
+```
+
+If the class extends another one, assign the fields after the `super()` call. If a field initializer reads one of these fields, like `private address = this.signer.address`, move it into the constructor, after the assignments.
+
+### Namespaces with values
+
+Move the contents of the namespace to the top level of a module, and import that module with the name of the namespace:
+
+```ts title="Before: addresses.ts"
+export namespace Addresses {
+  export const router = "0x…";
+
+  export function isRouter(address: string): boolean {
+    return address === router;
+  }
+}
+```
+
+```ts title="After: addresses.ts"
+export const router = "0x…";
+
+export function isRouter(address: string): boolean {
+  return address === router;
+}
+```
+
+```ts title="Before: deploy.ts"
+import { Addresses } from "./addresses.ts";
+```
+
+```ts title="After: deploy.ts"
+import * as Addresses from "./addresses.ts";
+```
+
+Namespaces that only contain types don't need any changes. If `tsc` reports one of them, remove any stray `;` between its members.
+
+### Angle-bracket type assertions
+
+Use `as` instead:
+
+```ts title="Before"
+const amount = <bigint>value;
+```
+
+```ts title="After"
+const amount = value as bigint;
+```
+
+### Type-only imports
+
+Mark type-only imports and re-exports with `type`:
+
+```ts title="Before"
+import { defineConfig, HardhatUserConfig } from "hardhat/config";
+export { DeploymentResult } from "./types.ts";
+```
+
+```ts title="After"
+import { defineConfig, type HardhatUserConfig } from "hardhat/config";
+export type { DeploymentResult } from "./types.ts";
+```
+
+### Decorators
+
+There's no general replacement for decorators. If you wrote the decorator yourself, write what it does as plain code where it's applied:
+
+```ts title="Before"
+function logged(
+  method: (...args: any[]) => any,
+  context: ClassMethodDecoratorContext,
+) {
+  return function (this: unknown, ...args: any[]) {
+    console.log(`Calling ${String(context.name)}`);
+    return method.apply(this, args);
+  };
+}
+
+class Registry {
+  @logged
+  register(name: string) {
+    // ...
+  }
+}
+```
+
+```ts title="After"
+function logCall(name: string) {
+  console.log(`Calling ${name}`);
+}
+
+class Registry {
+  register(name: string) {
+    logCall("register");
+    // ...
+  }
+}
+```
+
+If your project uses decorators from a library, keep using the `"tsx"` mode.
+
+### `using` declarations
+
+Node.js 22 can't run `using` and `await using` declarations. If your project supports Node.js 22, dispose of each value in a `finally` block instead:
+
+```ts title="Before"
+async function deployAll() {
+  await using node = await startNode();
+  using lock = acquireLock();
+
+  await node.deploy();
+}
+```
+
+```ts title="After"
+async function deployAll() {
+  const node = await startNode();
+  try {
+    const lock = acquireLock();
+    try {
+      await node.deploy();
+    } finally {
+      lock[Symbol.dispose]();
+    }
+  } finally {
+    await node[Symbol.asyncDispose]();
+  }
+}
+```
+
+Give each declaration its own `try`, nested in the order of the declarations, so that the values are disposed of in reverse order, as `using` does.
+
+There's one difference: if your code and a disposal both throw, `using` throws a `SuppressedError` that contains both errors, while `finally` only throws the error of the disposal.
+
+## Troubleshooting
+
+These are the errors that you're most likely to see after switching to the `"node"` mode, and how to fix them:
+
+| Error                                                                        | Fix                                                                                                    |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `ERR_MODULE_NOT_FOUND`, or Hardhat suggesting a `.ts` path                   | Use the full path of the file, including `.ts`, in the import. See step 4.                             |
+| `ERR_UNSUPPORTED_DIR_IMPORT`                                                 | The import points to a folder. Import its `index.ts` file instead.                                     |
+| `ERR_IMPORT_ATTRIBUTE_MISSING`                                               | Add `with { type: "json" }` to the JSON import.                                                        |
+| `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`                                          | Rewrite the syntax as shown in [Replacing unsupported syntax](#replacing-unsupported-syntax).          |
+| `SyntaxError: Invalid or unexpected token`, pointing at a `@`                | The file uses a decorator. See [Decorators](#decorators).                                              |
+| `SyntaxError: The requested module '…' does not provide an export named '…'` | A type-only import isn't marked with `type`. See [Type-only imports](#type-only-imports).              |
+| `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`                                | A package that you installed is published as TypeScript. Keep using the `"tsx"` mode until it's fixed. |
+
+## Migrate with an AI agent
+
+If you use an AI coding agent, our migration skill lets it go through these same steps for you, checking your project after each one.
+
+Install the skill in your project:
+
+<RunRemote command="skills add nomicfoundation/hardhat-skills --skill migrate-tsx-to-node-typescript" />
+
+This launches an interactive CLI that walks you through installing the skill for your agent. For instance, you can choose to install it into your current project, rather than globally, and specifically for Claude, which writes the skill files into `.claude/skills/` at the root of your repository.
+
+Then open your project in your coding agent and ask it to migrate, for example:
+
+> Migrate this project to the "node" TypeScript mode using the Hardhat migration skill.
+
+For Claude, you can also run the skill as a command:
+
+```
+/migrate-tsx-to-node-typescript
+```
+
+The agent pauses after each step so that you can review its changes. When it's done, it reports anything in your project that still needs the `"tsx"` mode, like decorators from a library.

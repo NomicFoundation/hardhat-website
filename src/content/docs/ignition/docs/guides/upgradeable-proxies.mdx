@@ -151,10 +151,10 @@ export default demoModule;
 
 Next it's time to upgrade our proxy to a new version. To do this, we'll create a new file within our `ignition/modules` directory called `UpgradeModule.ts` (or `UpgradeModule.js` if you're using JavaScript). Inside this file, we'll again break up our module into two parts. To start, we'll write our `UpgradeModule`:
 
-```js
+```ts
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-import DemoModule from "./ProxyModule.js";
+import DemoModule from "./ProxyModule.ts";
 
 const upgradeModule = buildModule("UpgradeModule", (m) => {
   const proxyAdminOwner = m.getAccount(0);
@@ -174,6 +174,8 @@ const upgradeModule = buildModule("UpgradeModule", (m) => {
   return { proxyAdmin, proxy };
 });
 ```
+
+If you're using JavaScript, import `./ProxyModule.js` instead.
 
 This module begins the same way as `ProxyModule`, by getting the account that owns the `ProxyAdmin` contract. We'll use this in a moment to upgrade the proxy.
 
@@ -223,8 +225,8 @@ import hre from "hardhat";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import DemoModule from "../ignition/modules/ProxyModule.js";
-import UpgradeModule from "../ignition/modules/UpgradeModule.js";
+import DemoModule from "../ignition/modules/ProxyModule.ts";
+import UpgradeModule from "../ignition/modules/UpgradeModule.ts";
 
 describe("Demo Proxy", async function () {
   const { ignition, viem } = await hre.network.create();
@@ -267,6 +269,8 @@ describe("Demo Proxy", async function () {
   });
 });
 ```
+
+If you're using JavaScript, import the modules with `.js` instead.
 
 Here we use Hardhat Ignition to deploy our imported modules. First, we deploy our base `DemoModule` that returns the first version of our `Demo` contract and tests it to ensure the proxy worked and retrieves the appropriate version string. Then, we deploy our `UpgradeModule` that returns an upgraded version of our `Demo` contract and tests it to ensure the proxy returns the updated version string. We also test that our initialization function was called, setting the `name` state variable to `"Example Name"`.
 

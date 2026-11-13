@@ -1,0 +1,132 @@
+---
+title: TypeScript support
+description: How Hardhat runs your TypeScript files, and how its two TypeScript modes differ
+sidebar:
+  label: TypeScript support
+  order: 10
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat runs your TypeScript files directly, without a build step. This includes your config, scripts, tests, and Ignition Modules.
+
+Hardhat doesn't type-check your files when it runs them. To find type errors, run the TypeScript compiler:
+
+<Run command="tsc --noEmit" />
+
+## TypeScript modes
+
+Hardhat can run TypeScript in two ways, which we call TypeScript modes. You choose one with the `typescript` setting of the `hardhat` field in your `package.json`:
+
+```json title="package.json" {4-6}
+{
+  "name": "my-project",
+  "type": "module",
+  "hardhat": {
+    "typescript": "node"
+  }
+}
+```
+
+The two modes are:
+
+- `"node"`: Hardhat runs your TypeScript the same way Node.js does, by removing the types from your files. Your code needs to follow a few rules, which are explained below.
+- `"tsx"`: Hardhat runs your TypeScript with [tsx](https://tsx.is), which supports all of TypeScript's syntax.
+
+Projects created with `hardhat --init` use the `"node"` mode. If your `package.json` doesn't set a mode, Hardhat uses `"tsx"`. To switch an existing project to the `"node"` mode, follow [this guide](/docs/guides/migrate-to-node-typescript).
+
+## Writing TypeScript for the `"node"` mode
+
+Node.js removes the types from your files without changing the rest of your code. This means that your TypeScript needs to be valid JavaScript once its types are removed. Here's what that looks like in practice.
+
+### Relative imports use the `.ts` extension
+
+Import the files of your project with their full path, including the `.ts` extension:
+
+```ts
+import { deployCounter } from "./helpers.ts";
+import { addresses } from "./config/index.ts";
+```
+
+Imports of packages, like `import { network } from "hardhat";`, don't change.
+
+If an import uses `.js` for a TypeScript file, Node.js can't find it, and Hardhat usually suggests the `.ts` path in its error message.
+
+### Type-only imports are marked with `type`
+
+Node.js keeps every import that isn't marked as type-only, so importing a type without `type` fails when the file runs:
+
+```ts
+import { defineConfig, type HardhatUserConfig } from "hardhat/config";
+import type { Counter } from "../types/ethers-contracts/index.ts";
+```
+
+### Syntax that generates JavaScript isn't supported
+
+Node.js can't run TypeScript syntax that generates JavaScript. Avoid using:
+
+- Enums
+- Namespaces with values
+- Constructor parameter properties, like `constructor(private signer: Signer) {}`
+- Angle-bracket type assertions, like `<bigint>value`. Use `value as bigint` instead.
+- Decorators
+
+Node.js 22 also can't run `using` and `await using` declarations.
+
+### JSON imports use an import attribute
+
+Import JSON files with `with { type: "json" }`:
+
+```ts
+import deployments from "./deployments.json" with { type: "json" };
+```
+
+For `tsc` to accept import attributes, set `module` to `node20` or `nodenext` in your `tsconfig.json`.
+
+### `paths` aliases don't work
+
+Node.js doesn't read your `tsconfig.json`, so its `paths` aliases don't work. Use relative imports instead, or [subpath imports](https://nodejs.org/api/packages.html#subpath-imports) in your `package.json`:
+
+```json title="package.json"
+{
+  "imports": {
+    "#utils/*": "./utils/*"
+  }
+}
+```
+
+```ts
+import { formatAmount } from "#utils/format.ts";
+```
+
+### Dependencies are JavaScript
+
+Node.js doesn't run TypeScript files inside `node_modules`, so the packages that you install need to be published as JavaScript.
+
+## Checking your code with `tsc`
+
+These `tsconfig.json` options make `tsc --noEmit` report most of the code that the `"node"` mode can't run. They need TypeScript 5.9 or later:
+
+```json title="tsconfig.json" {7,9-11}
+{
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node20",
+    "target": "es2023",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true
+  }
+}
+```
+
+- `erasableSyntaxOnly` reports syntax that generates JavaScript.
+- `verbatimModuleSyntax` reports type-only imports that aren't marked with `type`.
+- `allowImportingTsExtensions` lets you import files with the `.ts` extension. It needs `noEmit`.
+
+`tsc` doesn't report decorators, `using` declarations, or relative imports that use `.js`, so search your files for those.
+
+If you compile your project with `tsc`, use `rewriteRelativeImportExtensions` instead of `noEmit` and `allowImportingTsExtensions`. It lets you import `.ts` files, and changes those imports to `.js` in the compiled files.

@@ -22,7 +22,7 @@ We will begin by creating a `scripts` directory within our Hardhat project. With
 
 ```ts
 import hre from "hardhat";
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function main() {
   const connection = await hre.network.create();
@@ -34,6 +34,8 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+If you're using JavaScript, import `../ignition/modules/Apollo.js` instead.
 
 This script imports the `Apollo` module and deploys it using `connection.ignition.deploy`. The `apollo` object in this example is a [Viem](https://viem.sh) contract instance, which returns the deployed contract's address via the `address` property. We then log this address to the console. To run the script, execute the following command:
 
@@ -61,7 +63,7 @@ We've added a new parameter to the Ignition module called `rocketName`. This par
 
 ```ts
 import hre from "hardhat";
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function getRocketNameFromAPI() {
   // Mock function to simulate an asynchronous API call
@@ -95,7 +97,7 @@ You can read more about defining and using parameters in Ignition modules in the
 Lastly, let's add some conditional logic to our deployment script. Suppose we want to deploy the `Apollo` module only if the rocket name is not empty. We can achieve this by adding a simple `if` statement to our script:
 
 ```ts
-import ApolloModule from "../ignition/modules/Apollo.js";
+import ApolloModule from "../ignition/modules/Apollo.ts";
 
 async function getRocketNameFromAPI() {
   // Mock function to simulate an asynchronous API call
