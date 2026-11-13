@@ -63,12 +63,12 @@ import type { Counter } from "../types/ethers-contracts/index.ts";
 
 ### Syntax that generates JavaScript isn't supported
 
-Node.js can't run TypeScript syntax that turns into JavaScript code. Avoid using:
+Node.js can't run TypeScript syntax that generates JavaScript. Avoid using:
 
 - Enums
-- Namespaces that contain values
+- Namespaces with values
 - Constructor parameter properties, like `constructor(private signer: Signer) {}`
-- Type assertions with angle brackets, like `<bigint>value`. Use `value as bigint` instead.
+- Angle-bracket type assertions, like `<bigint>value`. Use `value as bigint` instead.
 - Decorators
 
 Node.js 22 also can't run `using` and `await using` declarations.
@@ -127,6 +127,6 @@ These `tsconfig.json` options make `tsc --noEmit` report most of the code that t
 - `verbatimModuleSyntax` reports type-only imports that aren't marked with `type`.
 - `allowImportingTsExtensions` lets you import files with the `.ts` extension. It needs `noEmit`.
 
-`tsc` doesn't report decorators, `using` declarations, or relative imports that use `.js`, so keep an eye out for those.
+`tsc` doesn't report decorators, `using` declarations, or relative imports that use `.js`, so search your files for those.
 
 If you compile your project with `tsc`, use `rewriteRelativeImportExtensions` instead of `noEmit` and `allowImportingTsExtensions`. It lets you import `.ts` files, and changes those imports to `.js` in the compiled files.

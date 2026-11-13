@@ -1,6 +1,6 @@
 ---
 title: Migrate to the "node" TypeScript mode
-description: How to switch an existing Hardhat project from tsx to Node.js's built-in TypeScript support
+description: How to switch an existing Hardhat project from the "tsx" to the "node" TypeScript mode
 sidebar:
   label: Migrate to the "node" TypeScript mode
 ---
@@ -9,7 +9,7 @@ import { Steps } from "@astrojs/starlight/components";
 import Run from "@hh/Run.astro";
 import RunRemote from "@hh/RunRemote.astro";
 
-Projects created with `hardhat --init` run their TypeScript with Node.js's built-in TypeScript support, which is the `"node"` [TypeScript mode](/docs/explanations/typescript-support). Older projects use the `"tsx"` mode. This guide walks you through switching an existing project to the `"node"` mode.
+Projects created with `hardhat --init` use the `"node"` [TypeScript mode](/docs/explanations/typescript-support), which runs your TypeScript the same way Node.js does. Older projects use the `"tsx"` mode. This guide walks you through switching an existing project to the `"node"` mode.
 
 You can migrate by hand, following the steps below, or [let an AI agent do it](#migrate-with-an-ai-agent).
 
@@ -21,7 +21,7 @@ You can migrate by hand, following the steps below, or [let an AI agent do it](#
 
    <Run command="tsc --version" />
 
-2. Add these options to your `tsconfig.json`, so that `tsc` reports the code that the `"node"` mode can't run:
+2. Add these options to your `tsconfig.json`, so that `tsc` reports most of the code that the `"node"` mode can't run:
 
    ```json title="tsconfig.json" {3-6}
    {
@@ -40,7 +40,7 @@ You can migrate by hand, following the steps below, or [let an AI agent do it](#
 
    <Run command="tsc --noEmit" />
 
-3. Replace the syntax that Node.js can't run. `tsc` reports most of it, like enums, and imports of types that aren't marked with `type`. It doesn't report decorators or `using` declarations, so search your files for those too.
+3. Replace the syntax that the `"node"` mode doesn't support. `tsc` reports most of it, like enums, and type-only imports that aren't marked with `type`. It doesn't report decorators or `using` declarations, so search your files for those.
 
    [Replacing unsupported syntax](#replacing-unsupported-syntax) shows how to rewrite each of them.
 
@@ -85,11 +85,11 @@ You can migrate by hand, following the steps below, or [let an AI agent do it](#
 
 </Steps>
 
-That's it, your project now runs its TypeScript with Node.js. If you need to go back, set `"typescript"` to `"tsx"` in your `package.json`.
+That's it. Your project now uses the `"node"` mode.
 
 ## Replacing unsupported syntax
 
-Node.js can't run TypeScript syntax that turns into JavaScript code. Here's how to rewrite each kind of syntax, so that your code works as it did before.
+Here's how to rewrite each kind of syntax that the `"node"` mode doesn't support, so that your code works as it did before.
 
 ### Enums
 
@@ -202,9 +202,9 @@ const amount = <bigint>value;
 const amount = value as bigint;
 ```
 
-### Imports of types
+### Type-only imports
 
-Mark the imports and re-exports that only refer to types with `type`:
+Mark type-only imports and re-exports with `type`:
 
 ```ts title="Before"
 import { defineConfig, HardhatUserConfig } from "hardhat/config";
@@ -285,6 +285,8 @@ async function deployAll() {
 
 Give each declaration its own `try`, nested in the order of the declarations, so that the values are disposed of in reverse order, as `using` does.
 
+There's one difference: if your code and a disposal both throw, `using` throws a `SuppressedError` that contains both errors, while `finally` only throws the error of the disposal.
+
 ## Troubleshooting
 
 These are the errors that you're most likely to see after switching to the `"node"` mode, and how to fix them:
@@ -296,7 +298,7 @@ These are the errors that you're most likely to see after switching to the `"nod
 | `ERR_IMPORT_ATTRIBUTE_MISSING`                                               | Add `with { type: "json" }` to the JSON import.                                                        |
 | `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`                                          | Rewrite the syntax as shown in [Replacing unsupported syntax](#replacing-unsupported-syntax).          |
 | `SyntaxError: Invalid or unexpected token`, pointing at a `@`                | The file uses a decorator. See [Decorators](#decorators).                                              |
-| `SyntaxError: The requested module '…' does not provide an export named '…'` | The import is a type that isn't marked with `type`. See [Imports of types](#imports-of-types).         |
+| `SyntaxError: The requested module '…' does not provide an export named '…'` | A type-only import isn't marked with `type`. See [Type-only imports](#type-only-imports).              |
 | `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`                                | A package that you installed is published as TypeScript. Keep using the `"tsx"` mode until it's fixed. |
 
 ## Migrate with an AI agent
