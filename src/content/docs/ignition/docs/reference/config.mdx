@@ -24,6 +24,7 @@ export default defineConfig({
     disableFeeBumping: false,
     maxRetries: 10,
     retryInterval: 1_000,
+    maxBatchSize: 10,
   },
 });
 ```
@@ -71,6 +72,16 @@ Default value: `10`
 The time in milliseconds that Hardhat Ignition will wait between retries when a transaction fails due to a network error.
 
 Default value: `1_000` (1 second)
+
+### `maxBatchSize`
+
+The maximum number of `Future` objects to execute in each deployment batch. Set this to a positive safe integer to split large batches into smaller ones. Each batch must complete successfully, including the required transaction confirmations, before the next batch starts.
+
+Default value: `undefined` (no size limit)
+
+The limit counts all `Future` objects, including operations that don't send transactions. It preserves the boundaries between the original dependency batches. See [Execution order and batching](/ignition/docs/explanations/execution#execution-order-and-batching) for more details.
+
+When resuming a deployment, pending transactions are ordered by account and nonce before new futures within each dependency batch. Reducing the limit doesn't cancel transactions that a previous run already submitted, so it doesn't cap the total number of pending transactions on the network.
 
 ## Network configuration options
 
