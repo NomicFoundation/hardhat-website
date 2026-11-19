@@ -85,3 +85,6 @@ Hegota
 slotnum
 dupn
 swapn
+UUPS
+Initializable
+reinitializer
