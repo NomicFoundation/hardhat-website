@@ -183,7 +183,7 @@ The following options are specific to JSON-RPC networks:
 - `accounts`: This field controls which accounts Hardhat uses. It can use the node's accounts (by setting it to `"remote"`), a list of local accounts (by setting it to an array of [configuration variables](/docs/guides/configuration-variables)), or use an [HD Wallet](#hd-wallet-config). Default value: `"remote"`.
 - `url`: The URL of the node, passed in via [configuration variable](/docs/guides/configuration-variables). This argument is required for HTTP networks.
 - `httpHeaders`: An optional object with headers to be sent in every request to the node. This can be useful for authentication or other purposes.
-- `timeout`: An optional number that specifies the timeout for requests to the node, in milliseconds.
+- `timeout`: An optional number that specifies the timeout for requests to the node, in milliseconds. Default value: `300000` (5 minutes).
 
 #### HD Wallet config
 
@@ -280,7 +280,7 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `failurePersistFile`: Name of the file to record fuzz failures, defaults to `failures`.
   - `runs`: The amount of fuzz runs to perform for each fuzz test case. Higher values give more confidence in results at the cost of testing speed. Defaults to 256.
   - `maxTestRejects`: The maximum number of combined inputs that may be rejected before the test as a whole aborts. "Global" filters apply to the whole test case. If the test case is rejected, the whole thing is regenerated. Defaults to 65536.
-  - `seed`: Hexadecimal string. Optional seed for the fuzzing RNG algorithm. Defaults to None.
+  - `seed`: Hexadecimal string. Optional seed for the fuzzing RNG algorithm. Defaults to a fixed seed (`0x7727ea51af0441c20da14dcd68a15dac8c9ebd589c5be8fa8c87c1d3720450bc`, the keccak256 of `"built for ethereum"`), so fuzz runs are deterministic unless you set a different seed.
   - `dictionaryWeight`: Integer between 0 and 100. The weight of the dictionary. A higher dictionary weight will bias the fuzz inputs towards "interesting" values, e.g. boundary values like type(uint256).max or contract addresses from your environment. Defaults to 40.
   - `includeStorage`: The flag indicating whether to include values from storage. Defaults to true.
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
@@ -290,7 +290,7 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `depth`: The number of calls executed to attempt to break invariants in one run. Defaults to 500.
   - `failOnRevert`: Fails the invariant fuzzing if a revert occurs. Defaults to false.
   - `callOverride`: Overrides unsafe external calls when running invariant tests, useful for e.g. performing reentrancy checks. Defaults to false.
-  - `dictionaryWeight`: Integer between 0 and 100. The weight of the dictionary. A higher dictionary weight will bias the fuzz inputs towards "interesting" values, e.g. boundary values like type(uint256).max or contract addresses from your environment. Defaults to 40.
+  - `dictionaryWeight`: Integer between 0 and 100. The weight of the dictionary. A higher dictionary weight will bias the fuzz inputs towards "interesting" values, e.g. boundary values like type(uint256).max or contract addresses from your environment. Defaults to 80, or to `fuzz.dictionaryWeight` if that is set.
   - `includeStorage`: The flag indicating whether to include values from storage. Defaults to true.
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
   - `shrinkRunLimit`: The maximum number of attempts to shrink a failed sequence. The shrink process is disabled if set to 0. Defaults to 5000.
