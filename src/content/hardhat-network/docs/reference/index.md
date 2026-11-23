@@ -15,6 +15,10 @@
 - shanghai
 - cancun
 - prague
+- osaka
+- amsterdam (experimental)
+
+Support for `amsterdam` is experimental and incomplete: the hardfork is still being specified, and its behavior in Hardhat Network may change in backward-incompatible ways before it activates on mainnet. It is never the default; you have to opt in with the [`hardfork`](#hardfork) field.
 
 ## Config
 
@@ -32,9 +36,9 @@ The address to use as default sender. If not present the first account of the Ha
 
 #### `gas`
 
-Its value should be `"auto"` or a number. If a number is used, it will be the gas limit used by default in every transaction. If `"auto"` is used, the gas limit will be automatically estimated. Default value: the same value as `blockGasLimit`.
+Its value should be `"auto"` or a number. If a number is used, it will be the gas limit used by default in every transaction. If `"auto"` is used, the gas limit will be automatically estimated.
 
-Note that when using `ethers` this value will not be applied.
+Default value: the `blockGasLimit`, capped at the most gas a transaction can use on the configured `hardfork`. That is `16_777_216` (2<sup>24</sup>, EIP-7825) before `amsterdam`, and `4_294_967_295` (2<sup>32</sup> - 1, EIP-8037) from `amsterdam` on, so with the default `blockGasLimit` it is `16_777_216`, or `60_000_000` on `amsterdam`.
 
 #### `gasPrice`
 
@@ -63,11 +67,13 @@ This field can be configured as one of these:
 
 #### `blockGasLimit`
 
-The block gas limit to use in Hardhat Network's blockchain. Default value: `30_000_000`
+The block gas limit to use in Hardhat Network's blockchain. Default value: `60_000_000`
 
 #### `hardfork`
 
-This setting changes how Hardhat Network works, to mimic Ethereum's mainnet at a given hardfork. It must be one of `"byzantium"`, `"constantinople"`, `"petersburg"`, `"istanbul"`, `"muirGlacier"`, `"berlin"`, `"london"`, `"arrowGlacier"`, `"grayGlacier"`, `"merge"`, `"shanghai"`, `"cancun"` and `"prague"`. Default value: `"prague"`
+This setting changes how Hardhat Network works, to mimic Ethereum's mainnet at a given hardfork. It must be one of `"byzantium"`, `"constantinople"`, `"petersburg"`, `"istanbul"`, `"muirGlacier"`, `"berlin"`, `"london"`, `"arrowGlacier"`, `"grayGlacier"`, `"merge"`, `"shanghai"`, `"cancun"`, `"prague"`, `"osaka"` and `"amsterdam"`. Default value: `"osaka"`
+
+`"amsterdam"` is [experimental](#supported-hardforks), and Hardhat prints a warning when it is used.
 
 #### `throwOnTransactionFailures`
 
