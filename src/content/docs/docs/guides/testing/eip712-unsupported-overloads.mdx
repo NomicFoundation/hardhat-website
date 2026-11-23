@@ -1,0 +1,121 @@
+---
+title: Unsupported EIP-712 cheatcode overloads
+description: How to migrate Solidity tests that use unsupported EIP-712 cheatcode overloads
+sidebar:
+  label: Unsupported EIP-712 overloads
+  order: 8
+---
+
+Hardhat 3 supports the following EIP-712 cheatcodes:
+
+```solidity
+function eip712HashType(
+  string calldata typeNameOrDefinition
+) external pure returns (bytes32);
+function eip712HashStruct(
+  string calldata typeNameOrDefinition,
+  bytes calldata abiEncodedData
+) external pure returns (bytes32);
+function eip712HashTypedData(
+  string calldata jsonData
+) external pure returns (bytes32);
+```
+
+The overloads that take a `bindingsPath` as their first argument are **not supported**:
+
+```solidity
+function eip712HashType(
+  string calldata bindingsPath,
+  string calldata typeName
+) external pure returns (bytes32);
+function eip712HashStruct(
+  string calldata bindingsPath,
+  string calldata typeName,
+  bytes calldata abiEncodedData
+) external pure returns (bytes32);
+```
+
+Calling either of them fails with an error such as:
+
+```text
+Cheatcode 'eip712HashType(string,string)' is not supported by Hardhat.
+```
+
+## Why
+
+These overloads read struct definitions from a generated bindings file at the given path. Hardhat 3 does not use bindings files. Instead, it collects struct definitions directly from your Solidity sources, based on the `eip712Types` setting in `hardhat.config.ts`. Because there is no file to point at, the `bindingsPath` argument has no meaning.
+
+## How to migrate
+
+### 1. Configure which sources contain your structs
+
+Replace the `[bind_json]` section of `foundry.toml` with an `eip712Types` block in `hardhat.config.ts`. The `include` and `exclude` entries carry over. The `out` path has no equivalent, since no bindings file is generated. If you previously relied on multiple bindings files, include the sources behind all of them.
+
+Before:
+
+```toml
+# foundry.toml
+[bind_json]
+out = "test/utils/JsonBindings.sol"
+include = ["src/interfaces/IPermit.sol", "test/mocks/EIP712Types.sol"]
+exclude = ["src/legacy/OldPermit.sol"]
+```
+
+After:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  test: {
+    solidity: {
+      eip712Types: {
+        include: ["src/interfaces/IPermit.sol", "test/mocks/EIP712Types.sol"],
+        exclude: ["src/legacy/OldPermit.sol"],
+      },
+    },
+  },
+});
+```
+
+Entries are matched against solc source names and may be exact paths or globs such as `"src/**"`. For structs from npm packages, use the package's source name, for example `"npm/@uniswap/permit2@*/src/interfaces/ISignatureTransfer.sol"`.
+
+See [EIP-712 type hashing in Solidity tests](/docs/guides/testing/eip712-types) for details.
+
+### 2. Drop the `bindingsPath` argument
+
+Before:
+
+```solidity
+bytes32 typeHash = vm.eip712HashType("test/utils/JsonBindings.sol", "Withdraw");
+bytes32 structHash = vm.eip712HashStruct("test/utils/JsonBindings.sol", "Withdraw", abi.encode(withdraw));
+```
+
+After:
+
+```solidity
+bytes32 typeHash = vm.eip712HashType("Withdraw");
+bytes32 structHash = vm.eip712HashStruct("Withdraw", abi.encode(withdraw));
+```
+
+### 3. Resolve duplicate struct names
+
+Every struct name must map to exactly one definition across the included sources. If two different structs share a name, Hardhat reports error [`HHE818`](/docs/reference/errors#hhe818-duplicate-eip-712-struct-name). Either rename one of the structs, or adjust the `include`/`exclude` patterns and pass the full type definition instead of the name at the remaining call sites:
+
+```solidity
+vm.eip712HashType("Withdraw(address spoke,uint256 reserveId,uint256 amount)");
+```
+
+## Troubleshooting
+
+- **`Cheatcode 'eip712HashType(string,string)' is not supported by Hardhat`** (or the `eip712HashStruct(string,string,bytes)` equivalent): a call still passes a `bindingsPath`. See step 2.
+- **`vm.eip712HashType: unknown EIP-712 type name 'Withdraw'`** (or the `vm.eip712HashStruct` equivalent): the struct's source is not matched by `eip712Types.include`, or is removed by `exclude`. See step 1.
+- **`HHE818: Two different EIP-712 struct definitions named "Withdraw" were found`**: two different structs share a name. See step 3.
+
+## See also
+
+- [`eip712HashType`](/docs/reference/cheatcodes/utilities/eip712-hash-type)
+- [`eip712HashStruct`](/docs/reference/cheatcodes/utilities/eip712-hash-struct)
+- [`eip712HashTypedData`](/docs/reference/cheatcodes/utilities/eip712-hash-typed-data)
+- [Unsupported cheatcodes](/docs/reference/cheatcodes/unsupported-cheatcodes)

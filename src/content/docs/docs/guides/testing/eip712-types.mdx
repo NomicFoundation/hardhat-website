@@ -14,6 +14,10 @@ Hardhat provides three cheatcodes for EIP-712 hashing in Solidity tests:
 
 The first two look up your project's struct definitions by name, avoiding hand-written canonical type strings. `eip712HashTypedData` computes a digest from a self-describing JSON payload and works without any configuration.
 
+:::note
+Migrating from Foundry? The `eip712HashType` and `eip712HashStruct` overloads that take a `bindingsPath` aren't supported in Hardhat. See [Unsupported EIP-712 cheatcode overloads](/docs/guides/testing/eip712-unsupported-overloads) to port them.
+:::
+
 ## Configuration
 
 `eip712HashType` and `eip712HashStruct` need a registry of struct types to resolve names. Enable this by adding an `eip712Types` block to your `hardhat.config.ts`:
