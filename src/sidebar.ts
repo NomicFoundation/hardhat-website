@@ -107,7 +107,20 @@ export const sidebarTopics: StarlightSidebarTopicsUserConfig = [
           { slug: "docs/reference/json-rpc-methods" },
           { slug: "docs/reference/artifacts" },
           { slug: "docs/reference/console-log" },
-          { slug: "docs/reference/utils" },
+          {
+            label: "Hardhat utils",
+            collapsed: true,
+            items: [
+              { slug: "docs/reference/utils" },
+              { slug: "docs/reference/utils/abi" },
+              { slug: "docs/reference/utils/constants" },
+              { slug: "docs/reference/utils/convert" },
+              { slug: "docs/reference/utils/fetch" },
+              { slug: "docs/reference/utils/hash" },
+              { slug: "docs/reference/utils/rpc" },
+              { slug: "docs/reference/utils/tx" },
+            ],
+          },
           { slug: "docs/reference/foundry-compatibility" },
           {
             label: "Solidity test cheatcodes",
