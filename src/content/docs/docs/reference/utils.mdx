@@ -1,0 +1,392 @@
+---
+title: Hardhat utils reference
+description: Reference of the hhu command-line utilities that come with Hardhat
+sidebar:
+  label: Hardhat utils
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat comes with a set of small command-line utilities for common Ethereum tasks, like encoding ABI data, hashing, converting units, and fetching on-chain data.
+
+You can run them with the `hhu` binary, or with the `utils` task. Both are the same:
+
+<Run command={["hhu convert to-wei 1.5", "hardhat utils convert to-wei 1.5"]} />
+
+Every utility prints its result to the standard output, one value per line.
+
+These are all the utilities:
+
+- [`abi`](#abi): Work with ABI signatures and data. Includes [`encode-args`](#abi-encode-args), [`encode-calldata`](#abi-encode-calldata), [`encode-type`](#abi-encode-type), [`sig`](#abi-sig), [`sig-event`](#abi-sig-event).
+- [`constants`](#constants): Print commonly used Ethereum constants. Includes [`max-value`](#constants-max-value), [`min-value`](#constants-min-value), [`zero-address`](#constants-zero-address), [`zero-hash`](#constants-zero-hash).
+- [`convert`](#convert): Convert values between common Ethereum representations. Includes [`format-units`](#convert-format-units), [`from-hex`](#convert-from-hex), [`from-wei`](#convert-from-wei), [`pad`](#convert-pad), [`parse-units`](#convert-parse-units), [`to-checksum-address`](#convert-to-checksum-address), [`to-hex`](#convert-to-hex), [`to-wei`](#convert-to-wei).
+- [`fetch`](#fetch): Fetch on-chain data. Includes [`balance`](#fetch-balance), [`block-number`](#fetch-block-number), [`chain-id`](#fetch-chain-id), [`code`](#fetch-code), [`gas-price`](#fetch-gas-price), [`nonce`](#fetch-nonce), [`storage`](#fetch-storage).
+- [`hash`](#hash): Hash values. Includes [`keccak`](#hash-keccak).
+- [`rpc`](#rpc): Send a JSON-RPC request.
+- [`tx`](#tx): Work with transactions. Includes [`call`](#tx-call), [`estimate`](#tx-estimate).
+
+## Global options
+
+The `utils` task accepts all of Hardhat's [global options](/docs/explanations/global-options). The `hhu` binary only accepts `--network`, `--help`, `--show-stack-traces` and `--version`.
+
+`hhu` works outside a Hardhat project, except for the `fetch`, `rpc` and `tx` utilities, which use `--network` to connect to one of the project's networks. The `utils` task always needs a project.
+
+To list all the utilities, run `hhu` without arguments. To get the help of one of them, add `--help`:
+
+<Run command="hhu convert pad --help" />
+
+## Passing values
+
+Some utilities take values, like function arguments or JSON-RPC params. These are the rules:
+
+- Integers can be decimal, like `1000`, or hex, like `0x3e8`.
+- Arrays and tuples are JSON, with addresses, hex and strings quoted, like `[1,"0x..."]`.
+- Negative numbers must come after `--`, so they aren't read as options: `hhu abi encode-type int256 -- -1`.
+
+Addresses can be all lowercase, all uppercase, or EIP-55 checksummed. A mixed-case address with a wrong checksum is rejected, except by `convert to-checksum-address`, which fixes it.
+
+## abi
+
+Utilities to work with ABI signatures and data.
+
+### abi encode-args
+
+ABI-encodes values for a signature, without its selector.
+
+- `signature`: The signature, like `"transfer(address,uint256)"` or `"(address,uint256)"`.
+- `values`: The values to encode, in order.
+
+```console
+$ npx hhu abi encode-args "(address,uint256)" 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed 1000
+0x0000000000000000000000005aaeb6053f3e94c9b9a09f33669435e7ef1beaed00000000000000000000000000000000000000000000000000000000000003e8
+```
+
+### abi encode-calldata
+
+ABI-encodes a function call: its selector followed by its values.
+
+- `signature`: The function signature, like `"transfer(address,uint256)"`.
+- `values`: The values to encode, in order.
+
+```console
+$ npx hhu abi encode-calldata "transfer(address,uint256)" 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed 1000
+0xa9059cbb0000000000000000000000005aaeb6053f3e94c9b9a09f33669435e7ef1beaed00000000000000000000000000000000000000000000000000000000000003e8
+```
+
+### abi encode-type
+
+ABI-encodes a single value of a given type.
+
+- `type`: The type, like `uint256`, `int128` or `address[]`.
+- `value`: The value to encode.
+
+```console
+$ npx hhu abi encode-type uint256 0xff
+0x00000000000000000000000000000000000000000000000000000000000000ff
+```
+
+### abi sig
+
+Prints the 4-byte selector of a function or error signature.
+
+- `signature`: The signature, like `"transfer(address,uint256)"`.
+
+```console
+$ npx hhu abi sig "transfer(address,uint256)"
+0xa9059cbb
+```
+
+### abi sig-event
+
+Prints the 32-byte topic of an event signature.
+
+- `signature`: The signature, like `"Transfer(address,address,uint256)"`.
+
+```console
+$ npx hhu abi sig-event "Transfer(address,address,uint256)"
+0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+```
+
+## constants
+
+Commonly used Ethereum constants.
+
+### constants max-value
+
+Prints the maximum value of an integer type.
+
+- `type`: The integer type, like `uint256` or `int128`. Defaults to `uint256`.
+
+```console
+$ npx hhu constants max-value uint8
+255
+```
+
+### constants min-value
+
+Prints the minimum value of an integer type.
+
+- `type`: The integer type, like `uint256` or `int128`. Defaults to `uint256`.
+
+```console
+$ npx hhu constants min-value int8
+-128
+```
+
+### constants zero-address
+
+Prints the zero address.
+
+```console
+$ npx hhu constants zero-address
+0x0000000000000000000000000000000000000000
+```
+
+### constants zero-hash
+
+Prints the zero hash.
+
+```console
+$ npx hhu constants zero-hash
+0x0000000000000000000000000000000000000000000000000000000000000000
+```
+
+## convert
+
+Utilities to convert values between common Ethereum representations.
+
+### convert format-units
+
+Formats an integer as a decimal amount with the given number of decimals. This is the inverse of `convert parse-units`.
+
+- `value`: The integer to format, in decimal or hex.
+- `decimals`: The number of decimals. Defaults to `18`.
+
+```console
+$ npx hhu convert format-units 1500000 6
+1.5
+```
+
+### convert from-hex
+
+Converts a hex value to a decimal integer.
+
+- `value`: The hex value to convert, with or without the `0x` prefix.
+
+```console
+$ npx hhu convert from-hex 0xff
+255
+```
+
+### convert from-wei
+
+Converts an amount of wei to ether, gwei or wei.
+
+- `value`: The amount of wei to convert, in decimal or hex.
+- `unit`: The unit to convert to: `ether`, `gwei` or `wei`. Defaults to `ether`.
+
+```console
+$ npx hhu convert from-wei 1500000000 gwei
+1.5
+```
+
+### convert pad
+
+Pads a hex string to a given byte length.
+
+- `value`: The hex string to pad.
+- `--length`: The target length, in bytes. Defaults to `32`.
+- `--left`: Pad to the left. This is the default.
+- `--right`: Pad to the right.
+
+```console
+$ npx hhu convert pad 0xff --length 8
+0x00000000000000ff
+```
+
+### convert parse-units
+
+Parses a decimal amount into an integer with the given number of decimals. This is the inverse of `convert format-units`.
+
+- `value`: The decimal amount to parse, like `1.5`.
+- `decimals`: The number of decimals. Defaults to `18`.
+
+```console
+$ npx hhu convert parse-units 1.5 6
+1500000
+```
+
+### convert to-checksum-address
+
+Converts an address to its EIP-55 checksummed representation.
+
+- `address`: The address to convert.
+
+```console
+$ npx hhu convert to-checksum-address 0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed
+0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed
+```
+
+### convert to-hex
+
+Converts a non-negative integer to hex.
+
+- `value`: The integer to convert, in decimal or hex.
+
+```console
+$ npx hhu convert to-hex 255
+0xff
+```
+
+### convert to-wei
+
+Converts an amount of ether, gwei or wei to wei.
+
+- `value`: The amount to convert, like `1.5`.
+- `unit`: The unit of the amount: `ether`, `gwei` or `wei`. Defaults to `ether`.
+
+```console
+$ npx hhu convert to-wei 1.5
+1500000000000000000
+```
+
+## fetch
+
+Utilities to fetch on-chain data. They connect to the network selected with `--network`.
+
+The ones that read an account accept `--block` to pick the block whose state to use: a number, a hash, or one of `latest`, `pending`, `earliest`, `safe` and `finalized`. It defaults to `latest`.
+
+### fetch balance
+
+Prints the balance of an address, in wei.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch balance 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network sepolia
+75600
+```
+
+### fetch block-number
+
+Prints the latest block number.
+
+```console
+$ npx hhu fetch block-number --network sepolia
+12203513
+```
+
+### fetch chain-id
+
+Prints the chain ID.
+
+```console
+$ npx hhu fetch chain-id --network sepolia
+11155111
+```
+
+### fetch code
+
+Prints the runtime bytecode of an address. It prints `0x` if there's no contract at that address.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch code 0x5FbDB2315678afecb367f032d93F642f64180aa3 --network sepolia
+0x
+```
+
+### fetch gas-price
+
+Prints the gas price, in wei.
+
+```console
+$ npx hhu fetch gas-price --network sepolia
+21
+```
+
+### fetch nonce
+
+Prints the nonce of an address.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch nonce 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network sepolia
+48722
+```
+
+### fetch storage
+
+Prints the 32-byte value of a storage slot.
+
+- `address`: The address to check.
+- `slot`: The storage slot, in decimal or hex.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch storage 0x5FbDB2315678afecb367f032d93F642f64180aa3 0 --network sepolia
+0x0000000000000000000000000000000000000000000000000000000000000000
+```
+
+## hash
+
+### hash keccak
+
+Prints the keccak256 hash of a value. A `0x`-prefixed value is hashed as bytes, anything else as a UTF-8 string.
+
+- `value`: The value to hash.
+
+```console
+$ npx hhu hash keccak hello
+0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
+```
+
+## rpc
+
+Sends a JSON-RPC request to the network selected with `--network`, and prints its result as JSON.
+
+- `method`: The JSON-RPC method, like `eth_getBalance`.
+- `params`: The method params, in order. A param that is valid JSON, like `false`, `1` or `{"to":"0x..."}`, is sent as JSON. Anything else, like `0x1` or `latest`, is sent as a string.
+
+```console
+$ npx hhu rpc eth_getBlockByNumber latest false --network sepolia
+{"baseFeePerGas":"0x13","difficulty":"0x0","gasLimit":"0xbe2d1f3","gasUsed":"0x41c2a9c","hash":"0x008f...","number":"0xba2c79",...}
+```
+
+## tx
+
+Utilities to work with transactions. They connect to the network selected with `--network`.
+
+Both take the same arguments:
+
+- `to`: The recipient's address.
+- `signature`: The function signature, like `"balanceOf(address)"`.
+- `args`: The function's arguments, in order.
+- `--data`: The `0x`-hex calldata, instead of a signature and arguments.
+- `--from`: The sender's address.
+- `--value`: The amount of wei to send, in decimal or hex. Defaults to `0`.
+- `--block`: The block whose state to use. Defaults to `latest`.
+
+### tx call
+
+Calls a contract without sending a transaction, and prints what it returns.
+
+If the signature includes the return types, like `"balanceOf(address)(uint256)"`, the result is decoded and printed one value per line, with arrays and tuples as JSON. Otherwise, the raw return data is printed as hex.
+
+```console
+$ npx hhu tx call 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984 "balanceOf(address)(uint256)" 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network mainnet
+0
+```
+
+### tx estimate
+
+Estimates the gas that a transaction would use, and prints it in decimal.
+
+```console
+$ npx hhu tx estimate 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984 "approve(address,uint256)" 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 1000 --network mainnet
+47198
+```
