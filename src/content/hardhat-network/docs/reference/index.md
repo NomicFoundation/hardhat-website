@@ -18,7 +18,7 @@
 - osaka
 - amsterdam (experimental)
 
-Support for `amsterdam` is experimental and incomplete: the hardfork is still being specified, and its behavior in Hardhat Network may change in backward-incompatible ways before it activates on mainnet. It is never the default; you have to opt in with the [`hardfork`](#hardfork) field.
+Support for `amsterdam` is experimental and incomplete: the hardfork is still being specified, and its behavior in Hardhat Network may change in backward-incompatible ways before it activates on mainnet. It is not the default; you have to opt through the [`hardfork`](#hardfork) field.
 
 ## Config
 
