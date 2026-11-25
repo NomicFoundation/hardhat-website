@@ -237,7 +237,7 @@ When a fuzz test fails, Hardhat reports the input that broke it as a counterexam
       args: 0
 ```
 
-The `args` line is the input. To debug the failure, call the fuzz test from a regular test:
+The `args` line is the input for the failed case. To debug the failure, call the fuzz test from a regular test:
 
 ```solidity
 function testIncByZero() public {
@@ -271,9 +271,9 @@ Each failing test gets a JSON file at `failures/<contract name>/<test name>` in 
 
 Fuzz tests run in parallel: the runs of each test are split between several workers, by default one for each available thread. The inputs a test receives depend on its `seed`, its `runs` and the number of workers.
 
-To run the same inputs everywhere (e.g. both locally and on CI), you can set `fuzz.workers` explicitly, for example in a `ci` [Test Profile](/docs/guides/testing/test-profiles):
+To run the same inputs everywhere (e.g. both locally and on CI), you can set `fuzz.seed` and `fuzz.workers` explicitly, for example in a `ci` [Test Profile](/docs/guides/testing/test-profiles):
 
-```ts
+```ts {10-15}
 // hardhat.config.ts
 import { defineConfig } from "hardhat/config";
 
@@ -284,7 +284,10 @@ export default defineConfig({
       profiles: {
         default: {},
         ci: {
-          fuzz: { workers: 1 },
+          fuzz: {
+            seed: "0x1234",
+            workers: 1,
+          },
         },
       },
     },
@@ -292,6 +295,6 @@ export default defineConfig({
 });
 ```
 
-and select it when running the failing test:
+and select it when running the tests:
 
 <Run command="hardhat test solidity --test-profile ci --grep testIncBy" />
