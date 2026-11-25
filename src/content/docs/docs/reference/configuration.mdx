@@ -276,14 +276,16 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `blockNumber`: Optional block number to pin the global state fork. If `url` is set, defaults to the latest block number.
   - `rpcEndpoints`: Map of RPC endpoints from chain name to RPC urls for fork cheat codes, e.g. `{ "optimism": "https://optimism.alchemyapi.io/v2/..." }`
 - `fuzz`: Optional fuzz testing configuration object.
-  - `failurePersistDir`: Optional path where fuzz failures are recorded and replayed if set.
-  - `failurePersistFile`: Name of the file to record fuzz failures, defaults to `failures`.
+  - `failurePersistDir`: Optional directory where fuzz failures are recorded, one JSON file per test under its `failures` subdirectory. A recorded failure is replayed first on the next run. Failures aren't recorded unless this is set. See [Reproducing fuzz test failures](/docs/guides/testing/using-solidity#reproducing-fuzz-test-failures).
   - `runs`: The amount of fuzz runs to perform for each fuzz test case. Higher values give more confidence in results at the cost of testing speed. Defaults to 256.
-  - `maxTestRejects`: The maximum number of combined inputs that may be rejected before the test as a whole aborts. "Global" filters apply to the whole test case. If the test case is rejected, the whole thing is regenerated. Defaults to 65536.
-  - `seed`: Hexadecimal string. Optional seed for the fuzzing RNG algorithm. Defaults to a fixed seed `0x7727ea51af0441c20da14dcd68a15dac8c9ebd589c5be8fa8c87c1d3720450bc` (the keccak256 of `"built for ethereum"`).
+  - `maxTestRejects`: The maximum number of inputs that [`vm.assume`](/docs/reference/cheatcodes/fuzzer/assume) may reject before the test as a whole aborts. Rejected inputs don't count towards `runs`. Set it to 0 to remove the limit, which requires a `timeout`. Defaults to 65536.
+  - `seed`: Hexadecimal string. Optional seed for the fuzzing RNG algorithm. Defaults to a fixed seed `0x7727ea51af0441c20da14dcd68a15dac8c9ebd589c5be8fa8c87c1d3720450bc` (the keccak256 of `"built for ethereum"`). The inputs generated for a seed also depend on the number of `workers`.
   - `dictionaryWeight`: Integer between 0 and 100. The weight of the dictionary. A higher dictionary weight will bias the fuzz inputs towards "interesting" values, e.g. boundary values like type(uint256).max or contract addresses from your environment. Defaults to 40.
   - `includeStorage`: The flag indicating whether to include values from storage. Defaults to true.
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
+  - `showLogs`: Whether to show the `console.log` output of every fuzz run. The output of a failing run is shown either way. Defaults to false.
+  - `timeout`: Optional time limit in seconds for each fuzz test. No limit by default.
+  - `workers`: The maximum number of parallel workers that run each fuzz test. The runs are split between the workers, and fewer workers are used when there would be under 64 runs each. Defaults to the number of available threads. Set it to `1` to report the same failing input on every rerun. See [Reproducing fuzz test failures](/docs/guides/testing/using-solidity#reproducing-fuzz-test-failures).
 - `invariant`: Optional invariant testing configuration object. If an invariant config setting is not set, but a corresponding fuzz config value is set, then the fuzz config value will be used.
   - `failurePersistDir`: Optional path where invariant failures are recorded and replayed if set.
   - `runs`: The number of runs that must execute for each invariant test group. Defaults to 256.
