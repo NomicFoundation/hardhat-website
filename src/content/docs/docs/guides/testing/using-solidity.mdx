@@ -221,3 +221,85 @@ To learn more about how to configure your Solidity tests, read [the Solidity tes
 You can also override config settings for individual test functions using inline configuration. Read the [Inline configuration](/docs/guides/testing/inline-configuration) guide to learn more.
 
 To define several sets of settings and choose between them when running your tests, read the [Test Profiles](/docs/guides/testing/test-profiles) guide.
+
+## Reproducing fuzz test failures
+
+When a fuzz test fails, Hardhat reports the input that broke it as a counterexample:
+
+```
+  1) CounterTest#testIncBy(uint256)
+    Error: incBy: increment should be positive
+      at Counter.incBy (contracts/Counter.sol:15)
+      at CounterTest.testIncBy (test/CounterTest.t.sol:9)
+
+    Counterexample:
+      calldata: 0x5594b4850000000000000000000000000000000000000000000000000000000000000000
+      args: 0
+```
+
+The `args` line is the input. To debug the failure, call the fuzz test with it from a regular test, which also keeps the bug from coming back once it's fixed:
+
+```solidity
+function testIncByZero() public {
+  testIncBy(0);
+}
+```
+
+### Running the same inputs again
+
+Fuzz tests run in parallel: the runs of each test are split between several workers, by default one for each available thread. The inputs a test receives depend on its `seed`, its `runs` and the number of workers. As the default number of workers depends on the machine, a fuzz test can fail in CI and pass on your computer.
+
+To run the same inputs everywhere, set `fuzz.workers` explicitly, for example in a `ci` [Test Profile](/docs/guides/testing/test-profiles).
+
+With more than one worker, the workers race each other, so a rerun can report a different failing input. To report the same one every time, run the test with a single worker. For example, add a `debug` Test Profile:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      profiles: {
+        default: {},
+        debug: {
+          fuzz: { workers: 1 },
+        },
+      },
+    },
+  },
+});
+```
+
+and select it when running the failing test:
+
+<Run command="hardhat test solidity --test-profile debug --grep testIncBy" />
+
+A Test Profile doesn't inherit settings from `default`, so give `debug` any other settings your tests need, such as the same `seed`.
+
+`workers` can't be set with [inline configuration](/docs/guides/testing/inline-configuration). A test with fewer than 64 runs per worker uses fewer workers, so an inline `fuzz.runs` can also change how many workers a test uses.
+
+### Recording failures
+
+To record each failure and replay it first on the next run, set `fuzz.failurePersistDir`:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      fuzz: {
+        failurePersistDir: "cache/fuzz",
+      },
+    },
+  },
+});
+```
+
+A relative path is resolved from the directory you run Hardhat in. Each failing test gets a JSON file at `failures/<contract name>/<test name>` in that directory, holding the counterexample and the seed, run and worker that found it. The recorded input is replayed even if the `seed` or the number of workers changes, and once the bug is fixed the test passes it and goes on to new inputs.
+
+Tests are identified by their contract and function names, so two test contracts with the same name in different files share a file.
