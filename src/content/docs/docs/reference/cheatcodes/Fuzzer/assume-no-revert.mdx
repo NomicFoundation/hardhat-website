@@ -31,7 +31,9 @@ The fuzzer will discard the current fuzz inputs and start a new fuzz run if next
 
 The test may fail if you hit the max number of rejects.
 
-You can configure the rejection thresholds by setting `fuzz.maxTestRejects` in your [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration).
+Rejected inputs don't count towards the test's `runs`.
+
+You can configure the rejection threshold by setting `fuzz.maxTestRejects` in your [Solidity tests configuration](https://hardhat.org/docs/reference/configuration#solidity-tests-configuration). Setting it to 0 removes the limit, and requires a `timeout`.
 
 ### Examples
 

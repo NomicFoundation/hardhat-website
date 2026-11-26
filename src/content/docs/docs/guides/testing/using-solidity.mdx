@@ -221,3 +221,80 @@ To learn more about how to configure your Solidity tests, read [the Solidity tes
 You can also override config settings for individual test functions using inline configuration. Read the [Inline configuration](/docs/guides/testing/inline-configuration) guide to learn more.
 
 To define several sets of settings and choose between them when running your tests, read the [Test Profiles](/docs/guides/testing/test-profiles) guide.
+
+## Reproducing fuzz test failures
+
+When a fuzz test fails, Hardhat reports the input that broke it as a counterexample:
+
+```
+  1) CounterTest#testIncBy(uint256)
+    Error: incBy: increment should be positive
+      at Counter.incBy (contracts/Counter.sol:15)
+      at CounterTest.testIncBy (test/CounterTest.t.sol:9)
+
+    Counterexample:
+      calldata: 0x5594b4850000000000000000000000000000000000000000000000000000000000000000
+      args: 0
+```
+
+The `args` line is the input for the failed case. To debug the failure, call the fuzz test from a regular test:
+
+```solidity
+function testIncByZero() public {
+  testIncBy(0);
+}
+```
+
+### Recording failures
+
+To record each failure and replay it first on the next run, set `fuzz.failurePersistDir`:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      fuzz: {
+        failurePersistDir: "cache/fuzz",
+      },
+    },
+  },
+});
+```
+
+Each failing test gets a JSON file at `failures/<contract name>/<test name>` in the `failurePersistDir` directory, holding the counterexample. The recorded input is replayed even if the `seed` or the number of workers changes.
+
+### Running the same inputs again
+
+Fuzz tests run in parallel: the runs of each test are split between several workers, by default one for each available thread. The inputs a test receives depend on its `seed`, its `runs` and the number of workers.
+
+To run the same inputs everywhere (e.g. both locally and on CI), you can set `fuzz.seed` and `fuzz.workers` explicitly, for example in a `ci` [Test Profile](/docs/guides/testing/test-profiles):
+
+```ts {10-15}
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  /// ... other config ...
+  test: {
+    solidity: {
+      profiles: {
+        default: {},
+        ci: {
+          fuzz: {
+            seed: "0x1234",
+            workers: 1,
+          },
+        },
+      },
+    },
+  },
+});
+```
+
+and select it when running the tests:
+
+<Run command="hardhat test solidity --test-profile ci --grep testIncBy" />
