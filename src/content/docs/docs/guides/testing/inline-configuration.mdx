@@ -104,7 +104,7 @@ Keys with the `fuzz.`/`invariant.` prefix apply only to that test type; the rest
 | `fuzz.runs`                 | Number of fuzz iterations to run                                         |
 | `fuzz.maxTestRejects`       | Maximum number of rejected inputs before aborting                        |
 | `fuzz.showLogs`             | Whether to show console logs of every fuzz run, not only a failing one   |
-| `fuzz.timeout`              | Timeout for the fuzz test                                                |
+| `fuzz.timeout`              | Time limit in seconds; the test passes if no failure is found in time    |
 | `invariant.runs`            | Number of invariant test runs                                            |
 | `invariant.depth`           | Number of calls per run to attempt to break the invariant                |
 | `invariant.failOnRevert`    | Whether to fail the invariant if a revert occurs                         |

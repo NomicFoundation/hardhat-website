@@ -284,7 +284,7 @@ If write access to a directory is needed, please make sure that it doesn't conta
   - `includeStorage`: The flag indicating whether to include values from storage. Defaults to true.
   - `includePushBytes`: The flag indicating whether to include push bytes values. Defaults to true.
   - `showLogs`: Whether to show the `console.log` output of every fuzz run. The output of a failing run is shown either way. Defaults to false.
-  - `timeout`: Optional time limit in seconds for each fuzz test. No limit by default.
+  - `timeout`: Optional time limit in seconds for each fuzz test. When reached, the test stops and passes if no failure was found, even if fewer than `runs` runs were completed. No limit by default.
   - `workers`: The maximum number of parallel workers that run each fuzz test. The runs are split between the workers, and fewer workers are used when there would be under 64 runs each. Defaults to the number of available threads. Set it to `1` to report the same failing input on every rerun. See [Reproducing fuzz test failures](/docs/guides/testing/using-solidity#reproducing-fuzz-test-failures).
 - `invariant`: Optional invariant testing configuration object. If an invariant config setting is not set, but a corresponding fuzz config value is set, then the fuzz config value will be used.
   - `failurePersistDir`: Optional path where invariant failures are recorded and replayed if set.
