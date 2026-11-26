@@ -85,3 +85,4 @@ Hegota
 slotnum
 dupn
 swapn
+checksummed

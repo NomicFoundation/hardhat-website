@@ -1,0 +1,17 @@
+---
+title: hash
+description: Utilities to hash values with hhu, the Hardhat utils
+---
+
+Utilities to hash values.
+
+## hash keccak
+
+Prints the keccak256 hash of a value. A `0x`-prefixed value is hashed as bytes, anything else as a UTF-8 string.
+
+- `value`: The value to hash.
+
+```console
+$ npx hhu hash keccak hello
+0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
+```

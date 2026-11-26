@@ -1,0 +1,46 @@
+---
+title: Hardhat utils reference
+description: Reference of the hhu command-line utilities that come with Hardhat
+sidebar:
+  label: Hardhat utils
+---
+
+import Run from "@hh/Run.astro";
+
+Hardhat comes with a set of small command-line utilities for common Ethereum tasks, like encoding ABI data, hashing, converting units, and fetching on-chain data.
+
+You can run them with the `hhu` binary, or with the `utils` task. Both are the same:
+
+<Run command={["hhu convert to-wei 1.5", "hardhat utils convert to-wei 1.5"]} />
+
+Every utility prints its result to the standard output, one value per line.
+
+These are all the utilities:
+
+- [`abi`](/docs/reference/utils/abi): Work with ABI signatures and data. Includes [`encode-args`](/docs/reference/utils/abi#abi-encode-args), [`encode-calldata`](/docs/reference/utils/abi#abi-encode-calldata), [`encode-type`](/docs/reference/utils/abi#abi-encode-type), [`sig`](/docs/reference/utils/abi#abi-sig), [`sig-event`](/docs/reference/utils/abi#abi-sig-event).
+- [`constants`](/docs/reference/utils/constants): Print commonly used Ethereum constants. Includes [`max-value`](/docs/reference/utils/constants#constants-max-value), [`min-value`](/docs/reference/utils/constants#constants-min-value), [`zero-address`](/docs/reference/utils/constants#constants-zero-address), [`zero-hash`](/docs/reference/utils/constants#constants-zero-hash).
+- [`convert`](/docs/reference/utils/convert): Convert values between common Ethereum representations. Includes [`format-units`](/docs/reference/utils/convert#convert-format-units), [`from-hex`](/docs/reference/utils/convert#convert-from-hex), [`from-wei`](/docs/reference/utils/convert#convert-from-wei), [`pad`](/docs/reference/utils/convert#convert-pad), [`parse-units`](/docs/reference/utils/convert#convert-parse-units), [`to-checksum-address`](/docs/reference/utils/convert#convert-to-checksum-address), [`to-hex`](/docs/reference/utils/convert#convert-to-hex), [`to-wei`](/docs/reference/utils/convert#convert-to-wei).
+- [`fetch`](/docs/reference/utils/fetch): Fetch on-chain data. Includes [`balance`](/docs/reference/utils/fetch#fetch-balance), [`block-number`](/docs/reference/utils/fetch#fetch-block-number), [`chain-id`](/docs/reference/utils/fetch#fetch-chain-id), [`code`](/docs/reference/utils/fetch#fetch-code), [`gas-price`](/docs/reference/utils/fetch#fetch-gas-price), [`nonce`](/docs/reference/utils/fetch#fetch-nonce), [`storage`](/docs/reference/utils/fetch#fetch-storage).
+- [`hash`](/docs/reference/utils/hash): Hash values. Includes [`keccak`](/docs/reference/utils/hash#hash-keccak).
+- [`rpc`](/docs/reference/utils/rpc): Send a JSON-RPC request.
+- [`tx`](/docs/reference/utils/tx): Work with transactions. Includes [`call`](/docs/reference/utils/tx#tx-call), [`estimate`](/docs/reference/utils/tx#tx-estimate).
+
+## Global options
+
+The `utils` task accepts all of Hardhat's [global options](/docs/explanations/global-options). The `hhu` binary only accepts `--network`, `--help`, `--show-stack-traces` and `--version`.
+
+`hhu` works outside a Hardhat project, except for the `fetch`, `rpc` and `tx` utilities, which use `--network` to connect to one of the project's networks. The `utils` task always needs a project.
+
+To list all the utilities, run `hhu` without arguments. To get the help of one of them, add `--help`:
+
+<Run command="hhu convert pad --help" />
+
+## Passing values
+
+Some utilities take values, like function arguments or JSON-RPC params. These are the rules:
+
+- Integers can be decimal, like `1000`, or hex, like `0x3e8`.
+- Arrays and tuples are JSON, with addresses, hex and strings quoted, like `[1,"0x..."]`.
+- Negative numbers must come after `--`, so they aren't read as options: `hhu abi encode-type int256 -- -1`.
+
+Addresses can be all lowercase, all uppercase, or EIP-55 checksummed. A mixed-case address with a wrong checksum is rejected, except by `convert to-checksum-address`, which fixes it.

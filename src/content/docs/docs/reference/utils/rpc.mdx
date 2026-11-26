@@ -1,0 +1,14 @@
+---
+title: rpc
+description: Utility to send a JSON-RPC request with hhu, the Hardhat utils
+---
+
+Sends a JSON-RPC request to the network selected with `--network`, and prints its result as JSON.
+
+- `method`: The JSON-RPC method, like `eth_getBalance`.
+- `params`: The method params, in order. A param that is valid JSON, like `false`, `1` or `{"to":"0x..."}`, is sent as JSON. Anything else, like `0x1` or `latest`, is sent as a string.
+
+```console
+$ npx hhu rpc eth_getBlockByNumber latest false --network sepolia
+{"baseFeePerGas":"0x13","difficulty":"0x0","gasLimit":"0xbe2d1f3","gasUsed":"0x41c2a9c","hash":"0x008f...","number":"0xba2c79",...}
+```

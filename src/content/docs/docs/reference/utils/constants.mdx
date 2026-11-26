@@ -1,0 +1,46 @@
+---
+title: constants
+description: Utilities to print commonly used Ethereum constants with hhu, the Hardhat utils
+---
+
+Commonly used Ethereum constants.
+
+## constants max-value
+
+Prints the maximum value of an integer type.
+
+- `type`: The integer type, like `uint256` or `int128`. Defaults to `uint256`.
+
+```console
+$ npx hhu constants max-value uint8
+255
+```
+
+## constants min-value
+
+Prints the minimum value of an integer type.
+
+- `type`: The integer type, like `uint256` or `int128`. Defaults to `uint256`.
+
+```console
+$ npx hhu constants min-value int8
+-128
+```
+
+## constants zero-address
+
+Prints the zero address.
+
+```console
+$ npx hhu constants zero-address
+0x0000000000000000000000000000000000000000
+```
+
+## constants zero-hash
+
+Prints the zero hash.
+
+```console
+$ npx hhu constants zero-hash
+0x0000000000000000000000000000000000000000000000000000000000000000
+```

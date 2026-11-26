@@ -1,0 +1,64 @@
+---
+title: abi
+description: Utilities to work with ABI signatures and data with hhu, the Hardhat utils
+---
+
+Utilities to work with ABI signatures and data.
+
+## abi encode-args
+
+ABI-encodes values for a signature, without its selector.
+
+- `signature`: The signature, like `"transfer(address,uint256)"` or `"(address,uint256)"`.
+- `values`: The values to encode, in order.
+
+```console
+$ npx hhu abi encode-args "(address,uint256)" 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed 1000
+0x0000000000000000000000005aaeb6053f3e94c9b9a09f33669435e7ef1beaed00000000000000000000000000000000000000000000000000000000000003e8
+```
+
+## abi encode-calldata
+
+ABI-encodes a function call: its selector followed by its values.
+
+- `signature`: The function signature, like `"transfer(address,uint256)"`.
+- `values`: The values to encode, in order.
+
+```console
+$ npx hhu abi encode-calldata "transfer(address,uint256)" 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed 1000
+0xa9059cbb0000000000000000000000005aaeb6053f3e94c9b9a09f33669435e7ef1beaed00000000000000000000000000000000000000000000000000000000000003e8
+```
+
+## abi encode-type
+
+ABI-encodes a single value of a given type.
+
+- `type`: The type, like `uint256`, `int128` or `address[]`.
+- `value`: The value to encode.
+
+```console
+$ npx hhu abi encode-type uint256 0xff
+0x00000000000000000000000000000000000000000000000000000000000000ff
+```
+
+## abi sig
+
+Prints the 4-byte selector of a function or error signature.
+
+- `signature`: The signature, like `"transfer(address,uint256)"`.
+
+```console
+$ npx hhu abi sig "transfer(address,uint256)"
+0xa9059cbb
+```
+
+## abi sig-event
+
+Prints the 32-byte topic of an event signature.
+
+- `signature`: The signature, like `"Transfer(address,address,uint256)"`.
+
+```console
+$ npx hhu abi sig-event "Transfer(address,address,uint256)"
+0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+```

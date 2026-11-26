@@ -1,0 +1,84 @@
+---
+title: fetch
+description: Utilities to fetch on-chain data with hhu, the Hardhat utils
+---
+
+Utilities to fetch on-chain data. They connect to the network selected with `--network`.
+
+The ones that read an account accept `--block` to pick the block whose state to use: a number, a hash, or one of `latest`, `pending`, `earliest`, `safe` and `finalized`. It defaults to `latest`.
+
+## fetch balance
+
+Prints the balance of an address, in wei.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch balance 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network sepolia
+75600
+```
+
+## fetch block-number
+
+Prints the latest block number.
+
+```console
+$ npx hhu fetch block-number --network sepolia
+12203513
+```
+
+## fetch chain-id
+
+Prints the chain ID.
+
+```console
+$ npx hhu fetch chain-id --network sepolia
+11155111
+```
+
+## fetch code
+
+Prints the runtime bytecode of an address. It prints `0x` if there's no contract at that address.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch code 0x5FbDB2315678afecb367f032d93F642f64180aa3 --network sepolia
+0x
+```
+
+## fetch gas-price
+
+Prints the gas price, in wei.
+
+```console
+$ npx hhu fetch gas-price --network sepolia
+21
+```
+
+## fetch nonce
+
+Prints the nonce of an address.
+
+- `address`: The address to check.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch nonce 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --network sepolia
+48722
+```
+
+## fetch storage
+
+Prints the 32-byte value of a storage slot.
+
+- `address`: The address to check.
+- `slot`: The storage slot, in decimal or hex.
+- `--block`: The block whose state to use.
+
+```console
+$ npx hhu fetch storage 0x5FbDB2315678afecb367f032d93F642f64180aa3 0 --network sepolia
+0x0000000000000000000000000000000000000000000000000000000000000000
+```

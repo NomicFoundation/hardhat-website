@@ -1,0 +1,101 @@
+---
+title: convert
+description: Utilities to convert values between common Ethereum representations with hhu, the Hardhat utils
+---
+
+Utilities to convert values between common Ethereum representations.
+
+## convert format-units
+
+Formats an integer as a decimal amount with the given number of decimals. This is the inverse of `convert parse-units`.
+
+- `value`: The integer to format, in decimal or hex.
+- `decimals`: The number of decimals. Defaults to `18`.
+
+```console
+$ npx hhu convert format-units 1500000 6
+1.5
+```
+
+## convert from-hex
+
+Converts a hex value to a decimal integer.
+
+- `value`: The hex value to convert, with or without the `0x` prefix.
+
+```console
+$ npx hhu convert from-hex 0xff
+255
+```
+
+## convert from-wei
+
+Converts an amount of wei to ether, gwei or wei.
+
+- `value`: The amount of wei to convert, in decimal or hex.
+- `unit`: The unit to convert to: `ether`, `gwei` or `wei`. Defaults to `ether`.
+
+```console
+$ npx hhu convert from-wei 1500000000 gwei
+1.5
+```
+
+## convert pad
+
+Pads a hex string to a given byte length, to the left unless `--right` is set.
+
+- `value`: The hex string to pad.
+- `--length`: The target length, in bytes. Defaults to `32`.
+- `--left`: Pad to the left.
+- `--right`: Pad to the right.
+
+```console
+$ npx hhu convert pad 0xff --length 8
+0x00000000000000ff
+```
+
+## convert parse-units
+
+Parses a decimal amount into an integer with the given number of decimals. This is the inverse of `convert format-units`.
+
+- `value`: The decimal amount to parse, like `1.5`.
+- `decimals`: The number of decimals. Defaults to `18`.
+
+```console
+$ npx hhu convert parse-units 1.5 6
+1500000
+```
+
+## convert to-checksum-address
+
+Converts an address to its EIP-55 checksummed representation.
+
+- `address`: The address to convert.
+
+```console
+$ npx hhu convert to-checksum-address 0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed
+0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed
+```
+
+## convert to-hex
+
+Converts a non-negative integer to hex.
+
+- `value`: The integer to convert, in decimal or hex.
+
+```console
+$ npx hhu convert to-hex 255
+0xff
+```
+
+## convert to-wei
+
+Converts an amount of ether, gwei or wei to wei.
+
+- `value`: The amount to convert, like `1.5`.
+- `unit`: The unit of the amount: `ether`, `gwei` or `wei`. Defaults to `ether`.
+
+```console
+$ npx hhu convert to-wei 1.5
+1500000000000000000
+```
