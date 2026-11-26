@@ -1,0 +1,368 @@
+---
+title: UUPS upgradeable contracts
+description: How to deploy and upgrade UUPS proxies with Hardhat Ignition
+sidebar:
+  order: 10
+---
+
+import Install from "@hh/Install.astro";
+import Run from "@hh/Run.astro";
+
+The [Upgradeable contracts guide](/ignition/docs/guides/upgradeable-proxies) shows how to deploy and upgrade a `TransparentUpgradeableProxy`. This guide covers the [UUPS](https://docs.openzeppelin.com/contracts/5.x/api/proxy#UUPSUpgradeable) (Universal Upgradeable Proxy Standard) pattern instead.
+
+In a UUPS proxy, the upgrade logic lives in the implementation contract, not in the proxy. The proxy is a plain [ERC1967Proxy](https://docs.openzeppelin.com/contracts/5.x/api/proxy#ERC1967Proxy) with no `ProxyAdmin`, and you upgrade it by calling `upgradeToAndCall` through the proxy itself. You can read more about the tradeoffs between proxy patterns [in OpenZeppelin's documentation](https://docs.openzeppelin.com/contracts/5.x/api/proxy#transparent-vs-uups-proxies).
+
+## Installation
+
+This guide uses both the OpenZeppelin Contracts library and its upgradeable variant. Install them in your project:
+
+<Install packages="@openzeppelin/contracts @openzeppelin/contracts-upgradeable" />
+
+## Getting to know our contracts
+
+Let's take a look at the contracts we'll deploy and upgrade.
+
+First, inside the `contracts` directory, create a file called `Demo.sol`:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.22;
+
+import { Initializable } from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
+import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+
+// A contrived example of a UUPS upgradeable contract
+contract Demo is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+  /// @custom:oz-upgrades-unsafe-allow constructor
+  constructor() {
+    _disableInitializers();
+  }
+
+  function initialize(address initialOwner) public initializer {
+    __Ownable_init(initialOwner);
+  }
+
+  function version() public pure returns (string memory) {
+    return "1.0.0";
+  }
+
+  function _authorizeUpgrade(address) internal override onlyOwner {}
+}
+```
+
+This is the contract we'll upgrade. A few things are different from a regular contract:
+
+- Proxies don't run the implementation's constructor, so `Demo` uses an `initialize` function instead. The `initializer` modifier makes sure it only runs once.
+- The constructor calls `_disableInitializers()`, so nobody can initialize the implementation contract directly.
+- `UUPSUpgradeable` adds the `upgradeToAndCall` function, and requires you to override `_authorizeUpgrade`. Here we restrict it with `onlyOwner`, so only the owner can upgrade the proxy.
+
+:::caution
+If `_authorizeUpgrade` doesn't restrict who can call it, anyone can upgrade your proxy. If a new implementation doesn't inherit from `UUPSUpgradeable`, the proxy can't be upgraded again.
+:::
+
+Now create the upgraded version of this contract in a new file called `DemoV2.sol`:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.22;
+
+import { Initializable } from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import { UUPSUpgradeable } from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
+import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+
+// A contrived example of a UUPS upgradeable contract
+contract DemoV2 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+  string public name;
+
+  /// @custom:oz-upgrades-unsafe-allow constructor
+  constructor() {
+    _disableInitializers();
+  }
+
+  function initializeV2(string memory _name) public reinitializer(2) {
+    name = _name;
+  }
+
+  function version() public pure returns (string memory) {
+    return "2.0.0";
+  }
+
+  function _authorizeUpgrade(address) internal override onlyOwner {}
+}
+```
+
+In addition to updating the version string, `DemoV2` adds a `name` state variable and an `initializeV2` function that sets it. The `reinitializer(2)` modifier lets this function run once, after the original `initialize`. We'll call it as part of the upgrade.
+
+Finally, Ignition needs the `ERC1967Proxy` artifact, so we have to tell Hardhat to compile it. Add the following `npmFilesToBuild` field to your existing Hardhat configuration:
+
+```ts
+// hardhat.config.ts
+import { defineConfig } from "hardhat/config";
+
+export default defineConfig({
+  solidity: {
+    npmFilesToBuild: ["@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol"],
+  },
+});
+```
+
+## Writing our Ignition modules
+
+Inside the `ignition/modules` directory, create a file called `ProxyModule.ts` (or `ProxyModule.js` if you're using JavaScript). We'll split this first file into two modules.
+
+### Part 1: Deploying our proxy
+
+Start by importing `buildModule` from `@nomicfoundation/hardhat-ignition/modules`, and define a module called `ProxyModule`:
+
+```ts
+import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+
+const proxyModule = buildModule("ProxyModule", (m) => {
+  const owner = m.getAccount(0);
+
+  const demo = m.contract("Demo");
+
+  const initializeCall = m.encodeFunctionCall(demo, "initialize", [owner]);
+
+  const proxy = m.contract("ERC1967Proxy", [demo, initializeCall]);
+
+  return { proxy };
+});
+```
+
+Let's break down what's happening here.
+
+First, we get the account that will own the contract, and therefore be allowed to upgrade it. In this case, we use the first account in our Hardhat accounts array.
+
+Next, we deploy the `Demo` implementation contract.
+
+Then, we use `m.encodeFunctionCall(...)` to encode a call to `initialize`, passing the owner account.
+
+Finally, we deploy the `ERC1967Proxy`. Its constructor takes the implementation address and the encoded initialization call, which it runs through the proxy. This way, the proxy is deployed and initialized in a single transaction, and nobody can initialize it before us.
+
+### Part 2: Interacting with our proxy
+
+Now create a module called `DemoModule` inside the same file:
+
+```ts
+const demoModule = buildModule("DemoModule", (m) => {
+  const { proxy } = m.useModule(proxyModule);
+
+  const demo = m.contractAt("Demo", proxy);
+
+  return { demo, proxy };
+});
+```
+
+First, we use `m.useModule(...)` to get the proxy from the previous module.
+
+Then, we use `m.contractAt("Demo", proxy)` to tell Ignition to use the `Demo` ABI for the contract at the proxy's address. This lets us interact with `Demo` through the proxy in tests and scripts, including calling `upgradeToAndCall` later on.
+
+Finally, we return the `Demo` contract instance and the proxy, so we can use them in other modules.
+
+As a last step, export `demoModule` from the file:
+
+```ts
+export default demoModule;
+```
+
+### Part 3: Upgrading our proxy with an initialization function
+
+Next, create a file called `UpgradeModule.ts` (or `UpgradeModule.js` if you're using JavaScript) inside the `ignition/modules` directory. Start with the `UpgradeModule`:
+
+```ts
+import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+
+import DemoModule from "./ProxyModule.js";
+
+const upgradeModule = buildModule("UpgradeModule", (m) => {
+  const owner = m.getAccount(0);
+
+  const { demo, proxy } = m.useModule(DemoModule);
+
+  const demoV2 = m.contract("DemoV2");
+
+  const initializeV2Call = m.encodeFunctionCall(demoV2, "initializeV2", [
+    "Example Name",
+  ]);
+
+  m.call(demo, "upgradeToAndCall", [demoV2, initializeV2Call], {
+    from: owner,
+  });
+
+  return { proxy };
+});
+```
+
+This module gets the owner account, and uses `m.useModule(...)` to get the `Demo` contract instance and the proxy from `DemoModule`.
+
+Then, we deploy the `DemoV2` implementation contract, and encode a call to its `initializeV2` function with `"Example Name"` as its argument.
+
+Finally, we call `upgradeToAndCall` on `demo`. Since `demo` points to the proxy's address, this call goes through the proxy, which points it to its current implementation. `upgradeToAndCall` checks `_authorizeUpgrade`, switches the proxy to `DemoV2`, and then runs `initializeV2` through the proxy. We use the `from` option to send the call from the owner account, since `_authorizeUpgrade` only allows the owner to upgrade.
+
+Unlike the transparent proxy pattern, there's no `ProxyAdmin` involved.
+
+### Part 4: Interacting with our upgraded proxy
+
+Finally, in the same file, create a module called `DemoV2Module`:
+
+```ts
+const demoV2Module = buildModule("DemoV2Module", (m) => {
+  const { proxy } = m.useModule(upgradeModule);
+
+  const demo = m.contractAt("DemoV2", proxy);
+
+  return { demo };
+});
+```
+
+This module is similar to `DemoModule`, but it uses the `DemoV2` ABI for the proxy's address, so we can access the new `name` getter through the same proxy.
+
+As a last step, export `demoV2Module` from the file:
+
+```ts
+export default demoV2Module;
+```
+
+## Deploying our modules
+
+To try the upgrade, deploy `UpgradeModule.ts`. Ignition deploys `DemoModule` first, since `UpgradeModule` depends on it, and then runs the upgrade:
+
+<Run command="hardhat ignition deploy ignition/modules/UpgradeModule.ts" />
+
+You'll see output like this:
+
+```
+Hardhat Ignition 🚀
+
+Deploying [ DemoV2Module ]
+
+Batch #1
+  Executing ProxyModule#Demo...
+  Executing UpgradeModule#DemoV2...
+  Executed ProxyModule#Demo
+  Executed UpgradeModule#DemoV2
+
+Batch #2
+  Executing ProxyModule#encodeFunctionCall(ProxyModule#Demo.initialize)...
+  Executing UpgradeModule#encodeFunctionCall(UpgradeModule#DemoV2.initializeV2)...
+  Executed ProxyModule#encodeFunctionCall(ProxyModule#Demo.initialize)
+  Executed UpgradeModule#encodeFunctionCall(UpgradeModule#DemoV2.initializeV2)
+
+Batch #3
+  Executing ProxyModule#ERC1967Proxy...
+  Executed ProxyModule#ERC1967Proxy
+
+Batch #4
+  Executing DemoModule#Demo...
+  Executing DemoV2Module#DemoV2...
+  Executed DemoModule#Demo
+  Executed DemoV2Module#DemoV2
+
+Batch #5
+  Executing UpgradeModule#DemoModule~Demo.upgradeToAndCall...
+  Executed UpgradeModule#DemoModule~Demo.upgradeToAndCall
+
+[ DemoV2Module ] successfully deployed 🚀
+
+Deployed Addresses
+
+ProxyModule#Demo - 0x5FbDB2315678afecb367f032d93F642f64180aa3
+UpgradeModule#DemoV2 - 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+ProxyModule#ERC1967Proxy - 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+DemoModule#Demo - 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+DemoV2Module#DemoV2 - 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+```
+
+Notice that `DemoModule#Demo` and `DemoV2Module#DemoV2` share the proxy's address.
+
+## Testing our Ignition modules
+
+Now let's write some tests to make sure everything works as expected.
+
+Inside the `test` directory, create a file called `UUPSDemo.ts` (or `UUPSDemo.js` if you're using JavaScript):
+
+```ts
+import hre from "hardhat";
+
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
+import DemoModule from "../ignition/modules/ProxyModule.js";
+import UpgradeModule from "../ignition/modules/UpgradeModule.js";
+
+describe("Demo UUPS Proxy", async function () {
+  const { ignition, viem } = await hre.network.create();
+
+  describe("Proxy interaction", function () {
+    it("Should be usable via proxy", async function () {
+      const [owner] = await viem.getWalletClients();
+
+      const { demo } = await ignition.deploy(DemoModule);
+
+      assert.equal(await demo.read.version(), "1.0.0");
+      assert.equal(
+        (await demo.read.owner()).toLowerCase(),
+        owner.account.address.toLowerCase(),
+      );
+    });
+
+    it("Should only let the owner upgrade", async function () {
+      const [, otherAccount] = await viem.getWalletClients();
+
+      const { demo } = await ignition.deploy(DemoModule);
+
+      await viem.assertions.revertWithCustomErrorWithArgs(
+        demo.write.upgradeToAndCall([demo.address, "0x"], {
+          account: otherAccount.account,
+        }),
+        demo,
+        "OwnableUnauthorizedAccount",
+        [otherAccount.account.address],
+      );
+    });
+  });
+
+  describe("Upgrading", function () {
+    it("Should have upgraded the proxy to DemoV2", async function () {
+      const { demo } = await ignition.deploy(UpgradeModule);
+
+      assert.equal(await demo.read.version(), "2.0.0");
+    });
+
+    it("Should have set the name during upgrade", async function () {
+      const { demo } = await ignition.deploy(UpgradeModule);
+
+      assert.equal(await demo.read.name(), "Example Name");
+    });
+
+    it("Should keep the owner after the upgrade", async function () {
+      const [owner] = await viem.getWalletClients();
+
+      const { demo } = await ignition.deploy(UpgradeModule);
+
+      assert.equal(
+        (await demo.read.owner()).toLowerCase(),
+        owner.account.address.toLowerCase(),
+      );
+    });
+  });
+});
+```
+
+First, we deploy `DemoModule` and check that the proxy returns the first version string, and that it was initialized with the right owner. We also check that an account other than the owner can't upgrade the proxy, because `_authorizeUpgrade` reverts with OpenZeppelin's `OwnableUnauthorizedAccount` error.
+
+Then, we deploy `UpgradeModule` and check that the proxy returns the new version string, that `initializeV2` set `name` to `"Example Name"`, and that the owner stored by the first version is still there after the upgrade.
+
+## Further reading
+
+In this guide we learned how to use Hardhat Ignition to deploy, initialize, and upgrade a UUPS proxy. While this example isn't meant for production, you can use it as a starting point for your own upgradeable contracts.
+
+Here are some additional resources to learn more about topics discussed in this guide:
+
+- [OpenZeppelin's documentation on UUPSUpgradeable](https://docs.openzeppelin.com/contracts/5.x/api/proxy#UUPSUpgradeable)
+- [OpenZeppelin's documentation on writing upgradeable contracts](https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable)
+- [Hardhat Ignition's guide on transparent upgradeable proxies](/ignition/docs/guides/upgradeable-proxies)
+- [Hardhat Ignition's documentation on creating Ignition modules](/ignition/docs/guides/creating-modules)
+- [Hardhat Ignition's documentation on testing Ignition modules](/ignition/docs/guides/tests)
