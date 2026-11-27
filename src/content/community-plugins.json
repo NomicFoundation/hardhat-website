@@ -179,6 +179,15 @@
         "safe",
         "multisig"
       ]
+    },
+    {
+      "name": "hardhat-multichain-address-validator",
+      "website": "https://allswap.io/tools/address-validator",
+      "npmPackage": "hardhat-multichain-address-validator",
+      "author": "AllSwap Security Labs",
+      "authorUrl": "https://allswap.io",
+      "description": "Validate multi-chain wallet address syntax, mandatory Memo/Destination Tag routing, and vanity address-poisoning across 46+ networks.",
+      "tags": ["Validation", "Security"]
     }
   ]
 }
